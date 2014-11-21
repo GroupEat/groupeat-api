@@ -1,8 +1,0 @@
-alias ..="cd .."
-alias ...="cd ../.."
-alias h="cd ~"
-alias c="clear"
-alias cri="hhvm /usr/local/bin/composer install"
-alias cru="hhvm /usr/local/bin/composer update"
-alias crd="hhvm /usr/local/bin/composer dump-autoload"
-alias art="php artisan"

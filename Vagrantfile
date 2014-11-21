@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Configure a few VirtualBox settings
   config.vm.provider "virtualbox" do |vb|
-    vb.name = 'pizzeria'
+    vb.name = config.vm.hostname
     vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--cpus", "1"]
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -21,7 +21,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure port Ffrwarding to the box
   config.vm.network "forwarded_port", guest: 80, host: 8000
   config.vm.network "forwarded_port", guest: 443, host: 44300
-  config.vm.network "forwarded_port", guest: 3306, host: 33060
   config.vm.network "forwarded_port", guest: 5432, host: 54320
   config.vm.network "forwarded_port", guest: 35729, host: 35729
 
@@ -42,8 +41,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder Dir.pwd, "/home/vagrant/groupeat"
 
   # Run the base provisioning script
-  config.vm.provision "shell", path: "./server/provision.sh"
+  config.vm.provision "shell", path: "./scripts/provision.sh"
 
-  # Install the configured Nginx site
-  config.vm.provision "shell", path: "./server/nginx.sh"
+  # Configure Nginx to use the groupeat.app site
+  config.vm.provision "shell", path: "./scripts/nginx.sh"
+
+  # Install the project Composer dependencies
+  config.vm.provision "shell", inline: "cd ~vagrant/groupeat; /usr/bin/hhvm /usr/local/bin/composer install"
 end

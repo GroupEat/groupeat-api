@@ -116,6 +116,37 @@ sed -i "s/group = www-data/group = vagrant/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/;listen\.owner.*/listen.owner = vagrant/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/;listen\.group.*/listen.group = vagrant/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php5/fpm/pool.d/www.conf
+
+# Configure Nginx
+block="server {
+  listen 80;
+  server_name groupeat.fr;
+  root /home/vagrant/groupeat/public;
+  index index.html index.htm index.php;
+  charset utf-8;
+  location / {
+    try_files \$uri \$uri/ /index.php?\$query_string;
+  }
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location = /robots.txt  { access_log off; log_not_found off; }
+  access_log off;
+  error_log  /var/log/nginx/groupeat.fr-error.log error;
+  error_page 404 /index.php;
+  sendfile off;
+  location ~ \.php$ {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_index index.php;
+    include fastcgi_params;
+  }
+  location ~ /\.ht {
+    deny all;
+  }
+}
+"
+
+echo "$block" > "/etc/nginx/sites-available/groupeat.fr"
+ln -fs "/etc/nginx/sites-available/groupeat.fr" "/etc/nginx/sites-enabled/groupeat.fr"
 service nginx restart
 service php5-fpm restart
 
@@ -159,8 +190,17 @@ fi
 cp ~vagrant/.oh-my-zsh/templates/zshrc.zsh-template ~vagrant/.zshrc
 chown vagrant: ~vagrant/.zshrc
 sed -i -e 's/ZSH_THEME=".*"/ZSH_THEME="ys"/' ~vagrant/.zshrc
-echo "source ~vagrant/groupeat/scripts/aliases.sh" >> ~vagrant/.zshrc
 chsh -s /bin/zsh vagrant
 
 # Go directly to the web folder by default
 echo "cd ~vagrant/groupeat" >> ~vagrant/.zshrc
+
+# Some useful aliases
+echo "alias ..='cd ..'" >> ~vagrant/.zshrc
+echo "alias ...='cd ../..'" >> ~vagrant/.zshrc
+echo "alias h='cd ~'" >> ~vagrant/.zshrc
+echo "alias c='clear'" >> ~vagrant/.zshrc
+echo "alias cri='hhvm /usr/local/bin/composer install'" >> ~vagrant/.zshrc
+echo "alias cru='hhvm /usr/local/bin/composer update'" >> ~vagrant/.zshrc
+echo "alias crd='hhvm /usr/local/bin/composer dump-autoload'" >> ~vagrant/.zshrc
+echo "alias art='php artisan'" >> ~vagrant/.zshrc
