@@ -1,9 +1,11 @@
+#!/usr/bin/env bash
+
 rm -f /etc/nginx/sites-enabled/groupeat.fr
 rm -f /etc/nginx/sites-available/groupeat.fr
 
 block="server {
   listen 80;
-  server_name groupeat.app;
+  server_name groupeat.dev;
   root /home/vagrant/groupeat/public;
   index index.html index.htm index.php;
   charset utf-8;
@@ -13,7 +15,7 @@ block="server {
   location = /favicon.ico { access_log off; log_not_found off; }
   location = /robots.txt  { access_log off; log_not_found off; }
   access_log off;
-  error_log  /var/log/nginx/groupeat.app-error.log error;
+  error_log  /var/log/nginx/groupeat.dev-error.log error;
   error_page 404 /index.php;
   sendfile off;
   location ~ \.php$ {
@@ -28,7 +30,7 @@ block="server {
 }
 "
 
-echo "$block" > "/etc/nginx/sites-available/groupeat.app"
-ln -fs "/etc/nginx/sites-available/groupeat.app" "/etc/nginx/sites-enabled/groupeat.app"
+echo "$block" > "/etc/nginx/sites-available/groupeat.dev"
+ln -fs "/etc/nginx/sites-available/groupeat.dev" "/etc/nginx/sites-enabled/groupeat.dev"
 service nginx restart
 service php5-fpm restart
