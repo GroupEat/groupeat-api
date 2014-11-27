@@ -9,16 +9,16 @@ This project use Vagrant in order not to mess with your computer setup. Everythi
 Clone this repository on your machine. Place it where you like and rename it if you want but make sure you won't change your mind because moving it after the following steps will break things... Then `cd` into the project root so that you are in the folder of the `Vagrantfile`.
 
 ## Mac OS X
- - Run the `./scripts/mac_install.sh` command, sit back and you're done! Just stay around at the beginning of the process because your password may be asked up to three times.
+ - Run the `./scripts/mac_install.sh` command, sit back and you're done! Just stay around at the beginning of the process because your password may be asked a few times.
 
 ## Other
  - Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads.html).
- - Run the `vagrant up` command and wait for it to finish (a few minutes depending on your internet connection).
  - Copy `example.env.php` to `.env.local.php` and fill the missing data (if any) in the new file.
  - Add the line `192.168.10.10  groupeat.dev` to your hosts file:
-  - Windows: `c:\windows\systeme32\drivers\etc`
-  - Unix: `/etc/hosts`
- - Browse to http://groupeat.app and make sure it works.
+   - Windows: `c:\windows\systeme32\drivers\etc`
+   - Unix: `/etc/hosts`
+ - Run the `vagrant up` command and wait for it to finish (a few minutes depending on your internet connection).
+ - Browse to http://groupeat.dev and make sure it works.
 
 # Usage
 
