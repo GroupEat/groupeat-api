@@ -1,8 +1,8 @@
 {
 	"name": "groupeat/web",
 	"require": {
-        "dingo/api": "0.6.6",
-        "laravel/framework": "4.2.11",
+        "dingo/api": "dev-master",
+        "laravel/framework": "4.2.*",
         "anahkiasen/former": "3.5.2",
         "itsgoingd/clockwork": "1.6",
         "league/oauth2-server": "4.0.2"

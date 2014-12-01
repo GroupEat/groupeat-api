@@ -27,9 +27,6 @@ which -s brew
 if [[ $? != 0 ]]; then
   echo "Installing Homebrew"
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-else
-  echo "Updating Homebrew"
-  brew update -v
 fi
 
 if [[ -n $(brew ls --versions brew-cask) ]]; then
