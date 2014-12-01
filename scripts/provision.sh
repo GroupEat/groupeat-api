@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Setup correct locale
+sudo locale-gen en_US.UTF-8
+export LANG=en_US.UTF-8
+
 # Update packages list
 apt-get update
 apt-get upgrade -y
