@@ -46,5 +46,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", path: "./scripts/nginx.sh"
 
   # Install the project Composer dependencies
-  config.vm.provision "shell", inline: "cd ~vagrant/groupeat; /usr/bin/hhvm /usr/local/bin/composer install"
+  config.vm.provision "shell", inline: "cd ~vagrant/groupeat; /usr/local/bin/composer install"
 end
