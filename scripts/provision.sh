@@ -1,63 +1,63 @@
 #!/usr/bin/env bash
 
-# Setup correct locale
+echo "Setting up correct locale"
 sudo locale-gen en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# Update packages list
+echo "Updating packages list"
 apt-get update
 apt-get upgrade -y
 
-# Install some PPAs
+echo "Installing some PPAs"
 apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y
 apt-add-repository ppa:chris-lea/node.js -y
 apt-add-repository ppa:ondrej/php5-5.6 -y
 
-# Install git
+echo "Installing git"
 apt-get install -y git
 
-# Install some basic packages
+echo "Installing some basic packages"
 apt-get install -y build-essential curl gcc libmcrypt4 make whois vim
 
-# Set timezone
+echo "Setting timezone"
 ln -sf /usr/share/zoneinfo/CET /etc/localtime
 
-# Install PHP stuffs
+echo "Installing PHP stuffs"
 apt-get install -y php5-cli php5-dev php-pear php5-pgsql \
 php5-apcu php5-json php5-curl php5-gd php5-imap php5-gmp \
 php5-mcrypt php5-xdebug php5-memcached
 
-# Make MCrypt available
+echo "Making MCrypt available"
 ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
 sudo php5enmod mcrypt
 
-# Install Mailparse PECL extension
+echo "Installing Mailparse PECL extension"
 pecl install mailparse
 echo "extension=mailparse.so" > /etc/php5/mods-available/mailparse.ini
 ln -s /etc/php5/mods-available/mailparse.ini /etc/php5/cli/conf.d/20-mailparse.ini
 
-# Install Composer
+echo "Installing Composer"
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 /usr/local/bin/composer self-update
 
-# Add Composer global bin to path
+echo "Adding Composer global bin to path"
 printf "\nPATH=\"~vagrant/.composer/vendor/bin:\$PATH\"\n" | tee -a ~vagrant/.profile
 
-# Set some PHP CLI settings
+echo "Setting some PHP CLI settings"
 sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/cli/php.ini
 sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/cli/php.ini
 sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php5/cli/php.ini
 sudo sed -i "s/;date.timezone.*/date.timezone = CET/" /etc/php5/cli/php.ini
 
-# Install Nginx & PHP-FPM
+echo "Installing Nginx & PHP-FPM"
 apt-get install -y nginx php5-fpm
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 service nginx restart
 
-# Setup some PHP-FPM options
+echo "Setting up some PHP-FPM options"
 ln -s /etc/php5/mods-available/mailparse.ini /etc/php5/fpm/conf.d/20-mailparse.ini
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/fpm/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/fpm/php.ini
@@ -68,7 +68,7 @@ echo "xdebug.remote_enable = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
 echo "xdebug.remote_connect_back = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
 echo "xdebug.remote_port = 9000" >> /etc/php5/fpm/conf.d/20-xdebug.ini
 
-# Copy fastcgi_params to Nginx because they broke it on the PPA
+echo "Copying fastcgi_params to Nginx because they broke it on the PPA"
 cat > /etc/nginx/fastcgi_params << EOF
 fastcgi_param	QUERY_STRING		\$query_string;
 fastcgi_param	REQUEST_METHOD		\$request_method;
@@ -91,7 +91,7 @@ fastcgi_param	HTTPS			\$https if_not_empty;
 fastcgi_param	REDIRECT_STATUS		200;
 EOF
 
-# Set the Nginx & PHP-FPM user
+echo "Setting the Nginx & PHP-FPM user"
 sed -i "s/user www-data;/user vagrant;/" /etc/nginx/nginx.conf
 sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" /etc/nginx/nginx.conf
 sed -i "s/user = www-data/user = vagrant/" /etc/php5/fpm/pool.d/www.conf
@@ -100,7 +100,7 @@ sed -i "s/;listen\.owner.*/listen.owner = vagrant/" /etc/php5/fpm/pool.d/www.con
 sed -i "s/;listen\.group.*/listen.group = vagrant/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php5/fpm/pool.d/www.conf
 
-# Configure Nginx
+echo "Configuring Nginx"
 block="server {
   listen 80;
   server_name groupeat.fr;
@@ -133,32 +133,32 @@ ln -fs "/etc/nginx/sites-available/groupeat.fr" "/etc/nginx/sites-enabled/groupe
 service nginx restart
 service php5-fpm restart
 
-# Add vagrant user to www-Data
+echo "Adding vagrant user to www-Data"
 usermod -a -G www-data vagrant
 id vagrant
 groups vagrant
 
-# Install Node
+echo "Installing Node.js"
 apt-get install -y nodejs
 npm install -g grunt-cli
 npm install -g gulp
 npm install -g bower
 
-# Install Postgres
+echo "Installing PostgreSQL"
 apt-get install -y postgresql postgresql-contrib
 
-# Configure Postgres remote access
+echo "Configuring PostgreSQL remote access"
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
 echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
 sudo -u postgres psql -c "CREATE ROLE groupeat LOGIN UNENCRYPTED PASSWORD 'secret' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
 sudo -u postgres /usr/bin/createdb --echo --owner=groupeat groupeat
 service postgresql restart
 
-# Create database
+echo "Creating the database"
 su postgres -c "dropdb groupeat --if-exists"
 su postgres -c "createdb -O groupeat groupeat"
 
-# Add ZSH shell
+echo "Adding ZSH shell"
 apt-get install -y zsh
 if [ ! -d ~vagrant/.oh-my-zsh ]; then
   git clone https://github.com/robbyrussell/oh-my-zsh.git ~vagrant/.oh-my-zsh
@@ -168,10 +168,10 @@ chown vagrant: ~vagrant/.zshrc
 sed -i -e 's/ZSH_THEME=".*"/ZSH_THEME="ys"/' ~vagrant/.zshrc
 chsh -s /bin/zsh vagrant
 
-# Go directly to the web folder by default
+echo "Going directly to the web folder by default"
 echo "cd ~vagrant/groupeat" >> ~vagrant/.zshrc
 
-# Some useful aliases
+echo "Adding some useful aliases"
 echo "alias ..='cd ..'" >> ~vagrant/.zshrc
 echo "alias ...='cd ../..'" >> ~vagrant/.zshrc
 echo "alias h='cd ~'" >> ~vagrant/.zshrc
