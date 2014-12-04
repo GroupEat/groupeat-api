@@ -11,7 +11,13 @@ class DatabaseSeeder extends Seeder {
 	{
 		Eloquent::unguard();
 
-		// $this->call('UserTableSeeder');
+        // The seeder need to be run in a good chronological order to avoid foreign key problem
+        $orderedSeeders = ['Users'];
+
+        foreach ($orderedSeeders as $seeder)
+        {
+            $this->call($seeder . 'Seeder');
+        }
 	}
 
 }

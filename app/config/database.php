@@ -72,6 +72,32 @@ return [
 
 	'migrations' => 'migrations',
 
+    /*
+	|--------------------------------------------------------------------------
+	| Migration Seed
+	|--------------------------------------------------------------------------
+	|
+	| Seed used when seeding the DB so that the data is always the same.
+    | Used in the groupeat:db-refresh command, can be bypassed with the
+    | option --random that set this seed option to false.
+	|
+	*/
+
+    'seed' => 2014,
+
+
+    /*
+	|--------------------------------------------------------------------------
+	| Fake entries number
+	|--------------------------------------------------------------------------
+	|
+	| Number of fake entries to create when seeding the database in
+    | the development or test environment.
+	|
+	*/
+
+    'entries' => 100,
+
 	/*
 	|--------------------------------------------------------------------------
 	| Redis Databases
