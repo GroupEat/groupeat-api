@@ -7,8 +7,17 @@ else
   echo "Vagrant file found"
 fi
 
-echo 'Copying the environment variable file'
-cp example.env.php .env.local.php
+if [ ! -f ./.env.local.php ]; then
+    echo 'Copying example.env.php to .env.local.php'
+    cp example.env.php .env.local.php
+fi
+
+if [ ! -f ./.env.testing.php ]; then
+    echo 'Copying example.env.php to .env.testing.php'
+    cp example.env.php .env.testing.php
+fi
+
+exit
 
 while grep -q FILL_ME .env.local.php; do
   echo 'Please fill the missing data in .env.example.php'

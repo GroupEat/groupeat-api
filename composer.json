@@ -8,7 +8,8 @@
         "league/oauth2-server": "4.0.4"
 	},
     "require-dev": {
-        "fzaninotto/faker": "1.4.0"
+        "fzaninotto/faker": "1.4.0",
+        "codeception/codeception": "2.0.8"
     },
 	"autoload": {
 		"classmap": [

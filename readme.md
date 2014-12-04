@@ -13,7 +13,7 @@ Clone this repository on your machine. Place it where you like and rename it if 
 
 ## Other
  - Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads.html).
- - Copy `example.env.php` to `.env.local.php` and fill the missing data (if any) in the new file.
+ - Fill the missing data if any in `example.env.php` and copy this file to `.env.local.php` and `.env.testing.php`.
  - Add the line `192.168.10.10  groupeat.dev` to your hosts file:
    - Windows: `c:\windows\systeme32\drivers\etc`
    - Unix: `/etc/hosts`

@@ -28,6 +28,8 @@ $env = $app->detectEnvironment([
 
 	'local' => ['PizzeriaDev'],
 
+    'testing' => ['PizzeriaTest'],
+
 ]);
 
 /*

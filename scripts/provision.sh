@@ -11,29 +11,22 @@ apt-get upgrade -y
 # Install some PPAs
 apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y
-apt-add-repository ppa:rwky/redis -y
 apt-add-repository ppa:chris-lea/node.js -y
 apt-add-repository ppa:ondrej/php5-5.6 -y
-
-# Update packages list
-apt-get update
 
 # Install git
 apt-get install -y git
 
 # Install some basic packages
-apt-get install -y build-essential curl dos2unix gcc libmcrypt4 libpcre3-dev \
-make python2.7-dev python-pip re2c supervisor unattended-upgrades whois vim
+apt-get install -y build-essential curl gcc libmcrypt4 make whois vim
 
 # Set timezone
 ln -sf /usr/share/zoneinfo/CET /etc/localtime
 
 # Install PHP stuffs
-apt-get install -y php5-cli php5-dev php-pear \
-php5-mysqlnd php5-pgsql php5-sqlite \
-php5-apcu php5-json php5-curl php5-gd \
-php5-gmp php5-imap php5-mcrypt php5-xdebug \
-php5-memcached php5-redis
+apt-get install -y php5-cli php5-dev php-pear php5-pgsql \
+php5-apcu php5-json php5-curl php5-gd php5-imap php5-gmp \
+php5-mcrypt php5-xdebug php5-memcached
 
 # Make MCrypt available
 ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
@@ -63,20 +56,6 @@ apt-get install -y nginx php5-fpm
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 service nginx restart
-
-# Add the HHVM key & repository
-wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key | apt-key add -
-echo deb http://dl.hhvm.com/ubuntu trusty main | tee /etc/apt/sources.list.d/hhvm.list
-apt-get update
-apt-get install -y hhvm
-
-# Configure HHVM to run as vagrant
-service hhvm stop
-sed -i 's/#RUN_AS_USER="www-data"/RUN_AS_USER="vagrant"/' /etc/default/hhvm
-service hhvm start
-
-# Start HHVM on system start
-update-rc.d hhvm defaults
 
 # Setup some PHP-FPM options
 ln -s /etc/php5/mods-available/mailparse.ini /etc/php5/fpm/conf.d/20-mailparse.ini
@@ -178,13 +157,6 @@ service postgresql restart
 # Create database
 su postgres -c "dropdb groupeat --if-exists"
 su postgres -c "createdb -O groupeat groupeat"
-
-# Install a few other things
-apt-get install -y redis-server memcached beanstalkd
-
-# Configure beanstalkd
-sudo sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
-sudo /etc/init.d/beanstalkd start
 
 # Add ZSH shell
 apt-get install -y zsh
