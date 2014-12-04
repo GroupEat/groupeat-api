@@ -59,9 +59,6 @@ else
   brew cask install vagrant
 fi
 
-echo "Downloading the Ubuntu box"
-vagrant box add ubuntu/trusty64
-
 echo 'Deleting old running VM'
 vagrant destroy -f
 
