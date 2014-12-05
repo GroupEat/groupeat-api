@@ -9,7 +9,7 @@ class ExampleTest extends TestCase {
 	 */
 	public function testBasicExample()
 	{
-        var_dump(App::environment());
+        var_dump($_ENV);
 
         $this->client->request('GET', '/');
 

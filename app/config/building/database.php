@@ -7,7 +7,7 @@ return [
             'host'     => '127.0.0.1',
             'database' => 'groupeat',
             'username' => 'postgre',
-            'password' => '',
+            'password' => null,
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',

@@ -4,7 +4,8 @@ php:
   - 5.6
 
 env:
-  - APP_ENV=testing
+  global:
+    - APP_ENV=testing
 
 before_script:
   - mkdir -p shippable/testresults

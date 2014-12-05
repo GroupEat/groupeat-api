@@ -35,5 +35,5 @@ use the following information:
  - host: 127.0.0.1
  - port: 54320
  - user: groupeat
- - password: secret
+ - password: groupeat
  - database: groupeat
