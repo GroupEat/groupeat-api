@@ -10,14 +10,12 @@ class ExampleTest extends TestCase {
 	public function testBasicExample()
 	{
         var_dump($_SERVER);
-        var_dump($_ENV);
-        var_dump(php_uname());
 
         $this->client->request('GET', '/');
 
 		$this->assertTrue($this->client->getResponse()->isOk());
 
-        echo artisan('groupeat:migrate');
+        artisan('groupeat:migrate');
 
         var_dump((string) User::first());
 	}
