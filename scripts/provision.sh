@@ -138,13 +138,8 @@ usermod -a -G www-data vagrant
 id vagrant
 groups vagrant
 
-echo "Installing Node.js"
-apt-get install -y nodejs
-npm install -g gulp
-npm install -g bower
-
 echo "Installing PostgreSQL"
-apt-get install -y postgresql postgresql-contrib
+apt-get install -y postgresql-9.3 postgresql-contrib
 
 echo "Configuring PostgreSQL remote access"
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
