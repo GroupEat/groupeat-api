@@ -1,3 +1,5 @@
+build_environment: ubuntu1404
+
 language: php
 
 php:
@@ -6,13 +8,12 @@ php:
 reset_minion: true
 
 env:
-  global:
-    - APP_ENV=testing
+  - secure: CBB4CzpPKyofEv4Te5aPjM03ydRBXeuRANOLWLEuW0Vo3fXYqqeQsct5eBq/E0cLeXBzjI18oT4HN+PVJowLUS0X2W9PStE3pjkxA1TXNGbw1EP2MyNvIQLRbJ1Srp2XImeu9d22OCLgGPEFa6wluwKpsn3bjWwRHpE1OYzIJzLjLzh2cMGAOhe/TYqQ7RVy1BnARW6/c3BATO0vDJJHxbAsLhnbLCOSX3ZdyLmWdqmGk1pAIqeFYfJ989zdnAN1A6kQAALD8S1/bdb0boCHvbGuWkOcxjm0p7GJlG6Y3mRosZCa0MYOdMfFpi19+vCD24RH01pr+FZh6IxIsDZzSg==
 
 before_script:
   - mkdir -p shippable/testresults
   - psql -c 'CREATE DATABASE groupeat;' -U postgres
-  - composer config -g github-oauth.github.com cdc915a5f6f6080432de952edb2cca48088231ea
+  - composer config -g github-oauth.github.com $GITHUB_TOKEN
   - composer self-update
   - composer install --no-interaction
 

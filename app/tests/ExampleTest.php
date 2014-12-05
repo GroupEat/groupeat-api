@@ -17,7 +17,7 @@ class ExampleTest extends TestCase {
 
 		$this->assertTrue($this->client->getResponse()->isOk());
 
-        Artisan::call('groupeat:migrate');
+        echo artisan('groupeat:migrate');
 
         var_dump((string) User::first());
 	}
