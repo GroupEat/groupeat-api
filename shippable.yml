@@ -3,6 +3,8 @@ language: php
 php:
   - 5.6
 
+reset_minion: true
+
 env:
   global:
     - APP_ENV=testing
@@ -10,6 +12,7 @@ env:
 before_script:
   - mkdir -p shippable/testresults
   - psql -c 'CREATE DATABASE groupeat;' -U postgres
+  - composer config -g github-oauth.github.com cdc915a5f6f6080432de952edb2cca48088231ea
   - composer self-update
   - composer install --no-interaction
 
