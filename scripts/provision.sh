@@ -1,4 +1,4 @@
-#!/bin/bash bash
+#!/usr/bin/env bash
 
 echo "Setting up correct locale"
 sudo locale-gen en_US.UTF-8

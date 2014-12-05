@@ -7,6 +7,12 @@ else
   echo "Vagrant file found"
 fi
 
+while grep -q FILL_ME .env.local.php; do
+  echo 'Please fill the missing data in .env.example.php'
+  read -n1 -r -p "Press any key to continue " key
+  echo ''
+done
+
 if [ ! -f ./.env.local.php ]; then
     echo 'Copying example.env.php to .env.local.php'
     cp example.env.php .env.local.php
@@ -16,14 +22,6 @@ if [ ! -f ./.env.testing.php ]; then
     echo 'Copying example.env.php to .env.testing.php'
     cp example.env.php .env.testing.php
 fi
-
-exit
-
-while grep -q FILL_ME .env.local.php; do
-  echo 'Please fill the missing data in .env.example.php'
-  read -n1 -r -p "Press any key to continue " key
-  echo ''
-done
 
 if grep -Fxq "192.168.10.10  groupeat.dev" /etc/hosts; then
   echo "/etc/hosts file already modified"
