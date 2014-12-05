@@ -6,7 +6,7 @@ php:
 before_script:
   - mkdir -p shippable/testresults
   - composer self-update
-  - composer install
+  - composer install --no-interaction
 
 script:
   - phpunit --log-junit shippable/testresults/junit.xml
