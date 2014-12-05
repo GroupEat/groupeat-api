@@ -14,6 +14,10 @@ class ExampleTest extends TestCase {
         $this->client->request('GET', '/');
 
 		$this->assertTrue($this->client->getResponse()->isOk());
+
+        Artisan::call('groupeat:migrate');
+
+        var_dump((string) User::first());
 	}
 
 }

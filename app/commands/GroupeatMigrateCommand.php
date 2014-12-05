@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Input\InputOption;
 
 class GroupeatMigrateCommand extends Command {
@@ -12,7 +13,7 @@ class GroupeatMigrateCommand extends Command {
 	{
         $this->setSeed();
         $this->setEntries();
-
+        $this->createMigrationsTable();
         $this->call('migrate:refresh', ['--seed' => true]);
 	}
 
@@ -47,7 +48,15 @@ class GroupeatMigrateCommand extends Command {
         }
     }
 
-	protected function getOptions()
+    protected function createMigrationsTable()
+    {
+        if (!Schema::hasTable('migrations'))
+        {
+            $this->call('migrate:install');
+        }
+    }
+
+    protected function getOptions()
 	{
 		return [
 			['random', 'r', InputOption::VALUE_NONE, 'Use random fake data to seed the DB.', null],
