@@ -164,9 +164,14 @@ if [ ! -d ~vagrant/.oh-my-zsh ]; then
   git clone https://github.com/robbyrussell/oh-my-zsh.git ~vagrant/.oh-my-zsh
 fi
 cp ~vagrant/.oh-my-zsh/templates/zshrc.zsh-template ~vagrant/.zshrc
-chown vagrant: ~vagrant/.zshrc
+chown root: ~vagrant/.zshrc
 sed -i -e 's/ZSH_THEME=".*"/ZSH_THEME="ys"/' ~vagrant/.zshrc
-chsh -s /bin/zsh vagrant
+chsh -s /bin/zsh root
+
+echo "Tweaking the ys theme"
+theme_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+ys_path="$theme_dir/ys.zsh-theme"
+cp -f $ys_path ~vagrant/.oh-my-zsh/themes/ys.zsh-theme
 
 echo "Going directly to the web folder by default"
 echo "cd ~vagrant/groupeat" >> ~vagrant/.zshrc

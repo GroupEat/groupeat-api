@@ -17,11 +17,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
   end
 
-  # Configure port Ffrwarding to the box
+  # Configure port Forwarding to the box
   config.vm.network "forwarded_port", guest: 80, host: 8000
   config.vm.network "forwarded_port", guest: 443, host: 44300
   config.vm.network "forwarded_port", guest: 5432, host: 54320
-  config.vm.network "forwarded_port", guest: 35729, host: 35729
 
   # Configure the public key for SSH access
   config.vm.provision "shell" do |s|
