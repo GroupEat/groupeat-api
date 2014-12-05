@@ -1,0 +1,13 @@
+language: php
+
+php:
+  - 5.6
+
+before_script:
+  - mkdir -p shippable/testresults
+  - mkdir -p shippable/codecoverage
+  - composer self-update
+  - composer install
+
+script:
+  - phpunit --log-junit shippable/testresults/junit.xml --coverage-xml shippable/codecoverage app/tests

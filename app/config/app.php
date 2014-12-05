@@ -78,7 +78,7 @@ return [
 	|
 	*/
 
-	'key' => $_ENV['APP_KEY'],
+	'key' => '0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7',
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 

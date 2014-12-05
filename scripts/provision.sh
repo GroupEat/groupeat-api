@@ -140,7 +140,6 @@ groups vagrant
 
 echo "Installing Node.js"
 apt-get install -y nodejs
-npm install -g grunt-cli
 npm install -g gulp
 npm install -g bower
 
