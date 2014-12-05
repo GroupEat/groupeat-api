@@ -1,3 +1,5 @@
+[![Build Status](https://api.shippable.com/projects/5481a32ad46935d5fbbf7473/badge?branchName=master)](https://app.shippable.com/projects/5481a32ad46935d5fbbf7473/builds/latest)
+
 # Installation
 
 ## Introduction
