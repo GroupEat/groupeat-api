@@ -10,3 +10,6 @@ before_script:
 
 script:
   - phpunit --log-junit shippable/testresults/junit.xml
+
+notifications:
+  - email: false
