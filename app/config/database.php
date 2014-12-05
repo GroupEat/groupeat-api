@@ -51,7 +51,7 @@ return [
 			'host'     => 'localhost',
 			'database' => 'groupeat',
 			'username' => 'groupeat',
-			'password' => $_ENV['PGSQL_PASSWORD'],
+			'password' => 'secret',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',

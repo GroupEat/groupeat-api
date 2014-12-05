@@ -12,4 +12,5 @@
 */
 
 Artisan::add(new GroupeatDbRefreshCommand);
+Artisan::add(new GroupeatPushCommand);
 

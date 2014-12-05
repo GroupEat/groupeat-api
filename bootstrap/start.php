@@ -24,13 +24,22 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment([
+$env = $app->detectEnvironment(function()
+{
+    $hostname = gethostname();
 
-	'local' => ['PizzeriaDev'],
+    if ($hostname == 'PizzeriaDev')
+    {
+        return 'local';
+    }
 
-    'testing' => ['PizzeriaTest'],
+    if (!empty($_ENV['APP_ENV']))
+    {
+        return $_ENV['APP_ENV'];
+    }
 
-]);
+    return 'production';
+});
 
 /*
 |--------------------------------------------------------------------------
