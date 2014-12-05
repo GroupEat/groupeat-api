@@ -8,6 +8,7 @@ env:
 
 before_script:
   - mkdir -p shippable/testresults
+  - psql -c 'CREATE DATABASE groupeat;' -U postgres
   - composer self-update
   - composer install --no-interaction
 

@@ -11,6 +11,6 @@
 |
 */
 
-Artisan::add(new GroupeatDbRefreshCommand);
+Artisan::add(new GroupeatMigrateCommand);
 Artisan::add(new GroupeatPushCommand);
 

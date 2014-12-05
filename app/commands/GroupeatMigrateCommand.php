@@ -3,10 +3,10 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
-class GroupeatDbRefreshCommand extends Command {
+class GroupeatMigrateCommand extends Command {
 
-	protected $name = 'groupeat:db-refresh';
-	protected $description = 'Install or reinstall the DB by running all the migrations and the seeds.';
+	protected $name = 'groupeat:migrate';
+	protected $description = 'Install or reinstall the DB by running all the migrations with the seeds.';
 
 	public function fire()
 	{

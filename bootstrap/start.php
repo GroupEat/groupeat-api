@@ -33,11 +33,6 @@ $env = $app->detectEnvironment(function()
         return 'local';
     }
 
-    if (!empty($_ENV['APP_ENV']))
-    {
-        return $_ENV['APP_ENV'];
-    }
-
     return 'production';
 });
 

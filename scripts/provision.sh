@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash bash
 
 echo "Setting up correct locale"
 sudo locale-gen en_US.UTF-8
@@ -170,7 +170,7 @@ chsh -s /bin/zsh root
 echo "Tweaking the ys theme"
 theme_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 ys_path="$theme_dir/ys.zsh-theme"
-cp -f $ys_path ~vagrant/.oh-my-zsh/themes/ys.zsh-theme
+cp -f ${ys_path} ~vagrant/.oh-my-zsh/themes/ys.zsh-theme
 
 echo "Going directly to the web folder by default"
 echo "cd ~vagrant/groupeat" >> ~vagrant/.zshrc
@@ -180,7 +180,8 @@ echo "alias ..='cd ..'" >> ~vagrant/.zshrc
 echo "alias ...='cd ../..'" >> ~vagrant/.zshrc
 echo "alias h='cd ~'" >> ~vagrant/.zshrc
 echo "alias c='clear'" >> ~vagrant/.zshrc
+echo "alias art='php artisan'" >> ~vagrant/.zshrc
 echo "alias cri='composer install'" >> ~vagrant/.zshrc
 echo "alias cru='composer update'" >> ~vagrant/.zshrc
 echo "alias crd='composer dump-autoload'" >> ~vagrant/.zshrc
-echo "alias art='php artisan'" >> ~vagrant/.zshrc
+echo "alias phpunit='~vagrant/groupeat/vendor/bin/phpunit'" >> ~vagrant/.zshrc
