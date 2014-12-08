@@ -1,38 +1,37 @@
 #!/usr/bin/env bash
 
 echo "Setting up correct locale"
-sudo locale-gen en_US.UTF-8
-export LANG=en_US.UTF-8
+sudo apt-get install -y language-pack-fr
+export LANG=fr_FR.UTF-8
+
+echo "Installing some PPAs"
+apt-get install -y software-properties-common
+apt-add-repository ppa:nginx/stable -y
+apt-add-repository ppa:ondrej/php5-5.6 -y
 
 echo "Updating packages list"
 apt-get update
 apt-get upgrade -y
 
-echo "Installing some PPAs"
-apt-get install -y software-properties-common
-apt-add-repository ppa:nginx/stable -y
-apt-add-repository ppa:chris-lea/node.js -y
-apt-add-repository ppa:ondrej/php5-5.6 -y
-
 echo "Installing git"
 apt-get install -y git
 
 echo "Installing some basic packages"
-apt-get install -y build-essential curl gcc libmcrypt4 make whois vim
+apt-get install -y build-essential curl dos2unix gcc libmcrypt4 libpcre3-dev make re2c supervisor whois vim
 
 echo "Setting timezone"
 ln -sf /usr/share/zoneinfo/CET /etc/localtime
 
 echo "Installing PHP stuffs"
 apt-get install -y php5-cli php5-dev php-pear php5-pgsql \
-php5-apcu php5-json php5-curl php5-gd php5-imap php5-gmp \
+php5-apcu php5-json php5-curl php5-gd php5-gmp php5-imap \
 php5-mcrypt php5-xdebug php5-memcached
 
 echo "Making MCrypt available"
 ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
 sudo php5enmod mcrypt
 
-echo "Installing Mailparse PECL extension"
+echo "Ipasswd -l nstalling Mailparse PECL extension"
 pecl install mailparse
 echo "extension=mailparse.so" > /etc/php5/mods-available/mailparse.ini
 ln -s /etc/php5/mods-available/mailparse.ini /etc/php5/cli/conf.d/20-mailparse.ini
@@ -144,7 +143,7 @@ apt-get install -y postgresql-9.3 postgresql-contrib
 echo "Configuring PostgreSQL remote access"
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
 echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
-sudo -u postgres psql -c "CREATE ROLE groupeat LOGIN UNENCRYPTED PASSWORD 'groupeat' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
+sudo -u postgres psql -c "CREATE ROLE groupeat LOGIN UNENCRYPTED PASSWORD '$1' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
 sudo -u postgres /usr/bin/createdb --echo --owner=groupeat groupeat
 service postgresql restart
 
@@ -157,15 +156,45 @@ apt-get install -y zsh
 if [ ! -d ~vagrant/.oh-my-zsh ]; then
   git clone https://github.com/robbyrussell/oh-my-zsh.git ~vagrant/.oh-my-zsh
 fi
+
 cp ~vagrant/.oh-my-zsh/templates/zshrc.zsh-template ~vagrant/.zshrc
-chown root: ~vagrant/.zshrc
+chown vagrant: ~vagrant/.zshrc
 sed -i -e 's/ZSH_THEME=".*"/ZSH_THEME="ys"/' ~vagrant/.zshrc
+chsh -s /bin/zsh vagrant
+
+cp -r ~vagrant/.oh-my-zsh /root/.oh-my-zsh
+cp ~vagrant/.zshrc /root/.zshrc
+chown root: /root/.zshrc
+sed -i -e 's/ZSH_THEME=".*"/ZSH_THEME="ys"/' /root/.zshrc
 chsh -s /bin/zsh root
 
-echo "Tweaking the ys theme"
-theme_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-ys_path="$theme_dir/ys.zsh-theme"
-cp -f ${ys_path} ~vagrant/.oh-my-zsh/themes/ys.zsh-theme
+ysTheme='function box_name {
+  [ -f .box-name ] && cat .box-name || hostname
+}
+
+# Directory info.
+local current_dir='\''${PWD/#$HOME/~}'\''
+
+# Git info.
+local git_info='\''$(git_prompt_info)'\''
+ZSH_THEME_GIT_PROMPT_PREFIX=" %{$fg[white]%}on%{$reset_color%} git:%{$fg[cyan]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}x"
+ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}o"
+
+# Prompt format: \n # USER at MACHINE in DIRECTORY on git:BRANCH STATE \n $
+PROMPT="
+%{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
+%{$fg[cyan]%}%n \
+%{$fg[white]%}at \
+%{$fg[green]%}$(box_name) \
+%{$fg[white]%}in \
+%{$terminfo[bold]$fg[yellow]%}${current_dir}%{$reset_color%}\
+${git_info} \
+%{$fg[white]%}
+%{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"'
+echo "$ysTheme" > ~vagrant/.oh-my-zsh/themes/ys.zsh-theme
+echo "$ysTheme" > /root/.oh-my-zsh/themes/ys.zsh-theme
 
 echo "Going directly to the web folder by default"
 echo "cd ~vagrant/groupeat" >> ~vagrant/.zshrc

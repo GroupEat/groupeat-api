@@ -1,14 +1,8 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # Configure the box
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.hostname = "PizzeriaDev"
 
-  # Configure a private network IP
-  config.vm.network :private_network, ip: "192.168.10.10"
-
-  # Configure a few VirtualBox settings
+  # Configure the Virtualbox provider for development
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--cpus", "1"]
@@ -17,10 +11,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
   end
 
+  # Register the configured shared folders
+  config.vm.synced_folder Dir.pwd, "/home/vagrant/groupeat"
+
+  # Configure the box
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.hostname = "PizzeriaDev"
+
+  # Configure a private network IP
+  config.vm.network :private_network, ip: "192.168.10.10"
+
   # Configure port Forwarding to the box
   config.vm.network "forwarded_port", guest: 80, host: 8000
   config.vm.network "forwarded_port", guest: 443, host: 44300
   config.vm.network "forwarded_port", guest: 5432, host: 54320
+
+  # Run the base provisioning script
+  config.vm.provision "shell" do |s|
+    s.path = "./scripts/provision.sh"
+    s.args = ['groupeat']
+  end
 
   # Configure the public key for SSH access
   config.vm.provision "shell" do |s|
@@ -35,13 +45,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     s.args = [File.read(File.expand_path("~/.ssh/id_rsa")), 'id_rsa']
   end
 
-  # Register the configured shared folders
-  config.vm.synced_folder Dir.pwd, "/home/vagrant/groupeat"
-
-  # Run the base provisioning script
-  config.vm.provision "shell", path: "./scripts/provision.sh"
-
-  # Configure Nginx to use the groupeat.app site
+  # Configure Nginx to use the groupeat.dev site
   config.vm.provision "shell", path: "./scripts/nginx.sh"
 
   # Install the project Composer dependencies

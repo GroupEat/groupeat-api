@@ -51,7 +51,7 @@ return [
 			'host'     => 'localhost',
 			'database' => 'groupeat',
 			'username' => 'groupeat',
-			'password' => 'secret',
+			'password' => 'groupeat',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',

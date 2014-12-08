@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
-if [ ! -f Vagrantfile ]; then
-  echo "Please call this script from the Vagrantfile folder (ie project root)."
-  exit
-else
-  echo "Vagrant file found"
-fi
+echo "Cd into project root"
+cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..
 
 while grep -q FILL_ME .env.local.php; do
   echo 'Please fill the missing data in .env.example.php'
