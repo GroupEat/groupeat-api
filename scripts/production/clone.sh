@@ -23,14 +23,8 @@ else
   echo "Moving the repository to groupeat directory"
   mv groupeat-web groupeat
 
-  echo "Switching back to root user"
-  sudo su
-
-  echo "Starting provisionning"
-  ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
-
-  echo "Switching to vagrant user"
-  su vagrant
+  echo "Starting provisionning as root"
+  sudo ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
 
   echo "Creating and editing the .env.production.php file"
   cd ~vagrant/groupeat
