@@ -10,6 +10,7 @@ reset_minion: true
 env:
   global:
     - APP_KEY='0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7'
+    - PGSQL_PASSWORD=''
     - secure: gKI98uwhu3EEP00RdyPwQP/z2JGSKHXWJDzHR1W3PQRlR+1UlLHTEqV93ehBMmsJjYiXidz2D/1Gk7VGPBDMGA4GSHlQ72YMG/1xrvyVWmotgdKq6Yqsu8ruVRg4/oqAn7w7DeoV6TzfcBbnOSacRpI7RFmLilcXuCgm9TAOry7mxKHzTfC0yGxTGQ6Bw+Q7/s1/dVtoGVvPM5GArSZEvkFZFTCHLfq6sRXC0e1MhuJX35MzlUZr/va57OJAGqa9Gnpw4B5iqVNNDHzKCG1s47mJji3UyzJVSWkeh6L9ydJ6bf3QkRJb8ZCJ3ov2p6KpA7Sa3m+Fqz7/RsbXRtHL5g==
 
 before_script:

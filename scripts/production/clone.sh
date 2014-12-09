@@ -2,6 +2,7 @@
 
 appKey="$1"
 postgresPassword="$2"
+githubToken="$3"
 
 echo "Installing git"
 apt-get install -y git
@@ -24,14 +25,19 @@ else
   mv groupeat-web groupeat
 
   echo "Starting provisionning as root"
-  sudo ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
+  sudo -s ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
 
   echo "Creating and editing the .env.production.php file"
   cd ~vagrant/groupeat
-  cp example.env.php .env.production.php
-  sed -i "s/APP_KEY.*=>.*'.*'/APP_KEY' => '$appKey'/" .env.production.php
-  sed -i "s/PGSQL_PASSWORD.*=>.*'.*'/PGSQL_PASSWORD' => '$postgresPassword'/" .env.production.php
+echo "<?php
+
+return [
+  'APP_KEY' => '$appKey',
+  'PGSQL_PASSWORD' => '$postgresPassword',
+];
+  " > .env.production.php
 
   echo "Installing Composer dependencies"
+  composer config -g github-oauth.github.com "$githubToken"
   composer install
 fi

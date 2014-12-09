@@ -35,6 +35,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 read -p "Choose passphrase for the SSH Key: " sshPassphrase
+echo
 
 echo "Trying to ssh as root user into the production server..."
 cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/production
@@ -47,5 +48,6 @@ read -n1 -r -p "Add the previous SSH key into your GitHub account and press any 
 
 read -p "Choose application key: " appKey
 read -p "Choose password for the PostgreSQL DB: " postgresPassword
+read -p "Enter GitHub access token: " githubToken
 
-ssh root@"$ip" "bash -s" < ./clone.sh "$appKey" "$postgresPassword"
+ssh root@"$ip" "bash -s" < ./clone.sh "$appKey" "$postgresPassword" "$githubToken"
