@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-zsh
-
 appKey="$1"
 postgresPassword="$2"
 githubToken="$3"
@@ -32,9 +30,7 @@ git pull
 #  mv groupeat-web groupeat
 
   echo "Starting provisionning as root"
-  sudo su
-  ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
-  su vagrant
+  sudo ~vagrant/groupeat/scripts/provision.sh lol
 
   echo "Creating and editing the .env.production.php file"
   cd ~vagrant/groupeat
