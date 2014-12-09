@@ -12,7 +12,7 @@ sudo -u vagrant echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~vagr
 
 echo "Cloning the repository"
 cd ~vagrant
-sudo -u vagrant -H git clone git@github.com:GroupEat/groupeat-web.git
+sudo -u vagrant -H git clone -v git@github.com:GroupEat/groupeat-web.git
 
 if [ -d ~vagrant/groupeat ]; then
   echo "Groupeat directory already exists. Aborting..."
