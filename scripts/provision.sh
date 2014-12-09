@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-echo "Setting up correct locale"
-sudo apt-get install -y language-pack-fr
-export LANG=fr_FR.UTF-8
-
 echo "Installing some PPAs"
 apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y

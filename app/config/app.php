@@ -78,7 +78,7 @@ return [
 	|
 	*/
 
-	'key' => '0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7',
+	'key' => $_SERVER['APP_KEY'],
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 

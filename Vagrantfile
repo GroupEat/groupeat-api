@@ -26,6 +26,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 443, host: 44300
   config.vm.network "forwarded_port", guest: 5432, host: 54320
 
+  # Install correct language on the server
+  config.vm.provision "shell", inline: "sudo apt-get install -y language-pack-fr; export LANG=fr_FR.UTF-8"
+
   # Run the base provisioning script
   config.vm.provision "shell" do |s|
     s.path = "./scripts/provision.sh"

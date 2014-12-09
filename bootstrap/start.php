@@ -24,14 +24,27 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
+function loadProductionVariables()
+{
+    $path = realpath(__DIR__.'/../.env.production.php');
+
+    if (file_exists($path))
+    {
+        foreach(include($path) as $key => $value)
+        {
+            $_SERVER[$key] = $value;
+        }
+    }
+}
+
 $env = $app->detectEnvironment(function()
 {
-    $hostname = gethostname();
-
-    if ($hostname == 'PizzeriaDev')
+    if (gethostname() == 'PizzeriaDev')
     {
         return 'local';
     }
+
+    loadProductionVariables();
 
     return 'production';
 });

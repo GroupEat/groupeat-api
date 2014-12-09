@@ -4,8 +4,8 @@ echo "Successfully logged into production"
 echo "Now initializing..."
 
 echo "Setting up correct locale"
-#sudo apt-get install -y language-pack-fr
-#export LANG=fr_FR.UTF-8
+sudo apt-get install -y language-pack-fr
+export LANG=fr_FR.UTF-8
 
 echo "Adding the vagrant user"
 adduser --disabled-password --gecos ""  vagrant

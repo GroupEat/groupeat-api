@@ -13,5 +13,13 @@
 
 Route::get('/', function()
 {
+    dd($_SERVER);
+
     return View::make('hello');
+});
+
+
+Route::get('users', function()
+{
+    return User::all();
 });
