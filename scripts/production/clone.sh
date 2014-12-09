@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+zsh
+
 appKey="$1"
 postgresPassword="$2"
 githubToken="$3"
