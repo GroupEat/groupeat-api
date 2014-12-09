@@ -18,7 +18,8 @@ echo "Adding GitHub to the known hosts"
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 echo "Cloning the repository"
-git clone git@github.com:GroupEat/groupeat-web.git
+#git clone git@github.com:GroupEat/groupeat-web.git
+cd ~vagrant/groupeat
 git pull
 
 #if [ -d ~vagrant/groupeat ]; then
