@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo "$1"
 echo "Installing some PPAs"
 apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y

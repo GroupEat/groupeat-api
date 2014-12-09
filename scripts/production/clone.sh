@@ -29,7 +29,7 @@ git pull
 #  mv groupeat-web groupeat
 
   echo "Starting provisionning as root"
-  sudo -s ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
+  sudo ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
 
   echo "Creating and editing the .env.production.php file"
   cd ~vagrant/groupeat
