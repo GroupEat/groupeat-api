@@ -4,18 +4,12 @@ appKey="$1"
 postgresPassword="$2"
 githubToken="$3"
 
-echo "Dumping secrets in ~vagrant"
-echo "$postgresPassword" > ~vagrant/.psqlPassword
-echo "$githubToken" > ~vagrant/.githubToken
-
 echo "Installing git"
 apt-get install -y git
 
-echo "Switching to vagrant user"
-su vagrant
-
 echo "Adding GitHub to the known hosts"
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~vagrant/.ssh/config
+chown -R vagrant: ~vagrant/.ssh
 
 echo "Cloning the repository"
 cd ~vagrant
@@ -39,11 +33,12 @@ return [
 " > .env.production.php
 
   echo "Starting provisionning as root"
-  sudo ~vagrant/groupeat/scripts/provision.sh
-  rm ~vagrant/.psqlPassword
+  ~vagrant/groupeat/scripts/provision.sh "$postgresPassword"
 
   echo "Installing Composer dependencies"
-  sudo composer config -g github-oauth.github.com $(cat ~vagrant/.githubToken)
-  rm ~vagrant/.githubToken
+  composer config -g github-oauth.github.com "$githubToken"
   composer install
+
+  echo "Changing to correct permissions"
+  chown -R vagrant: ~vagrant
 fi
