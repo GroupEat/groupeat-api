@@ -23,5 +23,8 @@ before_script:
 script:
   - phpunit --log-junit shippable/testresults/junit.xml
 
+after_success:
+  - ./scripts/deploy.sh
+
 notifications:
   email: false
