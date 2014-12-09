@@ -4,7 +4,6 @@ appKey="$1"
 postgresPassword="$2"
 githubToken="$3"
 
-echo "$postgresPassword"
 echo "$githubToken"
 
 echo "Installing git"
@@ -18,38 +17,39 @@ echo "Adding GitHub to the known hosts"
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 echo "Cloning the repository"
-#git clone git@github.com:GroupEat/groupeat-web.git
+git clone git@github.com:GroupEat/groupeat-web.git
 cd ~vagrant/groupeat
 git pull
 
-#if [ -d ~vagrant/groupeat ]; then
+if [ -d ~vagrant/groupeat ]; then
   echo "Groupeat directory already exists. Aborting..."
-#  exit
-#else
+  exit
+else
   echo "Moving the repository to groupeat directory"
-#  mv groupeat-web groupeat
-
-  echo "Starting provisionning as root"
-  sudo ~vagrant/groupeat/scripts/provision.sh lol
+  mv groupeat-web groupeat
 
   echo "Creating and editing the .env.production.php file"
   cd ~vagrant/groupeat
-echo "<?php
+  echo "<?php
 
-return [
+  return [
   'APP_KEY' => '$appKey',
   'PGSQL_PASSWORD' => '$postgresPassword',
-];
-"
-echo "<?php
-
-return [
-  'APP_KEY' => '$appKey',
-  'PGSQL_PASSWORD' => '$postgresPassword',
-];
+  ];
   " > .env.production.php
 
+  echo "Starting provisionning as root"
+  echo "$postgresPassword" > /tmp/.psqlPassword
+  sudo ~vagrant/groupeat/scripts/provision.sh
+  rm -f /tmp/.psqlPassword
+
   echo "Installing Composer dependencies"
-  sudo composer config -g github-oauth.github.com "$githubToken"
+  cd ~vagrant/groupeat
+  composer self-update
+  "$githubToken"
+  sudo chown -R vagrant: ~vagrant/.composer
+  "$githubToken"
+  composer config -g github-oauth.github.com "$githubToken"
+  "$githubToken"
   composer install
-#fi
+fi
