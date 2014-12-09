@@ -34,8 +34,7 @@ if [[ $? -ne 0 ]]; then
   exit
 fi
 
-read -s -p "Choose passphrase for the SSH Key: " sshPassphrase
-echo
+read -p "Choose passphrase for the SSH Key: " sshPassphrase
 
 echo "Trying to ssh as root user into the production server..."
 cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/production
@@ -46,10 +45,7 @@ ssh root@"$ip" "cat ~vagrant/.ssh/id_rsa.pub"
 echo
 read -n1 -r -p "Add the previous SSH key into your GitHub account and press any key to continue..." uselessKey
 
-read -s -p "Choose application key: " appKey
-echo
-
-read -s -p "Choose password for the PostgreSQL DB: " postgresPassword
-echo
+read -p "Choose application key: " appKey
+read -p "Choose password for the PostgreSQL DB: " postgresPassword
 
 ssh root@"$ip" "bash -s" < ./clone.sh "$appKey" "$postgresPassword"
