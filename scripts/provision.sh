@@ -139,6 +139,7 @@ apt-get install -y postgresql-9.3 postgresql-contrib
 echo "Configuring PostgreSQL remote access"
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
 echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
+echo "$1"
 echo "CREATE ROLE groupeat LOGIN UNENCRYPTED PASSWORD '$1' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
 sudo -u postgres psql -c "CREATE ROLE groupeat LOGIN UNENCRYPTED PASSWORD '$1' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
 sudo -u postgres /usr/bin/createdb --echo --owner=groupeat groupeat
