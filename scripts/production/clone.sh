@@ -19,6 +19,7 @@ echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 echo "Cloning the repository"
 git clone git@github.com:GroupEat/groupeat-web.git
+git pull
 
 #if [ -d ~vagrant/groupeat ]; then
   echo "Groupeat directory already exists. Aborting..."
