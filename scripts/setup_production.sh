@@ -42,6 +42,7 @@ cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/production
 ssh root@"$ip" "bash -s" < ./init.sh "$shippableKey"
 
 echo
+echo
 ssh root@"$ip" "cat ~vagrant/.ssh/id_rsa.pub"
 echo
 read -n1 -r -p "Add the previous SSH key into your GitHub account and press any key to continue..." uselessKey
