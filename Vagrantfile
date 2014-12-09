@@ -53,4 +53,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Install the project Composer dependencies
   config.vm.provision "shell", inline: "cd ~vagrant/groupeat; /usr/local/bin/composer install"
+
+  # Copy the Git config into the VM
+  config.vm.provision "shell", inline: "echo '$(cat ~/.gitconfig)' > ~vagrant/.gitconfig"
 end
