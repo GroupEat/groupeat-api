@@ -35,11 +35,11 @@ if [[ $? -ne 0 ]]; then
 fi
 
 read -p "Choose passphrase for the SSH Key: " sshPassphrase
-echo
+read -p "Enter Shippable deployement key: " shippableKey
 
 echo "Trying to ssh as root user into the production server..."
 cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/production
-ssh root@"$ip" "bash -s" < ./init.sh "$sshPassphrase"
+ssh root@"$ip" "bash -s" < ./init.sh "$sshPassphrase" "$shippableKey"
 
 echo
 ssh root@"$ip" "cat ~vagrant/.ssh/id_rsa.pub"
