@@ -42,6 +42,7 @@ cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/production
 ssh root@"$ip" "bash -s" < ./init.sh "$shippableKey"
 
 echo
+echo "Fetching remote public rsa key"
 echo
 ssh root@"$ip" "cat ~vagrant/.ssh/id_rsa.pub"
 echo

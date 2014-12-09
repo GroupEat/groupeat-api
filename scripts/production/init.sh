@@ -21,7 +21,7 @@ cp /root/.ssh/authorized_keys ~vagrant/.ssh/authorized_keys
 chown -R vagrant: ~vagrant/.ssh
 
 echo "Creating RSA keys"
-sudo -u vagrant ssh-keygen -b 2048 -t rsa -C "tib.dex@gmail.com" -f ~vagrant/.ssh/id_rsa
+sudo -u vagrant ssh-keygen -t rsa -N "" -C "tib.dex@gmail.com" -f ~vagrant/.ssh/id_rsa
 
 echo "Adding Shippable deployment key to the authorized keys"
 shippableKey="$1"" ""$2"

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 cd ~vagrant/groupeat
-art down
+php artisan down
 git pull
 composer install
-art optimize
-art up
+php artisan optimize
+php artisan up
