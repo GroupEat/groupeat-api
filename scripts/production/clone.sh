@@ -21,12 +21,12 @@ git clone git@github.com:GroupEat/groupeat-web.git
 cd ~vagrant/groupeat
 git pull
 
-if [ -d ~vagrant/groupeat ]; then
+#if [ -d ~vagrant/groupeat ]; then
   echo "Groupeat directory already exists. Aborting..."
-  exit
-else
+#  exit
+#else
   echo "Moving the repository to groupeat directory"
-  mv groupeat-web groupeat
+  #mv groupeat-web groupeat
 
   echo "Creating and editing the .env.production.php file"
   cd ~vagrant/groupeat
@@ -52,4 +52,4 @@ else
   composer config -g github-oauth.github.com "$githubToken"
   "$githubToken"
   composer install
-fi
+#fi
