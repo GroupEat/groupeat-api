@@ -1,16 +1,5 @@
 #!/usr/bin/env bash
 
-cd ~/vagrant/groupeat/scripts/production
-
-ip="178.62.158.190"
-appKey="LLYGfhqxgVLXcbilLfdCkd8xwotU9zOh"
-postgresPassword="Meyne_IS2012"
-githubToken="c5d31e9eba81ef687d44ff0126e48d38269a0c78"
-
-ssh root@"$ip" "bash -s" < ./clone.sh "$appKey" "$postgresPassword" "$githubToken"
-
-exit
-
 function validateIP()
 {
   local ip=$1
