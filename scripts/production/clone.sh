@@ -8,12 +8,11 @@ echo "Installing git"
 apt-get install -y git
 
 echo "Adding GitHub to the known hosts"
-echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~vagrant/.ssh/config
-chown -R vagrant: ~vagrant/.ssh
+sudo -u vagrant echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~vagrant/.ssh/config
 
 echo "Cloning the repository"
 cd ~vagrant
-git clone git@github.com:GroupEat/groupeat-web.git
+sudo -u vagrant git clone git@github.com:GroupEat/groupeat-web.git
 
 if [ -d ~vagrant/groupeat ]; then
   echo "Groupeat directory already exists. Aborting..."
