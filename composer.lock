@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1678384853d9f1f6f0ef8949daecd265",
+    "hash": "2334fbd69f78ab30c275e26ac7fa1c46",
     "packages": [
         {
             "name": "anahkiasen/former",
@@ -187,16 +187,16 @@
         },
         {
             "name": "dingo/api",
-            "version": "v0.7.1",
+            "version": "v0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dingo/api.git",
-                "reference": "def08e52a6582d8f60c12ebc509ed7d6e8a7f81b"
+                "reference": "afc1bddb8c36e88cc6e7d0fbe8767435316579f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dingo/api/zipball/def08e52a6582d8f60c12ebc509ed7d6e8a7f81b",
-                "reference": "def08e52a6582d8f60c12ebc509ed7d6e8a7f81b",
+                "url": "https://api.github.com/repos/dingo/api/zipball/afc1bddb8c36e88cc6e7d0fbe8767435316579f0",
+                "reference": "afc1bddb8c36e88cc6e7d0fbe8767435316579f0",
                 "shasum": ""
             },
             "require": {
@@ -250,7 +250,7 @@
                 "laravel",
                 "restful"
             ],
-            "time": "2014-12-01 01:04:27"
+            "time": "2014-12-08 02:24:46"
         },
         {
             "name": "filp/whoops",
@@ -1184,16 +1184,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.3.0",
+            "version": "v5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205"
+                "reference": "c5f963e7f9d6f6438fda4f22d5cc2db296ec621a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/b86b927dfefdb56ab0b22d1350033d9a38e9f205",
-                "reference": "b86b927dfefdb56ab0b22d1350033d9a38e9f205",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/c5f963e7f9d6f6438fda4f22d5cc2db296ec621a",
+                "reference": "c5f963e7f9d6f6438fda4f22d5cc2db296ec621a",
                 "shasum": ""
             },
             "require": {
@@ -1232,7 +1232,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-10-04 05:53:18"
+            "time": "2014-12-05 14:17:14"
         },
         {
             "name": "symfony/browser-kit",
@@ -2015,6 +2015,84 @@
     ],
     "packages-dev": [
         {
+            "name": "anahkiasen/rocketeer",
+            "version": "2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rocketeers/rocketeer.git",
+                "reference": "2b52d30723136e6a56080c41341e4a398bebec52"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rocketeers/rocketeer/zipball/2b52d30723136e6a56080c41341e4a398bebec52",
+                "reference": "2b52d30723136e6a56080c41341e4a398bebec52",
+                "shasum": ""
+            },
+            "require": {
+                "d11wtq/boris": "~1.0.8",
+                "illuminate/config": "~4.2",
+                "illuminate/console": "~4.2",
+                "illuminate/container": "~4.2",
+                "illuminate/events": "~4.2",
+                "illuminate/filesystem": "~4.2",
+                "illuminate/log": "~4.2",
+                "illuminate/remote": "~4.2",
+                "illuminate/support": "~4.2",
+                "kzykhys/parallel": "~0.1.0",
+                "patchwork/utf8": "~1.1",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "herrera-io/box": "~1.5.3",
+                "johnkary/phpunit-speedtrap": "dev-master",
+                "mockery/mockery": "~0.9",
+                "nesbot/carbon": "~1.4",
+                "phpseclib/phpseclib": "~0.3.5",
+                "phpunit/phpunit": "~4.0",
+                "raveren/kint": "~0.9.1"
+            },
+            "suggest": {
+                "anahkiasen/rocketeer-campfire": "Campfire plugin to create deployments notifications",
+                "anahkiasen/rocketeer-slack": "Slack plugin to create deployments notifications",
+                "ext-pcntl": "Allow parallel deployments"
+            },
+            "bin": [
+                "bin/rocketeer"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rocketeer\\": "src/Rocketeer"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Maxime Fabre",
+                    "email": "ehtnam6@gmail.com",
+                    "homepage": "http://autopergamene.eu/en"
+                }
+            ],
+            "description": "Rocketeer is a fast and simple deployer for the PHP world",
+            "homepage": "http://rocketeer.autopergamene.eu",
+            "keywords": [
+                "deploy",
+                "deployment",
+                "laravel",
+                "ssh",
+                "task"
+            ],
+            "time": "2014-12-08 15:15:41"
+        },
+        {
             "name": "codeception/codeception",
             "version": "2.0.8",
             "source": {
@@ -2397,6 +2475,42 @@
             "time": "2014-10-12 19:18:40"
         },
         {
+            "name": "kzykhys/parallel",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kzykhys/Parallel.php.git",
+                "reference": "d15bc88f06d279112a0facb6607072dfb48dfc6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kzykhys/Parallel.php/zipball/d15bc88f06d279112a0facb6607072dfb48dfc6f",
+                "reference": "d15bc88f06d279112a0facb6607072dfb48dfc6f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/php-code-coverage": "1.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kazuyuki Hayashi",
+                    "email": "hayashi@valnur.net"
+                }
+            ],
+            "description": "Simple multitasking library",
+            "time": "2014-02-04 13:24:07"
+        },
+        {
             "name": "phpunit/php-code-coverage",
             "version": "2.0.13",
             "source": {
@@ -2645,16 +2759,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.3.5",
+            "version": "4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2dab9d593997db4abcf58d0daf798eb4e9cecfe1"
+                "reference": "bbe7bcb83b6ec1a9eaabbe1b70d4795027c53ee0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2dab9d593997db4abcf58d0daf798eb4e9cecfe1",
-                "reference": "2dab9d593997db4abcf58d0daf798eb4e9cecfe1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/bbe7bcb83b6ec1a9eaabbe1b70d4795027c53ee0",
+                "reference": "bbe7bcb83b6ec1a9eaabbe1b70d4795027c53ee0",
                 "shasum": ""
             },
             "require": {
@@ -2671,8 +2785,9 @@
                 "phpunit/phpunit-mock-objects": "~2.3",
                 "sebastian/comparator": "~1.0",
                 "sebastian/diff": "~1.1",
-                "sebastian/environment": "~1.0",
+                "sebastian/environment": "~1.1",
                 "sebastian/exporter": "~1.0",
+                "sebastian/global-state": "~1.0",
                 "sebastian/version": "~1.0",
                 "symfony/yaml": "~2.0"
             },
@@ -2685,7 +2800,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3.x-dev"
+                    "dev-master": "4.4.x-dev"
                 }
             },
             "autoload": {
@@ -2694,10 +2809,6 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "",
-                "../../symfony/yaml/"
-            ],
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2709,13 +2820,13 @@
                 }
             ],
             "description": "The PHP Unit Testing framework.",
-            "homepage": "http://www.phpunit.de/",
+            "homepage": "https://phpunit.de/",
             "keywords": [
                 "phpunit",
                 "testing",
                 "xunit"
             ],
-            "time": "2014-11-11 10:11:09"
+            "time": "2014-12-05 06:49:03"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3046,6 +3157,57 @@
                 "exporter"
             ],
             "time": "2014-09-10 00:51:36"
+        },
+        {
+            "name": "sebastian/global-state",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/global-state.git",
+                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
+                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.2"
+            },
+            "suggest": {
+                "ext-uopz": "*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de"
+                }
+            ],
+            "description": "Snapshotting of global state",
+            "homepage": "http://www.github.com/sebastianbergmann/global-state",
+            "keywords": [
+                "global state"
+            ],
+            "time": "2014-10-06 09:23:50"
         },
         {
             "name": "sebastian/version",

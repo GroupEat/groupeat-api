@@ -1,7 +1,7 @@
 {
 	"name": "groupeat/web",
 	"require": {
-        "dingo/api": "0.7.1",
+        "dingo/api": "0.8.0",
         "anahkiasen/former": "3.5.2",
         "itsgoingd/clockwork": "1.6",
         "laravel/framework": "4.2.11",
@@ -9,7 +9,8 @@
 	},
     "require-dev": {
         "fzaninotto/faker": "1.4.0",
-        "codeception/codeception": "2.0.8"
+        "codeception/codeception": "2.0.8",
+        "anahkiasen/rocketeer": "2.0.4"
     },
 	"autoload": {
 		"classmap": [

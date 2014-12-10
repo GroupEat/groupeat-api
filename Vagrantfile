@@ -49,7 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Configure Nginx to use the groupeat.dev site
-  config.vm.provision "shell", path: "./scripts/nginx.sh"
+  config.vm.provision "shell", path: "./scripts/vagrant/nginx.sh"
 
   # Install the project Composer dependencies
   config.vm.provision "shell", inline: "cd ~vagrant/groupeat; /usr/local/bin/composer install"

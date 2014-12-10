@@ -1,8 +1,7 @@
 <?php
 
 return [
-	'debug' => true,
-    'url' => 'http://groupeat.dev',
+    'debug' => true,
 
     'providers' => append_config([
         'Rocketeer\RocketeerServiceProvider',

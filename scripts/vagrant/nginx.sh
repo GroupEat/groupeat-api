@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-rm -f /etc/nginx/sites-enabled/groupeat.fr
-rm -f /etc/nginx/sites-available/groupeat.fr
-
 block="server {
   listen 80;
   server_name groupeat.dev;
