@@ -1,23 +1,28 @@
 {
-	"name": "groupeat/web",
+    "name": "groupeat/web",
+    "authors": [
+        {
+            "name": "Thibault Derousseaux",
+            "email": "tib.dex@gmail.com"
+        }
+    ],
 	"require": {
-        "dingo/api": "0.8.0",
-        "anahkiasen/former": "3.5.2",
-        "itsgoingd/clockwork": "1.6",
-        "laravel/framework": "4.2.11",
-        "league/oauth2-server": "4.0.4"
+        "anlutro/curl": "0.6.2",
+        "laravel/framework": "4.2.11"
+
 	},
     "require-dev": {
-        "fzaninotto/faker": "1.4.0",
-        "codeception/codeception": "2.0.8",
         "anahkiasen/rocketeer": "2.0.4"
     },
 	"autoload": {
+        "psr-4": {
+            "Groupeat\\Core\\": "workbench/groupeat/core/src",
+            "Groupeat\\Deploy\\": "workbench/groupeat/deploy/src",
+            "Groupeat\\Users\\": "workbench/groupeat/users/src"
+        },
 		"classmap": [
-			"app/commands",
-			"app/controllers",
-			"app/models",
-			"app/database",
+            "app/database/seeds",
+			"app/database/migrations",
 			"app/tests/TestCase.php"
 		]
 	},

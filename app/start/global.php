@@ -2,26 +2,6 @@
 
 /*
 |--------------------------------------------------------------------------
-| Register The Laravel Class Loader
-|--------------------------------------------------------------------------
-|
-| In addition to using Composer, you may use the Laravel class loader to
-| load your controllers and models. This is useful for keeping all of
-| your classes in the "global" namespace without Composer updating.
-|
-*/
-
-ClassLoader::addDirectories([
-
-	app_path().'/commands',
-	app_path().'/controllers',
-	app_path().'/models',
-	app_path().'/database/seeds',
-
-]);
-
-/*
-|--------------------------------------------------------------------------
 | Application Error Logger
 |--------------------------------------------------------------------------
 |
@@ -79,15 +59,3 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
-
-/*
-|--------------------------------------------------------------------------
-| Require The Helpers File
-|--------------------------------------------------------------------------
-|
-| Next we will load the helpers file for the application. This gives us
-| a nice separate location to store our small function definitions.
-|
-*/
-
-require app_path().'/helpers.php';

@@ -2,6 +2,8 @@
 
 use Rocketeer\Services\Connections\ConnectionsHandler;
 
+$connections = Config::get('remote.connections');
+
 return [
 
 	// The name of the application to deploy
@@ -31,7 +33,7 @@ return [
 	////////////////////////////////////////////////////////////////////
 
 	// The default remote connection(s) to execute tasks on
-	'default'          => ['production'],
+	'default'          => [Config::get('remote.default')],
 
 	// The various connections you defined
 	// You can leave all of this empty or remove it entirely if you don't want
@@ -39,14 +41,24 @@ return [
 	// and store them locally
 	'connections'      => [
 		'production' => [
-			'host'      => '178.62.158.190',
-			'username'  => 'vagrant',
-			'password'  => '',
-			'key'       => '/home/vagrant/.ssh/id_rsa',
-			'keyphrase' => '',
+			'host'      => $connections['production']['host'],
+			'username'  => $connections['production']['username'],
+			'password'  => $connections['production']['password'],
+			'key'       => $connections['production']['key'],
+			'keyphrase' => $connections['production']['keyphrase'],
 			'agent'     => '',
 			'db_role'   => true,
 		],
+
+        'production_root' => [
+            'host'      => $connections['production_root']['host'],
+            'username'  => $connections['production_root']['username'],
+            'password'  => $connections['production_root']['password'],
+            'key'       => $connections['production_root']['key'],
+            'keyphrase' => $connections['production_root']['keyphrase'],
+            'agent'     => '',
+            'db_role'   => true,
+        ],
 	],
 
 	/*

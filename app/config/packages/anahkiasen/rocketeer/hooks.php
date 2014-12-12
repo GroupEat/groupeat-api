@@ -16,15 +16,25 @@ return [
 
 	// Tasks to execute before the core Rocketeer Tasks
 	'before' => [
-		'setup'   => [],
+		'setup'   => [
+            'Groupeat\Deploy\Tasks\ProvisionTask',
+		],
 		'deploy'  => [],
 		'cleanup' => [],
 	],
 
 	// Tasks to execute after the core Rocketeer Tasks
 	'after'  => [
-		'setup'   => [],
-		'deploy'  => [],
+		'setup'   => [
+            function($task)
+            {
+                $sharedFolder = $task->paths->getFolder('shared');
+                $task->run('mv '.Groupeat\Deploy\Tasks\ProvisionTask::ENV_FILE_TEMP_PATH.' '.$sharedFolder);
+            },
+        ],
+		'deploy'  => [
+            'php artisan groupeat:opcache',
+        ],
 		'cleanup' => [],
 	],
 

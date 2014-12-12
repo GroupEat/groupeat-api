@@ -1,10 +1,14 @@
-<?php
+<?php namespace Groupeat\Users\Seeders;
 
-use Groupeat\Database\Seeder;
+use Groupeat\Users\Models\User;
+use Groupeat\Core\Support\Database\Seeder;
 
 class UsersSeeder extends Seeder {
 
-    const MODEL_CLASS = 'User';
+    public function getModel()
+    {
+        return new User;
+    }
 
     public function makeEntry()
     {
@@ -14,5 +18,4 @@ class UsersSeeder extends Seeder {
             'lastName' => $this->faker->lastName,
         ]);
     }
-
 }

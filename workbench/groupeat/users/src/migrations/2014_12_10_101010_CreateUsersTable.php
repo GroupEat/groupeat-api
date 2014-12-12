@@ -1,15 +1,19 @@
-<?php
+<?php namespace Groupeat\Users\Migrations;
 
-use Groupeat\Database\Migration;
+use Groupeat\Users\Models\User;
 use Illuminate\Database\Schema\Blueprint;
+use Groupeat\Core\Support\Database\Migration;
 
 class CreateUsersTable extends Migration {
 
-    const MODEL_CLASS = 'User';
+    public function getModel()
+    {
+        return new User;
+    }
 
-	public function up()
-	{
-        Schema::create($this->getTableName(), function($table)
+    public function up()
+    {
+        Schema::create($this->getTable(), function($table)
         {
             $table->increments('id');
             $table->string('email')->unique()->index();
@@ -17,6 +21,6 @@ class CreateUsersTable extends Migration {
             $table->string('lastName');
             $table->timestamps();
         });
-	}
+    }
 
 }

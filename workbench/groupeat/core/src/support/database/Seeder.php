@@ -1,14 +1,14 @@
-<?php namespace Groupeat\Database;
+<?php namespace Groupeat\Core\Support\Database;
 
-use App;
-use Config;
 use Faker\Factory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Seeder as LaravelSeeder;
 
 abstract class Seeder extends LaravelSeeder {
 
-    use TableNameGetter;
+    use TableGetter;
 
     protected $faker;
     protected $entries;
@@ -17,8 +17,8 @@ abstract class Seeder extends LaravelSeeder {
     {
         $locale = App::getLocale();
         $seed = Config::get('database.seed');
-        $fullLocale = strtolower($locale).'_'.strtoupper($locale);
 
+        $fullLocale = strtolower($locale).'_'.strtoupper($locale);
         $this->faker = Factory::create($locale);
 
         if ($seed)
@@ -44,7 +44,6 @@ abstract class Seeder extends LaravelSeeder {
 
     protected function cleanTable()
     {
-        DB::table($this->getTableName())->delete();
+        DB::table($this->getTable())->delete();
     }
-
 }

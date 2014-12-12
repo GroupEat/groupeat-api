@@ -4,92 +4,33 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2334fbd69f78ab30c275e26ac7fa1c46",
+    "hash": "42b443e27464bc5cca07ea8f9f74978d",
     "packages": [
         {
-            "name": "anahkiasen/former",
-            "version": "3.5.2",
+            "name": "anlutro/curl",
+            "version": "0.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Anahkiasen/former.git",
-                "reference": "9e98e577f0d733d24b846cbd572049fe1ca53473"
+                "url": "https://github.com/anlutro/php-curl.git",
+                "reference": "3744ba5995cc95bc9098667fa160898dfe613f0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Anahkiasen/former/zipball/9e98e577f0d733d24b846cbd572049fe1ca53473",
-                "reference": "9e98e577f0d733d24b846cbd572049fe1ca53473",
-                "shasum": ""
-            },
-            "require": {
-                "anahkiasen/html-object": "~1.4",
-                "illuminate/config": ">=4.2",
-                "illuminate/container": ">=4.2",
-                "illuminate/http": ">=4.2",
-                "illuminate/routing": ">=4.2",
-                "illuminate/session": ">=4.2",
-                "illuminate/translation": ">=4.2",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "illuminate/database": ">=4.2",
-                "mockery/mockery": "~0.9.1",
-                "phpunit/phpunit": "~4.1.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Former\\": [
-                        "src/Former",
-                        "tests"
-                    ],
-                    "Laravel\\": "src/Laravel"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Maxime Fabre",
-                    "email": "ehtnam6@gmail.com"
-                }
-            ],
-            "description": "A powerful form builder",
-            "homepage": "http://anahkiasen.github.com/former/",
-            "keywords": [
-                "bootstrap",
-                "form",
-                "foundation",
-                "laravel"
-            ],
-            "time": "2014-10-09 08:02:19"
-        },
-        {
-            "name": "anahkiasen/html-object",
-            "version": "1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Anahkiasen/html-object.git",
-                "reference": "776aff25a4db27964d95b2332e2f379b0aac9ff0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Anahkiasen/html-object/zipball/776aff25a4db27964d95b2332e2f379b0aac9ff0",
-                "reference": "776aff25a4db27964d95b2332e2f379b0aac9ff0",
+                "url": "https://api.github.com/repos/anlutro/php-curl/zipball/3744ba5995cc95bc9098667fa160898dfe613f0a",
+                "reference": "3744ba5995cc95bc9098667fa160898dfe613f0a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "require-dev": {
+                "mockery/mockery": "0.9.*"
+            },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "HtmlObject": "src"
-                },
-                "classmap": [
-                    "tests"
-                ]
+                "psr-4": {
+                    "anlutro\\cURL\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -97,12 +38,12 @@
             ],
             "authors": [
                 {
-                    "name": "Maxime Fabre",
-                    "email": "ehtnam6@gmail.com"
+                    "name": "Andreas Lutro",
+                    "email": "anlutro@gmail.com"
                 }
             ],
-            "description": "A set of classes to create and manipulate HTML objects abstractions",
-            "time": "2014-01-27 22:41:20"
+            "description": "Simple OOP cURL wrapper.",
+            "time": "2014-11-12 14:29:32"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -351,51 +292,6 @@
                 "password"
             ],
             "time": "2014-11-20 16:49:30"
-        },
-        {
-            "name": "itsgoingd/clockwork",
-            "version": "v1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/itsgoingd/clockwork.git",
-                "reference": "80c990bca6f57f059b8343c2848b8c98fcd86d97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/itsgoingd/clockwork/zipball/80c990bca6f57f059b8343c2848b8c98fcd86d97",
-                "reference": "80c990bca6f57f059b8343c2848b8c98fcd86d97",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9",
-                "psr/log": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Clockwork": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "itsgoingd",
-                    "email": "itsgoingd@luzer.sk",
-                    "homepage": "http://twitter.com/itsgoingd"
-                }
-            ],
-            "description": "Server-side component of Clockwork, a Chrome extension for PHP development",
-            "homepage": "http://github.com/itsgoingd/clockwork",
-            "keywords": [
-                "debugging",
-                "laravel",
-                "logging",
-                "profiling"
-            ],
-            "time": "2014-09-24 23:06:07"
         },
         {
             "name": "jeremeamia/SuperClosure",
@@ -2376,16 +2272,16 @@
         },
         {
             "name": "guzzlehttp/ringphp",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/RingPHP.git",
-                "reference": "9187999f80720b9494692d2167d75144acb2ad05"
+                "reference": "a903f51b692427318bc813217c0e6505287e79a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/9187999f80720b9494692d2167d75144acb2ad05",
-                "reference": "9187999f80720b9494692d2167d75144acb2ad05",
+                "url": "https://api.github.com/repos/guzzle/RingPHP/zipball/a903f51b692427318bc813217c0e6505287e79a4",
+                "reference": "a903f51b692427318bc813217c0e6505287e79a4",
                 "shasum": ""
             },
             "require": {
@@ -2422,7 +2318,7 @@
                     "homepage": "https://github.com/mtdowling"
                 }
             ],
-            "time": "2014-12-02 05:01:22"
+            "time": "2014-12-11 05:50:32"
         },
         {
             "name": "guzzlehttp/streams",

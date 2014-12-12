@@ -1,12 +1,13 @@
-<?php
+<?php namespace Groupeat\Core\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
-class GroupeatPushCommand extends Command {
+class PushCommand extends Command {
 
 	protected $name = 'groupeat:push';
 	protected $description = 'Push the code to the Git repository.';
+
 
 	public function fire()
 	{

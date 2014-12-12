@@ -12,7 +12,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Register the configured shared folders
-  config.vm.synced_folder Dir.pwd, "/home/vagrant/groupeat"
+  config.vm.synced_folder Dir.pwd, "/home/vagrant/groupeat/current"
 
   # Configure the box
   config.vm.box = "ubuntu/trusty64"
@@ -25,15 +25,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8000
   config.vm.network "forwarded_port", guest: 443, host: 44300
   config.vm.network "forwarded_port", guest: 5432, host: 54320
-
-  # Install correct language on the server
-  config.vm.provision "shell", inline: "sudo apt-get install -y language-pack-fr; export LANG=fr_FR.UTF-8"
-
-  # Run the base provisioning script
-  config.vm.provision "shell" do |s|
-    s.path = "./scripts/provision.sh"
-    s.args = ['groupeat']
-  end
 
   # Configure the public key for SSH access
   config.vm.provision "shell" do |s|
@@ -48,12 +39,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     s.args = [File.read(File.expand_path("~/.ssh/id_rsa")), 'id_rsa']
   end
 
-  # Configure Nginx to use the groupeat.dev site
-  config.vm.provision "shell", path: "./scripts/vagrant/nginx.sh"
-
-  # Install the project Composer dependencies
-  config.vm.provision "shell", inline: "cd ~vagrant/groupeat; /usr/local/bin/composer install"
-
   # Copy the Git config into the VM
   config.vm.provision :file, source: '~/.gitconfig', destination: '/home/vagrant/.gitconfig' if File.exist?(ENV['HOME'] + '/.gitconfig')
+
+  # Run the base provisioning script
+  config.vm.provision "shell" do |s|
+    domain = 'groupeat.dev'
+    postgresPassword = 'groupeat'
+    s.path = "./scripts/provision.sh"
+    s.args = [domain, postgresPassword]
+  end
+
+  # Install the project Composer dependencies
+  config.vm.provision "shell", inline: "cd ~vagrant/groupeat/current; /usr/local/bin/composer install"
 end
