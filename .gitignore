@@ -7,4 +7,3 @@ Thumbs.db
 composer.phar
 /vendor
 /bootstrap/compiled.php
-/public/packages

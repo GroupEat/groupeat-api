@@ -1,6 +1,8 @@
-<?php
+<?php namespace Groupeat\Core\Support\Tests;
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase {
+use Illuminate\Foundation\Testing\TestCase as IlluminateTestCase;
+
+abstract class TestCase extends IlluminateTestCase {
 
 	/**
 	 * Creates the application.
@@ -13,7 +15,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
 		$testEnvironment = !empty($_SERVER['SHIPPABLE']) ? 'building' : 'testing';
 
-		return require __DIR__.'/../../bootstrap/start.php';
+        return require __DIR__.'/../../../../../../bootstrap/start.php';
 	}
 
 }

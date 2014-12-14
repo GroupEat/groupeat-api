@@ -12,9 +12,54 @@ if (!function_exists('artisan'))
     }
 }
 
+if (!function_exists('process'))
+{
+    function process($command, \Symfony\Component\Console\Output\OutputInterface $output = null, $silent = false)
+    {
+        $process = new \Symfony\Component\Process\Process($command);
+
+        if ($silent)
+        {
+            $process->run();
+        }
+        else
+        {
+            if (empty($output))
+            {
+                $process->run(function ($type, $buffer)
+                {
+                    if ('err' === $type)
+                    {
+                        echo 'ERR > '.trim($buffer);
+                    }
+                    else
+                    {
+                        echo 'OUT > '.trim($buffer);
+                    }
+                });
+            }
+            else
+            {
+                $process->run(function ($type, $buffer) use ($output)
+                {
+                    if ('err' === $type)
+                    {
+                        $output->writeln('<error>'.trim($buffer).'</error>');
+                    }
+                    else
+                    {
+                        $output->writeln(trim($buffer));
+                    }
+                });
+            }
+        }
+
+        return $process->isSuccessful();
+    }
+}
+
 if (!function_exists('workbench_path'))
 {
-    // Call an Artisan command and return its output
     function workbench_path($package, $file = '')
     {
         $package = strtolower($package);
@@ -33,7 +78,6 @@ if (!function_exists('workbench_path'))
 
 if (!function_exists('listGroupeatPackages'))
 {
-    // Call an Artisan command and return its output
     function listGroupeatPackages($withoutCore = false)
     {
         $directories = \Illuminate\Support\Facades\File::directories(base_path('workbench/groupeat'));

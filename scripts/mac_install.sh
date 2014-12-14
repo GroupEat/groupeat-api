@@ -3,7 +3,7 @@
 echo "Cd into project root"
 cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..
 
-while grep -q FILL_ME .env.local.php; do
+while grep -qs FILL_ME .env.local.php; do
   echo 'Please fill the missing data in .env.example.php'
   read -n1 -r -p "Press any key to continue " key
   echo ''
@@ -19,7 +19,7 @@ if [ ! -f ./.env.testing.php ]; then
     cp example.env.php .env.testing.php
 fi
 
-if grep -Fxq "192.168.10.10  groupeat.dev" /etc/hosts; then
+if grep -Fxqs "192.168.10.10  groupeat.dev" /etc/hosts; then
   echo "/etc/hosts file already modified"
 else
   echo "Adding '192.168.10.10  groupeat.dev' to /etc/hosts"
@@ -42,15 +42,15 @@ fi
 if [[ -n $(brew ls --versions virtualbox) ]]; then
   echo 'Virtualbox already installed'
 else
-  echo "Installing Virtualbox"
-  brew cask install virtualbox
+  echo "Installing Virtualbox "
+  brew cask install --force virtualbox
 fi
 
 if [[ -n $(brew ls --versions vagrant) ]]; then
   echo 'Vagrant already installed'
 else
   echo "Installing Vagrant"
-  brew cask install vagrant
+  brew cask install --force vagrant
 fi
 
 echo 'Deleting old running VM'
@@ -61,3 +61,6 @@ vagrant up
 
 echo 'Opening the app in the default browser to check if everything works'
 open "http://groupeat.dev"
+
+echo "SSH into the VM"
+vagrant ssh

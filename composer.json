@@ -17,13 +17,13 @@
 	"autoload": {
         "psr-4": {
             "Groupeat\\Core\\": "workbench/groupeat/core/src",
+            "Groupeat\\Users\\": "workbench/groupeat/users/src",
             "Groupeat\\Deploy\\": "workbench/groupeat/deploy/src",
-            "Groupeat\\Users\\": "workbench/groupeat/users/src"
+            "Groupeat\\Showcase\\": "workbench/groupeat/showcase/src"
         },
 		"classmap": [
             "app/database/seeds",
-			"app/database/migrations",
-			"app/tests/TestCase.php"
+			"app/database/migrations"
 		]
 	},
 	"config": {

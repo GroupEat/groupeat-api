@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Core\Support;
+<?php namespace Groupeat\Core\Support\Providers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
@@ -13,8 +13,11 @@ class WorkbenchServiceProvider extends ServiceProvider {
     protected $autoRegisterCommands = true;
 
 
-	public function register()
-	{
+    public function boot()
+    {
+        $name = $this->getPackageName();
+        $this->package('groupeat/'.$name, $name, $this->getPackagePath());
+
         if ($this->autoRequireFiles)
         {
             $this->requireFiles(...$this->filesToRequire);
@@ -24,7 +27,12 @@ class WorkbenchServiceProvider extends ServiceProvider {
         {
             $this->registerCommands(...$this->listCommandShortNames());
         }
-	}
+    }
+
+    public function register()
+    {
+        $this->app['config']->package('groupeat/'.$this->getPackageName(), $this->getPackagePath('config'));
+    }
 
 	protected function requireFiles(...$files)
     {
@@ -62,7 +70,7 @@ class WorkbenchServiceProvider extends ServiceProvider {
 
         foreach ($commandShortNames as $commandShortName)
         {
-            $className = 'Groupeat\\'.$this->getPackageName().'\\Commands\\'.$commandShortName.'Command';
+            $className = 'Groupeat\\'.ucfirst($this->getPackageName()).'\\Commands\\'.$commandShortName.'Command';
             $name = 'groupeat.commands.'.strtolower($commandShortName);
 
             $this->app[$name] = $this->app->share(function($app) use ($className)
@@ -80,9 +88,7 @@ class WorkbenchServiceProvider extends ServiceProvider {
 
     protected function getPackagePath($file = '')
     {
-        $folder = strtolower($this->getPackageName());
-
-        $workbench_root = base_path('workbench/groupeat/'.$folder.'/src');
+        $workbench_root = base_path('workbench/groupeat/'.$this->getPackageName().'/src');
 
         if (empty($file))
         {
@@ -99,7 +105,7 @@ class WorkbenchServiceProvider extends ServiceProvider {
         $className = get_class($this);
         $parts = explode('\\', $className);
 
-        return $parts[1];
+        return lcfirst($parts[1]);
     }
 
 }

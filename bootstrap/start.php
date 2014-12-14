@@ -24,15 +24,20 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-function loadProductionVariables()
+if (!function_exists('loadProductionVariables'))
 {
-    $path = realpath(__DIR__.'/../.env.production.php');
-
-    if (file_exists($path))
+    function loadProductionVariables()
     {
-        foreach(include($path) as $key => $value)
+        $path = realpath(__DIR__ . '/../.env.production.php');
+
+        if (file_exists($path))
         {
-            $_SERVER[$key] = $value;
+            $variables = include $path;
+
+            foreach ($variables as $key => $value)
+            {
+                $_SERVER[$key] = $value;
+            }
         }
     }
 }

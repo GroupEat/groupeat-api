@@ -10,8 +10,11 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="Application Test Suite">
-            <directory>./app/tests/</directory>
+        <testsuite name="showcase">
+            <directory>./workbench/groupeat/showcase/tests</directory>
+        </testsuite>
+        <testsuite name="users">
+            <directory>./workbench/groupeat/users/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

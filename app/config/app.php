@@ -123,9 +123,10 @@ return [
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
         'Groupeat\Core\ServiceProvider',
-        'Groupeat\Deploy\ServiceProvider',
         'Groupeat\Users\ServiceProvider',
-	],
+        'Groupeat\Deploy\ServiceProvider',
+        'Groupeat\Showcase\ServiceProvider',
+    ],
 
 	/*
 	|--------------------------------------------------------------------------

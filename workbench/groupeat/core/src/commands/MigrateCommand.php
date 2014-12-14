@@ -13,17 +13,13 @@ class MigrateCommand extends Command {
 
     public function fire()
 	{
-        if ($this->option('with-seeds'))
-        {
-            $this->setSeed();
-            $this->setEntries();
-        }
-
         $this->createMigrationsTable();
         $this->migrate();
 
         if ($this->option('with-seeds'))
         {
+            $this->setSeed();
+            $this->setEntries();
             $this->call('db:seed');
         }
 	}
@@ -51,7 +47,7 @@ class MigrateCommand extends Command {
             }
         }
 
-        system('cd '.base_path().'; composer dump-autoload');
+        process('cd '.base_path().'; composer dump-autoload', $this->output);
         $this->call('migrate:refresh');
     }
 
