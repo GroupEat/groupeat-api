@@ -44,14 +44,22 @@ if (!function_exists('loadProductionVariables'))
 
 $env = $app->detectEnvironment(function()
 {
-    if (gethostname() == 'PizzeriaDev')
+    $hostname = gethostname();
+
+    if ($hostname == 'PizzeriaDev')
     {
         return 'local';
     }
+    if ($hostname == 'PizzeriaProd')
+    {
+        loadProductionVariables();
 
-    loadProductionVariables();
-
-    return 'production';
+        return 'production';
+    }
+    else
+    {
+        return 'building';
+    }
 });
 
 /*
