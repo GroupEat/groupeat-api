@@ -21,11 +21,6 @@ before_script:
   - composer install --no-interaction --no-progress
 
 script:
-  - pwd
-  - cat ~/.ssh/id_rsa.pub
-  - cat /home/shippable/.ssh/id_rsa.pub
-  - php artisan env
-  - php artisan
   - phpunit --debug --log-junit shippable/testresults/junit.xml
 
 after_success:
