@@ -2,7 +2,9 @@
 
 use anlutro\cURL\cURL;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Config;
 
 class OpCacheResetCommand extends Command {
 
@@ -20,7 +22,16 @@ class OpCacheResetCommand extends Command {
 
     private function resetServer($path)
     {
-        $url = URL::to($path);
+        if (App::environment() == 'production')
+        {
+            $ip = Config::get('remote.connections.production.host');
+            $url = 'http://'.$ip.'/'.$path;
+        }
+        else
+        {
+            $url = URL::to($path);
+        }
+
         $this->line('Hitting '.$url);
         (new cURL)->get($url);
     }
