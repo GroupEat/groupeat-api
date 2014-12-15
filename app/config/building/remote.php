@@ -4,7 +4,7 @@ return [
 
     'connections' => [
 		'production' => [
-			'key'       => '~/.ssh/id_rsa',
+			'key'       => '/home/shippable/.ssh/id_rsa',
 		],
 	],
 

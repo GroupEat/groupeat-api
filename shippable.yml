@@ -23,8 +23,7 @@ before_script:
 script:
   - pwd
   - cat ~/.ssh/id_rsa.pub
-  - ssh-keygen -y -f ~/.ssh/id_rsa
-  - cat ~/.ssh/id_rsa.pub
+  - cat /home/shippable/.ssh/id_rsa.pub
   - php artisan env
   - php artisan
   - phpunit --debug --log-junit shippable/testresults/junit.xml
