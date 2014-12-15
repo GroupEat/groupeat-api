@@ -15,13 +15,8 @@
         "anahkiasen/rocketeer": "2.0.4"
     },
 	"autoload": {
-        "psr-4": {
-            "Groupeat\\Core\\": "workbench/groupeat/core/src",
-            "Groupeat\\Users\\": "workbench/groupeat/users/src",
-            "Groupeat\\Deploy\\": "workbench/groupeat/deploy/src",
-            "Groupeat\\Showcase\\": "workbench/groupeat/showcase/src"
-        },
-		"classmap": [
+        "classmap": [
+            "workbench",
             "app/database/seeds",
 			"app/database/migrations"
 		]

@@ -91,9 +91,10 @@ class GitHubApi extends cURL {
     public function send($HTTPverb, $path, $data = [])
     {
         $onError = $this->onError;
+        $url = 'https://api.github.com/'.$path;
         $HTTPverb = strtolower($HTTPverb);
 
-        $request = (new cURL)->newRequest($HTTPverb, 'https://api.github.com/'.$path, $data)
+        $request = (new cURL)->newRequest($HTTPverb, $url, $data)
             ->setHeader('content-type', 'application/json')
             ->setOptions([
                 CURLOPT_USERPWD => $this->username.':'.$this->password,
@@ -118,6 +119,8 @@ class GitHubApi extends cURL {
             $this->output->error('Too many GitHub requests with invalid credentials for '.$this->username);
             $onError();
         }
+
+        $this->output->line($url.': '.$response->statusCode);
 
         return json_decode($response->body);
     }
