@@ -21,6 +21,8 @@ before_script:
   - composer install --no-interaction
 
 script:
+  - php artisan env
+  - php artisan
   - phpunit --debug --log-junit shippable/testresults/junit.xml
 
 after_success:

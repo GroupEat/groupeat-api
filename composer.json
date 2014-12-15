@@ -9,7 +9,6 @@
 	"require": {
         "anlutro/curl": "0.6.2",
         "laravel/framework": "4.2.11"
-
 	},
     "require-dev": {
         "anahkiasen/rocketeer": "2.0.4"
