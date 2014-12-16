@@ -24,7 +24,10 @@ script:
   - phpunit --debug --log-junit shippable/testresults/junit.xml
 
 after_success:
-  - php artisan deploy:deploy -v
+  - COMMIT_MESSAGE=$(git log -1 HEAD --pretty=format:%s)
+    if [[ "$MESSAGE" == *\[deploy\]* ]]; then
+            php artisan deploy:deploy -v
+    fi
 
 notifications:
   email: false

@@ -8,6 +8,7 @@
     ],
 	"require": {
         "anlutro/curl": "0.6.2",
+        "fzaninotto/faker": "1.4.0",
         "laravel/framework": "4.2.11"
 	},
     "require-dev": {

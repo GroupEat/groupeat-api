@@ -5,6 +5,10 @@ apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y
 apt-add-repository ppa:ondrej/php5-5.6 -y
 
+echo "Adding Neo4j source"
+wget -O - http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
+echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
+
 echo "Updating packages list"
 apt-get update
 apt-get upgrade -y
@@ -156,6 +160,9 @@ service postgresql restart
 echo "Creating the database"
 su postgres -c "dropdb groupeat --if-exists"
 su postgres -c "createdb -O groupeat groupeat"
+
+echo "Installing Neo4j"
+apt-get install -y neo4j
 
 echo "Adding ZSH shell"
 apt-get install -y zsh

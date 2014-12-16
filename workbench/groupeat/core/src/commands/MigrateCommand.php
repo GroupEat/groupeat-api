@@ -20,7 +20,7 @@ class MigrateCommand extends Command {
         {
             $this->setSeed();
             $this->setEntries();
-            $this->call('db:seed');
+            $this->call('db:seed', ['--force' => $this->option('force')]);
         }
 	}
 
@@ -28,7 +28,7 @@ class MigrateCommand extends Command {
     {
         if (!Schema::hasTable('migrations'))
         {
-            $this->call('migrate:install');
+            $this->call('migrate:install', ['--force' => $this->option('force')]);
         }
     }
 
@@ -48,7 +48,7 @@ class MigrateCommand extends Command {
         }
 
         process('cd '.base_path().'; composer dump-autoload', $this->output);
-        $this->call('migrate:refresh');
+        $this->call('migrate:refresh', ['--force' => $this->option('force')]);
     }
 
     private function setSeed()
@@ -98,6 +98,7 @@ class MigrateCommand extends Command {
     protected function getOptions()
     {
         return [
+            ['force', 'f', InputOption::VALUE_NONE, 'Force in production.', null],
             ['with-seeds', 'w', InputOption::VALUE_NONE, 'Migrate and seed.', null],
             ['random', 'r', InputOption::VALUE_NONE, 'Use random fake data to seed the DB.', null],
             ['seed', 's', InputOption::VALUE_REQUIRED, 'Specify a seed for the fake data generator.', null],
