@@ -19,7 +19,9 @@ return [
 		'setup'   => [
             'Groupeat\Deploy\Tasks\ProvisionTask',
 		],
-		'deploy'  => [],
+		'deploy'  => [
+            'Groupeat\Deploy\Tasks\DeployDependingOnCommitMessageTask',
+        ],
 		'cleanup' => [],
 	],
 
