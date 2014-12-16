@@ -28,7 +28,7 @@ class MigrateCommand extends Command {
     {
         if (!Schema::hasTable('migrations'))
         {
-            $this->call('migrate:install', ['--force' => $this->option('force')]);
+            $this->call('migrate:install');
         }
     }
 
@@ -98,7 +98,7 @@ class MigrateCommand extends Command {
     protected function getOptions()
     {
         return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Force in production.', null],
+            ['force', 'f', InputOption::VALUE_NONE, 'Force the operation to run when in production.', null],
             ['with-seeds', 'w', InputOption::VALUE_NONE, 'Migrate and seed.', null],
             ['random', 'r', InputOption::VALUE_NONE, 'Use random fake data to seed the DB.', null],
             ['seed', 's', InputOption::VALUE_REQUIRED, 'Specify a seed for the fake data generator.', null],
