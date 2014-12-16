@@ -47,7 +47,7 @@ class MigrateCommand extends Command {
             }
         }
 
-        process('cd '.base_path().'; composer dump-autoload', $this->output);
+        processAtProjectRoot('composer dump-autoload', $this->output);
         $this->call('migrate:refresh', ['--force' => $this->option('force')]);
     }
 

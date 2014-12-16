@@ -41,6 +41,16 @@ if (!function_exists('process'))
     }
 }
 
+if (!function_exists('processAtProjectRoot'))
+{
+    function processAtProjectRoot($command, \Symfony\Component\Console\Output\OutputInterface $output = null)
+    {
+        $command = 'cd '.base_path().'; '.$command;
+
+        return process($command, $output);
+    }
+}
+
 if (!function_exists('workbench_path'))
 {
     function workbench_path($package, $file = '')
