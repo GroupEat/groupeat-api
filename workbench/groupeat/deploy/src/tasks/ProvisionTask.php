@@ -15,8 +15,8 @@ class ProvisionTask extends AbstractTask {
     public function execute()
     {
         $githubApi = $this->makeGitHubApi();
-        $appKey = 'LLYGfhqxgVLXcbilLfdCkd8xwotU9zOh'; //$this->askForAppKey('Choose a 32 character string for the application key: ');
-        $postgresPassword = 'Meyne_IS2012'; //$this->command->askSecretly('Choose the password for the postgreSQL DB: ');
+        $appKey = $this->askForAppKey('Choose a 32 character string for the application key: ');
+        $postgresPassword = $this->command->askSecretly('Choose the password for the postgreSQL DB: ');
         $serverName = $this->getServerName();
 
         $this->addVagrantUserAndShippableKey($githubApi->getEmail(), Config::get('remote.shippable_key'));
@@ -31,8 +31,8 @@ class ProvisionTask extends AbstractTask {
 
     private function makeGitHubApi()
     {
-        $username = 'tibdex'; //$this->command->ask('Enter your GitHub username: ');
-        $password = $_SERVER['GITHUB_PASSWORD']; // $this->command->askSecretly('Enter your GitHub password: ');
+        $username = $this->getGitHubUsername();
+        $password = $this->command->askSecretly(ucfirst($username).', enter your GitHub password: ');
 
         return new GitHubApi($username, $password, $this->explainer, function() { exit; });
     }
@@ -87,6 +87,21 @@ class ProvisionTask extends AbstractTask {
         } while (strlen($key) != '32');
 
         return $key;
+    }
+
+    private function getGitHubUsername()
+    {
+        $output = process('ssh -T git@github.com')->getErrorOutput();
+        preg_match("/^hi (\w+)!/i", $output, $matches);
+
+        if (!empty($matches[1]))
+        {
+            return $matches[1];
+        }
+        else
+        {
+            $this->command->ask('Enter your GitHub username: ');
+        }
     }
 
     private function getServerPublicKey()

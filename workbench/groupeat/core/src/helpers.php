@@ -14,47 +14,30 @@ if (!function_exists('artisan'))
 
 if (!function_exists('process'))
 {
-    function process($command, \Symfony\Component\Console\Output\OutputInterface $output = null, $silent = false)
+    function process($command, \Symfony\Component\Console\Output\OutputInterface $output = null)
     {
         $process = new \Symfony\Component\Process\Process($command);
 
-        if ($silent)
+        if (empty($output))
         {
             $process->run();
         }
         else
         {
-            if (empty($output))
+            $process->run(function ($type, $buffer) use ($output)
             {
-                $process->run(function ($type, $buffer)
+                if ('err' === $type)
                 {
-                    if ('err' === $type)
-                    {
-                        echo 'ERR > '.trim($buffer);
-                    }
-                    else
-                    {
-                        echo 'OUT > '.trim($buffer);
-                    }
-                });
-            }
-            else
-            {
-                $process->run(function ($type, $buffer) use ($output)
+                    $output->writeln('<error>'.trim($buffer).'</error>');
+                }
+                else
                 {
-                    if ('err' === $type)
-                    {
-                        $output->writeln('<error>'.trim($buffer).'</error>');
-                    }
-                    else
-                    {
-                        $output->writeln(trim($buffer));
-                    }
-                });
-            }
+                    $output->writeln(trim($buffer));
+                }
+            });
         }
 
-        return $process->isSuccessful();
+        return $process;
     }
 }
 
