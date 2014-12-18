@@ -35,6 +35,7 @@ return [
             },
         ],
 		'deploy'  => [
+            'php artisan optimize',
             'php artisan groupeat:opcache',
         ],
 		'cleanup' => [],

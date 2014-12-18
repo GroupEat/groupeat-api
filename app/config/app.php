@@ -122,6 +122,8 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+        'Dingo\Api\Provider\ApiServiceProvider',
+
         'Groupeat\Core\ServiceProvider',
         'Groupeat\Users\ServiceProvider',
         'Groupeat\Deploy\ServiceProvider',
@@ -192,6 +194,8 @@ return [
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
+
+        'API'               => 'Dingo\Api\Facade\API',
 
 	],
 

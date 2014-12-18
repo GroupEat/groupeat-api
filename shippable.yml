@@ -24,7 +24,7 @@ script:
   - phpunit --debug --log-junit shippable/testresults/junit.xml
 
 after_success:
-  - php artisan deploy:deploy -v
+  - php artisan deploy -v
 
 notifications:
   email: false

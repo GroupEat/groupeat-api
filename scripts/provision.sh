@@ -5,17 +5,18 @@ apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y
 apt-add-repository ppa:ondrej/php5-5.6 -y
 
-echo "Adding Neo4j source"
-wget -O - http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
-echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
+# echo "Adding Neo4j source"
+# wget -O - http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
+# echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
 
 echo "Updating packages list"
 apt-get update
 apt-get upgrade -y
 
 echo "Installing correct locale"
-sudo apt-get install -y language-pack-fr;
-export LANG=fr_FR.UTF-8
+sudo locale-gen en_US.UTF-8
+ export LANG=en_US.UTF-8
+touch /var/lib/cloud/instance/locale-check.skip
 
 echo "Installing git"
 apt-get install -y git
@@ -162,7 +163,7 @@ su postgres -c "dropdb groupeat --if-exists"
 su postgres -c "createdb -O groupeat groupeat"
 
 echo "Installing Neo4j"
-apt-get install -y neo4j
+# apt-get install -y neo4j
 
 echo "Adding ZSH shell"
 apt-get install -y zsh

@@ -2,7 +2,10 @@
 
 use Groupeat\Users\Models\User;
 
-Route::get('users', function()
+Route::api('v1', function ()
 {
-    return User::all();
+    Route::get('users', function()
+    {
+        return User::all();
+    });
 });
