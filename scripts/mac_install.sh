@@ -33,21 +33,24 @@ if [[ $? != 0 ]]; then
 fi
 
 if [[ -n $(brew ls --versions brew-cask) ]]; then
-  echo 'Brew-cask already installed'
+  echo 'Updating Brew-cask'
+  brew upgrade brew-cask
 else
   echo "Installing Brew-cask"
   brew install caskroom/cask/brew-cask
 fi
 
 if [[ -n $(brew ls --versions virtualbox) ]]; then
-  echo 'Virtualbox already installed'
+  echo 'Updating Virtualbox'
+  brew upgrade virtualbox
 else
   echo "Installing Virtualbox "
   brew cask install --force virtualbox
 fi
 
 if [[ -n $(brew ls --versions vagrant) ]]; then
-  echo 'Vagrant already installed'
+  echo 'Updating Vagrant'
+  brew upgrade vagrant
 else
   echo "Installing Vagrant"
   brew cask install --force vagrant
