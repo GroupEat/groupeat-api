@@ -71,7 +71,12 @@ class ProvisionTask extends AbstractTask {
             'sudo -u vagrant echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~vagrant/.ssh/config',
         ]);
 
-        $this->executeScriptRemotely('provision', 'Starting provisioning', [$domain, $postgresPassword]);
+        $environment = 'production';
+        $this->executeScriptRemotely('provision', 'Starting provisioning', [
+            $environment,
+            $domain,
+            $postgresPassword,
+        ]);
 
         $this->runAsRoot([
             'echo "Adding GitHub token to Composer config"',

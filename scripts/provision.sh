@@ -29,8 +29,18 @@ ln -sf /usr/share/zoneinfo/CET /etc/localtime
 
 echo "Installing PHP stuffs"
 apt-get install -y php5-cli php5-dev php-pear php5-pgsql \
-php5-apcu php5-json php5-curl php5-gd php5-gmp php5-imap \
-php5-mcrypt php5-xdebug php5-memcached
+php5-json php5-curl php5-gd php5-gmp php5-imap php5-mcrypt
+
+if [[ $1 == 'local' ]]; then
+    echo "Installing PHP Xdebug"
+    apt-get install -y php5-xdebug
+
+    echo "Removing PHP cache features"
+    rm /etc/php5/mods-available/opcache.ini
+else
+    echo "Installing PHP APCu"
+    apt-get install -y php5-apcu
+fi
 
 echo "Making MCrypt available"
 ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
@@ -67,10 +77,13 @@ sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/fpm/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/fpm/php.ini
 sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5/fpm/php.ini
 sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php5/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php5/fpm/php.ini
-echo "xdebug.remote_enable = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
-echo "xdebug.remote_connect_back = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
-echo "xdebug.remote_port = 9000" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+sed -i "s/;date.timezone.*/date.timezone = CET/" /etc/php5/fpm/php.ini
+
+if [[ $1 == 'local' ]]; then
+    echo "xdebug.remote_enable = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+    echo "xdebug.remote_connect_back = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+    echo "xdebug.remote_port = 9000" >> /etc/php5/fpm/conf.d/20-xdebug.ini
+fi
 
 echo "Copying fastcgi_params to Nginx because they broke it on the PPA"
 cat > /etc/nginx/fastcgi_params << EOF
@@ -106,7 +119,7 @@ sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php5/fpm/pool.d/www.conf
 
 block="server {
   listen 80;
-  server_name "$1";
+  server_name "$2";
   root /home/vagrant/groupeat/current/public;
 
   index index.html index.php;
@@ -120,7 +133,7 @@ block="server {
   location = /robots.txt  { access_log off; log_not_found off; }
 
   access_log off;
-  error_log  /var/log/nginx/$1-error.log error;
+  error_log  /var/log/nginx/$2-error.log error;
   error_page 404 /index.php;
 
   sendfile off;
@@ -138,8 +151,8 @@ block="server {
 }
 "
 
-echo "$block" > "/etc/nginx/sites-available/$1"
-ln -fs "/etc/nginx/sites-available/$1" "/etc/nginx/sites-enabled/$1"
+echo "$block" > "/etc/nginx/sites-available/$2"
+ln -fs "/etc/nginx/sites-available/$2" "/etc/nginx/sites-enabled/$2"
 service nginx restart
 service php5-fpm restart
 
@@ -154,7 +167,7 @@ apt-get install -y postgresql-9.3 postgresql-contrib
 echo "Configuring PostgreSQL remote access"
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
 echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
-sudo -u postgres psql -c "CREATE ROLE groupeat LOGIN UNENCRYPTED PASSWORD '$2' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
+sudo -u postgres psql -c "CREATE ROLE groupeat LOGIN UNENCRYPTED PASSWORD '$3' SUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;"
 sudo -u postgres /usr/bin/createdb --echo --owner=groupeat groupeat
 service postgresql restart
 
@@ -162,7 +175,7 @@ echo "Creating the database"
 su postgres -c "dropdb groupeat --if-exists"
 su postgres -c "createdb -O groupeat groupeat"
 
-echo "Installing Neo4j"
+# echo "Installing Neo4j"
 # apt-get install -y neo4j
 
 echo "Adding ZSH shell"

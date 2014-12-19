@@ -2,5 +2,5 @@
 
 Route::get('/', function()
 {
-    return View::make('showcase::hello');
+    return View::make('showcase::index');
 });

@@ -63,8 +63,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell" do |s|
     domain = 'groupeat.dev'
     postgresPassword = 'groupeat'
+    environment = 'local'
     s.path = "./scripts/provision.sh"
-    s.args = [domain, postgresPassword]
+    s.args = [environment, domain, postgresPassword]
   end
 
   # Install the project Composer dependencies

@@ -24,8 +24,8 @@ class OpCacheResetCommand extends Command {
     {
         if (App::environment() == 'production')
         {
-            $ip = Config::get('remote.connections.production.host');
-            $url = 'http://'.$ip.'/'.$path;
+            $host = Config::get('remote.connections.production.host');
+            $url = 'http://'.$host.'/'.$path;
         }
         else
         {

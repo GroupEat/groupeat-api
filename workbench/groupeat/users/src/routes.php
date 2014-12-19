@@ -2,7 +2,7 @@
 
 use Groupeat\Users\Models\User;
 
-Route::api('v1', function ()
+Route::api(['version' => 'v1', 'protected' => true], function ()
 {
     Route::get('users', function()
     {
