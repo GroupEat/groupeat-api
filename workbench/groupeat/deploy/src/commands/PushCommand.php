@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Core\Commands;
+<?php namespace Groupeat\Deploy\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;

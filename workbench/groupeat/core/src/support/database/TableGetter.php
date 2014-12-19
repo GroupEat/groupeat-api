@@ -2,6 +2,9 @@
 
 trait TableGetter {
 
+    /**
+     * @var string The name of the DB table
+     */
     protected $table;
 
     public function getTable()

@@ -5,17 +5,22 @@ use Groupeat\Core\Support\Database\Seeder;
 
 class UsersSeeder extends Seeder {
 
-    public function getModel()
+    protected function getModel()
     {
         return new User;
     }
 
-    public function makeEntry()
+    protected function makeEntry()
     {
         User::create([
             'email' => $this->faker->email,
             'firstName' => $this->faker->firstName,
             'lastName' => $this->faker->lastName,
         ]);
+    }
+
+    protected function insertAdditionalEntries()
+    {
+
     }
 }

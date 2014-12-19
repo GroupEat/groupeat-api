@@ -10,22 +10,20 @@ abstract class Seeder extends LaravelSeeder {
 
     use TableGetter;
 
+    /**
+     * @var \Faker\Generator
+     */
     protected $faker;
+
+    /**
+     * @var int number of entities to create
+     */
     protected $entries;
+
 
     public function __construct()
     {
-        $locale = App::getLocale();
-        $seed = Config::get('database.seed');
-
-        $fullLocale = strtolower($locale).'_'.strtoupper($locale);
-        $this->faker = Factory::create($locale);
-
-        if ($seed)
-        {
-            $this->faker->seed($seed);
-        }
-
+        $this->faker = $this->makeFaker(App::getLocale(), Config::get('database.seed'));
         $this->entries = (int) Config::get('database.entries');
     }
 
@@ -40,10 +38,29 @@ abstract class Seeder extends LaravelSeeder {
                 $this->makeEntry();
             }
         }
+
+        if (method_exists($this, 'insertAdditionalEntries'))
+        {
+            $this->insertAdditionalEntries();
+        }
     }
 
     protected function cleanTable()
     {
         DB::table($this->getTable())->delete();
+    }
+
+    protected function makeFaker($locale, $seed)
+    {
+        $fullLocale = strtolower($locale).'_'.strtoupper($locale);
+
+        $faker = Factory::create($fullLocale);
+
+        if ($seed)
+        {
+            $faker->seed($seed);
+        }
+
+        return $faker;
     }
 }

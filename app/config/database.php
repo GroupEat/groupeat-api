@@ -74,22 +74,6 @@ return [
 
     /*
 	|--------------------------------------------------------------------------
-	| Tables in Order
-	|--------------------------------------------------------------------------
-	|
-	| Because of foreign keys, the seeding must occur in a specific order.
-    | Specify here the seeders to be used from the first one to the last one.
-    | Just type the lowercase name of the class without its namespace and
-    | the 'seeder' suffix.
-    |
-	*/
-
-    'seeders' => [
-        'users',
-    ],
-
-    /*
-	|--------------------------------------------------------------------------
 	| Migration Seed
 	|--------------------------------------------------------------------------
 	|

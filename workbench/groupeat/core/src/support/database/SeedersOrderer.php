@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\File;
 
 class SeedersOrderer {
 
+    /**
+     * Returns the Seeders in the same order than the Migrations in order
+     * to avoid any foreign key problem
+     *
+     * @return array
+     */
     public static function getList()
     {
         $seeders = [];
