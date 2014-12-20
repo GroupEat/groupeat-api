@@ -35,6 +35,8 @@ class MigrateCommand extends Command {
 
     private function migrate()
     {
+        $this->deleteOldMigrationFiles();
+
         foreach (listGroupeatPackagesWithoutSupport() as $package)
         {
             $migrationsDirectory = workbench_path($package, 'migrations');
@@ -50,6 +52,11 @@ class MigrateCommand extends Command {
 
         processAtProjectRoot('composer dump-autoload', $this->output);
         $this->call('migrate:refresh', ['--force' => $this->option('force')]);
+    }
+
+    private function deleteOldMigrationFiles()
+    {
+        File::delete(File::files(app_path('database/migrations')));
     }
 
     private function setSeed()
