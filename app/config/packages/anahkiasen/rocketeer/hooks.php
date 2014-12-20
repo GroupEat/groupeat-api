@@ -37,7 +37,12 @@ return [
 		'deploy'  => [
             'php artisan optimize',
             'php artisan groupeat:opcache',
-            'php artisan groupeat:migrate --force --with-seeds --entries 403',
+            function($task)
+            {
+                // This command need to be executed in another thread in order to work while deploying
+                $migrationCommand = 'php artisan groupeat:migrate --force --with-seeds --entries 403';
+                processAtProjectRoot($migrationCommand, $task->command->getOutput());
+            },
         ],
 		'cleanup' => [],
 	],
