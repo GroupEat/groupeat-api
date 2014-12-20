@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Support\Commands;
+<?php namespace Groupeat\Support\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;

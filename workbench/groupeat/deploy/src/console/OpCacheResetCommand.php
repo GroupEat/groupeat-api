@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Deploy\Commands;
+<?php namespace Groupeat\Deploy\Console;
 
 use anlutro\cURL\cURL;
 use Illuminate\Console\Command;

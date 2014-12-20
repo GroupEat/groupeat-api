@@ -10,7 +10,7 @@ class WorkbenchServiceProvider extends ServiceProvider {
     protected $filesToRequire = ['helpers', 'routes'];
     protected $autoRequireFiles = true;
 
-    protected $autoRegisterCommands = true;
+    protected $autoRegisterConsoleCommands = true;
 
 
     public function boot()
@@ -23,9 +23,9 @@ class WorkbenchServiceProvider extends ServiceProvider {
             $this->requireFiles(...$this->filesToRequire);
         }
 
-        if ($this->autoRegisterCommands)
+        if ($this->autoRegisterConsoleCommands)
         {
-            $this->registerCommands(...$this->listCommandShortNames());
+            $this->registerConsoleCommands(...$this->listConsoleCommandShortNames());
         }
     }
 
@@ -49,29 +49,29 @@ class WorkbenchServiceProvider extends ServiceProvider {
         return $this;
     }
 
-    protected function listCommandShortNames()
+    protected function listConsoleCommandShortNames()
     {
-        $commands_path = $this->getPackagePath('commands');
+        $console_path = $this->getPackagePath('console');
 
-        if (is_dir($commands_path))
+        if (is_dir($console_path))
         {
             return array_map(function($file) {
                 $filename = pathinfo($file, PATHINFO_FILENAME);
                 return str_replace('Command', '', $filename);
-            }, File::files($commands_path));
+            }, File::files($console_path));
         }
 
         return [];
     }
 
-    protected function registerCommands(...$commandShortNames)
+    protected function registerConsoleCommands(...$commandShortNames)
     {
         $names = [];
 
         foreach ($commandShortNames as $commandShortName)
         {
-            $className = 'Groupeat\\'.ucfirst($this->getPackageName()).'\\Commands\\'.$commandShortName.'Command';
-            $name = 'groupeat.commands.'.strtolower($commandShortName);
+            $className = 'Groupeat\\'.ucfirst($this->getPackageName()).'\\Console\\'.$commandShortName.'Command';
+            $name = 'groupeat.console.'.strtolower($commandShortName);
 
             $this->app[$name] = $this->app->share(function($app) use ($className)
             {
