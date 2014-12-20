@@ -1,11 +1,11 @@
-<?php namespace Groupeat\Core\Support\Database;
+<?php namespace Groupeat\Support\Database;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration as LaravelMigration;
 
 abstract class Migration extends LaravelMigration {
 
-    use TableGetter;
+    const TABLE = 'Defined by inheritance';
 
     /**
      * Run the migrations.
@@ -24,7 +24,7 @@ abstract class Migration extends LaravelMigration {
      */
     public function down()
     {
-        Schema::dropIfExists($this->getTable());
+        Schema::dropIfExists(static::TABLE);
     }
 
 }

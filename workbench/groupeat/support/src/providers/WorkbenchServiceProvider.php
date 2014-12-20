@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Core\Support\Providers;
+<?php namespace Groupeat\Support\Providers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;

@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Core\Commands;
+<?php namespace Groupeat\Support\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -10,6 +10,7 @@ class MigrateCommand extends Command {
 
 	protected $name = 'groupeat:migrate';
 	protected $description = 'Install or reinstall the DB by running all the migrations';
+
 
     public function fire()
 	{
@@ -34,7 +35,7 @@ class MigrateCommand extends Command {
 
     private function migrate()
     {
-        foreach (listGroupeatPackagesWithoutCore() as $package)
+        foreach (listGroupeatPackagesWithoutSupport() as $package)
         {
             $migrationsDirectory = workbench_path($package, 'migrations');
 
@@ -65,7 +66,6 @@ class MigrateCommand extends Command {
         }
         else
         {
-            // Use the configured seed
             return;
         }
 
@@ -77,11 +77,13 @@ class MigrateCommand extends Command {
         $entriesKey = 'database.entries';
         $entries = Config::get($entriesKey);
 
-        if ($this->option('random'))
+        if ($this->option('entries'))
         {
             $entries = (int) $this->option('entries');
             Config::set($entriesKey, $entries);
         }
+
+        $this->line('Creating '.$entries.' fake entities for each table');
     }
 
     private function publishCopy($migrationPath)

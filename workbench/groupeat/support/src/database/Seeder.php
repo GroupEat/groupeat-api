@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Core\Support\Database;
+<?php namespace Groupeat\Support\Database;
 
 use Faker\Factory;
 use Illuminate\Support\Facades\DB;
@@ -8,22 +8,20 @@ use Illuminate\Database\Seeder as LaravelSeeder;
 
 abstract class Seeder extends LaravelSeeder {
 
-    use TableGetter;
-
     /**
      * @var \Faker\Generator
      */
     protected $faker;
 
     /**
-     * @var int number of entities to create
+     * @var int Number of fake entities to create
      */
     protected $entries;
 
 
     public function __construct()
     {
-        $this->faker = $this->makeFaker(App::getLocale(), Config::get('database.seed'));
+        $this->faker = $this->makeFaker('fr_FR', Config::get('database.seed'));
         $this->entries = (int) Config::get('database.entries');
     }
 
@@ -35,7 +33,7 @@ abstract class Seeder extends LaravelSeeder {
         {
             for ($i = 0; $i < $this->entries; $i++)
             {
-                $this->makeEntry();
+                $this->makeEntry($i, $this->entries);
             }
         }
 
@@ -45,6 +43,23 @@ abstract class Seeder extends LaravelSeeder {
         }
     }
 
+    protected function getTable()
+    {
+        $migration = $this->getRelatedMigration();
+
+        return $migration::TABLE;
+    }
+
+    /**
+     * @return \Groupeat\Support\Database\Migration
+     */
+    protected function getRelatedMigration()
+    {
+        $migrationClass = str_replace('Seeder', 'Migration', get_class($this));
+
+        return new $migrationClass;
+    }
+
     protected function cleanTable()
     {
         DB::table($this->getTable())->delete();
@@ -52,9 +67,7 @@ abstract class Seeder extends LaravelSeeder {
 
     protected function makeFaker($locale, $seed)
     {
-        $fullLocale = strtolower($locale).'_'.strtoupper($locale);
-
-        $faker = Factory::create($fullLocale);
+        $faker = Factory::create($locale);
 
         if ($seed)
         {

@@ -124,11 +124,12 @@ return [
 
         'Dingo\Api\Provider\ApiServiceProvider',
 
-        'Groupeat\Core\ServiceProvider',
+        'Groupeat\Support\ServiceProvider',
         'Groupeat\Users\ServiceProvider',
         'Groupeat\Deploy\ServiceProvider',
         'Groupeat\Showcase\ServiceProvider',
         'Groupeat\App\ServiceProvider',
+
     ],
 
 	/*

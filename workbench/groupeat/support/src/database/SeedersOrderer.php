@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Core\Support\Database;
+<?php namespace Groupeat\Support\Database;
 
 use Illuminate\Support\Facades\File;
 
@@ -14,7 +14,7 @@ class SeedersOrderer {
     {
         $seeders = [];
 
-        foreach (listGroupeatPackagesWithoutCore() as $package)
+        foreach (listGroupeatPackagesWithoutSupport() as $package)
         {
             $seedersDirectory = workbench_path($package, 'seeders');
 
@@ -36,7 +36,7 @@ class SeedersOrderer {
 
     private static function getTimestamp($package, $seederName)
     {
-        $ending = '_Create'.str_replace('Seeder', 'Table.php', $seederName);
+        $ending = '_'.str_replace('Seeder', 'Migration.php', $seederName);
 
         $files = File::glob(workbench_path($package, 'migrations/*'.$ending));
 

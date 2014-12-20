@@ -1,6 +1,6 @@
 <?php
 
-use Groupeat\Core\Support\Tests\TestCase;
+use Groupeat\Support\Tests\TestCase;
 
 class ShowCaseIsUpTest extends TestCase {
 

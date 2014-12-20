@@ -5,9 +5,9 @@ if (!function_exists('artisan'))
     /**
      * Call an Artisan command and return its output
      *
-     * @param       $command Command name (like groupeat:push)
-     * @param array $parameters Command options
-     * @param null  $verbosity
+     * @param string $command Command name (like groupeat:push)
+     * @param array  $parameters Command options
+     * @param int    $verbosity
      *
      * @return string Command output
      */
@@ -122,11 +122,11 @@ if (!function_exists('listGroupeatPackages'))
     /**
      * Get the list of the GroupEat packages with the same case than the corresponding folders
      *
-     * @param bool $withoutCore
+     * @param bool $withoutSupport
      *
      * @return array
      */
-    function listGroupeatPackages($withoutCore = false)
+    function listGroupeatPackages($withoutSupport = false)
     {
         $directories = \Illuminate\Support\Facades\File::directories(base_path('workbench/groupeat'));
 
@@ -137,9 +137,9 @@ if (!function_exists('listGroupeatPackages'))
             return array_pop($parts);
         }, $directories);
 
-        if ($withoutCore)
+        if ($withoutSupport)
         {
-            return array_filter($packages, function($package) { return $package != 'core'; });
+            return array_filter($packages, function($package) { return $package != 'Support'; });
         }
         else
         {
@@ -148,11 +148,11 @@ if (!function_exists('listGroupeatPackages'))
     }
 
     /**
-     * Same as above but without the Core package
+     * Same as above but without the Support package
      *
      * @return array
      */
-    function listGroupeatPackagesWithoutCore()
+    function listGroupeatPackagesWithoutSupport()
     {
         return listGroupeatPackages(true);
     }

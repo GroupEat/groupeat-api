@@ -237,4 +237,4 @@ echo "alias art='php artisan'" >> ~vagrant/.zshrc
 echo "alias cri='composer install'" >> ~vagrant/.zshrc
 echo "alias cru='composer update'" >> ~vagrant/.zshrc
 echo "alias crd='composer dump-autoload'" >> ~vagrant/.zshrc
-echo "alias phpunit='./vendor/bin/phpunit'" >> ~vagrant/.zshrc
+echo "alias phpunit='./vendor/bin/phpunit --debug'" >> ~vagrant/.zshrc

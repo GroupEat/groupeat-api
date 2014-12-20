@@ -1,6 +1,6 @@
 <?php
 
-use Groupeat\Users\Models\User;
+use Groupeat\Users\Entities\User;
 
 Route::api(['version' => 'v1', 'protected' => true], function ()
 {

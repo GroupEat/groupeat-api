@@ -89,7 +89,7 @@ return [
     |
     */
 
-    'debug' => false, //Config::get('app.debug'),
+    'debug' => Config::get('app.debug'),
 
     /*
     |--------------------------------------------------------------------------

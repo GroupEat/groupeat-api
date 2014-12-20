@@ -1,6 +1,6 @@
 <?php namespace Groupeat\Deploy;
 
-use Groupeat\Core\Support\Providers\WorkbenchServiceProvider;
+use Groupeat\Support\Providers\WorkbenchServiceProvider;
 
 class ServiceProvider extends WorkbenchServiceProvider {
 

@@ -1,7 +1,7 @@
 <?php
 
-use Groupeat\Users\Models\User;
-use Groupeat\Core\Support\Tests\TestCase;
+use Groupeat\Users\Entities\User;
+use Groupeat\Support\Tests\TestCase;
 
 class UsersSeederTest extends TestCase {
 
@@ -16,7 +16,7 @@ class UsersSeederTest extends TestCase {
 	{
 		artisan('groupeat:migrate', ['--with-seeds' => true]);
 
-        $this->assertInstanceOf('Groupeat\Users\Models\User', User::all()->first());
+        $this->assertInstanceOf('Groupeat\Users\Entities\User', User::all()->first());
 	}
 
 }
