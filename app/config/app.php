@@ -128,6 +128,7 @@ return [
         'Groupeat\Users\ServiceProvider',
         'Groupeat\Deploy\ServiceProvider',
         'Groupeat\Showcase\ServiceProvider',
+        'Groupeat\App\ServiceProvider',
     ],
 
 	/*
