@@ -37,6 +37,7 @@ return [
 		'deploy'  => [
             'php artisan optimize',
             'php artisan groupeat:opcache',
+            'php artisan groupeat:migrate --force --with-seeds --entries 403',
         ],
 		'cleanup' => [],
 	],
