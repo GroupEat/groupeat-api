@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Input\InputOption;
 
-class MigrateCommand extends Command {
+class DbInstallCommand extends Command {
 
-	protected $name = 'groupeat:migrate';
-	protected $description = 'Install or reinstall the DB by running all the migrations';
+	protected $name = 'db-install';
+	protected $description = 'Install or reinstall the DB by running all the migrations and seed if needed';
 
 
     public function fire()

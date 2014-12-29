@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class PushCommand extends Command {
 
-	protected $name = 'groupeat:push';
+	protected $name = 'push';
 	protected $description = 'Push the code to the Git repository';
 
 

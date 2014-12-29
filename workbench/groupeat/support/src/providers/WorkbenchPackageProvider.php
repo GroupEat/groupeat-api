@@ -3,14 +3,12 @@
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
-class WorkbenchServiceProvider extends ServiceProvider {
+class WorkbenchPackageProvider extends ServiceProvider {
 
     protected $defer = false;
 
-    protected $filesToRequire = ['helpers', 'routes'];
-    protected $autoRequireFiles = true;
-
-    protected $autoRegisterConsoleCommands = true;
+    protected $require = [];
+    protected $console = [];
 
 
     public function boot()
@@ -18,20 +16,20 @@ class WorkbenchServiceProvider extends ServiceProvider {
         $name = $this->getPackageName();
         $this->package('groupeat/'.$name, $name, $this->getPackagePath());
 
-        if ($this->autoRequireFiles)
-        {
-            $this->requireFiles(...$this->filesToRequire);
-        }
-
-        if ($this->autoRegisterConsoleCommands)
-        {
-            $this->registerConsoleCommands(...$this->listConsoleCommandShortNames());
-        }
+        $this->requireFiles(...$this->require);
+        $this->registerConsoleCommands(...$this->console);
     }
 
     public function register()
     {
         $this->app['config']->package('groupeat/'.$this->getPackageName(), $this->getPackagePath('config'));
+
+        $this->registerServices();
+    }
+
+    protected function registerServices()
+    {
+        // Implemented by inheritance
     }
 
 	protected function requireFiles(...$files)
@@ -40,28 +38,10 @@ class WorkbenchServiceProvider extends ServiceProvider {
         {
             $path = $this->getPackagePath($file.'.php');
 
-            if (file_exists($path))
-            {
-                require_once $path;
-            }
+            require_once $path;
         }
 
         return $this;
-    }
-
-    protected function listConsoleCommandShortNames()
-    {
-        $console_path = $this->getPackagePath('console');
-
-        if (is_dir($console_path))
-        {
-            return array_map(function($file) {
-                $filename = pathinfo($file, PATHINFO_FILENAME);
-                return str_replace('Command', '', $filename);
-            }, File::files($console_path));
-        }
-
-        return [];
     }
 
     protected function registerConsoleCommands(...$commandShortNames)

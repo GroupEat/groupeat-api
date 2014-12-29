@@ -35,7 +35,6 @@ return [
                 '--no-interaction' => null,
                 '--no-progress' => null,
                 '--no-dev' => null,
-                '--prefer-dist' => null
             ]);
 		},
 		'update'  => function (Composer $composer) {

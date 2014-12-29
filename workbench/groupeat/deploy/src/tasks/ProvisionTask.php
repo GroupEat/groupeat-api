@@ -1,8 +1,8 @@
 <?php namespace Groupeat\Deploy\Tasks;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\SSH;
 use Rocketeer\Abstracts\AbstractTask;
-use Groupeat\Deploy\Support\GitHubApi;
 use Illuminate\Support\Facades\Config;
 
 class ProvisionTask extends AbstractTask {
@@ -29,12 +29,17 @@ class ProvisionTask extends AbstractTask {
         );
     }
 
+    /**
+     * @return \Groupeat\Deploy\Services\GitHubApi
+     */
     private function makeGitHubApi()
     {
         $username = $this->getGitHubUsername();
         $password = $this->command->askSecretly(ucfirst($username).', enter your GitHub password: ');
+        $output = $this->explainer;
+        $onError = function() { exit; };
 
-        return new GitHubApi($username, $password, $this->explainer, function() { exit; });
+        return App::make('GitHubApi', compact('username', 'password', 'output', 'onError'));
     }
 
     private function addVagrantUserAndShippableKey($email, $shippableKey)
@@ -105,7 +110,7 @@ class ProvisionTask extends AbstractTask {
         }
         else
         {
-            $this->command->ask('Enter your GitHub username: ');
+            return $this->command->ask('Enter your GitHub username: ');
         }
     }
 

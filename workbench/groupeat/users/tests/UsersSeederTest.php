@@ -7,14 +7,14 @@ class UsersSeederTest extends TestCase {
 
     public function test_no_users_in_rdbms_without_seeding()
     {
-        artisan('groupeat:migrate');
+        artisan('db-install');
 
         $this->assertNull(User::all()->first());
     }
 
 	public function test_users_in_rdbms_after_seeding()
 	{
-		artisan('groupeat:migrate', ['--with-seeds' => true]);
+		artisan('db-install', ['--with-seeds' => true]);
 
         $this->assertInstanceOf('Groupeat\Users\Entities\User', User::all()->first());
 	}

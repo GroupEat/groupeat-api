@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Deploy\Support;
+<?php namespace Groupeat\Deploy\Services;
 
 use Closure;
 use anlutro\cURL\cURL;

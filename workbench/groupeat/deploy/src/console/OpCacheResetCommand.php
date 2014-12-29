@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Config;
 
 class OpCacheResetCommand extends Command {
 
-    protected $name = 'groupeat:opcache';
+    protected $name = 'opcache';
     protected $description = 'Reset the OPcache on both server and CLI';
 
 

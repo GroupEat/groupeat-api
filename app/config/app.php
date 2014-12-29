@@ -99,7 +99,12 @@ return [
 		'Illuminate\Auth\AuthServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Session\CommandsServiceProvider',
-		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
+        'Illuminate\Foundation\Providers\CommandCreatorServiceProvider',
+        'Illuminate\Foundation\Providers\ComposerServiceProvider',
+        'Illuminate\Foundation\Providers\MaintenanceServiceProvider',
+        'Illuminate\Foundation\Providers\OptimizeServiceProvider',
+        'Illuminate\Foundation\Providers\PublisherServiceProvider',
+        'Illuminate\Queue\FailConsoleServiceProvider',
 		'Illuminate\Routing\ControllerServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
 		'Illuminate\Database\DatabaseServiceProvider',
@@ -124,11 +129,11 @@ return [
 
         'Dingo\Api\Provider\ApiServiceProvider',
 
-        'Groupeat\Support\ServiceProvider',
-        'Groupeat\Users\ServiceProvider',
-        'Groupeat\Deploy\ServiceProvider',
-        'Groupeat\Showcase\ServiceProvider',
-        'Groupeat\App\ServiceProvider',
+        'Groupeat\Support\PackageProvider',
+        'Groupeat\Users\PackageProvider',
+        'Groupeat\Deploy\PackageProvider',
+        'Groupeat\Showcase\PackageProvider',
+        'Groupeat\App\PackageProvider',
 
     ],
 
