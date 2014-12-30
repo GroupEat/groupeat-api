@@ -14,7 +14,7 @@ class OpCacheResetCommand extends Command {
     public function fire()
     {
         $path = 'packages/groupeat/deploy/reset_opcache.php';
-        $this->callSilent('asset:publish', ['--bench' => 'groupeat/deploy']);
+        $this->call('asset:publish', ['--bench' => 'groupeat/deploy']);
         $this->resetServer($path);
         $this->resetCLI($path);
     }

@@ -45,11 +45,12 @@ return [
         ],
 		'deploy'  => [
             'php artisan optimize',
-            'php artisan groupeat:opcache',
+            'php artisan opcache',
             function($task)
             {
+                // TODO : REMOVE this task before launching the application in public
                 // This command need to be executed in another thread in order to work while deploying
-                $migrationCommand = 'php artisan groupeat:migrate --force --with-seeds --entries 403';
+                $migrationCommand = 'php artisan db-install --force --with-seeds --entries 100';
                 processAtProjectRoot($migrationCommand, $task->command->getOutput());
             },
         ],
