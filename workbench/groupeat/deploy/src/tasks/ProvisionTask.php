@@ -15,8 +15,19 @@ class ProvisionTask extends AbstractTask {
     public function execute()
     {
         $githubApi = $this->makeGitHubApi();
+
+        $sslKey = $this->getSecretFromServerParams(
+            'PROD_SSL_PRIVATE_KEY',
+            'Enter the SSL key: '
+        );
+
         $appKey = $this->askForAppKey('Choose a 32 character string for the application key: ');
-        $postgresPassword = $this->command->askSecretly('Choose the password for the postgreSQL DB: ');
+
+        $postgresPassword = $this->getSecretFromServerParams(
+            'PROD_PGSQL_PASSWORD',
+            'Choose the password for the postgreSQL DB: '
+        );
+
         $serverName = $this->getServerName();
 
         $this->addVagrantUserAndShippableKey($githubApi->getEmail(), Config::get('remote.shippable_key'));
@@ -35,10 +46,11 @@ class ProvisionTask extends AbstractTask {
     private function makeGitHubApi()
     {
         $username = $this->getGitHubUsername();
-        $password = $this->command->askSecretly(ucfirst($username).', enter your GitHub password: ');
+        $passwordPrompt = ucfirst($username).', enter your GitHub password: ';
+        $password = $this->getSecretFromServerParams('GITHUB_PASSWORD', $passwordPrompt);
         $output = $this->explainer;
         $onError = function() { exit; };
-
+        
         return App::make('GitHubApi', compact('username', 'password', 'output', 'onError'));
     }
 
@@ -93,7 +105,7 @@ class ProvisionTask extends AbstractTask {
     {
         do
         {
-            $key = $this->command->askSecretly($question);
+            $key = $this->getSecretFromServerParams('PROD_APP_KEY', $question);
         } while (strlen($key) != '32');
 
         return $key;
@@ -170,6 +182,18 @@ EOD;
         });
 
         return $output;
+    }
+
+    private function getSecretFromServerParams($key, $promptIfKeyMissing)
+    {
+        if (!empty($_SERVER[$key]))
+        {
+            return $_SERVER[$key];
+        }
+
+        $this->explainer->error('Cannot find key ['.$key.'] in $_SERVER params');
+
+        return $this->askSecretly($promptIfKeyMissing);
     }
 
 }

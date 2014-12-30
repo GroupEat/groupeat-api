@@ -80,6 +80,7 @@ sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php5/fpm/php.ini
 sed -i "s/;date.timezone.*/date.timezone = CET/" /etc/php5/fpm/php.ini
 
 if [[ $1 == 'local' ]]; then
+    echo "Enabling PHP Xdebug"
     echo "xdebug.remote_enable = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
     echo "xdebug.remote_connect_back = 1" >> /etc/php5/fpm/conf.d/20-xdebug.ini
     echo "xdebug.remote_port = 9000" >> /etc/php5/fpm/conf.d/20-xdebug.ini
@@ -117,42 +118,65 @@ sed -i "s/;listen\.owner.*/listen.owner = vagrant/" /etc/php5/fpm/pool.d/www.con
 sed -i "s/;listen\.group.*/listen.group = vagrant/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php5/fpm/pool.d/www.conf
 
+if [[ $1 == 'local' ]]; then
+    echo "Creating self-signed SSL certificate for HTTPS access"
+    mkdir /etc/nginx/ssl
+    openssl req \
+        -new \
+        -newkey rsa:2048 \
+        -days 365 \
+        -nodes \
+        -x509 \
+        -subj "/C=FR/ST=Essonne/L=Palaiseau/O=GroupEat/CN=groupeat.dev" \
+        -keyout /etc/nginx/ssl/nginx.key \
+        -out /etc/nginx/ssl/nginx.crt
+fi
+
 block="server {
-  listen 80;
-  server_name "$2";
-  root /home/vagrant/groupeat/current/public;
+    listen         80;
+    server_name    "$2";
+    return         301 https://\$server_name\$request_uri;
+}
 
-  index index.html index.php;
-  charset utf-8;
+server {
+    listen 443 ssl;
+    server_name "$2";
+    root /home/vagrant/groupeat/current/public;
 
-  location / {
-    try_files \$uri \$uri/ /index.php?\$query_string;
-  }
+    ssl_certificate /etc/nginx/ssl/nginx.crt;
+    ssl_certificate_key /etc/nginx/ssl/nginx.key;
 
-  location = /favicon.ico { access_log off; log_not_found off; }
-  location = /robots.txt  { access_log off; log_not_found off; }
+    index index.html index.php;
+    charset utf-8;
 
-  access_log off;
-  error_log  /var/log/nginx/$2-error.log error;
-  error_page 404 /index.php;
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
 
-  sendfile off;
+    location = /favicon.ico { access_log off; log_not_found on; }
+    location = /robots.txt  { access_log off; log_not_found on; }
 
-  location ~ \.php$ {
-    fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
-    fastcgi_index index.php;
-    include fastcgi_params;
-  }
+    access_log /var/log/nginx/access.log;
+    error_log  /var/log/nginx/error.log error;
+    error_page 404 /index.php;
 
-  location ~ /\.ht {
-    deny all;
-  }
+    sendfile off;
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
 }
 "
 
-echo "$block" > "/etc/nginx/sites-available/$2"
-ln -fs "/etc/nginx/sites-available/$2" "/etc/nginx/sites-enabled/$2"
+echo "$block" > "/etc/nginx/sites-available/groupeat"
+ln -fs "/etc/nginx/sites-available/groupeat" "/etc/nginx/sites-enabled/groupeat"
 service nginx restart
 service php5-fpm restart
 
@@ -223,6 +247,10 @@ ${git_info} \
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"'
 echo "$ysTheme" > ~vagrant/.oh-my-zsh/themes/ys.zsh-theme
 echo "$ysTheme" > /root/.oh-my-zsh/themes/ys.zsh-theme
+
+echo "Disable Oh-My-Zsh updates"
+echo "DISABLE_AUTO_UPDATE=true" >> /root/.zshrc
+echo "DISABLE_AUTO_UPDATE=true" >> ~vagrant/.zshrc
 
 echo "Going directly to the web folder by default"
 echo "cd ~vagrant/groupeat/current" >> ~vagrant/.zshrc

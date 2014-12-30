@@ -20,11 +20,15 @@ Clone this repository on your machine. Place it where you like and rename it if 
    - Windows: `c:\windows\systeme32\drivers\etc`
    - Unix: `/etc/hosts`
  - Run the `vagrant up` command and wait for it to finish (a few minutes depending on your internet connection).
- - Browse to http://groupeat.dev and make sure it works.
+ - Browse to https://groupeat.dev and make sure it works.
 
-# Usage
+# Local Usage
 
-## SSH session
+## Uncertified certificate
+
+The SSL certificate used in local development is self-signed in order to be free. You can safely ignore your browser warnings about potential security issues and accept the certificate.
+
+## Access to the VM
 
 Run the `vagrant ssh` command to SSH into the freshly created virtual machine.
 Remember that some useful aliases are specified at the end of `server/provision.sh`, so don't hesitate to use them!

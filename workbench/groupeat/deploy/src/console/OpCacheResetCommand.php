@@ -4,7 +4,6 @@ use anlutro\cURL\cURL;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Config;
 
 class OpCacheResetCommand extends Command {
 
@@ -22,18 +21,20 @@ class OpCacheResetCommand extends Command {
 
     private function resetServer($path)
     {
-        if (App::environment() == 'production')
+        $url = URL::to($path);
+        $request = (new cURL)->newRequest('GET', $url);
+
+        if (App::isLocal())
         {
-            $host = Config::get('remote.connections.production.host');
-            $url = 'http://'.$host.'/'.$path;
-        }
-        else
-        {
-            $url = URL::to($path);
+            $this->comment('Disabling cURL SSL certificate verification');
+            $request->setOptions([
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => 0,
+            ]);
         }
 
         $this->line('Hitting '.$url);
-        (new cURL)->get($url);
+        $request->send();
     }
 
     private function resetCLI($path)

@@ -2,7 +2,7 @@
 
 return [
 	'debug' => true,
-    'url' => 'http://groupeat.dev',
+    'url' => 'https://groupeat.dev',
 
     'providers' => append_config([
         'Illuminate\Foundation\Providers\TinkerServiceProvider',
