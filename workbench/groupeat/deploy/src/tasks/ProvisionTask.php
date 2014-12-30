@@ -21,6 +21,11 @@ class ProvisionTask extends AbstractTask {
             'Enter the SSL key: '
         );
 
+        $sslCertificate = $this->getSecretFromServerParams(
+            'PROD_SSL_CERTIFICATE',
+            'Enter the SSL certificate: '
+        );
+
         $appKey = $this->askForAppKey('Choose a 32 character string for the application key: ');
 
         $postgresPassword = $this->getSecretFromServerParams(
@@ -38,6 +43,8 @@ class ProvisionTask extends AbstractTask {
             $postgresPassword,
             $githubApi->addOAuthToken($serverName)
         );
+
+        $this->setupSSL($sslKey, $sslCertificate);
     }
 
     /**
@@ -50,7 +57,7 @@ class ProvisionTask extends AbstractTask {
         $password = $this->getSecretFromServerParams('GITHUB_PASSWORD', $passwordPrompt);
         $output = $this->explainer;
         $onError = function() { exit; };
-        
+
         return App::make('GitHubApi', compact('username', 'password', 'output', 'onError'));
     }
 
@@ -101,6 +108,17 @@ class ProvisionTask extends AbstractTask {
         ]);
     }
 
+    private function setupSSL($privateKey, $certificate)
+    {
+        $this->runAsRoot([
+            'echo "Writing SSL credentials into /etc/nginx/ssl"',
+            'mkdir /etc/nginx/ssl',
+            'echo "'.$privateKey.'" >> /etc/nginx/ssl/nginx.key',
+            'echo "'.$certificate.'" >> /etc/nginx/ssl/nginx.crt',
+            'service nginx restart',
+        ]);
+    }
+
     private function askForAppKey($question)
     {
         do
@@ -114,10 +132,11 @@ class ProvisionTask extends AbstractTask {
     private function getGitHubUsername()
     {
         $output = process('ssh -T git@github.com')->getErrorOutput();
-        preg_match("/^hi (\w+)!/i", $output, $matches);
+        preg_match("/\bhi (\w+)!/i", $output, $matches);
 
         if (!empty($matches[1]))
         {
+            $this->explainer->line('Using '.$matches[1].' username for GitHub');
             return $matches[1];
         }
         else
@@ -188,6 +207,7 @@ EOD;
     {
         if (!empty($_SERVER[$key]))
         {
+            $this->explainer->line($key. 'found in $_SERVER params');
             return $_SERVER[$key];
         }
 
