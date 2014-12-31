@@ -1,9 +1,9 @@
 <?php namespace Groupeat\Deploy\Console;
 
 use anlutro\cURL\cURL;
+use App;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
+use URL;
 
 class OpCacheResetCommand extends Command {
 
@@ -41,6 +41,7 @@ class OpCacheResetCommand extends Command {
     {
         $file = public_path($path);
         $this->line('Requiring '.$file);
+
         require $file;
     }
 

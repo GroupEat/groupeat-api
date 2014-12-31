@@ -128,11 +128,15 @@ return [
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
         'Dingo\Api\Provider\ApiServiceProvider',
+        'Tymon\JWTAuth\JWTAuthServiceProvider',
 
         'Groupeat\Support\PackageProvider',
-        'Groupeat\Users\PackageProvider',
+
+        'Groupeat\Auth\PackageProvider',
+        'Groupeat\Customers\PackageProvider',
         'Groupeat\Deploy\PackageProvider',
         'Groupeat\Showcase\PackageProvider',
+
         'Groupeat\App\PackageProvider',
 
     ],
@@ -203,6 +207,7 @@ return [
 		'View'              => 'Illuminate\Support\Facades\View',
 
         'API'               => 'Dingo\Api\Facade\API',
+        'JWTAuth'           => 'Tymon\JWTAuth\Facades\JWTAuth',
 
 	],
 

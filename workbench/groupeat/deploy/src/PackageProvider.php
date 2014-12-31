@@ -7,6 +7,7 @@ class PackageProvider extends WorkbenchPackageProvider {
 
     protected $console = ['OpCacheReset', 'Push'];
 
+
     protected function registerServices()
     {
         $this->app->bind('GitHubApi', function($app, $params)

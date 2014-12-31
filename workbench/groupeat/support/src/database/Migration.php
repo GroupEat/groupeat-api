@@ -1,11 +1,12 @@
 <?php namespace Groupeat\Support\Database;
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration as LaravelMigration;
+use Illuminate\Support\Facades\Schema;
 
 abstract class Migration extends LaravelMigration {
 
     const TABLE = 'Defined by inheritance';
+
 
     /**
      * Run the migrations.

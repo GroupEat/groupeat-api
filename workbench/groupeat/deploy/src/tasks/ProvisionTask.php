@@ -1,9 +1,9 @@
 <?php namespace Groupeat\Deploy\Tasks;
 
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\SSH;
+use App;
+use Config;
 use Rocketeer\Abstracts\AbstractTask;
-use Illuminate\Support\Facades\Config;
+use SSH;
 
 class ProvisionTask extends AbstractTask {
 
@@ -33,6 +33,11 @@ class ProvisionTask extends AbstractTask {
             'Choose the password for the postgreSQL DB: '
         );
 
+        $gandiMailPassword = $this->getSecretFromServerParams(
+            'GANDI_MAIL_PASSWORD',
+            'Enter the password of the Gandi Mail account: '
+        );
+
         $serverName = $this->getServerName();
 
         $this->addVagrantUserAndShippableKey($githubApi->getEmail(), Config::get('remote.shippable_key'));
@@ -41,6 +46,7 @@ class ProvisionTask extends AbstractTask {
             Config::get('remote.domain'),
             $appKey,
             $postgresPassword,
+            $gandiMailPassword,
             $githubApi->addOAuthToken($serverName)
         );
 
@@ -84,9 +90,9 @@ class ProvisionTask extends AbstractTask {
         ]);
     }
 
-    private function provisionServer($domain, $appKey, $postgresPassword, $githubOAuthToken)
+    private function provisionServer($domain, $appKey, $postgresPassword, $gandiMailPassword, $githubOAuthToken)
     {
-        $envFile = $this->getEnvProductionFileContent($appKey, $postgresPassword);
+        $envFile = $this->getEnvProductionFileContent($appKey, $postgresPassword, $gandiMailPassword);
         $this->explainer->line('Creating the .env.production.php file');
         $this->putFile(static::ENV_FILE_TEMP_PATH, $envFile);
 
@@ -155,7 +161,7 @@ class ProvisionTask extends AbstractTask {
         return trim($this->runAsRoot('hostname', 'Fetching remote server name'));
     }
 
-    private function getEnvProductionFileContent($appKey, $postgresPassword)
+    private function getEnvProductionFileContent($appKey, $postgresPassword, $gandiMailPassword)
     {
         return <<<EOD
 <?php
@@ -163,6 +169,7 @@ class ProvisionTask extends AbstractTask {
 return [
     'PGSQL_PASSWORD' => '$postgresPassword',
     'APP_KEY' => '$appKey',
+    'GANDI_MAIL_PASSWORD' => '$gandiMailPassword',
 ];
 EOD;
     }
@@ -211,7 +218,7 @@ EOD;
             return $_SERVER[$key];
         }
 
-        $this->explainer->error('Cannot find key ['.$key.'] in $_SERVER params');
+        $this->explainer->error('$_SERVER['.$key.'] is empty');
 
         return $this->askSecretly($promptIfKeyMissing);
     }

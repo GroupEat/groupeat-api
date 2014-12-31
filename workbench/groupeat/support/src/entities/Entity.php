@@ -1,7 +1,7 @@
 <?php namespace Groupeat\Support\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Validator;
+use Validator;
 
 abstract class Entity extends Model {
 
@@ -37,7 +37,18 @@ abstract class Entity extends Model {
         return $isValid;
     }
 
-    public function getErrors()
+    public function forceSave(array $options = [])
+    {
+        static::$skipValidation = true;
+
+        $status = $this->save($options);
+
+        static::$skipValidation = false;
+
+        return $status;
+    }
+
+    public function errors()
     {
         return $this->validationErrors;
     }
@@ -50,11 +61,29 @@ abstract class Entity extends Model {
     /**
      * @return string Table name of the entity
      */
+    public static function table()
+    {
+        return (new static)->getTable();
+    }
+
+    /**
+     * @return string Table name of the entity
+     */
     public function getTable()
     {
         $migration = $this->getRelatedMigration();
 
         return $migration::TABLE;
+    }
+
+    /**
+     * @param $fieldName
+     *
+     * @return string The field name preceded by the the table name
+     */
+    public function getTableField($fieldName)
+    {
+        return $this->getTable().'.'.$fieldName;
     }
 
     /**
@@ -67,6 +96,17 @@ abstract class Entity extends Model {
         $migrationClass = str_plural($temp).'Migration';
 
         return new $migrationClass;
+    }
+
+    protected function setPolymorphicAttribute($name, Entity $relatedEntity)
+    {
+        $this->setRelation($name, $relatedEntity);
+        $type = $name.'_type';
+        $id = $name.'_id';
+        $this->$type = get_class($relatedEntity);
+        $this->$id = $relatedEntity->id;
+
+        return $this;
     }
 
 }

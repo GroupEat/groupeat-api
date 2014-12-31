@@ -6,6 +6,8 @@ return [
 
     'providers' => append_config([
         'Illuminate\Foundation\Providers\TinkerServiceProvider',
+
+        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
         'Rocketeer\RocketeerServiceProvider',
     ]),
 ];

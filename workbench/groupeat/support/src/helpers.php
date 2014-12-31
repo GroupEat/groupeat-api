@@ -20,14 +20,14 @@ if (!function_exists('artisan'))
     }
 }
 
-if (!function_exists('ddump') && function_exists('dump'))
+if (!function_exists('ddd') && function_exists('dump'))
 {
     /**
      * Dump a variable and exit the script
      *
      * @param $var
      */
-    function ddump($var)
+    function ddd($var)
     {
         dump($var);
         exit;
@@ -96,7 +96,7 @@ if (!function_exists('workbench_path'))
      * Get an absolute path from a GroupEat package path relative to its src folder
      * Behave like the others Laravel *_path functions
      *
-     * @param        $package The GroupEat package to use
+     * @param string $package The GroupEat package to use
      * @param string $file
      *
      * @return string

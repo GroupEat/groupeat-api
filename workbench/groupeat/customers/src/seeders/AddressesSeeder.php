@@ -1,15 +1,14 @@
-<?php namespace Groupeat\Users\Seeders;
+<?php namespace Groupeat\Customers\Seeders;
 
-use Groupeat\Users\Entities\User;
-use Groupeat\Users\Entities\Address;
+use Groupeat\Customers\Entities\Address;
 use Groupeat\Support\Database\Seeder;
 
 class AddressesSeeder extends Seeder {
 
-    protected function makeEntry($i, $max)
+    protected function makeEntry($id, $max)
     {
         Address::create([
-            'user_id' => $this->faker->numberBetween(1, $max),
+            'customer_id' => $this->faker->numberBetween(1, $max),
             'street' => $this->faker->streetAddress,
             'details' => $this->faker->buildingNumber,
             'city' => $this->faker->city,
@@ -22,10 +21,10 @@ class AddressesSeeder extends Seeder {
         ]);
     }
 
-    protected function insertAdditionalEntries()
+    protected function insertAdditionalEntries($id)
     {
         Address::create([
-           'user_id' => User::where('email', 'groupeat@groupeat.fr')->first()->id,
+           'customer_id' => 1,
            'street' => '828 Boulevard des Maréchaux',
            'details' => 'Bâtiment E, studio 311',
            'city' => 'Palaiseau',

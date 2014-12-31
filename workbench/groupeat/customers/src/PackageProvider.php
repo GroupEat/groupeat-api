@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Users;
+<?php namespace Groupeat\Customers;
 
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 

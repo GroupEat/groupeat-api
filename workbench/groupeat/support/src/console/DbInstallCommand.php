@@ -1,15 +1,16 @@
 <?php namespace Groupeat\Support\Console;
 
+use Config;
+use DB;
+use File;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
+use Schema;
 use Symfony\Component\Console\Input\InputOption;
 
 class DbInstallCommand extends Command {
 
 	protected $name = 'db-install';
-	protected $description = 'Install or reinstall the DB by running all the migrations and seed if needed';
+	protected $description = 'Install the DB by running all the migrations and seed if needed';
 
 
     public function fire()

@@ -1,6 +1,6 @@
 <?php namespace Groupeat\Deploy\Tasks;
 
-use Illuminate\Support\Facades\App;
+use App;
 use Rocketeer\Abstracts\AbstractTask;
 
 class DeployDependingOnCommitMessageTask extends AbstractTask {
@@ -11,7 +11,7 @@ class DeployDependingOnCommitMessageTask extends AbstractTask {
 
     public function execute()
     {
-        if (App::environment() == 'building')
+        if (App::environment('building'))
         {
             $lastCommitMessage = processAtProjectRoot('git log -1 HEAD --pretty=format:%s')->getOutput();
 
@@ -20,6 +20,7 @@ class DeployDependingOnCommitMessageTask extends AbstractTask {
                 $message = '"'.$lastCommitMessage.'" contains [skip deploy]. Cancelling deployment...';
 
                 $this->explainer->line($message);
+
                 exit;
             }
         }

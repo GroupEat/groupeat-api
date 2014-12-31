@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Support\Providers;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class WorkbenchPackageProvider extends ServiceProvider {

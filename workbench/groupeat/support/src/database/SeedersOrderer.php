@@ -1,6 +1,6 @@
 <?php namespace Groupeat\Support\Database;
 
-use Illuminate\Support\Facades\File;
+use File;
 
 class SeedersOrderer {
 

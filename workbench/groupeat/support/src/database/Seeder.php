@@ -1,9 +1,8 @@
 <?php namespace Groupeat\Support\Database;
 
+use Config;
+use DB;
 use Faker\Factory;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Seeder as LaravelSeeder;
 
 abstract class Seeder extends LaravelSeeder {
@@ -27,19 +26,21 @@ abstract class Seeder extends LaravelSeeder {
 
     public function run()
     {
+        $id = 1;
         $this->cleanTable();
+
 
         if (method_exists($this, 'makeEntry'))
         {
-            for ($i = 0; $i < $this->entries; $i++)
+            for ($id = 1; $id <= $this->entries; $id++)
             {
-                $this->makeEntry($i, $this->entries);
+                $this->makeEntry($id, $this->entries);
             }
         }
 
         if (method_exists($this, 'insertAdditionalEntries'))
         {
-            $this->insertAdditionalEntries();
+            $this->insertAdditionalEntries($id);
         }
     }
 

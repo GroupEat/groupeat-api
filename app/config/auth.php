@@ -28,7 +28,7 @@ return [
 	|
 	*/
 
-	'model' => 'Groupeat\Users\Entities\User',
+	'model' => 'Groupeat\Auth\Entities\UserCredentials',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ return [
 	|
 	*/
 
-	'table' => \Groupeat\Users\Migrations\UsersMigration::TABLE,
+	'table' => \Groupeat\Auth\Migrations\UserCredentialsMigration::TABLE,
 
 	/*
 	|--------------------------------------------------------------------------

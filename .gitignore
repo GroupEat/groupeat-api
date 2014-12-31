@@ -5,5 +5,6 @@ Thumbs.db
 .env.php
 .env.*.php
 composer.phar
+_ide_helper.php
 /vendor
 /bootstrap/compiled.php
