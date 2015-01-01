@@ -35,11 +35,10 @@ Remember that some useful aliases are specified at the end of `server/provision.
 
 ## Connect to PostgreSQL
 
-Download [Valentina Studio](http://www.valentina-db.com/en/all-downloads) if you don't already have an equivalent solution and
-use the following information:
- - method: TCP/IP
- - host: 127.0.0.1
- - port: 54320
- - user: groupeat
- - password: groupeat
- - database: groupeat
+Browse to https://groupeat.dev/db/adminer.php and use the following configuration:
+
+ - System: PostgreSQL
+ - Server: 127.0.0.1
+ - Username: groupeat
+ - Password: groupeat
+ - Database: groupeat

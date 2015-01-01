@@ -11,7 +11,6 @@
         "anlutro/curl": "0.6.2",
         "tymon/jwt-auth": "0.3.12",
         "fzaninotto/faker": "1.4.0",
-        "cartalyst/sentry": "2.1.4",
         "laravel/framework": "4.2.11"
 	},
     "require-dev": {
