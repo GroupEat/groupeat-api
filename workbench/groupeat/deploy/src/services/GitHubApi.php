@@ -49,7 +49,7 @@ class GitHubApi extends cURL {
         {
             if ($existingKey->key == $keyWithoutEmail && $existingKey->title == $title)
             {
-                $this->output->line($title.' SSH key already exists in GitHub');
+                $this->output->line("$title SSH key already exists in GitHub");
                 return;
             }
             if (
@@ -57,12 +57,12 @@ class GitHubApi extends cURL {
                 ($existingKey->key == $keyWithoutEmail && $existingKey->title != $title)
             )
             {
-                $this->output->line('Deleting obsolete '.$title.' SSH key from GitHub');
-                $this->send('delete', 'user/keys/'.$existingKey->id);
+                $this->output->line("Deleting obsolete $title SSH key from GitHub");
+                $this->send('delete', "user/keys/$existingKey->id");
             }
         }
 
-        $this->output->line('Adding '.$title.' SSH key to GitHub');
+        $this->output->line("Adding $title SSH key to GitHub");
         $this->send('post', 'user/keys', compact('title', 'key'));
     }
 
@@ -72,14 +72,14 @@ class GitHubApi extends cURL {
 
         foreach ($authorizations as $authorization)
         {
-            if ($authorization->app->name == ($title.' (API)'))
+            if ($authorization->app->name == "$title (API)")
             {
-                $this->output->line($title.' OAuth token already exists in GitHub');
+                $this->output->line("$title OAuth token already exists in GitHub");
                 return $authorization->token;
             }
         }
 
-        $this->output->line('Adding '.$title.' OAuth token to GitHub');
+        $this->output->line("Adding $title OAuth token to GitHub");
         $response = $this->send('post', 'authorizations', [
             'scopes' => [],
             'note' => $title,
@@ -91,13 +91,13 @@ class GitHubApi extends cURL {
     public function send($HTTPverb, $path, $data = [])
     {
         $onError = $this->onError;
-        $url = 'https://api.github.com/'.$path;
+        $url = "https://api.github.com/$path";
         $HTTPverb = strtolower($HTTPverb);
 
         $request = (new cURL)->newRequest($HTTPverb, $url, $data)
             ->setHeader('content-type', 'application/json')
             ->setOptions([
-                CURLOPT_USERPWD => $this->username.':'.$this->password,
+                CURLOPT_USERPWD => "$this->username:$this->password",
                 CURLOPT_USERAGENT => static::USER_AGENT,
             ]);
 
@@ -110,17 +110,17 @@ class GitHubApi extends cURL {
 
         if ($response->statusCode == 401)
         {
-            $this->output->error('Wrong GitHub password for '.$this->username);
+            $this->output->error("Wrong GitHub password for $this->username");
             $onError();
         }
 
         if ($response->statusCode == 403)
         {
-            $this->output->error('Too many GitHub requests with invalid credentials for '.$this->username);
+            $this->output->error("Too many GitHub requests with invalid credentials for $this->username");
             $onError();
         }
 
-        $this->output->line($url.': '.$response->statusCode);
+        $this->output->line("$url: $response->statusCode");
 
         return json_decode($response->body);
     }

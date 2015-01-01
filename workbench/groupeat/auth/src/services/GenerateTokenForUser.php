@@ -1,6 +1,6 @@
 <?php namespace Groupeat\Auth\Services;
 
-use Groupeat\Auth\Entities\Interfaces\User;
+use Groupeat\Auth\Entities\UserCredentials;
 use Tymon\JWTAuth\JWTAuth;
 
 class GenerateTokenForUser {
@@ -10,27 +10,31 @@ class GenerateTokenForUser {
      */
     protected $JWTauth;
 
-    /**
-     * @var string
-     */
-    protected $token;
-
 
     public function __construct(JWTAuth $JWTauth)
     {
         $this->JWTauth = $JWTauth;
     }
 
-    public function call(User $user)
+    /**
+     * @param User $user
+     *
+     * @return string The authentication token
+     */
+    public function call(UserCredentials $credentials)
     {
-        $this->token = $this->JWTauth->fromUser($user->Credentials);
-
-        return true;
+        return $this->JWTauth->fromUser($credentials);
     }
 
-    public function getToken()
+    /**
+     * @param string $email
+     * @param string $password
+     *
+     * @return string The authentication token
+     */
+    public function callFromCredentials($email, $password)
     {
-        return $this->token;
+        return $this->JWTauth->attempt(compact('email', 'password'));
     }
 
 }

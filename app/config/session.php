@@ -16,7 +16,7 @@ return [
 	|
 	*/
 
-	'driver' => 'file',
+	'driver' => 'array', // API does not rely on session
 
 	/*
 	|--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ return [
 
 	'lifetime' => 120,
 
-	'expire_on_close' => false,
+	'expire_on_close' => true,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -135,6 +135,6 @@ return [
 	|
 	*/
 
-	'secure' => false,
+	'secure' => true,
 
 ];

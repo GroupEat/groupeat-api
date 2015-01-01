@@ -101,8 +101,8 @@ abstract class Entity extends Model {
     protected function setPolymorphicAttribute($name, Entity $relatedEntity)
     {
         $this->setRelation($name, $relatedEntity);
-        $type = $name.'_type';
-        $id = $name.'_id';
+        $type = "{$name}_type";
+        $id = "{$name}_id";
         $this->$type = get_class($relatedEntity);
         $this->$id = $relatedEntity->id;
 

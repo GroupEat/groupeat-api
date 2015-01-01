@@ -18,27 +18,15 @@ class CustomersController extends Controller {
 
     public function store()
     {
-        $registerUser = App::make('RegisterUser');
+        $registrationService = App::make('RegisterUserService');
+        $token = $registrationService->call(Input::get('email'), Input::get('password'), new Customer);
 
-        if (!$registerUser->call(Input::get('email'), Input::get('password'), new Customer))
-        {
-            throw new StoreResourceFailedException(
-                Lang::get('customers::errors.registration_failed'),
-                $registerUser->errors()
-            );
-        }
-
-        return $this->response->created();
+        return $this->response->array(compact('token'))->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function destroy(Customer $customer)
     {
-        $deleteUser = App::make('DeleteUser');
-
-        if (!$deleteUser->call($customer))
-        {
-            throw new DeleteResourceFailedException(Lang::get('customers::errors.deletion_failed'));
-        }
+        App::make('DeleteUserService')->call($customer);
     }
 
 }

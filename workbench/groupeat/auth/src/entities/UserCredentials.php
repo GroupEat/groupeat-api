@@ -29,6 +29,14 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         return $this->morphTo();
     }
 
+    /**
+     * @return bool
+     */
+    public function isActivated()
+    {
+        return !empty($this->activated_at);
+    }
+
     protected function setUserAttribute(User $user)
     {
         return $this->setPolymorphicAttribute('user', $user);

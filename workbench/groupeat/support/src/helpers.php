@@ -104,7 +104,7 @@ if (!function_exists('workbench_path'))
     function workbench_path($package, $file = '')
     {
         $package = strtolower($package);
-        $workbench_root = base_path('workbench/groupeat/'.$package.'/src');
+        $workbench_root = base_path("workbench/groupeat/$package/src");
 
         if (empty($file))
         {
@@ -112,7 +112,7 @@ if (!function_exists('workbench_path'))
         }
         else
         {
-            return $workbench_root.'/'.$file;
+            return "$workbench_root/$file";
         }
     }
 }

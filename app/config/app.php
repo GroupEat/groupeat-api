@@ -52,7 +52,7 @@ return [
 	|
 	*/
 
-	'locale' => 'fr',
+	'locale' => 'en',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -205,9 +205,6 @@ return [
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
-
-        'API'               => 'Dingo\Api\Facade\API',
-        'JWTAuth'           => 'Tymon\JWTAuth\Facades\JWTAuth',
 
 	],
 

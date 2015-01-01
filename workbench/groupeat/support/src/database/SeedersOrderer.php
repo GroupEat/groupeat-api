@@ -38,7 +38,7 @@ class SeedersOrderer {
     {
         $ending = '_'.str_replace('Seeder', 'Migration.php', $seederName);
 
-        $files = File::glob(workbench_path($package, 'migrations/*'.$ending));
+        $files = File::glob(workbench_path($package, "migrations/*$ending"));
 
         if (count($files) == 1)
         {

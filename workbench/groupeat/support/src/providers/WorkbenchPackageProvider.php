@@ -13,7 +13,7 @@ class WorkbenchPackageProvider extends ServiceProvider {
     public function boot()
     {
         $name = $this->getPackageName();
-        $this->package('groupeat/'.$name, $name, $this->getPackagePath());
+        $this->package("groupeat/$name", $name, $this->getPackagePath());
 
         $this->requireFiles(...$this->require);
         $this->registerConsoleCommands(...$this->console);
@@ -21,7 +21,7 @@ class WorkbenchPackageProvider extends ServiceProvider {
 
     public function register()
     {
-        $this->app['config']->package('groupeat/'.$this->getPackageName(), $this->getPackagePath('config'));
+        $this->app['config']->package("groupeat/{$this->getPackageName()}", $this->getPackagePath('config'));
 
         $this->registerServices();
     }
@@ -35,7 +35,7 @@ class WorkbenchPackageProvider extends ServiceProvider {
     {
         foreach ($files as $file)
         {
-            $path = $this->getPackagePath($file.'.php');
+            $path = $this->getPackagePath("$file.php");
 
             require_once $path;
         }
@@ -67,7 +67,7 @@ class WorkbenchPackageProvider extends ServiceProvider {
 
     protected function getPackagePath($file = '')
     {
-        $workbench_root = base_path('workbench/groupeat/'.$this->getPackageName().'/src');
+        $workbench_root = base_path("workbench/groupeat/{$this->getPackageName()}/src");
 
         if (empty($file))
         {

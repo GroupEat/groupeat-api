@@ -33,14 +33,14 @@ class OpCacheResetCommand extends Command {
             ]);
         }
 
-        $this->line('Hitting '.$url);
+        $this->line("Hitting $url");
         $request->send();
     }
 
     private function resetCLI($path)
     {
         $file = public_path($path);
-        $this->line('Requiring '.$file);
+        $this->line("Requiring $file");
 
         require $file;
     }

@@ -13,8 +13,8 @@
         <testsuite name="showcase">
             <directory>./workbench/groupeat/showcase/tests</directory>
         </testsuite>
-        <testsuite name="users">
-            <directory>./workbench/groupeat/users/tests</directory>
+        <testsuite name="auth">
+            <directory>./workbench/groupeat/auth/tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

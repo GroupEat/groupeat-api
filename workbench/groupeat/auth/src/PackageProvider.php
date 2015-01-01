@@ -7,26 +7,29 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider {
 
+    protected $require = ['routes'];
+
+
     protected function registerServices()
     {
-        $this->app->bind('ActivateUser', function()
+        $this->app->bind('ActivateUserService', function()
         {
             return new ActivateUser;
         });
 
-        $this->app->bind('DeleteUser', function()
+        $this->app->bind('DeleteUserService', function($app)
         {
-            return new DeleteUser;
+            return new DeleteUser($app['auth']);
         });
 
-        $this->app->bind('GenerateTokenForUser', function($app)
+        $this->app->bind('GenerateTokenForUserService', function($app)
         {
             return new GenerateTokenForUser($app['tymon.jwt.auth']);
         });
 
-        $this->app->bind('RegisterUser', function($app)
+        $this->app->bind('RegisterUserService', function($app)
         {
-            return new RegisterUser($app['mailer']);
+            return new RegisterUser($app['mailer'], $app['validator'], $app['GenerateTokenForUserService']);
         });
     }
 

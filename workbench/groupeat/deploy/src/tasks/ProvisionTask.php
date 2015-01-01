@@ -9,7 +9,7 @@ class ProvisionTask extends AbstractTask {
 
     const ENV_FILE_TEMP_PATH = '/tmp/.env.production.php';
 
-    protected $description = "Initialize the production server";
+    protected $description = 'Initialize the production server';
 
 
     public function execute()
@@ -58,8 +58,8 @@ class ProvisionTask extends AbstractTask {
      */
     private function makeGitHubApi()
     {
-        $username = $this->getGitHubUsername();
-        $passwordPrompt = ucfirst($username).', enter your GitHub password: ';
+        $username = ucfirst($this->getGitHubUsername());
+        $passwordPrompt = "$username, enter your GitHub password: ";
         $password = $this->getSecretFromServerParams('GITHUB_PASSWORD', $passwordPrompt);
         $output = $this->explainer;
         $onError = function() { exit; };
@@ -142,7 +142,8 @@ class ProvisionTask extends AbstractTask {
 
         if (!empty($matches[1]))
         {
-            $this->explainer->line('Using '.$matches[1].' username for GitHub');
+            $this->explainer->line("Using $matches[1] username for GitHub");
+
             return $matches[1];
         }
         else
@@ -176,23 +177,23 @@ EOD;
 
     private function executeScriptRemotely($scriptName, $description, $arguments = [])
     {
-        $localPath = base_path('scripts/'.$scriptName.'.sh');
+        $localPath = base_path("scripts/$scriptName.sh");
 
         if (!file_exists($localPath))
         {
-            $this->explainer->error('File '.$localPath.' do not exists.');
+            $this->explainer->error("File $localPath do not exists.");
             exit;
         }
 
-        $remotePath = '/tmp/'.$scriptName.'.sh';
+        $remotePath = "/tmp/$scriptName.sh";
         $this->putFile($remotePath, file_get_contents($localPath));
         $command = $remotePath.' '.implode(' ', $arguments);
 
         return $this->runAsRoot([
-            'echo "'.$description.'"',
-            'chmod 754 '.$remotePath,
+            "echo \"$description\"",
+            "chmod 754 $remotePath",
             $command,
-            'rm '.$remotePath,
+            "rm $remotePath",
         ]);
     }
 
@@ -214,11 +215,11 @@ EOD;
     {
         if (!empty($_SERVER[$key]))
         {
-            $this->explainer->line($key. 'found in $_SERVER params');
+            $this->explainer->line("$key found in \$_SERVER params");
             return $_SERVER[$key];
         }
 
-        $this->explainer->error('$_SERVER['.$key.'] is empty');
+        $this->explainer->error("\$_SERVER['$key'] is empty");
 
         return $this->askSecretly($promptIfKeyMissing);
     }
