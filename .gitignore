@@ -2,8 +2,7 @@
 .vagrant
 .DS_Store
 Thumbs.db
-.env.php
-.env.*.php
+.env*
 composer.phar
 _ide_helper.php
 /vendor
