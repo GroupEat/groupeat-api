@@ -1,1 +1,1 @@
-{{ $activationCode }}
+{{ $url }}

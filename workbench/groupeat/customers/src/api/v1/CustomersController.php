@@ -5,6 +5,7 @@ use Auth;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
+use Symfony\Component\HttpFoundation\Response;
 
 class CustomersController extends Controller {
 
@@ -23,7 +24,10 @@ class CustomersController extends Controller {
         $customer = App::make('RegisterUserService')
             ->call(Input::get('email'), Input::get('password'), new Customer);
 
-        return $this->response->created();
+        $id = $customer->id;
+        $token = App::make('GenerateTokenForUserService')->call(Input::get('email'), Input::get('password'));
+
+        return $this->response->array(compact('id', 'token'))->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function destroyCurrentUser()

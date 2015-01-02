@@ -37,7 +37,12 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->bind('RegisterUserService', function($app)
         {
-            return new RegisterUser($app['mailer'], $app['validator'], $app['GenerateTokenForUserService']);
+            return new RegisterUser(
+                $app['mailer'],
+                $app['validator'],
+                $app['url'],
+                $app['GenerateTokenForUserService']
+            );
         });
     }
 

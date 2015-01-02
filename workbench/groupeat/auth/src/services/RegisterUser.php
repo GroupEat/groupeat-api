@@ -4,6 +4,7 @@ use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\BadRequest;
 use Illuminate\Mail\Mailer;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Validation\Factory as Validation;
 use RuntimeException;
 
@@ -20,6 +21,11 @@ class RegisterUser {
     private $tokenGenerator;
 
     /**
+     * @var UrlGenerator
+     */
+    private $urlGenerator;
+
+    /**
      * @var Validation
      */
     private $validation;
@@ -30,10 +36,16 @@ class RegisterUser {
     private $userCredentials;
 
 
-    public function __construct(Mailer $mailer, Validation $validation, GenerateTokenForUser $tokenGenerator)
+    public function __construct(
+        Mailer $mailer,
+        Validation $validation,
+        UrlGenerator $urlGenerator,
+        GenerateTokenForUser $tokenGenerator
+    )
     {
         $this->mailer = $mailer;
         $this->validation = $validation;
+        $this->urlGenerator = $urlGenerator;
         $this->tokenGenerator = $tokenGenerator;
     }
 
@@ -106,7 +118,9 @@ class RegisterUser {
     private function sendActivationCode($email)
     {
         $view = 'auth::mails.activation';
-        $data = ['activationCode' => $this->userCredentials->activationCode];
+        $code = $this->userCredentials->activationCode;
+        $url = $this->urlGenerator->route('auth.activation', compact('code'));
+        $data = compact('url');
 
         $this->mailer->send($view, $data, function($message) use ($email)
         {
