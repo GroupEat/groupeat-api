@@ -6,7 +6,7 @@ use Rocketeer\Abstracts\AbstractTask;
 class DeployDependingOnCommitMessageTask extends AbstractTask {
 
     protected $local = true;
-    protected $description = 'Cancel deployment after building if commit message contains [skip deploy]';
+    protected $description = "Cancel deployment after building if commit message contains [skip deploy]";
 
 
     public function execute()

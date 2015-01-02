@@ -104,6 +104,7 @@ return [
         'Illuminate\Foundation\Providers\MaintenanceServiceProvider',
         'Illuminate\Foundation\Providers\OptimizeServiceProvider',
         'Illuminate\Foundation\Providers\PublisherServiceProvider',
+        'Illuminate\Foundation\Providers\RouteListServiceProvider',
         'Illuminate\Queue\FailConsoleServiceProvider',
 		'Illuminate\Routing\ControllerServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
@@ -133,6 +134,7 @@ return [
         'Groupeat\Support\PackageProvider',
 
         'Groupeat\Auth\PackageProvider',
+        'Groupeat\Admin\PackageProvider',
         'Groupeat\Customers\PackageProvider',
         'Groupeat\Deploy\PackageProvider',
         'Groupeat\Showcase\PackageProvider',
@@ -169,7 +171,6 @@ return [
 
 		'App'               => 'Illuminate\Support\Facades\App',
 		'Artisan'           => 'Illuminate\Support\Facades\Artisan',
-		'Auth'              => 'Illuminate\Support\Facades\Auth',
 		'Blade'             => 'Illuminate\Support\Facades\Blade',
 		'Cache'             => 'Illuminate\Support\Facades\Cache',
 		'ClassLoader'       => 'Illuminate\Support\ClassLoader',
@@ -205,6 +206,8 @@ return [
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
+
+        'Auth'              => 'Groupeat\Auth\Facades\Auth',
 
 	],
 

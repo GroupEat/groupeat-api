@@ -20,7 +20,9 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     {
         return [
             'email' => 'email|required',
-            'password' => 'min:6',
+            'password' => 'min:6|required',
+            'user_id' => 'required',
+            'user_type' => 'required',
         ];
     }
 
@@ -29,9 +31,6 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         return $this->morphTo();
     }
 
-    /**
-     * @return bool
-     */
     public function isActivated()
     {
         return !empty($this->activated_at);

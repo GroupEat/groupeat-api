@@ -3,7 +3,7 @@
 interface User {
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne The relationship giving access to the credentials
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne Relationship giving access to the credentials
      */
     public function credentials();
 

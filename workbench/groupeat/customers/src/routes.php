@@ -4,23 +4,26 @@ Route::model('customer', 'Groupeat\Customers\Entities\Customer');
 
 Route::api(['version' => 'v1'], function()
 {
-    $controller = 'Groupeat\Customers\Api\V1\CustomersController@';
-
-    Route::group(['protected' => false], function() use ($controller)
+    Route::group(['prefix' => 'customers'], function()
     {
-        /**
-         * @param email
-         * @param password
-         *
-         * @return string The authentication token
-         */
-        Route::post('customers', $controller.'store');
-    });
+        $controller = 'Groupeat\Customers\Api\V1\CustomersController@';
 
-    Route::group(['protected' => true], function() use ($controller)
-    {
-        Route::get('customers', $controller.'index');
+        Route::group(['protected' => false], function() use ($controller)
+        {
+            /**
+             * @param email
+             * @param password
+             */
+            Route::post('/', $controller.'store');
+        });
 
-        Route::delete('customer/{customer}', $controller.'destroy');
+        Route::group(['protected' => true], function() use ($controller)
+        {
+            Route::get('/', $controller.'index');
+
+            Route::get('me', $controller.'showCurrentUser');
+
+            Route::delete('me', $controller.'destroyCurrentUser');
+        });
     });
 });

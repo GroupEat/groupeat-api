@@ -35,10 +35,4 @@ Remember that some useful aliases are specified at the end of `server/provision.
 
 ## Connect to PostgreSQL
 
-Browse to https://groupeat.dev/db/adminer.php and use the following configuration:
-
- - System: PostgreSQL
- - Server: 127.0.0.1
- - Username: groupeat
- - Password: groupeat
- - Database: groupeat
+Browse to https://groupeat.dev/admin/db and type `groupeat` in the password field.

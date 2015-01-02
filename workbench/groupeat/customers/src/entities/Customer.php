@@ -8,6 +8,10 @@ class Customer extends Entity implements User {
 
     use HasCredentials;
 
+    // Delegated to credentials.
+    public $timestamps = false;
+
+
     public function getRules()
     {
         return [];

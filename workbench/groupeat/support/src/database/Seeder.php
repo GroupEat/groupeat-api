@@ -56,7 +56,7 @@ abstract class Seeder extends LaravelSeeder {
      */
     protected function getRelatedMigration()
     {
-        $migrationClass = str_replace('Seeder', 'Migration', get_class($this));
+        $migrationClass = str_replace('Seeder', 'Migration', static::class);
 
         return new $migrationClass;
     }

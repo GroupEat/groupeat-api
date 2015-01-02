@@ -48,7 +48,7 @@ return [
 
 		'pgsql' => [
 			'driver'   => 'pgsql',
-			'host'     => 'localhost',
+			'host'     => '127.0.0.1',
 			'database' => 'groupeat',
 			'username' => 'groupeat',
 			'password' => $_SERVER['PGSQL_PASSWORD'],

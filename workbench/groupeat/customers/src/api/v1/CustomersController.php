@@ -1,13 +1,10 @@
 <?php namespace Groupeat\Customers\Api\V1;
 
 use App;
-use Dingo\Api\Exception\DeleteResourceFailedException;
-use Dingo\Api\Exception\StoreResourceFailedException;
+use Auth;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
-use Lang;
-use Symfony\Component\HttpFoundation\Response;
 
 class CustomersController extends Controller {
 
@@ -16,17 +13,22 @@ class CustomersController extends Controller {
         return Customer::all();
     }
 
-    public function store()
+    public function showCurrentUser()
     {
-        $registrationService = App::make('RegisterUserService');
-        $token = $registrationService->call(Input::get('email'), Input::get('password'), new Customer);
-
-        return $this->response->array(compact('token'))->setStatusCode(Response::HTTP_CREATED);
+        return Auth::customer();
     }
 
-    public function destroy(Customer $customer)
+    public function store()
     {
-        App::make('DeleteUserService')->call($customer);
+        $customer = App::make('RegisterUserService')
+            ->call(Input::get('email'), Input::get('password'), new Customer);
+
+        return $this->response->created();
+    }
+
+    public function destroyCurrentUser()
+    {
+        App::make('DeleteUserService')->call(Auth::customer());
     }
 
 }

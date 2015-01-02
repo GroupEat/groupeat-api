@@ -8,7 +8,7 @@ use URL;
 class OpCacheResetCommand extends Command {
 
     protected $name = 'opcache';
-    protected $description = 'Reset the OPcache on both server and CLI';
+    protected $description = "Reset the OPcache on both server and CLI";
 
 
     public function fire()

@@ -3,7 +3,7 @@
 if (!function_exists('artisan'))
 {
     /**
-     * Call an Artisan command and return its output
+     * Call an Artisan command and return its output.
      *
      * @param string $command Command name (like groupeat:push)
      * @param array  $parameters Command options
@@ -14,7 +14,7 @@ if (!function_exists('artisan'))
     function artisan($command, $parameters = [], $verbosity = null)
     {
         $output = new \Symfony\Component\Console\Output\BufferedOutput($verbosity);
-        \Illuminate\Support\Facades\Artisan::call($command, $parameters, $output);
+        Artisan::call($command, $parameters, $output);
 
         return $output->fetch();
     }
@@ -23,7 +23,7 @@ if (!function_exists('artisan'))
 if (!function_exists('ddd') && function_exists('dump'))
 {
     /**
-     * Dump a variable and exit the script
+     * Dump a variable and exit the script.
      *
      * @param $var
      */
@@ -37,10 +37,10 @@ if (!function_exists('ddd') && function_exists('dump'))
 if (!function_exists('process'))
 {
     /**
-     * Run a shell command with the Symfony Process class
-     * Give a valid output parameter if you want realtime feedback
+     * Run a shell command with the Symfony Process class.
+     * Give a valid output parameter if you want realtime feedback.
      *
-     * @param                                                   $command
+     * @param string                                            $command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return \Symfony\Component\Process\Process
@@ -75,9 +75,9 @@ if (!function_exists('process'))
 if (!function_exists('processAtProjectRoot'))
 {
     /**
-     * Run a shell commmand at the project root (in the artisan file folder)
+     * Run a shell commmand at the project root (in the artisan file folder).
      *
-     * @param                                                   $command
+     * @param string                                            $command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return \Symfony\Component\Process\Process
@@ -93,10 +93,10 @@ if (!function_exists('processAtProjectRoot'))
 if (!function_exists('workbench_path'))
 {
     /**
-     * Get an absolute path from a GroupEat package path relative to its src folder
-     * Behave like the others Laravel *_path functions
+     * Get an absolute path from a GroupEat package path relative to its src folder.
+     * Behave like the others Laravel *_path functions.
      *
-     * @param string $package The GroupEat package to use
+     * @param string $package GroupEat package to use
      * @param string $file
      *
      * @return string
@@ -120,7 +120,7 @@ if (!function_exists('workbench_path'))
 if (!function_exists('listGroupeatPackages'))
 {
     /**
-     * Get the list of the GroupEat packages with the same case than the corresponding folders
+     * Get the list of the GroupEat packages with the same case than the corresponding folders.
      *
      * @param bool $withoutSupport
      *
@@ -148,7 +148,7 @@ if (!function_exists('listGroupeatPackages'))
     }
 
     /**
-     * Same as above but without the Support package
+     * Same as above but without the Support package.
      *
      * @return array
      */

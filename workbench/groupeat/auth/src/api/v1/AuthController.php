@@ -9,7 +9,7 @@ class AuthController extends Controller {
     public function token()
     {
         $token = App::make('GenerateTokenForUserService')
-            ->callFromCredentials(Input::get('email'), Input::get('password'));
+            ->call(Input::get('email'), Input::get('password'));
 
         return $this->response->array(compact('token'));
     }

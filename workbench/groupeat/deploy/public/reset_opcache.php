@@ -6,5 +6,5 @@ if (function_exists('opcache_reset'))
 }
 else
 {
-    echo "OPcache is not enabled\n";
+    echo "OPcache is not enabled.\n";
 }

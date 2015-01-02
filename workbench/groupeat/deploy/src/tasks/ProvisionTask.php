@@ -2,6 +2,7 @@
 
 use App;
 use Config;
+use File;
 use Rocketeer\Abstracts\AbstractTask;
 use SSH;
 
@@ -9,31 +10,41 @@ class ProvisionTask extends AbstractTask {
 
     const ENV_FILE_TEMP_PATH = '/tmp/.env.production.php';
 
-    protected $description = 'Initialize the production server';
+    protected $description = "Initialize the production server";
+
+    /**
+     * @var array
+     */
+    private $secrets = [];
 
 
     public function execute()
     {
         $githubApi = $this->makeGitHubApi();
 
-        $sslKey = $this->getSecretFromServerParams(
+        $sslKey = $this->getSecretFromProductionEnvFile(
             'PROD_SSL_PRIVATE_KEY',
             'Enter the SSL key: '
         );
 
-        $sslCertificate = $this->getSecretFromServerParams(
+        $sslCertificate = $this->getSecretFromProductionEnvFile(
             'PROD_SSL_CERTIFICATE',
             'Enter the SSL certificate: '
         );
 
         $appKey = $this->askForAppKey('Choose a 32 character string for the application key: ');
 
-        $postgresPassword = $this->getSecretFromServerParams(
+        $postgresPassword = $this->getSecretFromProductionEnvFile(
             'PROD_PGSQL_PASSWORD',
             'Choose the password for the postgreSQL DB: '
         );
 
-        $gandiMailPassword = $this->getSecretFromServerParams(
+        $adminKey = $this->getSecretFromProductionEnvFile(
+            'ADMIN_KEY',
+            'Enter the admin key used to protect the admin routes: '
+        );
+
+        $gandiMailPassword = $this->getSecretFromProductionEnvFile(
             'GANDI_MAIL_PASSWORD',
             'Enter the password of the Gandi Mail account: '
         );
@@ -46,6 +57,7 @@ class ProvisionTask extends AbstractTask {
             Config::get('remote.domain'),
             $appKey,
             $postgresPassword,
+            $adminKey,
             $gandiMailPassword,
             $githubApi->addOAuthToken($serverName)
         );
@@ -59,8 +71,12 @@ class ProvisionTask extends AbstractTask {
     private function makeGitHubApi()
     {
         $username = ucfirst($this->getGitHubUsername());
-        $passwordPrompt = "$username, enter your GitHub password: ";
-        $password = $this->getSecretFromServerParams('GITHUB_PASSWORD', $passwordPrompt);
+
+        $password = $this->getSecretFromProductionEnvFile(
+            'GITHUB_PASSWORD',
+            "$username, enter your GitHub password: "
+        );
+
         $output = $this->explainer;
         $onError = function() { exit; };
 
@@ -90,9 +106,16 @@ class ProvisionTask extends AbstractTask {
         ]);
     }
 
-    private function provisionServer($domain, $appKey, $postgresPassword, $gandiMailPassword, $githubOAuthToken)
+    private function provisionServer(
+        $domain,
+        $appKey,
+        $postgresPassword,
+        $adminKey,
+        $gandiMailPassword,
+        $githubOAuthToken
+    )
     {
-        $envFile = $this->getEnvProductionFileContent($appKey, $postgresPassword, $gandiMailPassword);
+        $envFile = $this->getEnvProductionFileContent($appKey, $postgresPassword, $adminKey, $gandiMailPassword);
         $this->explainer->line('Creating the .env.production.php file');
         $this->putFile(static::ENV_FILE_TEMP_PATH, $envFile);
 
@@ -129,7 +152,7 @@ class ProvisionTask extends AbstractTask {
     {
         do
         {
-            $key = $this->getSecretFromServerParams('PROD_APP_KEY', $question);
+            $key = $this->getSecretFromProductionEnvFile('PROD_APP_KEY', $question);
         } while (strlen($key) != '32');
 
         return $key;
@@ -162,14 +185,15 @@ class ProvisionTask extends AbstractTask {
         return trim($this->runAsRoot('hostname', 'Fetching remote server name'));
     }
 
-    private function getEnvProductionFileContent($appKey, $postgresPassword, $gandiMailPassword)
+    private function getEnvProductionFileContent($appKey, $postgresPassword, $adminKey, $gandiMailPassword)
     {
         return <<<EOD
 <?php
 
 return [
-    'PGSQL_PASSWORD' => '$postgresPassword',
     'APP_KEY' => '$appKey',
+    'PGSQL_PASSWORD' => '$postgresPassword',
+    'ADMIN_KEY' => '$adminKey',
     'GANDI_MAIL_PASSWORD' => '$gandiMailPassword',
 ];
 EOD;
@@ -211,17 +235,45 @@ EOD;
         return $output;
     }
 
-    private function getSecretFromServerParams($key, $promptIfKeyMissing)
+    private function getSecretFromProductionEnvFile($key, $promptIfKeyMissing)
     {
-        if (!empty($_SERVER[$key]))
+        $this->loadSecretFileIfNeeded();
+
+        if (!empty($this->secrets[$key]))
         {
-            $this->explainer->line("$key found in \$_SERVER params");
-            return $_SERVER[$key];
+            $this->explainer->line("$key found in secret file");
+
+            return $this->secrets[$key];
         }
 
-        $this->explainer->error("\$_SERVER['$key'] is empty");
+        $this->explainer->error("$key not found in secret file");
 
-        return $this->askSecretly($promptIfKeyMissing);
+        return $this->command->askSecretly($promptIfKeyMissing);
+    }
+
+    private function loadSecretFileIfNeeded()
+    {
+        if ($this->secrets === false)
+        {
+            // Secret file not found
+            return;
+        }
+
+        if ($this->secrets === null)
+        {
+            $envProductionPath = base_path('.env.production.php');
+
+            if (!File::exists($envProductionPath))
+            {
+                $this->explainer->error("Secret file $envProductionPath not found");
+                $this->secrets = false;
+            }
+            else
+            {
+                $this->explainer->line("Secret file found!");
+                $this->secrets = require_once $envProductionPath;
+            }
+        }
     }
 
 }

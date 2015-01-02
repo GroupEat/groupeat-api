@@ -6,9 +6,11 @@
  */
 return [
 
+    'APP_KEY' => '0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7',
+
     'PGSQL_PASSWORD' => 'groupeat',
 
-    'APP_KEY' => '0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7',
+    'ADMIN_KEY' => 'groupeat',
 
     'GANDI_MAIL_PASSWORD' => 'FILL_IF_YOU_WANT_TO_SEND_MAIL_OR_SETUP_PRODUCTION_SERVER',
 

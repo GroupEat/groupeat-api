@@ -42,19 +42,22 @@ class RegisterUser {
      * @param string $plainPassword
      * @param User   $user
      *
-     * @return string The authentication token
+     * @return User
      */
-    public function call($email, $plainPassword, User $user)
+    public function call($email, $plainPassword, User $newUser)
     {
-        return $this->insertUserWithCredentials($email, $plainPassword, $user)
+        $this->insertUserWithCredentials($email, $plainPassword, $newUser)
             ->generateActivationCode()
-            ->sendActivationCode($email)
-            ->generateToken();
+            ->sendActivationCode($email);
+
+        return $this->userCredentials->user;
     }
 
     private function insertUserWithCredentials($email, $plainPassword, User $user)
     {
         // We need to save the user to have its id
+        // A user cannot be saved with empty data so we create temporary one
+        $user->firstName = 'temp';
         $user->save();
 
         $this->userCredentials = new UserCredentials;
@@ -76,10 +79,15 @@ class RegisterUser {
 
         if (!$errors->isEmpty())
         {
-            // Delete the user if the credentials are invalid
-            $user->delete();
+            // Delete the user if the credentials are invalid.
+            $user->forceDelete();
 
-            throw new BadRequest("Invalid credentials", $errors);
+            throw new BadRequest("Invalid credentials.", $errors);
+        }
+        else
+        {
+            $user->firstName = null;
+            $user->save();
         }
 
         $this->userCredentials->save();
@@ -102,16 +110,11 @@ class RegisterUser {
 
         $this->mailer->send($view, $data, function($message) use ($email)
         {
-            // TODO I18n
-            $message->to($email)->subject('Activate your GroupEat account');
+            // TODO: I18n.
+            $message->to($email)->subject("Activate your GroupEat account");
         });
 
         return $this;
-    }
-
-    private function generateToken()
-    {
-        return $this->tokenGenerator->call($this->userCredentials);
     }
 
     private function generateRandomString($length = 42)
@@ -121,10 +124,9 @@ class RegisterUser {
         // take out the "/", "+", and "=" characters.
         $bytes = openssl_random_pseudo_bytes($length * 2);
 
-        // Stop execution if the generation fails
         if ($bytes === false)
         {
-            throw new RuntimeException('Unable to generate random string.');
+            throw new RuntimeException("Unable to generate random string.");
         }
 
         return substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $length);

@@ -4,6 +4,10 @@ use Illuminate\Support\ServiceProvider;
 
 class WorkbenchPackageProvider extends ServiceProvider {
 
+    const FILTERS = 'filters';
+    const HELPERS = 'helpers';
+    const ROUTES = 'routes';
+
     protected $defer = false;
 
     protected $require = [];
@@ -81,8 +85,7 @@ class WorkbenchPackageProvider extends ServiceProvider {
 
     protected function getPackageName()
     {
-        $className = get_class($this);
-        $parts = explode('\\', $className);
+        $parts = explode('\\', static::class);
 
         return lcfirst($parts[1]);
     }

@@ -76,7 +76,7 @@ return [
     |
     */
 
-    'strict' => true,
+    'strict' => !Config::get('app.debug'),
 
     /*
     |--------------------------------------------------------------------------
@@ -103,7 +103,7 @@ return [
 
     'auth' => [
         'jwt' => function ($app) {
-            return new Dingo\Api\Auth\JWTProvider($app['tymon.jwt.auth']);
+            return new Dingo\Api\Auth\JWTProvider($app['groupeat.auth']);
         }
     ],
 

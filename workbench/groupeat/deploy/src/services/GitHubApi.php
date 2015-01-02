@@ -33,8 +33,7 @@ class GitHubApi extends cURL {
             }
         }
 
-        // Return default if other email not found
-        return 'tib.dex@gmail.com';
+        throw new \RuntimeException("Cannot find GitHub email.");
     }
 
     public function addSSHkey($key, $title)

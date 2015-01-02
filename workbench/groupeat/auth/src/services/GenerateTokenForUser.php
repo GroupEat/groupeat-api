@@ -1,6 +1,8 @@
 <?php namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Support\Exceptions\Exception;
+use Groupeat\Support\Exceptions\Forbidden;
 use Tymon\JWTAuth\JWTAuth;
 
 class GenerateTokenForUser {
@@ -17,24 +19,31 @@ class GenerateTokenForUser {
     }
 
     /**
-     * @param User $user
-     *
-     * @return string The authentication token
-     */
-    public function call(UserCredentials $credentials)
-    {
-        return $this->JWTauth->fromUser($credentials);
-    }
-
-    /**
      * @param string $email
      * @param string $password
      *
-     * @return string The authentication token
+     * @return string Authentication token
      */
-    public function callFromCredentials($email, $password)
+    public function call($email, $password)
     {
-        return $this->JWTauth->attempt(compact('email', 'password'));
+        $token = $this->JWTauth->attempt(compact('email', 'password'));
+
+        if (!$token)
+        {
+            throw new Forbidden("Bad credentials.");
+        }
+
+        $user = $this->JWTauth->toUser($token);
+
+        if (!$user)
+        {
+            throw new Exception("Cannot retrieve user from token");
+        }
+
+        $user->token = $token;
+        $user->save();
+
+        return $token;
     }
 
 }

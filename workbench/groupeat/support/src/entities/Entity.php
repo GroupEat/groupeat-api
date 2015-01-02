@@ -6,7 +6,7 @@ use Validator;
 abstract class Entity extends Model {
 
     /**
-     * Can be set to true for easier seeding
+     * Can be set to true for easier seeding.
      *
      * @var bool Indicate if the entity can be saved without being valid
      */
@@ -17,15 +17,15 @@ abstract class Entity extends Model {
 
     protected static function boot()
     {
-        Model::boot();
-
-        static::saving(function($entity)
+        static::saving(function(Entity $entity)
         {
             if (!static::$skipValidation)
             {
                 return $entity->validate();
             }
         });
+
+        parent::boot();
     }
 
     public function validate()
@@ -54,7 +54,7 @@ abstract class Entity extends Model {
     }
 
     /**
-     * @return array The rules that the entity must match
+     * @return array Rules that the entity must match
      */
     abstract public function getRules();
 
@@ -77,9 +77,9 @@ abstract class Entity extends Model {
     }
 
     /**
-     * @param $fieldName
+     * @param string $fieldName
      *
-     * @return string The field name preceded by the the table name
+     * @return string Field name preceded by the the table name
      */
     public function getTableField($fieldName)
     {
@@ -91,8 +91,7 @@ abstract class Entity extends Model {
      */
     protected function getRelatedMigration()
     {
-        $entityClass = get_class($this);
-        $temp = str_replace('\\Entities\\', '\\Migrations\\', $entityClass);
+        $temp = str_replace('\\Entities\\', '\\Migrations\\', static::class);
         $migrationClass = str_plural($temp).'Migration';
 
         return new $migrationClass;
