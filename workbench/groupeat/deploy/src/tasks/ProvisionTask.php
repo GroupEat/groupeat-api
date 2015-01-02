@@ -13,9 +13,9 @@ class ProvisionTask extends AbstractTask {
     protected $description = "Initialize the production server";
 
     /**
-     * @var array
+     * @var mixed
      */
-    private $secrets = [];
+    private $secrets;
 
 
     public function execute()
@@ -23,19 +23,19 @@ class ProvisionTask extends AbstractTask {
         $githubApi = $this->makeGitHubApi();
 
         $sslKey = $this->getSecretFromProductionEnvFile(
-            'PROD_SSL_PRIVATE_KEY',
+            'SSL_PRIVATE_KEY',
             'Enter the SSL key: '
         );
 
         $sslCertificate = $this->getSecretFromProductionEnvFile(
-            'PROD_SSL_CERTIFICATE',
+            'SSL_CERTIFICATE',
             'Enter the SSL certificate: '
         );
 
         $appKey = $this->askForAppKey('Choose a 32 character string for the application key: ');
 
         $postgresPassword = $this->getSecretFromProductionEnvFile(
-            'PROD_PGSQL_PASSWORD',
+            'PGSQL_PASSWORD',
             'Choose the password for the postgreSQL DB: '
         );
 
@@ -152,7 +152,7 @@ class ProvisionTask extends AbstractTask {
     {
         do
         {
-            $key = $this->getSecretFromProductionEnvFile('PROD_APP_KEY', $question);
+            $key = $this->getSecretFromProductionEnvFile('APP_KEY', $question);
         } while (strlen($key) != '32');
 
         return $key;
