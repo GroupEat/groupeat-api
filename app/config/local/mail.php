@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'pretend' => false,
+    'pretend' => true,
 ];
