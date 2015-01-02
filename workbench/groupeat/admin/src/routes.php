@@ -12,7 +12,7 @@ Route::group(['prefix' => 'admin'], function()
         $adminerPath = 'packages/groupeat/admin/db/adminer.php';
         $diskPath = public_path($adminerPath);
 
-        if (!File::exists($diskPath))
+        if (File::exists($diskPath))
         {
             Artisan::call('asset:publish', ['--bench' => 'groupeat/admin']);
         }
