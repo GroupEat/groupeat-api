@@ -7,14 +7,25 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\UserTrait;
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class UserCredentials extends Entity implements UserInterface, RemindableInterface {
 
-    use UserTrait, RemindableTrait, SoftDeletingTrait;
+    use UserTrait, RemindableTrait;
 
-    protected $hidden = ['password'];
+    public $timestamps = false;
 
+    protected $hidden = ['password', 'token', 'activationCode'];
+
+
+    public static function boot()
+    {
+        static::saved(function(UserCredentials $credentials)
+        {
+            $credentials->user->touch();
+        });
+
+        parent::boot();
+    }
 
     public function getRules()
     {

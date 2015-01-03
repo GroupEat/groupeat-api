@@ -14,25 +14,28 @@ class CustomersController extends Controller {
         return Customer::all();
     }
 
-    public function showCurrentUser()
+    public function show(Customer $customer)
     {
-        return Auth::customer();
+        Auth::assertSame($customer);
+
+        return $customer;
     }
 
     public function store()
     {
-        $customer = App::make('RegisterUserService')
-            ->call(Input::get('email'), Input::get('password'), new Customer);
+        $email = Input::get('email');
+        $password = Input::get('password');
 
-        $id = $customer->id;
-        $token = App::make('GenerateTokenForUserService')->call(Input::get('email'), Input::get('password'));
+        $customer = App::make('RegisterUserService')->call($email, $password, new Customer);
 
-        return $this->response->array(compact('id', 'token'))->setStatusCode(Response::HTTP_CREATED);
+        return $this->api->raw()
+            ->put('auth/token', compact('email', 'password'))
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function destroyCurrentUser()
+    public function destroy(Customer $customer)
     {
-        App::make('DeleteUserService')->call(Auth::customer());
+        App::make('DeleteUserService')->call($customer);
     }
 
 }

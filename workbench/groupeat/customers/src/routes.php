@@ -21,9 +21,9 @@ Route::api(['version' => 'v1'], function()
         {
             Route::get('/', $controller.'index');
 
-            Route::get('me', $controller.'showCurrentUser');
+            Route::get('{customer}', $controller.'show');
 
-            Route::delete('me', $controller.'destroyCurrentUser');
+            Route::delete('{customer}', $controller.'destroy');
         });
     });
 });

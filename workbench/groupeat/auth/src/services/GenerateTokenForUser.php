@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Auth\Services;
 
-use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Auth;
+use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\Forbidden;
 use Tymon\JWTAuth\JWTAuth;
@@ -10,19 +11,25 @@ class GenerateTokenForUser {
     /**
      * @var JWTAuth
      */
-    protected $JWTauth;
+    private $JWTauth;
+
+    /**
+     * @var Auth
+     */
+    private $groupeatAuth;
 
 
-    public function __construct(JWTAuth $JWTauth)
+    public function __construct(JWTAuth $JWTauth, Auth $groupeatAuth)
     {
         $this->JWTauth = $JWTauth;
+        $this->groupeatAuth = $groupeatAuth;
     }
 
     /**
      * @param string $email
      * @param string $password
      *
-     * @return string Authentication token
+     * @return User
      */
     public function call($email, $password)
     {
@@ -43,7 +50,9 @@ class GenerateTokenForUser {
         $user->token = $token;
         $user->save();
 
-        return $token;
+        $this->groupeatAuth->setUserCredentials($user);
+
+        return $user->user;
     }
 
 }

@@ -37,12 +37,14 @@ class Auth extends JWTAuth {
             throw new Unauthorized("The user corresponding to the authentication token does not exist.");
         }
 
+        $this->assertCorrespondingUserExists($userCredentials);
+
         if ($userCredentials->token != $this->token)
         {
             throw new Unauthorized("Obsolete token.");
         }
 
-        return $this->setUserCredentials($userCredentials);
+        return $this->forceSetUserCredentials($userCredentials);
     }
 
     /**
@@ -53,17 +55,12 @@ class Auth extends JWTAuth {
         return !empty($this->userCredentials);
     }
 
-    /**
-     * @return bool
-     */
     public function checkOrFail()
     {
         if (!$this->check())
         {
             throw new Unauthorized("No authenticated user.");
         }
-
-        return true;
     }
 
     /**
@@ -87,81 +84,64 @@ class Auth extends JWTAuth {
     }
 
     /**
-     * @param UserCredentials $userCredentials
-     *
-     * @return UserCredentials
+     * @param User $user
      */
-    public function setUserCredentials(UserCredentials $userCredentials)
+    public function assertSame(User $user)
     {
-        if (! $userCredentials->user instanceof User)
+        $this->assertSameType($user);
+
+        if ($this->user()->id != $user->id)
         {
-            throw new Unauthorized("The user corresponding to these credentials does not exist.");
+            $type = $this->currentType();
+            $givenId = $user->id;
+            $currentId = $this->user()->id;
+
+            throw new Unauthorized("Should be authenticated as $type $givenId instead of $currentId.");
         }
-
-        $this->auth->setUser($userCredentials);
-        $this->userCredentials = $userCredentials;
-
-        return $this->userCredentials;
     }
 
     /**
-     * Check if the authenticated user is of a specific type by giving a full class name.
-     *
-     * @param string $className
+     * @param User $user
      *
      * @return bool
      */
-    public function isOfType($className)
+    public function isSame(User $user)
     {
         if (!$this->check())
         {
             return false;
         }
 
-        return $this->userCredentials->user_type == $className;
+        return $this->currentType() == $this->typeOf($user) && $this->user()->id == $user->id;
     }
 
     /**
-     * @param string $className
-     *
-     * @return User
+     * @param User $user
      */
-    public function assertTypeAndGetUser($className)
+    public function assertSameType(User $user)
     {
-        $this->checkOrFail();
+        $currentType = $this->currentType();
+        $givenType = $this->typeOf($user);
 
-        $shortType = $this->toShortType($className);
-
-        if (!$this->isOfType($className))
+        if ($currentType != $givenType)
         {
-            throw new Unauthorized("Should be authenticated as $shortType.");
+            throw new Unauthorized("Should be authenticated as $givenType instead of $currentType.");
         }
-
-        return $this->user();
     }
 
     /**
-     * @param string $method
-     * @param array  $parameters
+     * @param User $user
      *
-     * @return mixed
+     * @return bool
      */
-    public function __call($method, $parameters)
+    public function isSameType(User $user)
     {
-        foreach ($this->userTypes as $shortType => $className)
+        if (!$this->check())
         {
-            if ($method == 'is'.ucfirst($shortType))
-            {
-                return $this->isofType($className);
-            }
-
-            if ($method == $shortType)
-            {
-                return $this->assertTypeAndGetUser($className);
-            }
+            return false;
         }
 
-        return parent::__call($method, $parameters);
+        return $this->currentType() == $this->typeOf($user);
     }
 
     /**
@@ -169,19 +149,50 @@ class Auth extends JWTAuth {
      *
      * @return bool
      */
-    public function addUserType(User $type)
+    public function addUserType(User $user)
     {
-        $className = get_class($type);
-        $shortType = $this->toShortType($className);
+        $userType = $this->typeOf($user);
+        $shortType = $this->toShortType($userType);
 
         if (empty($this->userTypes[$shortType]))
         {
-            $this->userTypes[$shortType] = $className;
+            $this->userTypes[$shortType] = $userType;
 
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function currentType()
+    {
+        return $this->typeOf($this->user());
+    }
+
+    public function shortTypeOf(User $user)
+    {
+        $type = $this->typeOf($user);
+        $shortType = array_search($type, $this->userTypes);
+
+        if ($shortType === false)
+        {
+            throw new Exception("Type $type has not been added to the available user types.");
+        }
+
+        return $shortType;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return string
+     */
+    public function typeOf(User $user)
+    {
+        return get_class($user);
     }
 
     /**
@@ -193,13 +204,90 @@ class Auth extends JWTAuth {
     }
 
     /**
-     * @param string $className
+     * @param UserCredentials $userCredentials
+     *
+     * @return UserCredentials
+     */
+    public function setUserCredentials(UserCredentials $userCredentials)
+    {
+        $this->assertCorrespondingUserExists($userCredentials);
+
+        return $this->forceSetUserCredentials($userCredentials);
+    }
+
+    /**
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        foreach ($this->userTypes as $shortType => $userType)
+        {
+            $user = new $userType;
+
+            if ($method == 'is'.ucfirst($shortType))
+            {
+                return $this->isofType($user);
+            }
+
+            if ($method == $shortType)
+            {
+                $this->assertSameType($user);
+
+                return $this->user();
+            }
+        }
+
+        return parent::__call($method, $parameters);
+    }
+
+    private function assertCorrespondingUserExists(UserCredentials $credentials)
+    {
+        $userQuery = $credentials->user();
+        $userType = $userQuery->getModel();
+        $usesSoftDelete = method_exists($userType, 'withTrashed');
+
+        if ($usesSoftDelete)
+        {
+            $userQuery->withTrashed();
+        }
+
+        $user = $userQuery->getResults();
+
+        if (! $user instanceof User)
+        {
+            throw new Unauthorized("The user corresponding to these credentials does not exist.");
+        }
+
+        if ($usesSoftDelete && $user->trashed())
+        {
+            throw new Unauthorized("The user corresponding to these credentials has been deleted.");
+        }
+    }
+
+    /**
+     * @param UserCredentials $userCredentials
+     *
+     * @return UserCredentials
+     */
+    private function forceSetUserCredentials(UserCredentials $userCredentials)
+    {
+        $this->auth->setUser($userCredentials);
+        $this->userCredentials = $userCredentials;
+
+        return $this->userCredentials;
+    }
+
+    /**
+     * @param string $userType
      *
      * @return string
      */
-    private function toShortType($className)
+    private function toShortType($userType)
     {
-        $parts = explode('\\', $className);
+        $parts = explode('\\', $userType);
 
         return strtolower(array_pop($parts));
     }

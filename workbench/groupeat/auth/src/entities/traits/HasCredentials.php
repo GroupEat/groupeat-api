@@ -6,18 +6,6 @@ use Groupeat\Auth\Entities\UserCredentials;
 
 trait HasCredentials {
 
-    public static function bootHasCredentials()
-    {
-        static::saved(function(User $user)
-        {
-            // When registering, the user is saved before its credentials
-            if ($user->credentials)
-            {
-                $user->credentials->touch();
-            }
-        });
-    }
-
     /**
      * @param string $email
      *

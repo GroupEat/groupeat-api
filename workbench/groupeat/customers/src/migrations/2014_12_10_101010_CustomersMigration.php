@@ -16,6 +16,8 @@ class CustomersMigration extends Migration {
             $table->increments('id');
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

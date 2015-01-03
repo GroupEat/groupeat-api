@@ -32,7 +32,7 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->bind('GenerateTokenForUserService', function($app)
         {
-            return new GenerateTokenForUser($app['tymon.jwt.auth']);
+            return new GenerateTokenForUser($app['tymon.jwt.auth'], $app['groupeat.auth']);
         });
 
         $this->app->bind('RegisterUserService', function($app)

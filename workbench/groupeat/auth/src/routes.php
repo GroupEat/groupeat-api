@@ -20,5 +20,5 @@ Route::api(['version' => 'v1', 'protected' => false], function()
      *
      * @return authentication token
      */
-    Route::post('auth/token', 'Groupeat\Auth\Api\V1\AuthController@token');
+    Route::put('auth/token', 'Groupeat\Auth\Api\V1\AuthController@token');
 });
