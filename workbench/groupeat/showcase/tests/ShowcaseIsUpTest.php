@@ -8,6 +8,8 @@ class ShowCaseIsUpTest extends TestCase {
 	{
 		$this->client->request('GET', '/');
 
+        var_dump($this->client->getResponse());
+
 		$this->assertTrue($this->client->getResponse()->isOk());
 	}
 

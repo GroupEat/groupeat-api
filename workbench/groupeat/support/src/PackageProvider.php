@@ -4,6 +4,7 @@ use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
+use Groupeat\Support\Middlewares\ApiCorsHeaders;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 use Response;
 
@@ -14,6 +15,15 @@ class PackageProvider extends WorkbenchPackageProvider {
 
 
     public function register()
+    {
+        $this->registerExceptions();
+
+        $this->app->middleware(new ApiCorsHeaders($this->app));
+
+        parent::register();
+    }
+
+    private function registerExceptions()
     {
         $this->app['api.exception']->register(function(BadRequest $exception)
         {
@@ -30,7 +40,14 @@ class PackageProvider extends WorkbenchPackageProvider {
             return $this->getResponseFrom($exception);
         });
 
-        parent::register();
+        return $this;
+    }
+
+    private function registerApiMiddleware()
+    {
+
+
+        return $this;
     }
 
     private function getResponseFrom(Exception $exception)
