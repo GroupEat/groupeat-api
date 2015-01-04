@@ -12,15 +12,20 @@ class GenerateApiDocumentation {
      */
     private $filesystem;
 
-
+    /**
+     * @param Filesystem $filesystem
+     */
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
     }
 
+    /**
+     * @param OutputInterface $output
+     */
     public function call(OutputInterface $output = null)
     {
-        $doc = '';
+        $docContent = '';
 
         foreach (listGroupeatPackages() as $package)
         {
@@ -28,17 +33,48 @@ class GenerateApiDocumentation {
 
             if ($this->filesystem->exists($docPath))
             {
-                $doc .= $this->filesystem->get($docPath);
+                $docContent .= $this->filesystem->get($docPath);
             }
         }
 
-        $tempPath = base_path('.tmp-api.md');
+        $inputPath = $this->getInputPath();
+        $outputPath = $this->getOutputPath();
 
-        $this->filesystem->put($tempPath, $doc);
+        $this->filesystem->put($inputPath, $docContent);
 
-        processAtProjectRoot("aglio -t flatly -i $tempPath -o ".public_path(static::PATH), $output);
+        $command = "aglio -t flatly -i $inputPath -o $outputPath";
 
-        $this->filesystem->delete($tempPath);
+        processAtProjectRoot($command, $output);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHTML()
+    {
+        $path = $this->getOutputPath();
+
+        if (!$this->filesystem->exists($path))
+        {
+            $this->call();
+        }
+
+        return $this->filesystem->get($path);
+    }
+
+    private function getInputPath()
+    {
+        return $this->getPathFor('md');
+    }
+
+    private function getOutputPath()
+    {
+        return $this->getPathFor('html');
+    }
+
+    private function getPathFor($extension)
+    {
+        return workbench_path('documentation', "generated/documentation.$extension");
     }
 
 }

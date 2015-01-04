@@ -1,7 +1,5 @@
 <?php
 
-use Groupeat\Documentation\Services\GenerateApiDocumentation;
-
 Route::group(['prefix' => 'admin'], function()
 {
     Route::get('phpinfo', function()
@@ -17,20 +15,29 @@ Route::group(['prefix' => 'admin'], function()
             'username' => DB::getConfig('username'),
         ];
 
-        $url = URL::to('packages/groupeat/admin/db/adminer.php').'?'.http_build_query($data);
+        if (App::isLocal())
+        {
+            $data['passwd'] = DB::getConfig('password');
+        }
+
+        if (Input::get('testing'))
+        {
+            $data['db'] = $data['db'].'-testing';
+        }
+
+        // 'packages/groupeat/admin/db/adminer.php'
+        $url = URL::to('admin/db/connection').'?'.http_build_query($data);
 
         return Redirect::to($url);
     });
 
+    Route::any('db/connection', function()
+    {
+        include '/home/vagrant/groupeat/current/workbench/groupeat/admin/src/resources/adminer.php';
+    });
+
     Route::get('docs', function()
     {
-        $path = GenerateApiDocumentation::PATH;
-
-        if (!File::exists(public_path($path)))
-        {
-            artisan('api:doc');
-        }
-
-        return Redirect::to($path);
+        return App::make('GenerateApiDocumentationService')->getHTML();
     });
 });

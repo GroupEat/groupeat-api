@@ -53,7 +53,7 @@ return [
 		// The folders and files to set as web writable
 		// You can pass paths in brackets, so {path.public} will return
 		// the correct path to the public folder
-		'files'    => [
+		'files'    => [ // TODO: Don't user vagrant as nginx user for better security.
 			'{path.storage}',
 			'{path.public}',
 		],

@@ -39,4 +39,4 @@ Instead of the usual `git pull` and `git push` commands, use the `art pull` and 
 
 ## Connect to PostgreSQL
 
-Browse to https://groupeat.dev/admin/db and type `groupeat` in the password field.
+Browse to https://groupeat.dev/admin/db, ignore the eventual error message and click on 'Login'.

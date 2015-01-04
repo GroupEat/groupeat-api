@@ -4,6 +4,7 @@ echo "Installing some PPAs"
 apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y
 apt-add-repository ppa:ondrej/php5-5.6 -y
+apt-add-repository ppa:chris-lea/node.js -y
 
 echo "Updating packages list"
 apt-get update
@@ -203,7 +204,6 @@ fi
 
 echo "Installing Node.js and NPM packages"
 apt-get install -y nodejs
-apt-get install -y npm
 npm install -g aglio
 
 echo "Adding ZSH shell"

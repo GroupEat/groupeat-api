@@ -16,7 +16,7 @@ return [
 	|
 	*/
 
-	'driver' => 'array', // API does not rely on session
+	'driver' => 'file',
 
 	/*
 	|--------------------------------------------------------------------------
