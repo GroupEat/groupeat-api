@@ -138,6 +138,7 @@ return [
         'Groupeat\Admin\PackageProvider',
         'Groupeat\Customers\PackageProvider',
         'Groupeat\Deploy\PackageProvider',
+        'Groupeat\Documentation\PackageProvider',
         'Groupeat\Showcase\PackageProvider',
 
         'Groupeat\App\PackageProvider',

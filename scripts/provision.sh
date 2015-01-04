@@ -5,10 +5,6 @@ apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y
 apt-add-repository ppa:ondrej/php5-5.6 -y
 
-# echo "Adding Neo4j source"
-# wget -O - http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
-# echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
-
 echo "Updating packages list"
 apt-get update
 apt-get upgrade -y
@@ -205,8 +201,10 @@ if [[ $1 == 'local' ]]; then
     su postgres -c "createdb -O groupeat-testing groupeat-testing --owner groupeat"
 fi
 
-# echo "Installing Neo4j"
-# apt-get install -y neo4j
+echo "Installing Node.js and NPM packages"
+apt-get install -y nodejs
+apt-get install -y npm
+npm install -g aglio
 
 echo "Adding ZSH shell"
 apt-get install -y zsh

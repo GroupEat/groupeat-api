@@ -7,3 +7,4 @@ composer.phar
 _ide_helper.php
 /vendor
 /bootstrap/compiled.php
+/public/_generated-docs.html
