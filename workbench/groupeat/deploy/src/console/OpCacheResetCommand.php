@@ -2,7 +2,7 @@
 
 use anlutro\cURL\cURL;
 use App;
-use Illuminate\Console\Command;
+use Groupeat\Support\Console\Command;
 use URL;
 
 class OpCacheResetCommand extends Command {

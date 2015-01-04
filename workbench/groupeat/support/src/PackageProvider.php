@@ -11,7 +11,7 @@ use Response;
 class PackageProvider extends WorkbenchPackageProvider {
 
     protected $require = [self::HELPERS];
-    protected $console = ['DbInstall'];
+    protected $console = ['DbInstall', 'PublishAllAssets', 'Pull'];
 
 
     public function register()

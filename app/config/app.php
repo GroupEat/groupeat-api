@@ -129,6 +129,7 @@ return [
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
         'Dingo\Api\Provider\ApiServiceProvider',
+        'Kmd\Logviewer\LogviewerServiceProvider',
         'Tymon\JWTAuth\JWTAuthServiceProvider',
 
         'Groupeat\Support\PackageProvider',

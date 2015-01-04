@@ -15,7 +15,7 @@ return [
 	|
 	*/
 
-	'driver' => 'smtp',
+	'driver' => 'log', // TODO: Change to 'smtp' before app launch.
 
 	/*
 	|--------------------------------------------------------------------------

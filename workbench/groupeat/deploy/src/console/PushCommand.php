@@ -1,6 +1,6 @@
 <?php namespace Groupeat\Deploy\Console;
 
-use Illuminate\Console\Command;
+use Groupeat\Support\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
 class PushCommand extends Command {
@@ -13,10 +13,10 @@ class PushCommand extends Command {
 	{
         $message = str_replace('"',"'",$this->argument('message'));
 
-        $this->line(system('git add -u .'));
-        $this->line(system('git add .'));
-        $this->line(system('git commit -m "'.$message.'"'));
-        $this->line(system('git push'));
+        $this->process('git add -u .');
+        $this->process('git add .');
+        $this->process('git commit -m "'.$message.'"');
+        $this->process('git push');
 	}
 
 	protected function getArguments()

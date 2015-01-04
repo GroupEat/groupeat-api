@@ -24,6 +24,10 @@ Clone this repository on your machine. Place it where you like and rename it if 
 
 # Local Usage
 
+## Git commands
+
+Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically.
+
 ## Uncertified certificate
 
 The SSL certificate used in local development is self-signed in order to be free. You can safely ignore your browser warnings about potential security issues and accept the certificate.

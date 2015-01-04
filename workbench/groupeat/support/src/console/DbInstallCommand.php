@@ -3,7 +3,6 @@
 use Config;
 use DB;
 use File;
-use Illuminate\Console\Command;
 use Schema;
 use Symfony\Component\Console\Input\InputOption;
 
