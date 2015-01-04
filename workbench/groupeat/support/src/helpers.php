@@ -112,7 +112,7 @@ if (!function_exists('workbench_path'))
         }
         else
         {
-            return realpath("$workbench_root/$file");
+            return "$workbench_root/$file";
         }
     }
 }
