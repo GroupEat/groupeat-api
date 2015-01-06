@@ -1,4 +1,4 @@
-@extends('app::layout.master')
+@extends('layout.main')
 
 @section('css')
     <style>

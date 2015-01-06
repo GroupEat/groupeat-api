@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>GroupEat</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        @include('app::partials.favicon')
+        <link rel="stylesheet" href="/build/main.css" media="screen, print">
         @yield('css')
     </head>
 

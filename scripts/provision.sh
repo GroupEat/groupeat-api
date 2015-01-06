@@ -155,7 +155,6 @@ server {
 
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log error;
-    error_page 404 /index.php;
 
     sendfile off;
 
@@ -204,7 +203,15 @@ fi
 
 echo "Installing Node.js and NPM packages"
 apt-get install -y nodejs
+npm install -g gulp
+npm install -g bower
 npm install -g aglio
+mkdir -p ~vagrant/groupeat/current
+chown vagrant: ~vagrant/groupeat/current
+cd ~vagrant/groupeat/current
+su vagrant -c "npm install gulp --save-dev"
+su vagrant -c "npm install gulp-sass --save-dev"
+cd
 
 echo "Adding ZSH shell"
 apt-get install -y zsh

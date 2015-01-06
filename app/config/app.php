@@ -141,8 +141,6 @@ return [
         'Groupeat\Documentation\PackageProvider',
         'Groupeat\Showcase\PackageProvider',
 
-        'Groupeat\App\PackageProvider',
-
     ],
 
 	/*

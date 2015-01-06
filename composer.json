@@ -1,6 +1,6 @@
 {
-    "name": "groupeat/web",
-    "description": "GroupEat API",
+    "name": "groupeat/backend",
+    "description": "GroupEat Backend",
     "authors": [
         {
             "name": "Thibault Derousseaux",

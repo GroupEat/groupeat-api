@@ -4,7 +4,7 @@ use File;
 
 class PublishAllAssetsCommand extends Command {
 
-	protected $name = 'assets:publish-all';
+	protected $name = 'asset:publish-all';
 	protected $description = "Publish assets from vendor and groupeat packages";
 
 
