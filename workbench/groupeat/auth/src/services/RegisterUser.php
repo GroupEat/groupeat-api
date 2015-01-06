@@ -3,7 +3,6 @@
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\BadRequest;
-use Groupeat\Support\Exceptions\Forbidden;
 use Illuminate\Mail\Mailer;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Validation\Factory as Validation;
@@ -53,37 +52,17 @@ class RegisterUser {
     /**
      * @param string $email
      * @param string $plainPassword
-     * @param User   $user
+     * @param User   $newUser
      *
      * @return User
      */
     public function call($email, $plainPassword, User $newUser)
     {
-        $this->assertCampusEmail($email)
-            ->insertUserWithCredentials($email, $plainPassword, $newUser)
+        $this->insertUserWithCredentials($email, $plainPassword, $newUser)
             ->generateActivationCode()
             ->sendActivationCode($email);
 
         return $this->userCredentials->user;
-    }
-
-    private function assertCampusEmail($email)
-    {
-        $domains = ['ensta-paristech.fr', 'ensta.fr', 'polytechnique.edu', 'institutoptique.fr'];
-
-        preg_match('/@(.+)$/', $email, $matches);
-
-        if (!empty($matches[1]))
-        {
-            $domain = $matches[1];
-
-            if (in_array($domain, $domains))
-            {
-                return $this;
-            }
-        }
-
-        throw new Forbidden("Email should correspond to a Saclay campus account.");
     }
 
     private function insertUserWithCredentials($email, $plainPassword, User $user)

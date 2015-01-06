@@ -9,11 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CustomersController extends Controller {
 
-    public function index()
-    {
-        return Customer::all();
-    }
-
     public function show(Customer $customer)
     {
         Auth::assertSame($customer);
@@ -26,7 +21,7 @@ class CustomersController extends Controller {
         $email = Input::get('email');
         $password = Input::get('password');
 
-        $customer = App::make('RegisterUserService')->call($email, $password, new Customer);
+        $customer = App::make('RegisterCustomerService')->call($email, $password, new Customer);
 
         return $this->api->raw()
             ->put('auth/token', compact('email', 'password'))

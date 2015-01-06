@@ -13,27 +13,38 @@ class GenerateApiDocumentation {
     private $filesystem;
 
     /**
+     * @var array
+     */
+    private $orderedPackages;
+
+
+    /**
      * @param Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem, array $orderedPackages)
     {
         $this->filesystem = $filesystem;
+        $this->orderedPackages = $orderedPackages;
     }
 
     /**
      * @param OutputInterface $output
+     *
+     * @return string Error output
      */
     public function call(OutputInterface $output = null)
     {
-        $docContent = '';
+        $docContent = $this->filesystem->get(__DIR__.'/../resources/api-docs-introduction.md');
 
-        foreach (listGroupeatPackages() as $package)
+        foreach ($this->orderedPackages as $package)
         {
-            $docPath = realpath(workbench_path($package, '../docs/api.md'));
+            $paths = $this->getPathsForPackage($package);
 
-            if ($this->filesystem->exists($docPath))
+            if ($this->filesystem->exists($paths['disk']))
             {
-                $docContent .= $this->filesystem->get($docPath);
+                $packageDocContent = "\n<!-- include({$paths['include']}) -->\n";
+
+                $docContent .= $packageDocContent;
             }
         }
 
@@ -44,35 +55,50 @@ class GenerateApiDocumentation {
 
         $command = "aglio -t flatly -i $inputPath -o $outputPath";
 
-        processAtProjectRoot($command, $output);
+        return processAtProjectRoot($command, $output)->getErrorOutput();
     }
 
     /**
+     * @param bool $forceGeneration
+     *
      * @return string
      */
-    public function getHTML()
+    public function getHTML($forceGeneration = false)
     {
         $path = $this->getOutputPath();
 
-        if (!$this->filesystem->exists($path))
+        if ($forceGeneration || !$this->filesystem->exists($path))
         {
-            $this->call();
+            $errorOutput = $this->call();
+
+            if ($errorOutput)
+            {
+                return $errorOutput;
+            }
         }
 
         return $this->filesystem->get($path);
     }
 
+    private function getPathsForPackage($package)
+    {
+        return [
+            'disk' => realpath(workbench_path($package, '../docs/api/main.md')),
+            'include' => "../../../$package/docs/api/main.md",
+        ];
+    }
+
     private function getInputPath()
     {
-        return $this->getPathFor('md');
+        return $this->getPathForExtension('md');
     }
 
     private function getOutputPath()
     {
-        return $this->getPathFor('html');
+        return $this->getPathForExtension('html');
     }
 
-    private function getPathFor($extension)
+    private function getPathForExtension($extension)
     {
         return workbench_path('documentation', "generated/documentation.$extension");
     }

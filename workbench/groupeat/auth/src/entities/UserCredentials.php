@@ -21,7 +21,10 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     {
         static::saved(function(UserCredentials $credentials)
         {
-            $credentials->user->touch();
+            if ($credentials->user)
+            {
+                $credentials->user->touch();
+            }
         });
 
         parent::boot();

@@ -14,11 +14,5 @@ Route::get('auth/activate/{code}', ['as' => 'auth.activation', function($code)
 
 Route::api(['version' => 'v1', 'protected' => false], function()
 {
-    /**
-     * @param email
-     * @param password
-     *
-     * @return authentication token
-     */
     Route::put('auth/token', 'Groupeat\Auth\Api\V1\AuthController@token');
 });

@@ -1,43 +1,12 @@
 <?php
 
-Route::group(['prefix' => 'admin'], function()
+Route::group(['before' => 'admin'], function()
 {
-    Route::get('phpinfo', function()
-    {
-        phpinfo();
-    });
+    $controller = 'Groupeat\Admin\Html\AdminController';
 
-    Route::get('db', function()
-    {
-        $data = [
-            DB::getConfig('driver') => DB::getConfig('host'),
-            'db' => DB::getConfig('database'),
-            'username' => DB::getConfig('username'),
-        ];
+    Route::get('phpinfo', "$controller@PHPinfo");
 
-        if (App::isLocal())
-        {
-            $data['passwd'] = DB::getConfig('password');
-        }
+    Route::get('db', "$controller@db");
 
-        if (Input::get('testing'))
-        {
-            $data['db'] = $data['db'].'-testing';
-        }
-
-        // 'packages/groupeat/admin/db/adminer.php'
-        $url = URL::to('admin/db/connection').'?'.http_build_query($data);
-
-        return Redirect::to($url);
-    });
-
-    Route::any('db/connection', function()
-    {
-        include '/home/vagrant/groupeat/current/workbench/groupeat/admin/src/resources/adminer.php';
-    });
-
-    Route::get('docs', function()
-    {
-        return App::make('GenerateApiDocumentationService')->getHTML();
-    });
+    Route::get('docs', "$controller@docs");
 });

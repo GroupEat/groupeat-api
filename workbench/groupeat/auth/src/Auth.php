@@ -96,7 +96,7 @@ class Auth extends JWTAuth {
             $givenId = $user->id;
             $currentId = $this->user()->id;
 
-            throw new Unauthorized("Should be authenticated as $type $givenId instead of $currentId.");
+            throw new Unauthorized("Should be authenticated as {$this->toShortType($type)} $givenId instead of $currentId.");
         }
     }
 
@@ -125,7 +125,7 @@ class Auth extends JWTAuth {
 
         if ($currentType != $givenType)
         {
-            throw new Unauthorized("Should be authenticated as $givenType instead of $currentType.");
+            throw new Unauthorized("Should be authenticated as {$this->toShortType($givenType)} instead of {$this->toShortType($currentType)}.");
         }
     }
 

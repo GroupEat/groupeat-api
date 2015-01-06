@@ -2,7 +2,7 @@
 
 return [
 
-    'base_url'   => 'admin/logs',
+    'base_url'   => 'logs',
     'filters'    => [
         'global' => ['admin'],
         'view'   => [],

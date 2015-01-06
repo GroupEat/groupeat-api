@@ -6,24 +6,18 @@ Route::api(['version' => 'v1'], function()
 {
     Route::group(['prefix' => 'customers'], function()
     {
-        $controller = 'Groupeat\Customers\Api\V1\CustomersController@';
+        $controller = 'Groupeat\Customers\Api\V1\CustomersController';
 
         Route::group(['protected' => false], function() use ($controller)
         {
-            /**
-             * @param email
-             * @param password
-             */
-            Route::post('/', $controller.'store');
+            Route::post('/', "$controller@store");
         });
 
         Route::group(['protected' => true], function() use ($controller)
         {
-            Route::get('/', $controller.'index');
+            Route::get('{customer}', "$controller@show");
 
-            Route::get('{customer}', $controller.'show');
-
-            Route::delete('{customer}', $controller.'destroy');
+            Route::delete('{customer}', "$controller@destroy");
         });
     });
 });

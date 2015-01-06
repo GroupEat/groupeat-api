@@ -4,7 +4,7 @@ use Groupeat\Support\Console\Command;
 
 class GenerateApiDocumentationCommand extends Command {
 
-	protected $name = 'api:doc';
+	protected $name = 'api:docs';
 	protected $description = "Generate the API documentation";
 
 

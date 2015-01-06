@@ -30,7 +30,7 @@ The SSL certificate used in local development is self-signed in order to be free
 
 ## Access to the VM
 
-Run the `vagrant ssh` command to SSH into the freshly created virtual machine.
+As soon as the VM is up you should SSH into it with the `vagrant ssh` command if you want to tinker with the application. In fact, you should not run commands outside of the VM because you may not have everything installed properly on your host machine.
 Remember that some useful aliases are specified at the end of `server/provision.sh`, so don't hesitate to use them!
 
 ## Git commands
@@ -39,4 +39,4 @@ Instead of the usual `git pull` and `git push` commands, use the `art pull` and 
 
 ## Connect to PostgreSQL
 
-Browse to https://groupeat.dev/admin/db, ignore the eventual error message and click on 'Login'.
+Browse to https://groupeat.dev/db, ignore the eventual error message and click on 'Login'.

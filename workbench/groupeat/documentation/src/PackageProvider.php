@@ -12,7 +12,10 @@ class PackageProvider extends WorkbenchPackageProvider {
     {
         $this->app->bind('GenerateApiDocumentationService', function($app)
         {
-            return new GenerateApiDocumentation($app['files']);
+            return new GenerateApiDocumentation(
+                $app['files'],
+                $app['config']->get('documentation::order')
+            );
         });
     }
 

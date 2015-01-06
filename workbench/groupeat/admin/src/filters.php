@@ -16,5 +16,3 @@ Route::filter('admin', function()
         throw new Unauthorized("Missing administrator key.");
     }
 });
-
-Route::when('admin/*', 'admin');

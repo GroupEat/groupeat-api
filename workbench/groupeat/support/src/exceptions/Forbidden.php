@@ -13,7 +13,7 @@ class Forbidden extends Exception {
         $code = 0
     )
     {
-        parent::__construct($message, Response::HTTP_FORBIDDEN, $errors, $headers, $previous, $code);
+        Exception::__construct($message, Response::HTTP_FORBIDDEN, $errors, $headers, $previous, $code);
     }
 
 }

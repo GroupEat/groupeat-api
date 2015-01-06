@@ -23,10 +23,7 @@ class DeleteUser {
      */
     public function call(User $user)
     {
-        if (!$this->auth->isSame($user))
-        {
-            throw new Forbidden("Cannot delete another user.");
-        }
+        $this->auth->assertSame($user);
 
         $user->delete();
     }

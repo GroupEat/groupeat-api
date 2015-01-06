@@ -13,7 +13,7 @@ class BadRequest extends Exception {
         $code = 0
     )
     {
-        parent::__construct($message, Response::HTTP_BAD_REQUEST, $errors, $headers, $previous, $code);
+        Exception::__construct($message, Response::HTTP_BAD_REQUEST, $errors, $headers, $previous, $code);
     }
 
 }
