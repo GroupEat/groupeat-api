@@ -2,5 +2,5 @@
 
 Route::get('/', function()
 {
-    return View::make('showcase::index');
+    return View::make('showcase::index', ['hideNavbar' => true]);
 });

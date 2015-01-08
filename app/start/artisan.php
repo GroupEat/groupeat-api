@@ -1,1 +1,3 @@
-<?php // Commands are cleanly registered via Service Providers
+<?php
+
+Artisan::add(new BuildAssetsCommand);

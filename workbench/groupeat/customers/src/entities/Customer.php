@@ -9,6 +9,7 @@ class Customer extends Entity implements User {
 
     use HasCredentials, SoftDeletingTrait;
 
+
     public function getRules()
     {
         return [];

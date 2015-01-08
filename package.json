@@ -1,0 +1,10 @@
+{
+    "name": "GroupEat",
+    "main": "Gulpfile.js",
+    "private": true,
+    "dependencies": {
+        "gulp": "^3.8.10",
+        "gulp-sass": "^1.2.4"
+    },
+    "author": "Thibault Derousseaux tib.dex@gmail.com"
+}

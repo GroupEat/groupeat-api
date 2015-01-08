@@ -12,7 +12,7 @@ abstract class Command extends IlluminateCommand {
      */
     protected function process($command)
     {
-        return process($command, $this->output);
+        return processAtProjectRoot($command, $this->output);
     }
 
 }

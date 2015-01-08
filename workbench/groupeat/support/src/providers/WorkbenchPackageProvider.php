@@ -14,6 +14,11 @@ class WorkbenchPackageProvider extends ServiceProvider {
     protected $console = [];
 
 
+    public function register()
+    {
+        $this->app['config']->package("groupeat/{$this->getPackageName()}", $this->getPackagePath('config'));
+    }
+
     public function boot()
     {
         $name = $this->getPackageName();
@@ -21,18 +26,6 @@ class WorkbenchPackageProvider extends ServiceProvider {
 
         $this->requireFiles(...$this->require);
         $this->registerConsoleCommands(...$this->console);
-    }
-
-    public function register()
-    {
-        $this->app['config']->package("groupeat/{$this->getPackageName()}", $this->getPackagePath('config'));
-
-        $this->registerServices();
-    }
-
-    protected function registerServices()
-    {
-        // Implemented by inheritance
     }
 
 	protected function requireFiles(...$files)

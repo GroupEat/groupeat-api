@@ -9,19 +9,21 @@ class PackageProvider extends WorkbenchPackageProvider {
     protected $require = [self::ROUTES];
 
 
-    public function boot()
+    public function register()
     {
-        $this->app->make('groupeat.auth')->addUserType(new Customer);
+        parent::register();
 
-        parent::boot();
-    }
-
-    protected function registerServices()
-    {
         $this->app->bind('RegisterCustomerService', function($app)
         {
             return new RegisterCustomer($app['RegisterUserService']);
         });
+    }
+
+    public function boot()
+    {
+        parent::boot();
+
+        $this->app->make('groupeat.auth')->addUserType(new Customer);
     }
 
 }

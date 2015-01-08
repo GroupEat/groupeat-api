@@ -8,8 +8,10 @@ class PackageProvider extends WorkbenchPackageProvider {
     protected $console = ['GenerateApiDocumentation'];
 
 
-    protected function registerServices()
+    public function boot()
     {
+        parent::boot();
+
         $this->app->bind('GenerateApiDocumentationService', function($app)
         {
             return new GenerateApiDocumentation(

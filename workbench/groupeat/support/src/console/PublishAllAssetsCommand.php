@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Support\Console;
 
 use File;
+use Symfony\Component\Console\Input\InputArgument;
 
 class PublishAllAssetsCommand extends Command {
 
@@ -10,17 +11,34 @@ class PublishAllAssetsCommand extends Command {
 
 	public function fire()
 	{
-        $this->call('asset:publish');
+        if ($this->argument('package'))
+        {
+            $this->comment("Publish only the goupeat/{$this->argument('package')} package");
+        }
+        else
+        {
+            $this->call('asset:publish');
+        }
 
         foreach(listGroupeatPackages() as $package)
         {
-            $publicFolderPath = workbench_path($package, '../public');
-
-            if (File::isDirectory($publicFolderPath))
+            if (!$this->argument('package') || $this->argument('package') == $package)
             {
-                $this->call('asset:publish', ['--bench' => "groupeat/$package"]);
+                $publicFolderPath = workbench_path($package, '../public');
+
+                if (File::isDirectory($publicFolderPath))
+                {
+                    $this->call('asset:publish', ['--bench' => "groupeat/$package"]);
+                }
             }
         }
 	}
+
+    protected function getArguments()
+    {
+        return [
+            ['package', InputArgument::OPTIONAL, 'Publish only the given GroupEat package.'],
+        ];
+    }
 
 }

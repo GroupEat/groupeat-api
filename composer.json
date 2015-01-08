@@ -24,15 +24,11 @@
     "autoload": {
         "classmap": [
             "workbench",
+            "app/console",
             "app/database/seeds",
 			"app/database/migrations"
 		]
 	},
-    "scripts": {
-        "post-install-cmd": [
-            "php artisan asset:publish-all"
-        ]
-    },
     "config": {
 		"preferred-install": "dist"
 	},

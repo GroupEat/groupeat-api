@@ -7,4 +7,13 @@ abstract class Controller extends IlluminateController {
 
     use ApiController;
 
+
+    public function __construct()
+    {
+//        $this->afterFilter(function($route, $request, $response)
+//        {
+//            //
+//        });
+    }
+
 }

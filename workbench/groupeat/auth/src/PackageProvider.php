@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Auth;
 
+use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\ActivateUser;
 use Groupeat\Auth\Services\DeleteUser;
 use Groupeat\Auth\Services\GenerateTokenForUser;
@@ -8,18 +9,13 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider {
 
-    protected $require = [self::ROUTES];
+    protected $require = [self::FILTERS, self::ROUTES];
 
 
     public function register()
     {
         parent::register();
 
-        $this->registerAuthDriver();
-    }
-
-    protected function registerServices()
-    {
         $this->app->bind('ActivateUserService', function()
         {
             return new ActivateUser;
@@ -44,15 +40,10 @@ class PackageProvider extends WorkbenchPackageProvider {
                 $app['GenerateTokenForUserService']
             );
         });
-    }
 
-    private function registerAuthDriver()
-    {
         $this->app->bindShared('groupeat.auth', function($app)
         {
-            $userClass = $app['config']->get('jwt::user');
-
-            $auth = new Auth(new $userClass, $app['tymon.jwt.provider'], $app['auth'], $app['request']);
+            $auth = new Auth(new UserCredentials, $app['tymon.jwt.provider'], $app['auth'], $app['request']);
 
             return $auth->setIdentifier($app['config']->get('jwt::identifier'));
         });

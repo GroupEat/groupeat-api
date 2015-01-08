@@ -48,6 +48,26 @@ class Auth extends JWTAuth {
     }
 
     /**
+     * @param $email
+     * @param $password
+     *
+     * @return bool
+     */
+    public function attemptByCredentials($email, $password)
+    {
+        if ($this->auth->once(compact('email', 'password')))
+        {
+            $user = $this->auth->user();
+
+            $this->setUserCredentials($user);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @return bool
      */
     public function check()

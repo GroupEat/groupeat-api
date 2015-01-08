@@ -49,9 +49,8 @@ echo "extension=mailparse.so" > /etc/php5/mods-available/mailparse.ini
 ln -s /etc/php5/mods-available/mailparse.ini /etc/php5/cli/conf.d/20-mailparse.ini
 
 echo "Installing Composer"
-curl -sS https://getcomposer.org/installer | php
+su vagrant -c "curl -sS https://getcomposer.org/installer | php"
 mv composer.phar /usr/local/bin/composer
-/usr/local/bin/composer self-update
 
 echo "Adding Composer global bin to path"
 printf "\nPATH=\"~vagrant/.composer/vendor/bin:\$PATH\"\n" | tee -a ~vagrant/.profile
@@ -203,15 +202,14 @@ fi
 
 echo "Installing Node.js and NPM packages"
 apt-get install -y nodejs
+su vagrant -c "mkdir ~/npm-global"
+su vagrant -c "npm config set prefix '~/npm-global'"
+su vagrant -c "touch ~/.profile"
+echo "export PATH=~/npm-global/bin:$PATH" >> ~vagrant/.profile
+su vagrant -c "source ~/.profile"
 npm install -g gulp
 npm install -g bower
 npm install -g aglio
-mkdir -p ~vagrant/groupeat/current
-chown vagrant: ~vagrant/groupeat/current
-cd ~vagrant/groupeat/current
-su vagrant -c "npm install gulp --save-dev"
-su vagrant -c "npm install gulp-sass --save-dev"
-cd
 
 echo "Adding ZSH shell"
 apt-get install -y zsh

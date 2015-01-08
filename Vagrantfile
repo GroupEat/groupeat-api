@@ -69,5 +69,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Install the project Composer dependencies
-  config.vm.provision "shell", inline: "cd ~vagrant/groupeat/current; /usr/local/bin/composer install"
+  config.vm.provision "shell", inline: "cd ~vagrant/groupeat/current; composer install"
+
+  # Install the NPM dependencies
+  config.vm.provision "shell", inline: "cd ~vagrant/groupeat/current; npm install"
+
+  # Build the project assets and install the database
+  config.vm.provision "shell", inline: "cd ~vagrant/groupeat/current; php artisan asset:build; php artisan db-install -w -e 4"
 end
