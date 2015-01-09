@@ -125,7 +125,7 @@ class RegisterUser {
         $this->mailer->send($view, $data, function($message) use ($email)
         {
             // TODO: I18n.
-            $message->to($email)->subject("Activate your GroupEat account");
+            $message->to($email)->subject("Activation de votre compte GroupEat");
         });
 
         return $this;

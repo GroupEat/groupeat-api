@@ -4,7 +4,7 @@ return [
 
     'base_url'   => 'logs',
     'filters'    => [
-        'global' => ['admin'],
+        'global' => ['before' => 'admin'],
         'view'   => [],
         'delete' => [],
     ],

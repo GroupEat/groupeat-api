@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col-md-4 col-md-offset-4">
-        <div id="admin-login-form" class="panel panel-default">
+        <div id="admin-login-form" class="panel panel-danger">
             <div class="panel-heading">
                 <h3 class="panel-title">Admin zone</h3>
             </div>

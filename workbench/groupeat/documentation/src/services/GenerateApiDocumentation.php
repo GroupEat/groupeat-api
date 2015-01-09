@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Documentation\Services;
 
+use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -13,6 +14,11 @@ class GenerateApiDocumentation {
     private $filesystem;
 
     /**
+     * @var Repository
+     */
+    private $config;
+
+    /**
      * @var array
      */
     private $orderedPackages;
@@ -21,9 +27,10 @@ class GenerateApiDocumentation {
     /**
      * @param Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem, array $orderedPackages)
+    public function __construct(Filesystem $filesystem, Repository $config, array $orderedPackages)
     {
         $this->filesystem = $filesystem;
+        $this->config = $config;
         $this->orderedPackages = $orderedPackages;
     }
 
@@ -51,7 +58,7 @@ class GenerateApiDocumentation {
         $inputPath = $this->getInputPath();
         $outputPath = $this->getOutputPath();
 
-        $this->filesystem->put($inputPath, $docContent);
+        $this->filesystem->put($inputPath, $this->parseConfig($docContent));
 
         $command = "aglio -t flatly -i $inputPath -o $outputPath";
 
@@ -78,6 +85,14 @@ class GenerateApiDocumentation {
         }
 
         return $this->filesystem->get($path);
+    }
+
+    private function parseConfig($doc)
+    {
+        return preg_replace_callback("/\{\{([^\}]*)\}\}/", function($match)
+        {
+            return $this->config->get(trim($match[1]));
+        }, $doc);
     }
 
     private function getPathsForPackage($package)
