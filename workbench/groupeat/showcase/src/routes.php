@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', function()
+Route::get('/', ['as' => 'home', function()
 {
     return View::make('showcase::index', ['hideNavbar' => true]);
-});
+}]);

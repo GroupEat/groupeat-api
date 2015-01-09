@@ -37,6 +37,13 @@ Remember that some useful aliases are specified at the end of `server/provision.
 
 Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically.
 
-## Connect to PostgreSQL
+## Administration zone
 
-Browse to https://groupeat.dev/db, ignore the eventual error message and click on 'Login'.
+This zone is always available on local environment but on the production server you will have to fill a form to be granted access. You should be able to use the admin@groupeat.fr account with the usual GroupEat password to log in.
+
+Some useful admin routes are defined to tinker with the application :
+
+ - https://groupeat.dev/docs: Read the API documentation (use the `?generate=true` query string to regenerate it you made some change to the docs file)
+ - https://groupeat.dev/db: PostgreSQL management (ignore the eventual error message and click on 'Login')
+ - https://groupeat.dev/logs: View the application logs (from both Nginx and CLI)
+ - https://groupeat.dev/phpinfo: Open the PHPinfo page

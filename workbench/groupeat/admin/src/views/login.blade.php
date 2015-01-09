@@ -7,17 +7,19 @@
                 <h3 class="panel-title">Admin zone</h3>
             </div>
             <div class="panel-body">
-                <form accept-charset="UTF-8" role="form" action="/admin/check" method="POST">
-                <fieldset>
+                @if (isset($errors) && !$errors->isEmpty())
+                    <div class="alert alert-warning" role="alert">{{ $errors->first() }}</div>
+                @endif
+                {{ Form::open(['url' => 'admin/check']) }}
+                    {{ Form::token() }}
                     <div class="form-group">
-                        <input class="form-control" placeholder="Email" name="email" type="text">
+                        <input class="form-control" placeholder="Email" name="email" type="email" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                        <input class="form-control" placeholder="Password" name="password" type="password" required>
                     </div>
-                    <input class="btn btn-lg btn-danger btn-block" type="submit" value="Login">
-                </fieldset>
-                </form>
+                    {{ Form::submit('Log in', ['class' => 'btn btn-lg btn-danger btn-block']) }}
+                {{ Form::close() }}
             </div>
         </div>
     </div>

@@ -6,8 +6,31 @@ use Groupeat\Support\Html\Controller;
 use Input;
 use Redirect;
 use URL;
+use View;
 
 class AdminController extends Controller{
+
+    public function login()
+    {
+        return View::make('admin::login', ['hideNavbar' => true]);
+    }
+
+    public function check()
+    {
+        if (App::make('LoginAdminService')->attempt(Input::get('email'), Input::get('password')))
+        {
+            return Redirect::intended();
+        }
+
+        return Redirect::to('admin/login')->withErrors(['Invalid credentials!']);
+    }
+
+    public function logout()
+    {
+        App::make('LoginAdminService')->logout();
+
+        return Redirect::home();
+    }
 
     public function PHPinfo()
     {

@@ -72,20 +72,23 @@ class LoginAdmin {
         return false;
     }
 
+    public function logout()
+    {
+        $this->session->flush($this->getSessionKey());
+    }
+
+    /**
+     * @return bool
+     */
     private function tryToLogBySession()
     {
-        $adminId = $this->session->get($this->getSessionKey());
+        $admin = $this->retrieveFromSession();
 
-        if ($adminId)
+        if ($admin)
         {
-            $admin = Admin::fin($adminId);
+            $this->login($admin);
 
-            if ($admin)
-            {
-                $this->login($admin);
-
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -96,8 +99,36 @@ class LoginAdmin {
      */
     private function login(Admin $admin)
     {
-        $this->session->put($this->getSessionKey(), $admin->id);
+        $this->putInSession($admin);
         $this->auth->setUserCredentials($admin->credentials);
+    }
+
+    /**
+     * @return bool|Admin
+     */
+    private function retrieveFromSession()
+    {
+        $id = $this->session->get($this->getSessionKey());
+
+        if ($id)
+        {
+            $admin = Admin::find($id);
+
+            if ($admin)
+            {
+                return $admin;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Admin $admin
+     */
+    private function putInSession(Admin $admin)
+    {
+        $this->session->put($this->getSessionKey(), $admin->id);
     }
 
     /**

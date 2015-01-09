@@ -22,3 +22,12 @@ Route::after(function($request, $response)
         }
     }
 });
+
+// CSRF Protection Filter
+Route::filter('csrf', function()
+{
+    if (Session::token() !== Input::get('_token'))
+    {
+        throw new Illuminate\Session\TokenMismatchException;
+    }
+});
