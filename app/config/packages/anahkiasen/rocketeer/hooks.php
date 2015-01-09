@@ -46,7 +46,7 @@ return [
 		'deploy'  => [
             'php artisan optimize',
             'php artisan opcache',
-            'php artisan asset:build',
+            'php artisan asset:build --install',
             function($task)
             {
                 // TODO: Remove this before app launch.

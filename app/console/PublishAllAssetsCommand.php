@@ -1,6 +1,6 @@
-<?php namespace Groupeat\Support\Console;
+<?php
 
-use File;
+use Groupeat\Support\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
 class PublishAllAssetsCommand extends Command {

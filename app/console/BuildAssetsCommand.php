@@ -2,6 +2,7 @@
 
 use Groupeat\Support\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class BuildAssetsCommand extends Command {
 
@@ -11,8 +12,17 @@ class BuildAssetsCommand extends Command {
 
     public function fire()
     {
+        if ($this->option('install'))
+        {
+            $this->info('Installing NPM dependencies');
+            $this->process('npm install');
+
+            $this->info('Installing Bower dependencies');
+            $this->process('bower install');
+        }
+
         $this->call('asset:publish-all', ['package' => $this->argument('package')]);
-        $this->info('Calling gulp sass task...');
+        $this->info('Calling gulp sass task');
         $this->process('gulp sass');
     }
 
@@ -20,6 +30,13 @@ class BuildAssetsCommand extends Command {
     {
         return [
             ['package', InputArgument::OPTIONAL, 'Publish only the given GroupEat package.'],
+        ];
+    }
+
+    protected function getOptions()
+    {
+        return [
+            ['install', 'i', InputOption::VALUE_NONE, 'Install the NPM and bower dependencies.', null],
         ];
     }
 

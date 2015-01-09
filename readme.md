@@ -35,7 +35,7 @@ Remember that some useful aliases are specified at the end of `server/provision.
 
 ## Git commands
 
-Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically.
+Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically. However, before running `art pull` just after cloning this repo you need to run `composer install` to install the required Composer dependencies.
 
 ## Administration zone
 

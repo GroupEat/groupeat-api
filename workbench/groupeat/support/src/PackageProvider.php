@@ -10,6 +10,6 @@ use Response;
 class PackageProvider extends WorkbenchPackageProvider {
 
     protected $require = [self::FILTERS, self::HELPERS];
-    protected $console = ['DbInstall', 'PublishAllAssets', 'Pull'];
+    protected $console = ['DbInstall'];
 
 }

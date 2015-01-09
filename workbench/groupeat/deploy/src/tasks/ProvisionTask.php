@@ -109,7 +109,7 @@ class ProvisionTask extends AbstractTask {
         $this->executeScriptRemotely('provision', 'Starting provisioning', [
             $environment,
             $domain,
-            $postgresPassword,
+            $productionEnVariables['PGSQL_PASSWORD'],
         ]);
 
         $this->runAsRoot([
