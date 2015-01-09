@@ -49,6 +49,7 @@ echo "extension=mailparse.so" > /etc/php5/mods-available/mailparse.ini
 ln -s /etc/php5/mods-available/mailparse.ini /etc/php5/cli/conf.d/20-mailparse.ini
 
 echo "Installing Composer"
+cd ~vagrant
 su vagrant -c "curl -sS https://getcomposer.org/installer | php"
 mv composer.phar /usr/local/bin/composer
 
