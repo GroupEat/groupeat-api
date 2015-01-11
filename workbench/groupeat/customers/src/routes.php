@@ -10,14 +10,14 @@ Route::api(['version' => 'v1'], function()
 
         Route::group(['protected' => false], function() use ($controller)
         {
-            Route::post('/', "$controller@store");
+            Route::post('/', "$controller@register");
         });
 
         Route::group(['protected' => true], function() use ($controller)
         {
             Route::get('{customer}', "$controller@show");
 
-            Route::delete('{customer}', "$controller@destroy");
+            Route::delete('{customer}', "$controller@unregister");
         });
     });
 });

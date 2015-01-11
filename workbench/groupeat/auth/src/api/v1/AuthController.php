@@ -7,7 +7,7 @@ use Input;
 
 class AuthController extends Controller {
 
-    public function token()
+    public function refreshToken()
     {
         $user = App::make('GenerateTokenForUserService')
             ->call(Input::get('email'), Input::get('password'));

@@ -3,9 +3,7 @@
 // Send CORS headers on API requests in order to grant access to the mobile app
 Route::after(function($request, $response)
 {
-    $apiPrefix = '/'.Config::get('api::prefix').'/';
-
-    if (starts_with($request->getPathInfo(), $apiPrefix))
+    if (Route::isApiRequest($request))
     {
         $headers = [
             'Access-Control-Allow-Origin' => '*',

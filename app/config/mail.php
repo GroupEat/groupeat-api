@@ -15,7 +15,8 @@ return [
 	|
 	*/
 
-	'driver' => 'log', // TODO: Change to 'smtp' before app launch.
+    // Replace by 'smtp' if you really want to send mails
+	'driver' => 'log',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +94,8 @@ return [
 	|
 	*/
 
-	'password' => $_SERVER['GANDI_MAIL_PASSWORD'],
+    // Replace by $_SERVER['GANDI_MAIL_PASSWORD'] if you really want to send mails
+	'password' => 'SHOULD_NOT_SEND_MAILS',
 
 	/*
 	|--------------------------------------------------------------------------

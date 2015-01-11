@@ -2,6 +2,19 @@
 
 /*
 |--------------------------------------------------------------------------
+| Detect Testing Environment
+|--------------------------------------------------------------------------
+|
+| The application can be tested both on local environment or on the
+| Shippable platform. We need to detect the current environment in
+| order to load the correct configuration variables.
+|
+*/
+
+$testEnvironment = !empty($_SERVER['SHIPPABLE']) ? 'building' : 'testing';
+
+/*
+|--------------------------------------------------------------------------
 | Create The Application
 |--------------------------------------------------------------------------
 |

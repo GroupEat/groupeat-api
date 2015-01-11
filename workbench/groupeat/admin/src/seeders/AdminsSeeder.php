@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Admin\Seeders;
 
+use Config;
 use Groupeat\Admin\Entities\Admin;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Database\Seeder;
@@ -13,10 +14,12 @@ class AdminsSeeder extends Seeder {
             'lastName' => 'App',
         ]);
 
+        $credentials = Config::get('admin::default_account_credentials');
+
         UserCredentials::create([
             'user' => $admin,
-            'email' => $_SERVER['DEFAULT_ADMIN_EMAIL'],
-            'password' => $_SERVER['DEFAULT_ADMIN_PASSWORD'],
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
         ]);
     }
 

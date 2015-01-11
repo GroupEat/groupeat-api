@@ -1,9 +1,19 @@
 <?php
 
 return [
+    'default' => 'testing',
+
     'connections' => [
-        'pgsql' => [
-            'database' => 'groupeat-testing',
+        'setup' => [
+            'driver' => 'sqlite',
+            'database' => __DIR__.'/../../../tests/_data/setup.sqlite',
+            'prefix' => '',
+        ],
+
+        'testing' => [
+            'driver'   => 'sqlite',
+            'database' => __DIR__.'/../../../tests/_data/testing.sqlite',
+            'prefix'   => '',
         ],
     ],
 ];

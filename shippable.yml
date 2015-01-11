@@ -17,13 +17,15 @@ env:
 
 before_script:
   - mkdir -p shippable/testresults
+  - mkdir -p shippable/codecoverage
   - psql -c 'CREATE DATABASE groupeat;' -U postgres
   - composer config -g github-oauth.github.com $GITHUB_TOKEN
   - composer self-update
-  - composer install --no-interaction --no-progress --no-scripts
+  - composer install --no-interaction --no-progress
+  - ./vendor/bin/codecept build
 
 script:
-  - phpunit --debug --log-junit shippable/testresults/junit.xml
+  - ./vendor/bin/codecept run --xml ../../shippable/testresults/results.xml --coverage --coverage-xml ../../shippable/codecoverage/coverage.xml
 
 after_success:
   - php artisan deploy -v

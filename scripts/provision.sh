@@ -29,8 +29,8 @@ apt-get install -y php5-cli php5-dev php-pear php5-pgsql \
 php5-json php5-curl php5-gd php5-gmp php5-imap php5-mcrypt
 
 if [[ $1 == 'local' ]]; then
-    echo "Installing PHP Xdebug"
-    apt-get install -y php5-xdebug
+    echo "Installing PHP Xdebug and SQLite"
+    apt-get install -y php5-xdebug php5-sqlite sqlite3 libsqlite3-dev
 
     echo "Removing PHP cache features"
     rm /etc/php5/mods-available/opcache.ini
@@ -275,4 +275,5 @@ echo "alias art='php artisan'" >> ~vagrant/.zshrc
 echo "alias cri='composer install'" >> ~vagrant/.zshrc
 echo "alias cru='composer update'" >> ~vagrant/.zshrc
 echo "alias crd='composer dump-autoload'" >> ~vagrant/.zshrc
-echo "alias phpunit='./vendor/bin/phpunit --debug'" >> ~vagrant/.zshrc
+echo "alias codecept='~vagrant/groupeat/current/vendor/bin/codecept'" >> ~vagrant/.zshrc
+

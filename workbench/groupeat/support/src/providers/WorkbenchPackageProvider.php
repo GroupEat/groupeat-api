@@ -34,7 +34,7 @@ class WorkbenchPackageProvider extends ServiceProvider {
         {
             $path = $this->getPackagePath("$file.php");
 
-            require_once $path;
+            require $path;
         }
 
         return $this;

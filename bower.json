@@ -1,20 +1,20 @@
 {
-  "name": "GroupEat",
-  "authors": [
-    "Thibault Derousseaux <tib.dex@gmail.com>"
-  ],
-  "private": true,
-  "ignore": [
-    ".*",
-    "test",
-    "tests",
-    "_layouts",
-    "_includes",
-    "component.json",
-    "package.json",
-    "CHANGELOG.md"
-  ],
-  "dependencies": {
-    "bootstrap-sass-official": "3.3.1"
-  }
+    "name": "GroupEat",
+    "authors": [
+        "Thibault Derousseaux <tib.dex@gmail.com>"
+    ],
+    "private": true,
+    "ignore": [
+        ".*",
+        "test",
+        "tests",
+        "_layouts",
+        "_includes",
+        "component.json",
+        "package.json",
+        "CHANGELOG.md"
+    ],
+    "dependencies": {
+        "bootstrap-sass-official": "3.3.1"
+    }
 }

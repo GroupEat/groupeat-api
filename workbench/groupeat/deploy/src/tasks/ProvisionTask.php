@@ -36,7 +36,6 @@ class ProvisionTask extends AbstractTask {
 
         $productionEnvVariables = $this->askProductionEnvVariables([
             'PGSQL_PASSWORD' => 'Choose the password for the postgreSQL DB: ',
-            'DEFAULT_ADMIN_EMAIL' => 'Choose the default admin account email: ',
             'DEFAULT_ADMIN_PASSWORD' => 'Choose the default admin account password: ',
             'GANDI_MAIL_PASSWORD' => 'Enter the password of the Gandi Mail account: ',
         ]);

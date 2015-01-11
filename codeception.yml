@@ -1,0 +1,21 @@
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    helpers: tests/_support
+coverage:
+    enabled: true
+    whitelist:
+        include:
+            - app/*
+            - workbench/*
+        exclude:
+            - app/storage/*
+    blacklist:
+        include:
+            - vendor/*
+settings:
+    bootstrap: ./_bootstrap.php
+    suite_class: Groupeat\Tests\Support\TestCase
+    colors: true

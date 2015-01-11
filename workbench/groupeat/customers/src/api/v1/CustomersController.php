@@ -16,7 +16,7 @@ class CustomersController extends Controller {
         return $customer;
     }
 
-    public function store()
+    public function register()
     {
         $email = Input::get('email');
         $password = Input::get('password');
@@ -28,7 +28,7 @@ class CustomersController extends Controller {
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
-    public function destroy(Customer $customer)
+    public function unregister(Customer $customer)
     {
         App::make('DeleteUserService')->call($customer);
     }

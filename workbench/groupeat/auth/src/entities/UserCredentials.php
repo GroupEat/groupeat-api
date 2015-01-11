@@ -6,11 +6,10 @@ use Hash;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\UserInterface;
-use Illuminate\Auth\UserTrait;
 
 class UserCredentials extends Entity implements UserInterface, RemindableInterface {
 
-    use UserTrait, RemindableTrait;
+    use RemindableTrait;
 
     public $timestamps = false;
 
@@ -48,6 +47,31 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     public function isActivated()
     {
         return !empty($this->activated_at);
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+    public function getRememberToken()
+    {
+        // Not used
+    }
+
+    public function setRememberToken($value)
+    {
+        // Not used
+    }
+
+    public function getRememberTokenName()
+    {
+        // Not used
     }
 
     protected function setUserAttribute(User $user)

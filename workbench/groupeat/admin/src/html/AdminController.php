@@ -22,7 +22,7 @@ class AdminController extends Controller{
             return Redirect::intended();
         }
 
-        return Redirect::to('admin/login')->withErrors(['Invalid credentials!']);
+        return Redirect::route('admin.login')->withErrors(['Invalid credentials!']);
     }
 
     public function logout()

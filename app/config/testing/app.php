@@ -2,5 +2,5 @@
 
 return [
     'debug' => true,
-    'url' => 'http://groupeat.dev',
+    'url' => 'https://groupeat.dev',
 ];
