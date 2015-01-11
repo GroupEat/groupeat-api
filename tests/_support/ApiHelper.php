@@ -33,7 +33,7 @@ class ApiHelper extends \Codeception\Module
         $url = $this->getApiUrl($path);
 
         $this->haveAcceptHeader();
-        $this->getModule('Rest')->$method($url, $params);
+        $this->getModule('REST')->$method($url, $params);
     }
 
     public function getApiUrl($path)
@@ -43,12 +43,12 @@ class ApiHelper extends \Codeception\Module
 
     public function seeResponseMessageIs($message)
     {
-        $this->getModule('Rest')->seeResponseContainsJson(compact('message'));
+        $this->getModule('REST')->seeResponseContainsJson(compact('message'));
     }
 
     public function seeErrorResponse($code, $message)
     {
-        $this->getModule('Rest')->seeResponseCodeIs($code);
+        $this->getModule('REST')->seeResponseCodeIs($code);
         $this->seeResponseMessageIs($message);
     }
 
@@ -57,7 +57,7 @@ class ApiHelper extends \Codeception\Module
         $config = $this->getModule('Laravel4')->kernel['config']->get('api::config');
         $value = "application/vnd.{$config['vendor']}.{$config['version']}+{$config['default_format']}";
 
-        return $this->getModule('Rest')->haveHttpHeader('Accept', $value);
+        return $this->getModule('REST')->haveHttpHeader('Accept', $value);
     }
 
 }
