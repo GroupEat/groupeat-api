@@ -11,6 +11,7 @@ class DebugCodeceptionOnShippable extends \Groupeat\Support\Console\Command {
         $config = [];
         $namespace = '';
 
+        var_dump(file_exists(base_path('vendor/codeception/codeception/src/Codeception/Module/REST.php')));
         var_dump("\Codeception\Module\\$class");
         var_dump(class_exists("\Codeception\Module\\$class"));
         var_dump(@class_exists("\Codeception\Module\\$class"));

@@ -1,6 +1,6 @@
 class_name: ApiTester
 modules:
-    enabled: [ApiHelper, Rest, Laravel4, Asserts]
+    enabled: [ApiHelper, REST, Laravel4, Asserts]
     config:
       Laravel4:
         filters: true
