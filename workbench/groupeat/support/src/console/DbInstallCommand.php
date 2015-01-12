@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Support\Console;
 
+use App;
 use Config;
 use DB;
 use File;
@@ -8,12 +9,13 @@ use Symfony\Component\Console\Input\InputOption;
 
 class DbInstallCommand extends Command {
 
-	protected $name = 'db-install';
+	protected $name = 'db:install';
 	protected $description = "Install the DB by running all the migrations and seed if needed";
 
 
     public function fire()
 	{
+        $this->createSetupDbIfTesting();
         $this->createMigrationsTable();
         $this->migrate();
 
@@ -23,7 +25,16 @@ class DbInstallCommand extends Command {
             $this->setEntries();
             $this->call('db:seed', $this->getDbOptions());
         }
-	}
+    }
+
+    private function createSetupDbIfTesting()
+    {
+        if (App::environment('testing')) {
+            $setupDbPath = Config::get('database.connections.setup.database');
+
+            File::put($setupDbPath, '');
+        }
+    }
 
     private function createMigrationsTable()
     {
@@ -104,6 +115,14 @@ class DbInstallCommand extends Command {
         File::put($dest, implode("\n", $lines));
     }
 
+    private function getDbOptions()
+    {
+        return [
+            '--force' => $this->option('force'),
+            '--database' => $this->option('database'),
+        ];
+    }
+
     protected function getOptions()
     {
         return [
@@ -113,14 +132,6 @@ class DbInstallCommand extends Command {
             ['seed', 's', InputOption::VALUE_REQUIRED, 'Specify a seed for the fake data generator.', null],
             ['entries', 'e', InputOption::VALUE_REQUIRED, 'Number of fake entries to seed the DB with.', null],
             ['database', 'd', InputOption::VALUE_REQUIRED, 'The database connection to use.', null],
-        ];
-    }
-
-    private function getDbOptions()
-    {
-        return [
-            '--force' => $this->option('force'),
-            '--database' => $this->option('database'),
         ];
     }
 

@@ -17,7 +17,7 @@ class PullCommand extends Command {
         $this->process('composer install');
 
         $this->line('Install the database');
-        $this->call('db-install', ['--with-seeds' => true, '--entries' => 10]);
+        $this->call('db:install', ['--with-seeds' => true, '--entries' => 10]);
 
         $this->line('Building assets');
         $this->call('asset:build', ['--install' => true]);

@@ -22,11 +22,11 @@ before_script:
   - composer config -g github-oauth.github.com $GITHUB_TOKEN
   - composer self-update
   - composer install --no-interaction --no-progress
-  - php artisan codeception:debug
+  - php artisan db:install--with-seeds --entries 2
   - ./vendor/bin/codecept build
 
 script:
-  - ./vendor/bin/codecept run --xml ../../shippable/testresults/results.xml --coverage --coverage-xml ../../shippable/codecoverage/coverage.xml
+  - ./vendor/bin/codecept run --xml ../../shippable/testresults/results.xml --coverage --coverage-xml ../../shippable/codecoverage/index.xml
 
 after_success:
   - php artisan deploy -v

@@ -131,6 +131,7 @@ return [
         'Dingo\Api\Provider\ApiServiceProvider',
         'Kmd\Logviewer\LogviewerServiceProvider',
         'Tymon\JWTAuth\JWTAuthServiceProvider',
+        'Schickling\Backup\BackupServiceProvider',
 
         'Groupeat\Support\PackageProvider',
 
