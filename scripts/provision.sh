@@ -195,12 +195,6 @@ echo "Creating the database"
 su postgres -c "dropdb groupeat --if-exists"
 su postgres -c "createdb -O groupeat groupeat"
 
-if [[ $1 == 'local' ]]; then
-    echo "Creating the testing database"
-    su postgres -c "dropdb groupeat-testing --if-exists"
-    su postgres -c "createdb -O groupeat-testing groupeat-testing --owner groupeat"
-fi
-
 echo "Installing Node.js and NPM packages"
 apt-get install -y nodejs
 su vagrant -c "mkdir ~/npm-global"

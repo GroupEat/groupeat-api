@@ -15,7 +15,6 @@ class DbInstallCommand extends Command {
 
     public function fire()
 	{
-        $this->createSetupDbIfTesting();
         $this->createMigrationsTable();
         $this->migrate();
 
@@ -24,15 +23,6 @@ class DbInstallCommand extends Command {
             $this->setSeed();
             $this->setEntries();
             $this->call('db:seed', $this->getDbOptions());
-        }
-    }
-
-    private function createSetupDbIfTesting()
-    {
-        if (App::environment('testing')) {
-            $setupDbPath = Config::get('database.connections.setup.database');
-
-            File::put($setupDbPath, '');
         }
     }
 
