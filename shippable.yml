@@ -26,7 +26,7 @@ before_script:
   - ./vendor/bin/codecept build
 
 script:
-  - ./vendor/bin/codecept run --xml ../../shippable/testresults/results.xml --coverage --coverage-xml ../../shippable/codecoverage/index.xml
+  - ./vendor/bin/codecept run --xml ../../shippable/testresults/results.xml --coverage
 
 after_success:
   - php artisan deploy -v

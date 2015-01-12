@@ -61,7 +61,7 @@ class DbInstallCommand extends Command {
             }
         }
 
-        processAtProjectRoot('composer dump-autoload', $this->output);
+        $this->process('composer dump-autoload');
         $this->call('migrate:refresh', $this->getDbOptions());
     }
 

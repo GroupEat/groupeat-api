@@ -29,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Register the configured shared folders
-  config.vm.synced_folder Dir.pwd, "/home/vagrant/groupeat/current", nfs: true
+  config.vm.synced_folder Dir.pwd, "/home/vagrant/groupeat/current", type: "nfs",  mount_options: ['rw', 'vers=3', 'tcp', 'actimeo=2']
 
   # Configure the box
   config.vm.box = "ubuntu/trusty64"

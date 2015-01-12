@@ -42,12 +42,30 @@ if (!function_exists('process'))
      *
      * @param string                                            $command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param string or null for project root                   $workingDirectory
+     * @param int or null for no-timeout                        $timeoutInSeconds
      *
      * @return \Symfony\Component\Process\Process
      */
-    function process($command, \Symfony\Component\Console\Output\OutputInterface $output = null)
+    function process(
+        $command,
+        \Symfony\Component\Console\Output\OutputInterface $output = null,
+        $workingDirectory = null,
+        $timeoutInSeconds = 60
+    )
     {
-        $process = new \Symfony\Component\Process\Process($command);
+        if (is_null($workingDirectory))
+        {
+            $workingDirectory = base_path();
+        }
+
+        $process = new \Symfony\Component\Process\Process(
+            $command,
+            $workingDirectory,
+            null,
+            null,
+            $timeoutInSeconds
+        );
 
         if (empty($output))
         {
@@ -69,24 +87,6 @@ if (!function_exists('process'))
         }
 
         return $process;
-    }
-}
-
-if (!function_exists('processAtProjectRoot'))
-{
-    /**
-     * Run a shell commmand at the project root (in the artisan file folder).
-     *
-     * @param string                                            $command
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    function processAtProjectRoot($command, \Symfony\Component\Console\Output\OutputInterface $output = null)
-    {
-        $command = 'cd '.base_path().'; '.$command;
-
-        return process($command, $output);
     }
 }
 

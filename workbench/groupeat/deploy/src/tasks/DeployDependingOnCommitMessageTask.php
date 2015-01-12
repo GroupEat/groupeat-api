@@ -13,7 +13,7 @@ class DeployDependingOnCommitMessageTask extends AbstractTask {
     {
         if (App::environment('building'))
         {
-            $lastCommitMessage = processAtProjectRoot('git log -1 HEAD --pretty=format:%s')->getOutput();
+            $lastCommitMessage = process('git log -1 HEAD --pretty=format:%s')->getOutput();
 
             if (str_contains($lastCommitMessage, '[skip deploy]'))
             {

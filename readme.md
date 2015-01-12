@@ -15,6 +15,7 @@ Clone this repository on your machine. Place it where you like and rename it if 
 
 ## Other
  - Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads.html).
+ - If you are using Linux you should also install and configure the [Vagrant notify plugin](https://github.com/fgrehm/vagrant-notify) with the command `vagrant plugin install vagrant-notify`.
  - Fill the missing data if any in `example.env.php` and copy this file to `.env.local.php` and `.env.testing.php`.
  - Add the line `192.168.10.10  groupeat.dev` to your hosts file:
    - Windows: `c:\windows\systeme32\drivers\etc`
@@ -35,7 +36,15 @@ Remember that some useful aliases are specified at the end of `server/provision.
 
 ## Git commands
 
-Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically. However, before running `art pull` just after cloning this repo you need to run `composer install` to install the required Composer dependencies.
+Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically. However, before running `art pull` for the first time (i.e. after cloning this repo) you need to run `composer install` to install the required Composer dependencies.
+
+## Testing the code
+
+Codeception is used to test the application. Just after pulling from git you should run the `codecept build` command to generate the needed testing classes. Then use `codecept run` to execute the whole test suite.
+
+## Gulp
+
+The repo comes with a Gulp file that you can use to speed up development by automating some tasks. The `gulp` command will build the frontend assets and launch the `watch` task that triggers the tests automatically. Go have a look at the `Gulpfile.js` if you want more details.
 
 ## Administration zone
 

@@ -24,6 +24,11 @@ class BuildAssetsCommand extends Command {
         $this->call('asset:publish-all', ['package' => $this->argument('package')]);
         $this->info('Calling gulp sass task');
         $this->process('gulp sass');
+
+        if ($this->option('watch'))
+        {
+            $this->process('gulp watch');
+        }
     }
 
     protected function getArguments()
@@ -37,6 +42,7 @@ class BuildAssetsCommand extends Command {
     {
         return [
             ['install', 'i', InputOption::VALUE_NONE, 'Install the NPM and bower dependencies.', null],
+            ['watch', 'w', InputOption::VALUE_NONE, 'Launch the Gulp watch task.', null],
         ];
     }
 

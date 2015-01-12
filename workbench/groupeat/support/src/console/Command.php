@@ -10,9 +10,9 @@ abstract class Command extends IlluminateCommand {
      *
      * @return \Symfony\Component\Process\Process
      */
-    protected function process($command)
+    protected function process($command, $timeout = null)
     {
-        return processAtProjectRoot($command, $this->output);
+        return process($command, $this->output, null, $timeout);
     }
 
 }

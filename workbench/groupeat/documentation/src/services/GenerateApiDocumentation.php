@@ -62,7 +62,7 @@ class GenerateApiDocumentation {
 
         $command = "aglio -t flatly -i $inputPath -o $outputPath";
 
-        return processAtProjectRoot($command, $output)->getErrorOutput();
+        return process($command, $output)->getErrorOutput();
     }
 
     /**
