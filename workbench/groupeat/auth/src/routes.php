@@ -4,15 +4,26 @@ use Groupeat\Auth\Entities\UserCredentials;
 
 Route::model('user', 'Groupeat\Auth\Entities\UserCredentials');
 
-Route::get('auth/activate/{code}', ['as' => 'auth.activation', function($code)
+Route::group(['prefix' => 'auth'], function()
 {
-    App::make('ActivateUserService')->call($code);
+    Route::get('activate/{code}', ['as' => 'auth.activation', function($code)
+    {
+        App::make('ActivateUserService')->call($code);
 
-    // TODO: I18n.
-    return View::make('auth::activated', ['hideNavbar' => true]);
-}]);
+        // TODO: I18n.
+        return View::make('auth::activated', ['hideNavbar' => true]);
+    }]);
+
+//    Route::get('reset-password/{code}', ['as' => 'auth.resetPassword', function($code)
+//    {
+//
+//    }]);
+});
 
 Route::api(['version' => 'v1'], function()
 {
-    Route::put('auth/token', 'Groupeat\Auth\Api\V1\AuthController@refreshToken');
+    Route::group(['prefix' => 'auth'], function()
+    {
+        Route::put('token', 'Groupeat\Auth\Api\V1\AuthController@refreshToken');
+    });
 });

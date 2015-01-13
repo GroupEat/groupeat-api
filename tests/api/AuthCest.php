@@ -1,6 +1,7 @@
 <?php
 
 use Codeception\Module\ApiHelper;
+use Groupeat\Customers\Entities\Customer;
 
 class AuthCest {
 
@@ -15,7 +16,25 @@ class AuthCest {
         $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
 
         $I->seeResponseCodeIs(201);
-        $I->seeResponseContainsJson(['type' => 'customer']);
+        $I->seeResponseContainsJson(['type' => str_singular($this->getUserType())]);
+    }
+
+    public function testThatAUserCanBeActivatedAfterSuccessfulRegistration(ApiTester $I)
+    {
+        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
+        $id = $I->grabDataFromResponse('id');
+        $token = $I->grabDataFromResponse('token');
+
+        $I->sendApiGetWithToken($token, $this->getUserType().'/'.$id);
+        $I->assertFalse($I->grabDataFromResponse('activated'));
+
+        $activationLink = $I->grabLastMailCrawlableBody()->filter('#activation-link')->text();
+        $I->assertNotEmpty($activationLink);
+        $I->sendGET($activationLink);
+        $I->seeResponseCodeIs(200);
+
+        $I->sendApiGetWithToken($token, $this->getUserType().'/'.$id);
+        $I->assertTrue($I->grabDataFromResponse('activated'));
     }
 
     public function testThatAUserCanAuthenticateAfterSuccessfulRegistration(ApiTester $I)
@@ -23,8 +42,8 @@ class AuthCest {
         $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
         $I->seeResponseCodeIs(201);
 
-        $id = $I->grabDataFromJsonResponse('id');
-        $token = $I->grabDataFromJsonResponse('token');
+        $id = $I->grabDataFromResponse('id');
+        $token = $I->grabDataFromResponse('token');
         $I->sendApiGetWithToken($token, $this->getUserType().'/'.$id);
         $I->seeResponseCodeIs(200);
     }
@@ -35,14 +54,14 @@ class AuthCest {
         $password = 'password';
         $this->sendRegistrationRequest($I, $email, $password);
         $I->seeResponseCodeIs(201);
-        $id = $I->grabDataFromJsonResponse('id');
-        $oldToken = $I->grabDataFromJsonResponse('token');
+        $id = $I->grabDataFromResponse('id');
+        $oldToken = $I->grabDataFromResponse('token');
 
         sleep(1.1);
         $this->sendTokenRefreshRequest($I, $email, $password);
         $I->seeResponseCodeIs(200);
 
-        $newToken = $I->grabDataFromJsonResponse('token');
+        $newToken = $I->grabDataFromResponse('token');
         $I->assertNotEmpty($newToken);
         $I->assertNotEquals($oldToken, $newToken);
 

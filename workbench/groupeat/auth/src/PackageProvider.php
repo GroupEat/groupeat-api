@@ -5,6 +5,7 @@ use Groupeat\Auth\Services\ActivateUser;
 use Groupeat\Auth\Services\DeleteUser;
 use Groupeat\Auth\Services\GenerateTokenForUser;
 use Groupeat\Auth\Services\RegisterUser;
+use Groupeat\Auth\Services\SendResetPasswordLink;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider {
@@ -14,8 +15,6 @@ class PackageProvider extends WorkbenchPackageProvider {
 
     public function register()
     {
-        parent::register();
-
         $this->app->bind('ActivateUserService', function()
         {
             return new ActivateUser;
@@ -39,6 +38,11 @@ class PackageProvider extends WorkbenchPackageProvider {
                 $app['url'],
                 $app['GenerateTokenForUserService']
             );
+        });
+
+        $this->app->bind('SendResetPasswordLinkService', function($app)
+        {
+            return new SendResetPasswordLink($app['mailer'], $app['url']);
         });
 
         $this->app->bindShared('groupeat.auth', function($app)

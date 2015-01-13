@@ -2,6 +2,7 @@
 
 use App;
 use Auth;
+use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
 
@@ -16,7 +17,12 @@ class AuthController extends Controller {
         $type = Auth::shortTypeOf($user);
         $token = $user->credentials->token;
 
-        return $this->response->array(compact('id', 'type', 'token'));
+        return $this->arrayResponse(compact('id', 'type', 'token'));
+    }
+
+    public function sendResetPasswordLink(User $user)
+    {
+        App::make('SendResetPasswordLinkService')->call($user, Input::get('email'));
     }
 
 }

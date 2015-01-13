@@ -20,15 +20,15 @@ class RegisterCustomer {
     /**
      * @param string   $email
      * @param string   $plainPassword
-     * @param Customer $newCustomer
+     * @param array    $customerData
      *
      * @return Customer
      */
-    public function call($email, $plainPassword, Customer $newCustomer)
+    public function call($email, $plainPassword, array $customerData = [])
     {
         $this->assertCampusEmail($email);
 
-        return $this->registerUser->call($email, $plainPassword, $newCustomer);
+        return $this->registerUser->call($email, $plainPassword, new Customer($customerData));
     }
 
     private function assertCampusEmail($email)

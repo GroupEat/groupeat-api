@@ -11,11 +11,15 @@ Route::api(['version' => 'v1'], function()
         Route::group(['protected' => false], function() use ($controller)
         {
             Route::post('/', "$controller@register");
+
+            // Route::put('{customer}/reset-password', 'Groupeat\Auth\Api\V1\AuthController@sendResetPasswordLink');
         });
 
         Route::group(['protected' => true], function() use ($controller)
         {
             Route::get('{customer}', "$controller@show");
+
+            Route::patch('{customer}', "$controller@update");
 
             Route::delete('{customer}', "$controller@unregister");
         });

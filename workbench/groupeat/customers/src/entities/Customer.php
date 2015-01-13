@@ -9,10 +9,16 @@ class Customer extends Entity implements User {
 
     use HasCredentials, SoftDeletingTrait;
 
+    protected $fillable = ['firstName', 'lastName', 'phoneNumber'];
+
 
     public function getRules()
     {
-        return [];
+        return [
+            'firstName' => 'min:1',
+            'lastName' => 'min:1',
+            'phoneNumber' => ["regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/"],
+        ];
     }
 
     public function addresses()

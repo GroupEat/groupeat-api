@@ -34,6 +34,41 @@ if (!function_exists('ddd') && function_exists('dump'))
     }
 }
 
+if (!function_exists('getNamespaceOf'))
+{
+    /**
+     * Get the namespace of the given class.
+     *
+     * @param $class
+     *
+     * @return string
+     */
+    function getNamespaceOf($class)
+    {
+        $className = get_class($class);
+
+        return substr($className, 0, strrpos($className, '\\'));
+    }
+}
+
+if (!function_exists('getClassNameWithoutNamespace'))
+{
+    /**
+     * Get the name of a class without its namespace.
+     *
+     * @param $class
+     *
+     * @return string
+     */
+    function getClassNameWithoutNamespace($class)
+    {
+        $className = get_class($class);
+        $parts = explode('\\', $className);
+
+        return array_pop($parts);
+    }
+}
+
 if (!function_exists('process'))
 {
     /**

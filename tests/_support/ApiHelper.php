@@ -90,6 +90,16 @@ class ApiHelper extends \Codeception\Module
         $this->getModule('REST')->seeResponseContainsJson(compact('errors'));
     }
 
+    public function grabDataFromResponse($path)
+    {
+        return $this->getModule('REST')->grabDataFromJsonResponse("data.$path");
+    }
+
+    public function watchEmailSending()
+    {
+        $this->getModule('Laravel4');
+    }
+
     public function haveAcceptHeader()
     {
         $config = $this->getModule('Laravel4')->kernel['config']->get('api::config');

@@ -10,14 +10,16 @@ class CustomersSeeder extends Seeder {
         Customer::create([
             'firstName' => $this->faker->firstName,
             'lastName' => $this->faker->lastName,
+            'phoneNumber' => $this->faker->phoneNumber,
         ]);
     }
 
     protected function insertAdditionalEntries($id)
     {
         Customer::create([
-            'firstName' => 'groupeat',
-            'lastName' => 'App',
+            'firstName' => 'Jean-Nathanael',
+            'lastName' => 'Hérault',
+            'phoneNumber' => '0605040302',
         ]);
     }
 

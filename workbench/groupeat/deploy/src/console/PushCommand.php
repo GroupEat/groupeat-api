@@ -36,7 +36,7 @@ class PushCommand extends Command {
 
             $this->info('All tests have passed');
         }
-        
+
         $this->process('git add -u .');
         $this->process('git add .');
         $this->process('git commit -m "'.$message.'"');

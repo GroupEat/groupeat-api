@@ -8,12 +8,49 @@ abstract class Controller extends IlluminateController {
     use ApiController;
 
 
-    public function __construct()
+    /**
+     * @param $item
+     *
+     * @return \Dingo\Api\Http\ResponseBuilder
+     */
+    protected function itemResponse($item)
     {
-//        $this->afterFilter(function($route, $request, $response)
-//        {
-//            //
-//        });
+        return $this->response->item($item, $this->getTransformerFor($item));
+    }
+
+    /**
+     * @param $data
+     *
+     * @return \Dingo\Api\Http\ResponseBuilder
+     */
+    protected function arrayResponse($data)
+    {
+        return $this->response->array(compact('data'));
+    }
+
+    /**
+     * @param $item
+     *
+     * @return \League\Fractal\TransformerAbstract
+     */
+    protected function getTransformerFor($item)
+    {
+        $className = $this->getTransformerClassNameFor($item);
+
+        return new $className;
+    }
+
+    /**
+     * @param $item
+     *
+     * @return string
+     */
+    protected function getTransformerClassNameFor($item)
+    {
+        $controllerNamespace = getNamespaceOf($this);
+        $itemClass = getClassNameWithoutNamespace($item);
+
+        return $controllerNamespace.'\\'.$itemClass.'Transformer';
     }
 
 }

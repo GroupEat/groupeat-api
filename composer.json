@@ -27,7 +27,8 @@
             "workbench",
             "app/console",
             "app/database/seeds",
-			"app/database/migrations"
+			"app/database/migrations",
+            "tests/_support/customs"
 		]
 	},
     "config": {

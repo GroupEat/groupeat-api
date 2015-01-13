@@ -65,22 +65,17 @@ class RegisterUser {
         return $this->userCredentials->user;
     }
 
-    private function insertUserWithCredentials($email, $plainPassword, User $user)
+    private function insertUserWithCredentials($email, $password, User $user)
     {
         // We need to save the user to have its id
-        // A user cannot be saved with empty data so we create temporary one
-        $user->firstName = 'temp';
-        $user->save();
+        $user->forceSave();
 
         $this->userCredentials = new UserCredentials;
         $this->userCredentials->email = $email;
-        $this->userCredentials->password = $plainPassword;
+        $this->userCredentials->password = $password;
         $this->userCredentials->user = $user;
 
-        $data = [
-            'email' => $email,
-            'password' => $plainPassword,
-        ];
+        $data = compact('email', 'password');
 
         $rules = [
             'email' => 'email|required|unique:'.UserCredentials::table(),
@@ -98,8 +93,7 @@ class RegisterUser {
         }
         else
         {
-            $user->firstName = null;
-            $user->save();
+            $user->forceSave();
         }
 
         $this->userCredentials->save();
