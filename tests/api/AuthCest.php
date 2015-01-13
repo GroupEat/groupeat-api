@@ -6,7 +6,7 @@ class AuthCest {
 
     public function testThatPassingATokenInTheQueryStringIsForbidden(ApiTester $I)
     {
-        $I->sendApiGET('auth/token?token=shouldBePassedInHeader');
+        $I->sendApiGet('auth/token?token=shouldBePassedInHeader');
         $I->seeErrorResponse(403, "Trying to authenticate via token in query string is forbidden.");
     }
 
@@ -25,8 +25,7 @@ class AuthCest {
 
         $id = $I->grabDataFromJsonResponse('id');
         $token = $I->grabDataFromJsonResponse('token');
-        $I->haveAuthenticationToken($token);
-        $I->sendApiGET($this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($token, $this->getUserType().'/'.$id);
         $I->seeResponseCodeIs(200);
     }
 
@@ -47,12 +46,10 @@ class AuthCest {
         $I->assertNotEmpty($newToken);
         $I->assertNotEquals($oldToken, $newToken);
 
-        $I->haveAuthenticationToken($newToken);
-        $I->sendApiGET($this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($newToken, $this->getUserType().'/'.$id);
         $I->seeResponseCodeIs(200);
 
-        $I->haveAuthenticationToken($oldToken);
-        $I->sendApiGET($this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($oldToken, $this->getUserType().'/'.$id);
         $I->seeErrorResponse(401, "Obsolete token.");
     }
 
@@ -86,12 +83,12 @@ class AuthCest {
 
     private function sendTokenRefreshRequest(ApiTester $I, $email, $password)
     {
-        $I->sendApiPUT('auth/token', compact('email', 'password'));
+        $I->sendApiPut('auth/token', compact('email', 'password'));
     }
 
     private function sendRegistrationRequest(ApiTester $I, $email, $password)
     {
-        $I->sendApiPOST($this->getUserType(), compact('email', 'password'));
+        $I->sendApiPost($this->getUserType(), compact('email', 'password'));
     }
 
     private function getUserType()

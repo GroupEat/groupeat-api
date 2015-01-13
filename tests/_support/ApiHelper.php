@@ -2,29 +2,60 @@
 
 class ApiHelper extends \Codeception\Module
 {
-    public function sendApiGET($path, $params = [])
+    public function sendApiGetWithToken($token, $path, $params = [])
+    {
+        $this->sendApiWithToken($token, 'GET', $path, $params);
+    }
+
+    public function sendApiPutWithToken($token, $path, $params = [])
+    {
+        $this->sendApiWithToken($token, 'PUT', $path, $params);
+    }
+
+    public function sendApiPatchWithToken($token, $path, $params = [])
+    {
+        $this->sendApiWithToken($token, 'PATCH', $path, $params);
+    }
+
+    public function sendApiPostWithToken($token, $path, $params = [])
+    {
+        $this->sendApiWithToken($token, 'POST', $path, $params);
+    }
+
+    public function sendApiDeleteWithToken($token, $path, $params = [])
+    {
+        $this->sendApiWithToken($token, 'DELETE', $path, $params);
+    }
+
+    public function sendApiGet($path, $params = [])
     {
         $this->sendApi('GET', $path, $params);
     }
 
-    public function sendApiPUT($path, $params = [])
+    public function sendApiPut($path, $params = [])
     {
         $this->sendApi('PUT', $path, $params);
     }
 
-    public function sendApiPATCH($path, $params = [])
+    public function sendApiPatch($path, $params = [])
     {
         $this->sendApi('PATCH', $path, $params);
     }
 
-    public function sendApiPOST($path, $params = [])
+    public function sendApiPost($path, $params = [])
     {
         $this->sendApi('POST', $path, $params);
     }
 
-    public function sendApiDELETE($path, $params = [])
+    public function sendApiDelete($path, $params = [])
     {
         $this->sendApi('DELETE', $path, $params);
+    }
+
+    public function sendApiWithToken($token, $verb, $path, $params = [])
+    {
+        $this->haveAuthenticationToken($token);
+        $this->sendApi($verb, $path, $params);
     }
 
     public function sendApi($verb, $path, $params = [])
@@ -36,7 +67,6 @@ class ApiHelper extends \Codeception\Module
 
         $this->haveAcceptHeader();
         $this->getModule('REST')->$method($url, $params);
-        dump($this->getModule('Laravel4')->kernel['groupeat.auth']->check());
     }
 
     public function getApiUrl($path)

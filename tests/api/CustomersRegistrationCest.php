@@ -19,9 +19,19 @@ class CustomersRegistrationCest {
         }
     }
 
+    public function testThatACustomerCanUnregister(ApiTester $I)
+    {
+        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
+        $id = $I->grabDataFromJsonResponse('id');
+        $token = $I->grabDataFromJsonResponse('token');
+
+        $I->sendApiDeleteWithToken($token, "customers/$id");
+        $I->seeResponseCodeIs(200);
+    }
+
     private function sendRegistrationRequest(ApiTester $I, $email, $password)
     {
-        $I->sendApiPOST('customers', compact('email', 'password'));
+        $I->sendApiPost('customers', compact('email', 'password'));
     }
 
 }

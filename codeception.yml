@@ -6,15 +6,13 @@ paths:
     helpers: tests/_support
 coverage:
     enabled: true
-    whitelist:
-        include:
-            - app/*
-            - workbench/*
-        exclude:
-            - app/storage/*
-    blacklist:
-        include:
-            - vendor/*
+    include:
+        - app/*
+        - workbench/*
+    exclude:
+        - vendor/*
+        - app/config/*
+        - app/storage/*
 settings:
     bootstrap: ./_bootstrap.php
     suite_class: Groupeat\Tests\Support\TestCase
