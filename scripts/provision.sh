@@ -129,19 +129,44 @@ if [[ $1 == 'local' ]]; then
         -out /etc/nginx/ssl/nginx.crt
 fi
 
-block="server {
+block="# Don't send the Nginx version number in error pages and Server header
+server_tokens off;
+
+# Disallow the browser to render the page inside an frame or iframe
+add_header X-Frame-Options SAMEORIGIN;
+
+# Disable content-type sniffing on some browsers.
+add_header X-Content-Type-Options nosniff;
+
+# Enables the Cross-site scripting (XSS) filter
+add_header X-XSS-Protection \"1; mode=block\";
+
+server {
     listen         80;
     server_name    "$2";
     return         301 https://\$server_name\$request_uri;
 }
 
 server {
-    listen 443 ssl;
+    listen 443 ssl default deferred;
     server_name "$2";
     root /home/vagrant/groupeat/current/public;
 
     ssl_certificate /etc/nginx/ssl/nginx.crt;
     ssl_certificate_key /etc/nginx/ssl/nginx.key;
+
+    # Enable session resumption to improve HTTPS performance
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_timeout 5m;
+
+    # Enables server-side protection from BEAST attacks
+    ssl_prefer_server_ciphers on;
+
+    # Disable SSLv3 since it's less secure then TLS
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+    # Enable HSTS (HTTP Strict Transport Security)
+    add_header Strict-Transport-Security \"max-age=31536000; includeSubdomains;\";
 
     index index.html index.php;
     charset utf-8;

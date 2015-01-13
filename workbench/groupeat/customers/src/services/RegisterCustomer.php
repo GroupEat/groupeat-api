@@ -35,7 +35,7 @@ class RegisterCustomer {
     {
         $domains = ['ensta-paristech.fr', 'ensta.fr', 'polytechnique.edu', 'institutoptique.fr'];
 
-        preg_match('/@(.+)$/', $email, $matches);
+        preg_match('/@([^@]+)$/', $email, $matches);
 
         if (!empty($matches[1]))
         {

@@ -32,8 +32,11 @@ class ApiHelper extends \Codeception\Module
         $method = 'send'.strtoupper($verb);
         $url = $this->getApiUrl($path);
 
+        $this->getModule('Laravel4')->kernel['groupeat.auth']->logout();
+
         $this->haveAcceptHeader();
         $this->getModule('REST')->$method($url, $params);
+        dump($this->getModule('Laravel4')->kernel['groupeat.auth']->check());
     }
 
     public function getApiUrl($path)
@@ -52,12 +55,22 @@ class ApiHelper extends \Codeception\Module
         $this->seeResponseMessageIs($message);
     }
 
+    public function seeErrorsContain($errors)
+    {
+        $this->getModule('REST')->seeResponseContainsJson(compact('errors'));
+    }
+
     public function haveAcceptHeader()
     {
         $config = $this->getModule('Laravel4')->kernel['config']->get('api::config');
         $value = "application/vnd.{$config['vendor']}.{$config['version']}+{$config['default_format']}";
 
         return $this->getModule('REST')->haveHttpHeader('Accept', $value);
+    }
+
+    public function haveAuthenticationToken($token)
+    {
+        $this->getModule('REST')->haveHttpHeader('Authorization', "bearer $token");
     }
 
 }

@@ -25,7 +25,7 @@ gulp.task('tests', function()
 {
     gulp.src('codeception.yml')
         .pipe(plumber())
-        .pipe(codeception('', {notify: true}))
+        .pipe(codeception('./vendor/bin/codecept --fail-fast', {notify: true, debug: true}))
         .on('error', notify.onError(codeceptionNotification('fail')))
         .pipe(notify(codeceptionNotification('pass')));
 });
@@ -34,8 +34,13 @@ gulp.task('build-tests', shell.task('./vendor/bin/codecept build'));
 
 gulp.task('watch', function ()
 {
-    gulp.watch(['tests/**/*Cest.php', 'tests/**/_bootstrap.php', 'tests/*.yml'], ['build-tests', 'tests']);
     gulp.watch('public/assets/**', ['publish-assets', 'sass']);
+    gulp.watch([
+        'tests/_support/*.php',
+        'tests/**/*Cest.php',
+        'tests/**/_bootstrap.php',
+        'tests/*.yml'
+    ], ['build-tests', 'tests']);
 });
 
 function codeceptionNotification(status)
