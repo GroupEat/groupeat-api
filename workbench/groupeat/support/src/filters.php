@@ -29,3 +29,25 @@ Route::filter('csrf', function()
         throw new Illuminate\Session\TokenMismatchException;
     }
 });
+
+// Register error handler
+App::down(function()
+{
+    return Response::make("Be right back!", 503);
+});
+
+App::error(function($exception, $code)
+{
+    if (!Config::get('app.debug'))
+    {
+        Log::error($exception);
+
+        if (in_array($code, [404, 403]))
+        {
+            return Redirect::to($code);
+        }
+
+        return Redirect::to('500');
+    }
+});
+

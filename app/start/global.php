@@ -12,37 +12,3 @@
 */
 
 Log::useDailyFiles(storage_path('logs/log-'.php_sapi_name().'.txt'));
-
-/*
-|--------------------------------------------------------------------------
-| Application Error Handler
-|--------------------------------------------------------------------------
-|
-| Here you may handle any errors that occur in your application, including
-| logging them or displaying custom views for specific errors. You may
-| even register several error handlers to handle different types of
-| exceptions. If nothing is returned, the default error view is
-| shown, which includes a detailed stack trace during debug.
-|
-*/
-
-App::error(function(Exception $exception, $code)
-{
-	Log::error($exception);
-});
-
-/*
-|--------------------------------------------------------------------------
-| Maintenance Mode Handler
-|--------------------------------------------------------------------------
-|
-| The "down" Artisan command gives you the ability to put an application
-| into maintenance mode. Here, you will define what is displayed back
-| to the user if maintenance mode is in effect for the application.
-|
-*/
-
-App::down(function()
-{
-	return Response::make("Be right back!", 503);
-});

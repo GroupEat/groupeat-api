@@ -1,0 +1,19 @@
+#error-status-code {
+
+  margin-top: 10em;
+
+  p {
+    text-align: center;
+
+    .whoops
+    {
+      font-size: floor(1.5 * $font-size-h1);
+    }
+
+    .status-code
+    {
+      font-size: floor(2.5 * $font-size-h1);
+    }
+  }
+
+}

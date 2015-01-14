@@ -34,7 +34,11 @@ gulp.task('build-tests', shell.task('./vendor/bin/codecept build'));
 
 gulp.task('watch', function ()
 {
-    gulp.watch('public/assets/**', ['publish-assets', 'sass']);
+    gulp.watch([
+        'public/assets/**',
+        'workbench/*/public/**'
+    ], ['publish-assets', 'sass']);
+
     gulp.watch([
         'tests/_support/*.php',
         'tests/**/*Cest.php',
