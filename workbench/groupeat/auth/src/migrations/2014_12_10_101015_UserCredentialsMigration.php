@@ -17,7 +17,7 @@ class UserCredentialsMigration extends Migration {
             $table->string('email')->unique()->index();
             $table->morphs('user');
             $table->timestamp('activated_at')->nullable()->index();
-            $table->string('activationCode')->nullable()->unique()->index();
+            $table->string('activationToken')->nullable()->unique()->index();
             $table->string('password')->nullable()->index();
             $table->string('token')->unique()->nullable();
         });

@@ -3,8 +3,19 @@
 use App;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait HasCredentials {
+
+    /**
+     * @param $email
+     *
+     * @return User
+     */
+    public static function findByEmailOrFail($email)
+    {
+        return static::findByEmail($email);
+    }
 
     /**
      * @param string $email
@@ -13,7 +24,19 @@ trait HasCredentials {
      */
     public static function findByEmail($email)
     {
-        return UserCredentials::where('email', $email)->first();
+        $credentials = UserCredentials::findByEmail($email);
+
+        if (!$credentials)
+        {
+            return null;
+        }
+
+        if (!$credentials->user)
+        {
+            throw (new ModelNotFoundException)->setModel(get_called_class());
+        }
+
+        return $credentials->user;
     }
 
     public function getEmailAttribute()

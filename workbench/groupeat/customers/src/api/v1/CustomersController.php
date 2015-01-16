@@ -34,10 +34,10 @@ class CustomersController extends Controller {
         $email = Input::get('email');
         $password = Input::get('password');
 
-        App::make('RegisterCustomerService')->call($email, $password, Input::all())->exists();
+        App::make('RegisterCustomerService')->call($email, $password);
 
         return $this->api->raw()
-            ->put('auth/token', compact('email', 'password'))
+            ->post('auth/token', compact('email', 'password'))
             ->setStatusCode(Response::HTTP_CREATED);
     }
 

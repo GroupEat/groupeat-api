@@ -2,27 +2,33 @@
 
 use App;
 use DB;
+use Groupeat\Admin\Forms\LoginForm;
 use Groupeat\Support\Html\Controller;
 use Input;
 use Redirect;
 use URL;
 use View;
 
-class AdminController extends Controller{
+class AdminController extends Controller {
 
-    public function login()
+    public function showLoginForm()
     {
-        return View::make('admin::login', ['hideNavbar' => true]);
+        return panelView('admin::login.panel.title', new LoginForm, 'danger');
     }
 
-    public function check()
+    public function loginCheck()
     {
+        if ($response = $this->redirectBackIfInvalid(new LoginForm))
+        {
+            return $response;
+        }
+
         if (App::make('LoginAdminService')->attempt(Input::get('email'), Input::get('password')))
         {
             return Redirect::intended();
         }
 
-        return Redirect::route('admin.login')->withErrors(['Invalid credentials!']);
+        return $this->redirectBackWithError('admin::login.panel.invalidCredentials');
     }
 
     public function logout()
@@ -50,11 +56,6 @@ class AdminController extends Controller{
             $data['passwd'] = DB::getConfig('password');
         }
 
-        if (Input::get('testing'))
-        {
-            $data['db'] = $data['db'].'-testing';
-        }
-
         $url = URL::to('packages/groupeat/admin/resources/adminer.php').'?'.http_build_query($data);
 
         return Redirect::to($url);
@@ -62,7 +63,9 @@ class AdminController extends Controller{
 
     public function docs()
     {
-        return App::make('GenerateApiDocumentationService')->getHTML(Input::get('generate'));
+        $forceRegenerate = App::isLocal() && Input::get('generate');
+
+        return App::make('GenerateApiDocumentationService')->getHTML($forceRegenerate);
     }
 
 }

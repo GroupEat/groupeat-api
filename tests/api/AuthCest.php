@@ -58,7 +58,7 @@ class AuthCest {
         $oldToken = $I->grabDataFromResponse('token');
 
         sleep(1.1);
-        $this->sendTokenRefreshRequest($I, $email, $password);
+        $I->sendApiPost('auth/token', compact('email', 'password'));
         $I->seeResponseCodeIs(200);
 
         $newToken = $I->grabDataFromResponse('token');
@@ -78,7 +78,7 @@ class AuthCest {
         {
             $this->sendRegistrationRequest($I, "user@$invalidEmail", 'password');
             $I->seeErrorResponse(400, "Invalid credentials.");
-            $I->seeErrorsContain(['email' => ["The email must be a valid email address."]]);
+            $I->seeErrorsContain(['email' => ["The e-mail must be a valid e-mail address."]]);
         }
     }
 
@@ -88,7 +88,7 @@ class AuthCest {
         $this->sendRegistrationRequest($I, 'user@ensta.fr', 'other_password');
 
         $I->seeErrorResponse(400, "Invalid credentials.");
-        $I->seeErrorsContain(['email' => ["The email has already been taken."]]);
+        $I->seeErrorsContain(['email' => ["The e-mail has already been taken."]]);
     }
 
     public function testThatThePasswordMustBeAtLeastSixCharacters(ApiTester $I)
@@ -100,9 +100,38 @@ class AuthCest {
         $I->seeErrorsContain(['password' => ["The password must be at least 6 characters."]]);
     }
 
-    private function sendTokenRefreshRequest(ApiTester $I, $email, $password)
+    public function testThatAUserCanResetItsPassword(ApiTester $I)
     {
-        $I->sendApiPut('auth/token', compact('email', 'password'));
+        $email = 'user@ensta.fr';
+        $oldPassword = 'password';
+        $this->sendRegistrationRequest($I, $email, $oldPassword);
+
+        $I->sendApiPost('auth/reset-password', compact('email'));
+        $I->seeResponseCodeIs(200);
+        $link = $I->grabLastMailCrawlableBody()->filter('#reset-password-link')->text();
+        $I->assertNotEmpty($link);
+        $I->sendGET($link);
+        $I->seeResponseCodeIs(200);
+
+        $newPassword = 'new_password';
+        $I->sendPOST($link, [
+            'email' => $email,
+            'password' => $newPassword,
+            'password_confirmation' => $newPassword,
+        ]);
+        $I->seeResponseCodeIs(200);
+
+        $I->sendApiPost('auth/token', [
+            'email' => $email,
+            'password' => $newPassword,
+        ]);
+        $I->seeResponseCodeIs(200);
+
+        $I->sendApiPost('auth/token', [
+            'email' => $email,
+            'password' => $oldPassword,
+        ]);
+        $I->seeErrorResponse(403, "Bad credentials.");
     }
 
     private function sendRegistrationRequest(ApiTester $I, $email, $password)

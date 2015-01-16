@@ -1,43 +1,39 @@
 <?php namespace Groupeat\Auth\Services;
 
-use Groupeat\Auth\Entities\Interfaces\User;
-use Illuminate\Mail\Mailer;
-use Illuminate\Routing\UrlGenerator;
+use Groupeat\Support\Exceptions\NotFound;
+use Illuminate\Auth\Reminders\PasswordBroker;
 
 class SendResetPasswordLink {
 
     /**
-     * @var Mailer
+     * @var PasswordBroker
      */
-    private $mailer;
-
-    /**
-     * @var UrlGenerator
-     */
-    private $urlGenerator;
+    private $passwordBroker;
 
 
-    public function __construct(Mailer $mailer, UrlGenerator $urlGenerator)
+    public function __construct(PasswordBroker $passwordBroker)
     {
-        $this->mailer = $mailer;
-        $this->urlGenerator = $urlGenerator;
+        $this->passwordBroker = $passwordBroker;
     }
 
     /**
-     * @param User $user
+     * @param string $email
      */
-    public function call(User $user, $email)
+    public function call($email)
     {
-//        $view = 'auth::mails.activation';
-//        $code = $this->userCredentials->activationCode;
-//        $url = $this->urlGenerator->route('auth.activation', compact('code'));
-//        $data = compact('url');
-//
-//        $this->mailer->send($view, $data, function($message) use ($email)
-//        {
-//            // TODO: I18n.
-//            $message->to($email)->subject("Activation de votre compte GroupEat");
-//        });
+        $broker = $this->passwordBroker;
+        $credentials = compact('email');
+        $status = $broker->remind($credentials);
+
+        if ($status == $broker::INVALID_USER)
+        {
+            throw new NotFound($status);
+        }
+
+        $userCredentials = $broker->getUser($credentials);
+
+        $userCredentials->token = 'obsolete';
+        $userCredentials->save();
     }
 
 }

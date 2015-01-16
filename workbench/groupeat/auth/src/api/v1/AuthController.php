@@ -20,9 +20,9 @@ class AuthController extends Controller {
         return $this->arrayResponse(compact('id', 'type', 'token'));
     }
 
-    public function sendResetPasswordLink(User $user)
+    public function sendResetPasswordLink()
     {
-        App::make('SendResetPasswordLinkService')->call($user, Input::get('email'));
+        App::make('SendResetPasswordLinkService')->call(Input::get('email'));
     }
 
 }

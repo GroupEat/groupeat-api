@@ -3,10 +3,11 @@
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\BadRequest;
+use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Mail\Mailer;
 use Illuminate\Routing\UrlGenerator;
+use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory as Validation;
-use RuntimeException;
 
 class RegisterUser {
 
@@ -16,14 +17,19 @@ class RegisterUser {
     private $mailer;
 
     /**
+     * @var UrlGenerator
+     */
+    private $urlGenerator;
+
+    /**
      * @var GenerateTokenForUser
      */
     private $tokenGenerator;
 
     /**
-     * @var UrlGenerator
+     * @var Translator
      */
-    private $urlGenerator;
+    private $translator;
 
     /**
      * @var Validation
@@ -40,24 +46,28 @@ class RegisterUser {
         Mailer $mailer,
         Validation $validation,
         UrlGenerator $urlGenerator,
-        GenerateTokenForUser $tokenGenerator
+        GenerateTokenForUser $tokenGenerator,
+        Translator $translator
     )
     {
         $this->mailer = $mailer;
         $this->validation = $validation;
         $this->urlGenerator = $urlGenerator;
         $this->tokenGenerator = $tokenGenerator;
+        $this->translator = $translator;
     }
 
     /**
      * @param string $email
      * @param string $plainPassword
-     * @param User   $newUser
+     * @param User   $userType
      *
      * @return User
      */
-    public function call($email, $plainPassword, User $newUser)
+    public function call($email, $plainPassword, User $userType)
     {
+        $newUser = $userType->newInstance();
+
         $this->insertUserWithCredentials($email, $plainPassword, $newUser)
             ->generateActivationCode()
             ->sendActivationCode($email);
@@ -91,10 +101,6 @@ class RegisterUser {
 
             throw new BadRequest("Invalid credentials.", $errors);
         }
-        else
-        {
-            $user->forceSave();
-        }
 
         $this->userCredentials->save();
 
@@ -103,7 +109,7 @@ class RegisterUser {
 
     private function generateActivationCode()
     {
-        $this->userCredentials->activationCode = $this->generateRandomString();
+        $this->userCredentials->activationToken = $this->generateRandomString();
         $this->userCredentials->save();
 
         return $this;
@@ -112,14 +118,13 @@ class RegisterUser {
     private function sendActivationCode($email)
     {
         $view = 'auth::mails.activation';
-        $code = $this->userCredentials->activationCode;
-        $url = $this->urlGenerator->route('auth.activation', compact('code'));
+        $token = $this->userCredentials->activationToken;
+        $url = $this->urlGenerator->route('auth.activate', compact('token'));
         $data = compact('url');
 
         $this->mailer->send($view, $data, function($message) use ($email)
         {
-            // TODO: I18n.
-            $message->to($email)->subject("Activation de votre compte GroupEat");
+            $message->to($email)->subject($this->translator->get('auth::activation.mail.subject'));
         });
 
         return $this;
@@ -134,7 +139,7 @@ class RegisterUser {
 
         if ($bytes === false)
         {
-            throw new RuntimeException("Unable to generate random string.");
+            throw new Exception("Unable to generate random string.");
         }
 
         return substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $length);

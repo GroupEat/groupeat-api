@@ -17,7 +17,7 @@ class Customer extends Entity implements User {
         return [
             'firstName' => 'min:1',
             'lastName' => 'min:1',
-            'phoneNumber' => ["regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/"],
+            'phoneNumber' => ['regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/'],
         ];
     }
 

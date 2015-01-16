@@ -105,6 +105,43 @@ require $framework.'/Illuminate/Foundation/start.php';
 
 /*
 |--------------------------------------------------------------------------
+| Set locale from accet-language header if defined
+|--------------------------------------------------------------------------
+|
+| If the request contains the accept-language header, we will try to use it
+| to set the application locale.
+|
+*/
+
+if ($languageHeader = $app['request']->headers->get('accept-language'))
+{
+    $localeFound = false;
+    $availableLocales = $app['config']->get('app.available_locales');
+    $languages = explode(';', $languageHeader);
+
+    foreach ($languages as $language)
+    {
+        if ($localeFound)
+        {
+            break;
+        }
+
+        foreach ($availableLocales as $locale)
+        {
+            if (str_contains($language, $locale))
+            {
+                $localeFound = true;
+                $app['config']->set('app.locale', $locale);
+                $app['config']->set('app.user_locale', $locale);
+
+                break;
+            }
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |

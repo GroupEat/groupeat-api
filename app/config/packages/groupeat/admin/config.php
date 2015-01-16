@@ -15,7 +15,7 @@ return [
 
     'default_account_credentials' => [
         'email' => 'admin@groupeat.fr',
-        'password' => 'password',
+        'password' => 'groupeat',
     ],
 
 ];

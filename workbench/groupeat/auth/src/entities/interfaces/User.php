@@ -7,4 +7,14 @@ interface User {
      */
     public function credentials();
 
+    /**
+     * Create a new instance of the current user.
+     *
+     * @param  array $attributes
+     * @param  bool  $exists
+     *
+     * @return User
+     */
+    public function newInstance($attributes = [], $exists = false);
+
 }

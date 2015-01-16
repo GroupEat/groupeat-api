@@ -103,9 +103,9 @@ class ApiHelper extends \Codeception\Module
     public function haveAcceptHeader()
     {
         $config = $this->getModule('Laravel4')->kernel['config']->get('api::config');
-        $value = "application/vnd.{$config['vendor']}.{$config['version']}+{$config['default_format']}";
+        $accept = "application/vnd.{$config['vendor']}.{$config['version']}+{$config['default_format']}";
 
-        return $this->getModule('REST')->haveHttpHeader('Accept', $value);
+        $this->getModule('REST')->haveHttpHeader('Accept', $accept);
     }
 
     public function haveAuthenticationToken($token)

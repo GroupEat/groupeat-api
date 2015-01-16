@@ -2,30 +2,23 @@
 
 use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Exceptions\BadRequest;
-use Groupeat\Support\Exceptions\Forbidden;
+use Groupeat\Support\Exceptions\NotFound;
 
 class ActivateUser {
 
     /**
-     * @param UserCredentials $userCredentials
-     * @param string          $activationCode
+     * @param string          $activationToken
      */
-    public function call($activationCode)
+    public function call($activationToken)
     {
-        $userCredentials = UserCredentials::where('activationCode', $activationCode)->first();
+        $userCredentials = UserCredentials::where('activationToken', $activationToken)->first();
 
         if (!$userCredentials)
         {
-            throw new Forbidden("Wrong activation code.");
+            throw new NotFound("Cannot retrieve user from token.");
         }
 
-        if ($userCredentials->activated_at)
-        {
-            throw new BadRequest("Already activated.");
-        }
-
-        $userCredentials->activationCode = null;
+        $userCredentials->activationToken = null;
         $userCredentials->activated_at = Carbon::now();
 
         $userCredentials->save();

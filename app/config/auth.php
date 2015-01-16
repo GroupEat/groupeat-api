@@ -60,9 +60,9 @@ return [
 
 	'reminder' => [
 
-		'email' => 'emails.auth.reminder',
+		'email' => 'auth::mails.resetPassword',
 
-		'table' => 'password_reminders',
+		'table' => \Groupeat\Auth\Migrations\PasswordResetTokensMigration::TABLE,
 
 		'expire' => 60,
 

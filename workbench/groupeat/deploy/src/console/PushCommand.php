@@ -2,7 +2,6 @@
 
 use Groupeat\Support\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 class PushCommand extends Command {
 
@@ -13,29 +12,6 @@ class PushCommand extends Command {
 	public function fire()
 	{
         $message = str_replace('"',"'",$this->argument('message'));
-
-        if (!$this->option('force'))
-        {
-            $this->comment('Running git status before pushing');
-            $this->process('git status');
-
-            if (!$this->confirm("Confirm push with message: \"$message\" ? (y|n) "))
-            {
-                $this->error('Cancelling push...');
-                return;
-            }
-
-            $this->comment('Running all the tests');
-            $testsPassing = $this->process('./vendor/bin/codecept run --fail-fast')->isSuccessful();
-
-            if (!$testsPassing)
-            {
-                $this->error('At least one test failed: cancelling push...');
-                return;
-            }
-
-            $this->info('All tests have passed');
-        }
 
         $this->process('git add -u .');
         $this->process('git add .');
@@ -49,12 +25,5 @@ class PushCommand extends Command {
 			['message', InputArgument::REQUIRED, 'The commit message.'],
 		];
 	}
-
-    protected function getOptions()
-    {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Force push without running the tests.', null],
-        ];
-    }
 
 }

@@ -7,7 +7,6 @@ foreach([403 => 'Forbidden', 404 => 'Not found', 500 => 'Internal error', 503 =>
         return Response::view('support::error', [
             'code' => $code,
             'title' => "$code: $title",
-            'hideNavbar' => true,
         ], $code);
     }]);
 }

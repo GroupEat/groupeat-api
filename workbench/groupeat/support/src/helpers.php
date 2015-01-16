@@ -69,6 +69,50 @@ if (!function_exists('getClassNameWithoutNamespace'))
     }
 }
 
+if (!function_exists('translateIfNeeded'))
+{
+    /**
+     * If the text contains corresponds to a lang key its translation will be returned
+     * Else the untounched text is returned
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    function translateIfNeeded($text)
+    {
+        if (preg_match('/^\w+((\.|::)\w+)+\w+$/', $text))
+        {
+            return \Lang::get($text);
+        }
+
+        return $text;
+    }
+}
+
+if (!function_exists('panelView'))
+{
+    /**
+     * @param string $title
+     * @param mixed  $panelBody
+     * @param string $panelClass
+     * @param string $panelId
+     *
+     * @return \Illuminate\View\View
+     */
+    function panelView($title, $panelBody, $panelClass = 'primary', $panelId = 'groupeat-panel')
+    {
+        $title = translateIfNeeded($title);
+
+        if ($panelBody instanceof \Groupeat\Support\Forms\Form)
+        {
+            $panelBody = $panelBody->render();
+        }
+
+        return \View::make('support::panel', compact('title', 'panelBody', 'panelClass', 'panelId'));
+    }
+}
+
 if (!function_exists('process'))
 {
     /**

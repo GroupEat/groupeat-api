@@ -1,29 +1,38 @@
 <?php
 
+use Groupeat\Admin\Forms\ResetPasswordForm;
 use Groupeat\Auth\Entities\UserCredentials;
 
 Route::model('user', 'Groupeat\Auth\Entities\UserCredentials');
 
 Route::group(['prefix' => 'auth'], function()
 {
-    Route::get('activate/{code}', ['as' => 'auth.activation', function($code)
-    {
-        App::make('ActivateUserService')->call($code);
+    $controller = 'Groupeat\Auth\Html\AuthController';
 
-        // TODO: I18n.
-        return View::make('auth::activated', ['hideNavbar' => true]);
-    }]);
+    Route::get('activate/{token}', [
+        'as' => 'auth.activate',
+        'uses' => "$controller@activate",
+    ]);
 
-//    Route::get('reset-password/{code}', ['as' => 'auth.resetPassword', function($code)
-//    {
-//
-//    }]);
+    Route::get('reset-password/{token}', [
+        'as' => 'auth.showResetPasswordForm',
+        'uses' => "$controller@showResetPasswordForm",
+    ]);
+
+    Route::post('reset-password/{token}', [
+        'as' => 'auth.resetPassword',
+        'uses' => "$controller@resetPassword",
+    ]);
 });
 
 Route::api(['version' => 'v1'], function()
 {
     Route::group(['prefix' => 'auth'], function()
     {
-        Route::put('token', 'Groupeat\Auth\Api\V1\AuthController@refreshToken');
+        $controller = 'Groupeat\Auth\Api\V1\AuthController';
+
+        Route::post('token', "$controller@refreshToken");
+
+        Route::post('reset-password', "$controller@sendResetPasswordLink");
     });
 });

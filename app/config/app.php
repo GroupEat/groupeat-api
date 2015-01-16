@@ -54,6 +54,17 @@ return [
 
 	'locale' => 'en',
 
+    /*
+	|--------------------------------------------------------------------------
+	| Available locales
+	|--------------------------------------------------------------------------
+	|
+	| The application can be used with the following languages.
+	|
+	*/
+
+    'available_locales' => ['en', 'fr'],
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Fallback Locale
@@ -65,7 +76,7 @@ return [
 	|
 	*/
 
-	'fallback_locale' => 'en',
+	'fallback_locale' => 'fr',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -129,6 +140,7 @@ return [
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
         'Dingo\Api\Provider\ApiServiceProvider',
+        'Former\FormerServiceProvider',
         'Kmd\Logviewer\LogviewerServiceProvider',
         'Tymon\JWTAuth\JWTAuthServiceProvider',
         'Schickling\Backup\BackupServiceProvider',

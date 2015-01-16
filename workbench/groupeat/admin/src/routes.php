@@ -1,14 +1,14 @@
 <?php
 
 Route::get('admin/login', [
-    'as' => 'admin.login',
-    'uses' => 'Groupeat\Admin\Html\AdminController@login',
+    'as' => 'admin.showLoginForm',
+    'uses' => 'Groupeat\Admin\Html\AdminController@showLoginForm',
 ]);
 
-Route::post('admin/check', [
+Route::post('admin/login', [
     'before' => 'csrf',
-    'as' => 'admin.check',
-    'uses' => 'Groupeat\Admin\Html\AdminController@check',
+    'as' => 'admin.loginCheck',
+    'uses' => 'Groupeat\Admin\Html\AdminController@loginCheck',
 ]);
 
 Route::group(['before' => 'admin'], function()

@@ -13,7 +13,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
 
     public $timestamps = false;
 
-    protected $hidden = ['password', 'token', 'activationCode'];
+    protected $hidden = ['password', 'token', 'activationToken'];
 
 
     public static function boot()
@@ -27,6 +27,33 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         });
 
         parent::boot();
+    }
+
+    /**
+     * @param $email
+     *
+     * @return UserCredentials
+     */
+    public static function findByEmailOrFail($email)
+    {
+        $userCredentials = static::findByEmail($email);
+
+        if (!$userCredentials)
+        {
+            throw (new ModelNotFoundException)->setModel(get_called_class());
+        }
+
+        return $userCredentials;
+    }
+
+    /**
+     * @param $email
+     *
+     * @return UserCredentials|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::where('email', $email)->first();
     }
 
     public function getRules()
@@ -47,6 +74,14 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     public function isActivated()
     {
         return !empty($this->activated_at);
+    }
+
+    /**
+     * @param string $plainPassword
+     */
+    public function setPassword($plainPassword)
+    {
+        $this->attributes['password'] = Hash::make($plainPassword);
     }
 
     public function getAuthIdentifier()
@@ -84,11 +119,11 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         $this->hashPasswordBeforeInsertion($password);
     }
 
-    private function hashPasswordBeforeInsertion($password)
+    private function hashPasswordBeforeInsertion($plainPassword)
     {
         if (!$this->exists)
         {
-            return $this->attributes['password'] = Hash::make($password);
+            $this->setPassword($plainPassword);
         }
     }
 

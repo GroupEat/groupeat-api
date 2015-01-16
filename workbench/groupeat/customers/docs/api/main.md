@@ -26,7 +26,7 @@
              "status_code": 400,
              "errors": {
                  "email": [
-                     "The email must be a valid email address."
+                     "The e-mail must be a valid e-mail address."
                  ],
                  "password": [
                      "The password must be at least 6 characters."
@@ -37,7 +37,7 @@
 + Response 403
 
          {
-             "message": "Email should correspond to a Saclay campus account.",
+             "message": "E-mail should correspond to a Saclay campus account.",
              "status_code": 403
          }
          
@@ -51,8 +51,9 @@
 
         {
             "id": 1,
-            "firstName": Jean,
-            "lastName": Aymard,
+            "firstName": "Jean-Nathanaël",
+            "lastName": "Hérault",
+            "phoneNumber": "06 05 04 03 02",
             "created_at": "2015-01-06 09:22:31",
             "updated_at": "2015-01-06 10:41:25",
             "deleted_at": null
@@ -66,10 +67,47 @@
 
 + Response 401
             
-            {
-                "message": "Should be authenticated as customer 1 instead of 5.",
-                "status_code": 401
-            }
+        {
+            "message": "Should be authenticated as customer 1 instead of 5.",
+            "status_code": 401
+        }
+
++ Response 404
+
+### Update customer [PATCH]
+
+Update the customer data with the one passed in the request. A customer must have a first name, a last name and a phone number. That means that, when you hit this route for the first time, all of these fields must be given.
+
++ Request
+    
+        {
+            "firstName": "Jean-Nathanaël",
+            "lastName": "Hérault",
+            "phoneNumber": "06 05 04 03 02"
+        }
+
++ Response 200
+
+    [Customer][]
+
++ Response 400
+            
+        {
+            "message": "Cannot update customer data.",
+            "status_code": 400,
+            "errors": {
+                "phoneNumber": [
+                    "The phone number format is invalid."
+                 ]
+             }
+        }
+            
++ Response 401
+            
+        {
+            "message": "Should be authenticated as customer 1 instead of 5.",
+            "status_code": 401
+        }
             
 + Response 404
 
@@ -79,9 +117,9 @@
 
 + Response 401
 
-            {
-                "message": "Should be authenticated as customer 1 instead of 5.",
-                "status_code": 401
-            }
+        {
+            "message": "Should be authenticated as customer 1 instead of 5.",
+            "status_code": 401
+        }
             
 + Response 404

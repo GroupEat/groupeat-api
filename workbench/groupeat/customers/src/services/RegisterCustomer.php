@@ -20,15 +20,14 @@ class RegisterCustomer {
     /**
      * @param string   $email
      * @param string   $plainPassword
-     * @param array    $customerData
      *
      * @return Customer
      */
-    public function call($email, $plainPassword, array $customerData = [])
+    public function call($email, $plainPassword)
     {
         $this->assertCampusEmail($email);
 
-        return $this->registerUser->call($email, $plainPassword, new Customer($customerData));
+        return $this->registerUser->call($email, $plainPassword, new Customer);
     }
 
     private function assertCampusEmail($email)
@@ -47,7 +46,7 @@ class RegisterCustomer {
             }
         }
 
-        throw new Forbidden("Email should correspond to a Saclay campus account.");
+        throw new Forbidden("E-mail should correspond to a Saclay campus account.");
     }
 
 }

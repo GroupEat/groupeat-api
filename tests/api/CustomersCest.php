@@ -2,7 +2,7 @@
 
 use Codeception\Module\ApiHelper;
 
-class CustomersRegistrationCest {
+class CustomersCest {
 
     public function testThatACustomerNeedsACampusEmailToRegister(ApiTester $I)
     {
@@ -15,7 +15,7 @@ class CustomersRegistrationCest {
         foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain)
         {
             $this->sendRegistrationRequest($I, "user@$domain", 'password');
-            $I->seeErrorResponse(403, "Email should correspond to a Saclay campus account.");
+            $I->seeErrorResponse(403, "E-mail should correspond to a Saclay campus account.");
         }
     }
 
@@ -45,31 +45,23 @@ class CustomersRegistrationCest {
         $I->seeErrorResponse(401, "Should be authenticated as customer $id2 instead of $id1.");
     }
 
-    public function testThatACustomerCanRegisterWithDetails(ApiTester $I)
-    {
-        $data = $this->getFullCustomerData();
-
-        $I->sendApiPost('customers', $data);
-        $id = $I->grabDataFromResponse('id');
-        $token = $I->grabDataFromResponse('token');
-        $I->sendApiGetWithToken($token, "customers/$id");
-        $I->seeResponseCodeIs(200);
-
-        foreach (['firstName', 'lastName', 'phoneNumber', 'email'] as $key)
-        {
-            $I->assertEquals($data[$key], $I->grabDataFromResponse($key));
-        }
-    }
-
     public function testThatACustomerCanUpdateItsData(ApiTester $I)
     {
-        $I->sendApiPost('customers', $this->getFullCustomerData());
+        $data = [
+            'firstName' => 'First Name',
+            'lastName' => 'Last Name',
+            'phoneNumber' => '06 06 06 06 06',
+            'email' => 'user@ensta.fr',
+            'password' => 'password',
+        ];
+
+        $I->sendApiPost('customers', $data);
         $id = $I->grabDataFromResponse('id');
         $token = $I->grabDataFromResponse('token');
 
         $newData['firstName'] = 'New first name';
         $newData['lastName'] = 'New last name';
-        $newData['phoneNumber'] = '07 07 07 07 07';
+        $newData['phoneNumber'] = '07 07 07 07 07 08';
 
         $I->sendApiPatchWithToken($token, "customers/$id", $newData);
         $I->seeResponseCodeIs(200);
@@ -78,17 +70,6 @@ class CustomersRegistrationCest {
         {
             $I->assertEquals($value, $I->grabDataFromResponse($key));
         }
-    }
-
-    private function getFullCustomerData()
-    {
-        return [
-            'firstName' => 'First Name',
-            'lastName' => 'Last Name',
-            'phoneNumber' => '06 06 06 06 06',
-            'email' => 'user@ensta.fr',
-            'password' => 'password',
-        ];
     }
 
     private function sendRegistrationRequest(ApiTester $I, $email, $password)

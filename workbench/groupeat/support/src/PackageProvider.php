@@ -9,7 +9,7 @@ use Response;
 
 class PackageProvider extends WorkbenchPackageProvider {
 
-    protected $require = [self::FILTERS, self::HELPERS, self::ROUTES];
+    protected $require = [self::HELPERS, self::FILTERS, self::ROUTES];
     protected $console = ['DbInstall'];
 
 }

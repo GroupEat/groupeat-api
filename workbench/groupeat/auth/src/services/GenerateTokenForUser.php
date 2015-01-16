@@ -2,8 +2,8 @@
 
 use Groupeat\Auth\Auth;
 use Groupeat\Auth\Entities\Interfaces\User;
-use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\Forbidden;
+use Groupeat\Support\Exceptions\NotFound;
 use Tymon\JWTAuth\JWTAuth;
 
 class GenerateTokenForUser {
@@ -44,7 +44,7 @@ class GenerateTokenForUser {
 
         if (!$user)
         {
-            throw new Exception("Cannot retrieve user from token");
+            throw new NotFound("Cannot retrieve user from token.");
         }
 
         $user->token = $token;
