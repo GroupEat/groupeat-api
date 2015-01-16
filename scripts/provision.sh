@@ -231,6 +231,13 @@ npm install -g gulp
 npm install -g bower
 npm install -g aglio
 
+if [[ $1 == 'local' ]]; then
+    echo "Installing ghi"
+    curl -sL https://raw.githubusercontent.com/stephencelis/ghi/master/ghi > ghi
+    chmod 755 ghi
+    mv ghi /usr/local/bin
+fi
+
 echo "Adding ZSH shell"
 apt-get install -y zsh
 if [ ! -d ~vagrant/.oh-my-zsh ]; then
