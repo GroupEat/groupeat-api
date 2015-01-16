@@ -4,18 +4,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Account Credentials
+    | Default Account Password
     |--------------------------------------------------------------------------
     |
     | When seeding the database, a default admin account is created so that
     | it is always possible to acces the admin zone.
-    | Specify here this account credentials.
+    | Specify here the password of this account.
     |
     */
 
-    'default_account_credentials' => [
-        'email' => 'admin@groupeat.fr',
-        'password' => 'groupeat',
-    ],
+    'default_admin_password' => 'groupeat',
 
 ];

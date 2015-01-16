@@ -236,6 +236,9 @@ if [[ $1 == 'local' ]]; then
     curl -sL https://raw.githubusercontent.com/stephencelis/ghi/master/ghi > ghi
     chmod 755 ghi
     mv ghi /usr/local/bin
+else
+    echo "Seting NPM to production"
+    su vagrant -c "npm config set production"
 fi
 
 echo "Adding ZSH shell"
