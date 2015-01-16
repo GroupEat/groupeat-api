@@ -15,7 +15,6 @@ Clone this repository on your machine. Place it where you like and rename it if 
 
 ## Other
  - Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads.html).
- - If you are using Linux you should also install and configure the [Vagrant notify plugin](https://github.com/fgrehm/vagrant-notify) with the command `vagrant plugin install vagrant-notify`.
  - Fill the missing data if any in `example.env.php` and copy this file to `.env.local.php` and `.env.testing.php`.
  - Add the line `192.168.10.10  groupeat.dev` to your hosts file:
    - Windows: `c:\windows\systeme32\drivers\etc`

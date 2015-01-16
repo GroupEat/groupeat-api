@@ -1,15 +1,29 @@
 <?php namespace Groupeat\Support;
 
-use Groupeat\Support\Exceptions\BadRequest;
-use Groupeat\Support\Exceptions\Exception;
-use Groupeat\Support\Exceptions\Forbidden;
-use Groupeat\Support\Exceptions\Unauthorized;
+use Groupeat\Support\Services\Locale;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
-use Response;
 
 class PackageProvider extends WorkbenchPackageProvider {
 
     protected $require = [self::HELPERS, self::FILTERS, self::ROUTES];
     protected $console = ['DbInstall'];
+
+
+    public function register()
+    {
+        $this->app->bindShared('groupeat.locale', function($app)
+        {
+            return new Locale(
+                $app['router'],
+                $app['translator'],
+                $app['config']->get('app.available_frontend_locales')
+            );
+        });
+
+        $this->app['events']->listen('groupeat.auth.login', function($userCredentials)
+        {
+            $this->app['groupeat.locale']->set($userCredentials->locale);
+        });
+    }
 
 }

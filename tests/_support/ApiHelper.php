@@ -2,6 +2,22 @@
 
 class ApiHelper extends \Codeception\Module
 {
+    public function sendRegistrationRequest(
+        $email = 'user@ensta.fr',
+        $password = 'password',
+        $resource = 'customers',
+        $locale = 'fr'
+    )
+    {
+        $this->sendApiPost($resource, compact('email', 'password', 'locale'));
+        $this->getModule('REST')->seeResponseCodeIs(201);
+        $id = $this->grabDataFromResponse('id');
+        $token = $this->grabDataFromResponse('token');
+        $type = $this->grabDataFromResponse('type');
+
+        return [$token, $id, $type];
+    }
+
     public function sendApiGetWithToken($token, $path, $params = [])
     {
         $this->sendApiWithToken($token, 'GET', $path, $params);

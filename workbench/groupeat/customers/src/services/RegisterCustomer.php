@@ -18,16 +18,17 @@ class RegisterCustomer {
     }
 
     /**
-     * @param string   $email
-     * @param string   $plainPassword
+     * @param string $email
+     * @param string $plainPassword
+     * @param string $locale
      *
      * @return Customer
      */
-    public function call($email, $plainPassword)
+    public function call($email, $plainPassword, $locale)
     {
         $this->assertCampusEmail($email);
 
-        return $this->registerUser->call($email, $plainPassword, new Customer);
+        return $this->registerUser->call($email, $plainPassword, $locale, new Customer);
     }
 
     private function assertCampusEmail($email)
@@ -42,7 +43,7 @@ class RegisterCustomer {
 
             if (in_array($domain, $domains))
             {
-                return $this;
+                return true;
             }
         }
 

@@ -3,8 +3,6 @@
 echo "Cd into project root"
 cd $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..
 
-exit;
-
 while grep -qs FILL_ME .env.local.php; do
   echo 'Please fill the missing data in .env.example.php'
   read -n1 -r -p "Press any key to continue " key
@@ -30,8 +28,11 @@ fi
 
 which -s brew
 if [[ $? != 0 ]]; then
-  echo "Installing Homebrew"
+  echo "Installing Brew"
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+else
+  echo "Updating Brew"
+  brew update
 fi
 
 if [[ -n $(brew ls --versions brew-cask) ]]; then
@@ -42,46 +43,26 @@ else
   brew install caskroom/cask/brew-cask
 fi
 
-if [[ -n $(brew ls --versions virtualbox) ]]; then
-  echo 'Updating Virtualbox'
-  brew upgrade virtualbox
+brew cask list virtualbox
+if [[ $? != 0 ]]; then
+    echo "Installing Virtualbox"
+    brew cask install --force virtualbox
 else
-  echo "Installing Virtualbox "
-  brew cask install --force virtualbox
+    echo "Updating Virtualbox"
+    brew cask update virtualbox
 fi
 
-if [[ -n $(brew ls --versions vagrant) ]]; then
-  echo 'Updating Vagrant'
-  brew upgrade vagrant
+brew cask list vagrant
+if [[ $? != 0 ]]; then
+    echo "Installing Vagrant"
+    brew cask install --force vagrant
 else
-  echo "Installing Vagrant"
-  brew cask install --force vagrant
+    echo "Updating Vagrant"
+    brew cask update vagrant
 fi
 
-if [[ -n $(brew ls --versions terminal-notifier) ]]; then
-  echo 'Updating Terminal notifier'
-  brew upgrade terminal-notifier
-else
-  echo "Installing Terminal notifier "
-  brew cask install --force terminal-notifier
-fi
-
-vagrant plugin list | grep 'vagrant-notify' &> /dev/null
-if [ $? == 0 ]; then
-    echo "Vagrant notify plugin already installed"
-else
-    echo "Installing Vagrant notify plugin"
-    vagrant plugin install vagrant-notify
-fi
-
-block="#!/usr/bin/env
-
-bash/usr/local/bin/terminal-notifier -message \"\$5\" -title \"\$4\" -appIcon \"\$2\"
-"
-
-echo "Creating the notify-send file and givint it execution permission"
-sudo echo "$block" > /usr/local/bin/notify-send
-sudo chmod +x /usr/local/bin/notify-send
+echo "Cleanup Brew"
+brew cleanup
 
 echo 'Deleting old running VM'
 vagrant destroy -f

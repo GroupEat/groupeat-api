@@ -16,7 +16,7 @@ Regenerate an authentication token for an already registered user. Once hit, thi
 
         {
             "email": "customer@ensta.fr",
-            "password": "password"
+            "password": "password",
         }
 
 + Response 200
@@ -24,7 +24,8 @@ Regenerate an authentication token for an already registered user. Once hit, thi
         {
             "id": 1,
             "type": "customer",
-            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do"
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do",
+            "activated": false
         }
 
 + Response 403
@@ -41,11 +42,11 @@ Regenerate an authentication token for an already registered user. Once hit, thi
             "message": "Cannot retrieve user from token."
         }
 
-## Reset password [/auth/reset-password]
+## Send password reset link [/auth/reset-password]
 
 ### POST
 
-Send a password reset link to the given e-mail address and expire the previous authentication token. Once the link has been link, the user will have to fill a form to reset its password. A new one token will then have to be asked.
+Send a password reset link to the given e-mail address and expire the previous authentication token. Once the link has been clicked, the user will have to fill a form to reset its password. A new token will then have to be asked.
 
 + Request
 

@@ -13,19 +13,17 @@ class AuthCest {
 
     public function testThatAUserCanBeRegistered(ApiTester $I)
     {
-        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
+        $this->sendRegistrationRequest($I);
 
         $I->seeResponseCodeIs(201);
-        $I->seeResponseContainsJson(['type' => str_singular($this->getUserType())]);
+        $I->seeResponseContainsJson(['type' => str_singular($this->getUserResource())]);
     }
 
     public function testThatAUserCanBeActivatedAfterSuccessfulRegistration(ApiTester $I)
     {
-        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
-        $id = $I->grabDataFromResponse('id');
-        $token = $I->grabDataFromResponse('token');
+        list($token, $id) = $this->sendRegistrationRequest($I);
 
-        $I->sendApiGetWithToken($token, $this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
         $I->assertFalse($I->grabDataFromResponse('activated'));
 
         $activationLink = $I->grabLastMailCrawlableBody()->filter('#activation-link')->text();
@@ -33,18 +31,15 @@ class AuthCest {
         $I->sendGET($activationLink);
         $I->seeResponseCodeIs(200);
 
-        $I->sendApiGetWithToken($token, $this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
         $I->assertTrue($I->grabDataFromResponse('activated'));
     }
 
     public function testThatAUserCanAuthenticateAfterSuccessfulRegistration(ApiTester $I)
     {
-        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
-        $I->seeResponseCodeIs(201);
+        list($token, $id) = $this->sendRegistrationRequest($I);
 
-        $id = $I->grabDataFromResponse('id');
-        $token = $I->grabDataFromResponse('token');
-        $I->sendApiGetWithToken($token, $this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
         $I->seeResponseCodeIs(200);
     }
 
@@ -52,10 +47,7 @@ class AuthCest {
     {
         $email = 'user@ensta.fr';
         $password = 'password';
-        $this->sendRegistrationRequest($I, $email, $password);
-        $I->seeResponseCodeIs(201);
-        $id = $I->grabDataFromResponse('id');
-        $oldToken = $I->grabDataFromResponse('token');
+        list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $password);
 
         sleep(1.1);
         $I->sendApiPost('auth/token', compact('email', 'password'));
@@ -65,18 +57,23 @@ class AuthCest {
         $I->assertNotEmpty($newToken);
         $I->assertNotEquals($oldToken, $newToken);
 
-        $I->sendApiGetWithToken($newToken, $this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($newToken, $this->getUserResource().'/'.$id);
         $I->seeResponseCodeIs(200);
 
-        $I->sendApiGetWithToken($oldToken, $this->getUserType().'/'.$id);
+        $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
         $I->seeErrorResponse(401, "Obsolete token.");
     }
 
     public function testThatAUserMustGiveAWellFormattedEmailToRegister(ApiTester $I)
     {
-        foreach (['user#gmail@ensta.fr', 'user&user@polytechnique.edu'] as $invalidEmail)
+        foreach (['user)gmail@ensta.fr', 'user§user@polytechnique.edu'] as $invalidEmail)
         {
-            $this->sendRegistrationRequest($I, "user@$invalidEmail", 'password');
+            $I->sendApiPost($this->getUserResource(), [
+                'email' => $invalidEmail,
+                'password' => 'password',
+                'locale' => 'fr',
+            ]);
+
             $I->seeErrorResponse(400, "Invalid credentials.");
             $I->seeErrorsContain(['email' => ["The e-mail must be a valid e-mail address."]]);
         }
@@ -84,8 +81,12 @@ class AuthCest {
 
     public function testThatAUserCannotRegisterWithAnEmailAlreadyTaken(ApiTester $I)
     {
-        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
-        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'other_password');
+        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'one_password');
+        $I->sendApiPost($this->getUserResource(), [
+            'email' => 'user@ensta.fr',
+            'password' => 'another_password',
+            'locale' => 'fr',
+        ]);
 
         $I->seeErrorResponse(400, "Invalid credentials.");
         $I->seeErrorsContain(['email' => ["The e-mail has already been taken."]]);
@@ -94,9 +95,13 @@ class AuthCest {
     public function testThatThePasswordMustBeAtLeastSixCharacters(ApiTester $I)
     {
         $this->sendRegistrationRequest($I, 'user1@ensta.fr', '123456');
-        $I->seeResponseCodeIs(201);
 
-        $this->sendRegistrationRequest($I, 'user2@ensta.fr', '12345');
+        $I->sendApiPost($this->getUserResource(), [
+            'email' => 'user2@ensta.fr',
+            'password' => '12345',
+            'locale' => 'fr',
+        ]);
+
         $I->seeErrorsContain(['password' => ["The password must be at least 6 characters."]]);
     }
 
@@ -134,12 +139,17 @@ class AuthCest {
         $I->seeErrorResponse(403, "Bad credentials.");
     }
 
-    private function sendRegistrationRequest(ApiTester $I, $email, $password)
+    protected function sendRegistrationRequest(
+        ApiTester $I,
+        $email = 'user@ensta.fr',
+        $password = 'password',
+        $locale = 'fr'
+    )
     {
-        $I->sendApiPost($this->getUserType(), compact('email', 'password'));
+        return $I->sendRegistrationRequest($email, $password, $this->getUserResource(), $locale);
     }
 
-    private function getUserType()
+    private function getUserResource()
     {
         return 'customers'; // Could have been admin or any other user type.
     }

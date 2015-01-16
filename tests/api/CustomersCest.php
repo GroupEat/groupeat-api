@@ -8,22 +8,19 @@ class CustomersCest {
     {
         foreach (['ensta.fr', 'ensta-paristech.fr', 'institutoptique.fr', 'polytechnique.edu'] as $domain)
         {
-            $this->sendRegistrationRequest($I, "user@$domain", 'password');
-            $I->seeResponseCodeIs(201);
+            $this->sendRegistrationRequest($I,"user@$domain");
         }
 
         foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain)
         {
-            $this->sendRegistrationRequest($I, "user@$domain", 'password');
+            $I->sendApiPost('customers', ['email' => "user@$domain", 'password' => 'password']);
             $I->seeErrorResponse(403, "E-mail should correspond to a Saclay campus account.");
         }
     }
 
     public function testThatACustomerCanUnregister(ApiTester $I)
     {
-        $this->sendRegistrationRequest($I, 'user@ensta.fr', 'password');
-        $id = $I->grabDataFromResponse('id');
-        $token = $I->grabDataFromResponse('token');
+        list($token, $id) = $this->sendRegistrationRequest($I);
 
         $I->sendApiDeleteWithToken($token, "customers/$id");
         $I->seeResponseCodeIs(200);
@@ -31,50 +28,46 @@ class CustomersCest {
 
     public function testThatACustomerCannotAccessAnotherCustomerData(ApiTester $I)
     {
-        $this->sendRegistrationRequest($I, 'user1@ensta.fr', 'password');
+        list($token1, $id1) = $this->sendRegistrationRequest($I, 'user1@ensta.fr');
         $id1 = $I->grabDataFromResponse('id');
-        $token = $I->grabDataFromResponse('token');
+        $token1 = $I->grabDataFromResponse('token');
 
-        $this->sendRegistrationRequest($I, 'user2@ensta.fr', 'password');
-        $id2 = $I->grabDataFromResponse('id');
+        list($token2, $id2) = $this->sendRegistrationRequest($I, 'user2@ensta.fr');
 
-        $I->sendApiGetWithToken($token, "customers/$id2");
+        $I->sendApiGetWithToken($token1, "customers/$id2");
         $I->seeErrorResponse(401, "Should be authenticated as customer $id2 instead of $id1.");
 
-        $I->sendApiDeleteWithToken($token, "customers/$id2");
+        $I->sendApiDeleteWithToken($token1, "customers/$id2");
         $I->seeErrorResponse(401, "Should be authenticated as customer $id2 instead of $id1.");
     }
 
     public function testThatACustomerCanUpdateItsData(ApiTester $I)
     {
+        list($token, $id) = $this->sendRegistrationRequest($I);
+
         $data = [
             'firstName' => 'First Name',
             'lastName' => 'Last Name',
             'phoneNumber' => '06 06 06 06 06',
-            'email' => 'user@ensta.fr',
-            'password' => 'password',
         ];
 
-        $I->sendApiPost('customers', $data);
-        $id = $I->grabDataFromResponse('id');
-        $token = $I->grabDataFromResponse('token');
-
-        $newData['firstName'] = 'New first name';
-        $newData['lastName'] = 'New last name';
-        $newData['phoneNumber'] = '07 07 07 07 07 08';
-
-        $I->sendApiPatchWithToken($token, "customers/$id", $newData);
+        $I->sendApiPatchWithToken($token, "customers/$id", $data);
         $I->seeResponseCodeIs(200);
 
-        foreach ($newData as $key => $value)
+        foreach ($data as $key => $value)
         {
             $I->assertEquals($value, $I->grabDataFromResponse($key));
         }
     }
 
-    private function sendRegistrationRequest(ApiTester $I, $email, $password)
+    protected function sendRegistrationRequest(
+        ApiTester $I,
+        $email = 'user@ensta.fr',
+        $password = 'password',
+        $locale = 'fr'
+    )
     {
-        $I->sendApiPost('customers', compact('email', 'password'));
+        return $I->sendRegistrationRequest($email, $password, 'customers', $locale);
     }
 
 }

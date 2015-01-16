@@ -305,6 +305,7 @@ class Auth extends JWTAuth {
     {
         $this->auth->setUser($userCredentials);
         $this->userCredentials = $userCredentials;
+        $this->auth->getDispatcher()->fire('groupeat.auth.login', [$userCredentials]);
 
         return $this->userCredentials;
     }

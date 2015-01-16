@@ -20,7 +20,7 @@ class PullCommand extends Command {
         $this->call('db:install', ['--with-seeds' => true, '--entries' => 10]);
 
         $this->line('Building assets');
-        $this->call('asset:build', ['--install' => true, '--watch' => true]);
+        $this->call('asset:build', ['--install' => true]);
 	}
 
 }

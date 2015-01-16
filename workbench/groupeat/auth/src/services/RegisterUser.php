@@ -4,6 +4,7 @@ use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
+use Groupeat\Support\Services\Locale;
 use Illuminate\Mail\Mailer;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Translation\Translator;
@@ -17,6 +18,11 @@ class RegisterUser {
     private $mailer;
 
     /**
+     * @var Validation
+     */
+    private $validation;
+
+    /**
      * @var UrlGenerator
      */
     private $urlGenerator;
@@ -27,14 +33,9 @@ class RegisterUser {
     private $tokenGenerator;
 
     /**
-     * @var Translator
+     * @var Locale
      */
-    private $translator;
-
-    /**
-     * @var Validation
-     */
-    private $validation;
+    private $localeService;
 
     /**
      * @var UserCredentials
@@ -47,52 +48,46 @@ class RegisterUser {
         Validation $validation,
         UrlGenerator $urlGenerator,
         GenerateTokenForUser $tokenGenerator,
-        Translator $translator
+        Locale $localeService
     )
     {
         $this->mailer = $mailer;
         $this->validation = $validation;
         $this->urlGenerator = $urlGenerator;
         $this->tokenGenerator = $tokenGenerator;
-        $this->translator = $translator;
+        $this->localeService = $localeService;
     }
 
     /**
      * @param string $email
      * @param string $plainPassword
+     * @param string $locale
      * @param User   $userType
      *
      * @return User
      */
-    public function call($email, $plainPassword, User $userType)
+    public function call($email, $plainPassword, $locale, User $userType)
     {
         $newUser = $userType->newInstance();
+        $this->localeService->assertAvailable($locale);
 
-        $this->insertUserWithCredentials($email, $plainPassword, $newUser)
+        $this->insertUserWithCredentials($email, $plainPassword, $locale, $newUser)
             ->generateActivationCode()
-            ->sendActivationCode($email);
+            ->sendActivationCode($email, $locale);
 
         return $this->userCredentials->user;
     }
 
-    private function insertUserWithCredentials($email, $password, User $user)
+    private function insertUserWithCredentials($email, $password, $locale, User $user)
     {
-        // We need to save the user to have its id
-        $user->forceSave();
-
-        $this->userCredentials = new UserCredentials;
-        $this->userCredentials->email = $email;
-        $this->userCredentials->password = $password;
-        $this->userCredentials->user = $user;
-
-        $data = compact('email', 'password');
+        $credentials = compact('email', 'password');
 
         $rules = [
             'email' => 'email|required|unique:'.UserCredentials::table(),
             'password' => 'min:6',
         ];
 
-        $errors = $this->validation->make($data, $rules)->messages();
+        $errors = $this->validation->make($credentials, $rules)->messages();
 
         if (!$errors->isEmpty())
         {
@@ -101,6 +96,15 @@ class RegisterUser {
 
             throw new BadRequest("Invalid credentials.", $errors);
         }
+
+        // We need to save the user to have its id
+        $user->save();
+
+        $this->userCredentials = new UserCredentials;
+        $this->userCredentials->email = $email;
+        $this->userCredentials->password = $password;
+        $this->userCredentials->locale = $locale;
+        $this->userCredentials->user = $user;
 
         $this->userCredentials->save();
 
@@ -115,17 +119,22 @@ class RegisterUser {
         return $this;
     }
 
-    private function sendActivationCode($email)
+    private function sendActivationCode($email, $locale)
     {
         $view = 'auth::mails.activation';
         $token = $this->userCredentials->activationToken;
         $url = $this->urlGenerator->route('auth.activate', compact('token'));
         $data = compact('url');
 
-        $this->mailer->send($view, $data, function($message) use ($email)
+        $this->localeService->executeWithUserLocale(function() use ($view, $data, $email)
         {
-            $message->to($email)->subject($this->translator->get('auth::activation.mail.subject'));
-        });
+            $this->mailer->send($view, $data, function($message) use ($email)
+            {
+                $subject = $this->localeService->getTranslator()->get('auth::activation.mail.subject');
+
+                $message->to($email)->subject($subject);
+            });
+        }, $locale);
 
         return $this;
     }

@@ -20,6 +20,7 @@ class UserCredentialsMigration extends Migration {
             $table->string('activationToken')->nullable()->unique()->index();
             $table->string('password')->nullable()->index();
             $table->string('token')->unique()->nullable();
+            $table->string('locale', 6);
         });
     }
 

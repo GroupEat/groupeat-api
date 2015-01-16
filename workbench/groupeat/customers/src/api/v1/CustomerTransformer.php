@@ -13,6 +13,7 @@ class CustomerTransformer extends TransformerAbstract
             'firstName' => $customer->firstName,
             'lastName' => $customer->lastName,
             'phoneNumber' => $customer->phoneNumber,
+            'locale' => $customer->credentials->locale,
             'activated' => $customer->isActivated(),
         ];
     }

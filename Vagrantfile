@@ -45,15 +45,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Configure the public key for SSH access
   config.vm.provision "shell" do |s|
-    s.inline = "echo $1 | tee -a /home/vagrant/.ssh/authorized_keys"
+    s.inline = "echo $1 >> /home/vagrant/.ssh/authorized_keys"
     s.args = [File.read(File.expand_path("~/.ssh/id_rsa.pub"))]
   end
 
   # Copy the SSH private key to the box
   config.vm.provision "shell" do |s|
     s.privileged = false
-    s.inline = "echo \"$1\" > /home/vagrant/.ssh/$2 && chmod 600 /home/vagrant/.ssh/$2"
-    s.args = [File.read(File.expand_path("~/.ssh/id_rsa")), 'id_rsa']
+    s.inline = "echo $1 > /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa"
+    s.args = [File.read(File.expand_path("~/.ssh/id_rsa"))]
   end
 
   # Copy the Git config into the VM

@@ -38,13 +38,13 @@ class PackageProvider extends WorkbenchPackageProvider {
                 $app['validator'],
                 $app['url'],
                 $app['GenerateTokenForUserService'],
-                $app['translator']
+                $app['groupeat.locale']
             );
         });
 
         $this->app->bind('SendResetPasswordLinkService', function($app)
         {
-            return new SendResetPasswordLink($app['auth.reminder']);
+            return new SendResetPasswordLink($app['auth.reminder'], $app['groupeat.locale']);
         });
 
         $this->app->bind('ResetPasswordService', function($app)

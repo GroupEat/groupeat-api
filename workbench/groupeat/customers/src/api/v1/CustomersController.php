@@ -4,7 +4,6 @@ use App;
 use Auth;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Api\V1\Controller;
-use Groupeat\Support\Exceptions\BadRequest;
 use Input;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,10 +20,7 @@ class CustomersController extends Controller {
     {
         Auth::assertSame($customer);
 
-        if (!$customer->update(Input::all()))
-        {
-            throw new BadRequest("Cannot update customer data.", $customer->errors());
-        }
+        $customer->update(Input::all());
 
         return $this->itemResponse($customer);
     }
@@ -34,7 +30,7 @@ class CustomersController extends Controller {
         $email = Input::get('email');
         $password = Input::get('password');
 
-        App::make('RegisterCustomerService')->call($email, $password);
+        App::make('RegisterCustomerService')->call($email, $password, Input::get('locale'));
 
         return $this->api->raw()
             ->post('auth/token', compact('email', 'password'))

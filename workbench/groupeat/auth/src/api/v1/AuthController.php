@@ -16,8 +16,9 @@ class AuthController extends Controller {
         $id = $user->id;
         $type = Auth::shortTypeOf($user);
         $token = $user->credentials->token;
+        $activated = $user->credentials->isActivated();
 
-        return $this->arrayResponse(compact('id', 'type', 'token'));
+        return $this->arrayResponse(compact('id', 'type', 'token', 'activated'));
     }
 
     public function sendResetPasswordLink()

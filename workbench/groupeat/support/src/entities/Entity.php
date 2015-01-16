@@ -1,6 +1,8 @@
 <?php namespace Groupeat\Support\Entities;
 
+use Groupeat\Support\Exceptions\BadRequest;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\MessageBag;
 use Validator;
 
 abstract class Entity extends Model {
@@ -12,6 +14,9 @@ abstract class Entity extends Model {
      */
     public static $skipValidation = false;
 
+    /**
+     * @var MessageBag
+     */
     protected $validationErrors;
 
 
@@ -21,13 +26,31 @@ abstract class Entity extends Model {
         {
             if (!static::$skipValidation)
             {
-                return $entity->validate();
+                if (!$entity->validate())
+                {
+                    $entityString = getClassNameWithoutNamespace($entity).' #'.$entity->id;
+
+                    throw new BadRequest("Cannot save $entityString.", $entity->errors());
+                }
             }
         });
 
         parent::boot();
     }
 
+    /**
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->validationErrors = new MessageBag;
+    }
+
+    /**
+     * @return bool
+     */
     public function validate()
     {
         $validator = Validator::make($this->attributes, $this->getRules());
@@ -37,6 +60,11 @@ abstract class Entity extends Model {
         return $isValid;
     }
 
+    /**
+     * @param array $options
+     *
+     * @return bool
+     */
     public function forceSave(array $options = [])
     {
         static::$skipValidation = true;
@@ -48,6 +76,9 @@ abstract class Entity extends Model {
         return $status;
     }
 
+    /**
+     * @return MessageBag
+     */
     public function errors()
     {
         return $this->validationErrors;
@@ -97,6 +128,12 @@ abstract class Entity extends Model {
         return new $migrationClass;
     }
 
+    /**
+     * @param string $name Name of the relation
+     * @param Entity $relatedEntity
+     *
+     * @return $this
+     */
     protected function setPolymorphicAttribute($name, Entity $relatedEntity)
     {
         $this->setRelation($name, $relatedEntity);

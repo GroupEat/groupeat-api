@@ -18,6 +18,7 @@ class AdminsSeeder extends Seeder {
             'user' => $admin,
             'email' => 'admin@groupeat.fr',
             'password' => Config::get('admin::default_admin_password'),
+            'locale' => Config::get('app.available_frontend_locales')[0],
         ]);
     }
 

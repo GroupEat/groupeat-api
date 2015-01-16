@@ -63,6 +63,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
             'password' => 'min:6|required',
             'user_id' => 'required',
             'user_type' => 'required',
+            'locale' => 'max:6:required',
         ];
     }
 

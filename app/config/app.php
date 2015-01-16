@@ -56,27 +56,15 @@ return [
 
     /*
 	|--------------------------------------------------------------------------
-	| Available locales
+	| Available Front-End locales
 	|--------------------------------------------------------------------------
 	|
-	| The application can be used with the following languages.
+	| The front end (mails, views) of the application can be used with
+    | the following languages :
 	|
 	*/
 
-    'available_locales' => ['en', 'fr'],
-
-	/*
-	|--------------------------------------------------------------------------
-	| Application Fallback Locale
-	|--------------------------------------------------------------------------
-	|
-	| The fallback locale determines the locale to use when the current one
-	| is not available. You may change the value to correspond to any of
-	| the language folders that are provided through your application.
-	|
-	*/
-
-	'fallback_locale' => 'fr',
+    'available_frontend_locales' => ['fr'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -221,6 +209,7 @@ return [
 		'View'              => 'Illuminate\Support\Facades\View',
 
         'Auth'              => 'Groupeat\Auth\Facades\Auth',
+		'Locale'            => 'Groupeat\Support\Facades\Locale',
 
 	],
 
