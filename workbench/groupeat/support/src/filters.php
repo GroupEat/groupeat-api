@@ -21,12 +21,6 @@ Route::after(function($request, $response)
     }
 });
 
-// Set the front-end locale from the request
-Route::before(function($request)
-{
-    Locale::detectAndSetIfNeeded($request);
-});
-
 // CSRF Protection Filter
 Route::filter('csrf', function()
 {

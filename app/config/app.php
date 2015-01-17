@@ -209,7 +209,6 @@ return [
 		'View'              => 'Illuminate\Support\Facades\View',
 
         'Auth'              => 'Groupeat\Auth\Facades\Auth',
-		'Locale'            => 'Groupeat\Support\Facades\Locale',
 
 	],
 

@@ -24,6 +24,11 @@ class PackageProvider extends WorkbenchPackageProvider {
         {
             $this->app['groupeat.locale']->set($userCredentials->locale);
         });
+
+        $this->app['router']->before(function($request)
+        {
+            $this->app['groupeat.locale']->detectAndSetIfNeeded($request);
+        });
     }
 
 }
