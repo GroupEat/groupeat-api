@@ -113,8 +113,6 @@ Replace the customer data with the one passed in the request. However, a custome
             "message": "Should be authenticated as customer 1 instead of 5.",
             "status_code": 401
         }
-            
-+ Response 404
 
 ### Unregister customer [DELETE]
 
@@ -126,5 +124,46 @@ Replace the customer data with the one passed in the request. However, a custome
             "message": "Should be authenticated as customer 1 instead of 5.",
             "status_code": 401
         }
-            
-+ Response 404
+
+## Address [/customers/{id}/address]
+
++ Parameters
+
+    + id (required, string, `123`) ... The customer ID
+
++ Model
+
+        {
+            "street": "Allée des techniques avancées",
+            "details": "Bâtiment A, chambre 200",
+            "city": "Palaiseau",
+            "postcode": 91120,
+            "state": "Essone",
+            "country": "France",
+            "latitude": 48.711042,
+            "longitude": 2.219278
+        }
+        
+### Get address [GET]
+
++ Response 200
+
+    [Address][]
+    
+### Add/Update address [PUT]
+
+For the MVP, all the addresses must be valid campus addresses. That's why the only writable attributes are: street, details, latitude and longitude. Logically, all of these fields should change together because they are not independent. That's why this request is a PUT and not a PATCH...
+
++ Request
+
+        {
+            "street": "Allée des techniques avancées",
+            "details": "Bâtiment A, chambre 200",
+            "latitude": 48.711042,
+            "longitude": 2.219278
+        }
+        
++ Response 200
+
+    [Address][]
+    

@@ -3,8 +3,8 @@
 use Codeception\Util\Debug;
 use Symfony\Component\DomCrawler\Crawler;
 
-class MailWatcher extends \Codeception\Module
-{
+class MailWatcher extends \Codeception\Module {
+
     /**
      * @var Swift_Message|null
      */

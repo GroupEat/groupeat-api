@@ -2,7 +2,6 @@
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\ActivateUser;
-use Groupeat\Auth\Services\DeleteUser;
 use Groupeat\Auth\Services\GenerateTokenForUser;
 use Groupeat\Auth\Services\RegisterUser;
 use Groupeat\Auth\Services\SendResetPasswordLink;
@@ -19,11 +18,6 @@ class PackageProvider extends WorkbenchPackageProvider {
         $this->app->bind('ActivateUserService', function()
         {
             return new ActivateUser;
-        });
-
-        $this->app->bind('DeleteUserService', function($app)
-        {
-            return new DeleteUser($app['groupeat.auth']);
         });
 
         $this->app->bind('GenerateTokenForUserService', function($app)

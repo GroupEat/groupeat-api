@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Support\Entities;
 
 use Groupeat\Support\Exceptions\BadRequest;
+use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\MessageBag;
 use Validator;
@@ -28,9 +29,7 @@ abstract class Entity extends Model {
             {
                 if (!$entity->validate())
                 {
-                    $entityString = getClassNameWithoutNamespace($entity).' #'.$entity->id;
-
-                    throw new BadRequest("Cannot save $entityString.", $entity->errors());
+                    throw new BadRequest("Cannot save {$entity->toShortString()}.", $entity->errors());
                 }
             }
         });
@@ -118,6 +117,25 @@ abstract class Entity extends Model {
     }
 
     /**
+     * @return string
+     */
+    public function toShortString()
+    {
+        $str = strtolower(getClassNameWithoutNamespace($this));
+
+        if ($id = $this->getKey())
+        {
+            $str .= ' #'.$id;
+        }
+        else
+        {
+            $str = 'new '.$str;
+        }
+
+        return $str;
+    }
+
+    /**
      * @return \Groupeat\Support\Database\Migration
      */
     protected function getRelatedMigration()
@@ -136,11 +154,22 @@ abstract class Entity extends Model {
      */
     protected function setPolymorphicAttribute($name, Entity $relatedEntity)
     {
+        $id = $relatedEntity->getKey();
+
+        if (!$id)
+        {
+            $message = 'Cannot set polymorphic relation '
+                . $relatedEntity->toShortString().' on '
+                . $this->toShortString().'.';
+
+            throw new Exception($message);
+        }
+
         $this->setRelation($name, $relatedEntity);
-        $type = "{$name}_type";
-        $id = "{$name}_id";
-        $this->$type = get_class($relatedEntity);
-        $this->$id = $relatedEntity->id;
+        $typeAttribute = "{$name}_type";
+        $idAttribute = "{$name}_id";
+        $this->$typeAttribute = get_class($relatedEntity);
+        $this->$idAttribute = $id;
 
         return $this;
     }

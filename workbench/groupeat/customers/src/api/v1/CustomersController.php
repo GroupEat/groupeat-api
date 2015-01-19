@@ -39,7 +39,30 @@ class CustomersController extends Controller {
 
     public function unregister(Customer $customer)
     {
-        App::make('DeleteUserService')->call($customer);
+        Auth::assertSame($customer);
+
+        $customer->delete();
+    }
+
+    public function showAddress(Customer $customer)
+    {
+        Auth::assertSame($customer);
+
+        if (!$customer->address)
+        {
+            return $this->response->errorNotFound("No address has been set for this customer.");
+        }
+
+        return $this->itemResponse($customer->address);
+    }
+
+    public function changeAddress(Customer $customer)
+    {
+        Auth::assertSame($customer);
+
+        $address = App::make('ChangeCustomerAddressService')->call($customer, Input::all());
+
+        return $this->itemResponse($address);
     }
 
 }

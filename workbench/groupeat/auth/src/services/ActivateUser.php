@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Auth\Services;
 
-use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\NotFound;
 
@@ -18,10 +17,7 @@ class ActivateUser {
             throw new NotFound("Cannot retrieve user from token.");
         }
 
-        $userCredentials->activationToken = null;
-        $userCredentials->activated_at = Carbon::now();
-
-        $userCredentials->save();
+        $userCredentials->activate()->save();
     }
 
 }

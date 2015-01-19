@@ -1,7 +1,7 @@
 <?php namespace Codeception\Module;
 
-class ApiHelper extends \Codeception\Module
-{
+class ApiHelper extends \Codeception\Module {
+
     public function sendRegistrationRequest(
         $email = 'user@ensta.fr',
         $password = 'password',
@@ -101,9 +101,14 @@ class ApiHelper extends \Codeception\Module
         $this->seeResponseMessageIs($message);
     }
 
-    public function seeErrorsContain($errors)
+    public function seeErrorsContain(array $errors)
     {
         $this->getModule('REST')->seeResponseContainsJson(compact('errors'));
+    }
+
+    public function seeResponseContainsData(array $data)
+    {
+        return $this->getModule('REST')->seeResponseContainsJson(compact('data'));
     }
 
     public function grabDataFromResponse($path)

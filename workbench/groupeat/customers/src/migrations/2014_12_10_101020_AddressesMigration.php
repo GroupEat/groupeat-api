@@ -21,8 +21,8 @@ class AddressesMigration extends Migration {
             $table->string('postcode');
             $table->string('state');
             $table->string('country');
-            $table->float('longitude');
             $table->float('latitude');
+            $table->float('longitude');
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers');

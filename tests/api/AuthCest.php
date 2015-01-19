@@ -1,8 +1,5 @@
 <?php
 
-use Codeception\Module\ApiHelper;
-use Groupeat\Customers\Entities\Customer;
-
 class AuthCest {
 
     public function testThatPassingATokenInTheQueryStringIsForbidden(ApiTester $I)

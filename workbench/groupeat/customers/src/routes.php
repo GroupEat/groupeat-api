@@ -15,11 +15,21 @@ Route::api(['version' => 'v1'], function()
 
         Route::group(['protected' => true], function() use ($controller)
         {
-            Route::get('{customer}', "$controller@show");
+            Route::group(['prefix' => '{customer}'], function() use ($controller)
+            {
+                Route::get('/', "$controller@show");
 
-            Route::patch('{customer}', "$controller@update");
+                Route::patch('/', "$controller@update");
 
-            Route::delete('{customer}', "$controller@unregister");
+                Route::delete('/', "$controller@unregister");
+
+                Route::group(['prefix' => 'address'], function() use ($controller)
+                {
+                    Route::get('/', "$controller@showAddress");
+
+                    Route::put('/', "$controller@changeAddress");
+                });
+            });
         });
     });
 });

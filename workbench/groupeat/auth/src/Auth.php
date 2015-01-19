@@ -317,9 +317,7 @@ class Auth extends JWTAuth {
      */
     private function toShortType($userType)
     {
-        $parts = explode('\\', $userType);
-
-        return strtolower(array_pop($parts));
+        return strtolower(removeNamespaceFromClassName($userType));
     }
 
 }

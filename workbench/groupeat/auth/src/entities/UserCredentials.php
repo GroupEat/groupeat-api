@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Auth\Entities;
 
+use Carbon\Carbon;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Entities\Entity;
 use Hash;
@@ -56,6 +57,25 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         return static::where('email', $email)->first();
     }
 
+    /**
+     * @param string $email
+     * @param string $password
+     * @param string $locale
+     * @param User   $user
+     *
+     * @return static
+     */
+    public static function register($email, $password, $locale, User $user)
+    {
+        $userCredentials = new static;
+        $userCredentials->email = $email;
+        $userCredentials->password = $password;
+        $userCredentials->locale = $locale;
+        $userCredentials->user = $user;
+
+        return $userCredentials;
+    }
+
     public function getRules()
     {
         return [
@@ -78,11 +98,43 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     }
 
     /**
+     * @param Carbon $now
+     *
+     * @return $this
+     */
+    public function activate(Carbon $now = null)
+    {
+        $now = $now ?: Carbon::now();
+
+        $this->activationToken = null;
+        $this->activated_at = $now;
+
+        return $this;
+    }
+
+    /**
      * @param string $plainPassword
+     *
+     * @return $this
+     */
+    public function resetPassword($plainPassword)
+    {
+        $this->setPassword($plainPassword);
+        $this->token = null;
+
+        return $this;
+    }
+
+    /**
+     * @param string $plainPassword
+     *
+     * @return $this
      */
     public function setPassword($plainPassword)
     {
         $this->attributes['password'] = Hash::make($plainPassword);
+
+        return $this;
     }
 
     public function getAuthIdentifier()

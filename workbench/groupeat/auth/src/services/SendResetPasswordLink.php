@@ -48,7 +48,7 @@ class SendResetPasswordLink {
 
         $userCredentials = $broker->getUser($credentials);
 
-        $userCredentials->token = 'obsolete';
+        $userCredentials->token = null;
         $userCredentials->save();
     }
 

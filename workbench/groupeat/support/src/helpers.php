@@ -62,7 +62,21 @@ if (!function_exists('getClassNameWithoutNamespace'))
      */
     function getClassNameWithoutNamespace($class)
     {
-        $className = get_class($class);
+        return removeNamespaceFromClassName(get_class($class));
+    }
+}
+
+if (!function_exists('removeNamespaceFromClassName'))
+{
+    /**
+     * Remove the namespace from a class name.
+     *
+     * @param string $className
+     *
+     * @return string
+     */
+    function removeNamespaceFromClassName($className)
+    {
         $parts = explode('\\', $className);
 
         return array_pop($parts);

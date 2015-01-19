@@ -100,12 +100,7 @@ class RegisterUser {
         // We need to save the user to have its id
         $user->save();
 
-        $this->userCredentials = new UserCredentials;
-        $this->userCredentials->email = $email;
-        $this->userCredentials->password = $password;
-        $this->userCredentials->locale = $locale;
-        $this->userCredentials->user = $user;
-
+        $this->userCredentials = UserCredentials::register($email, $password, $locale, $user);
         $this->userCredentials->save();
 
         return $this;

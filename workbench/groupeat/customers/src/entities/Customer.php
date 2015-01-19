@@ -21,9 +21,9 @@ class Customer extends Entity implements User {
         ];
     }
 
-    public function addresses()
+    public function address()
     {
-        return $this->hasMany('Groupeat\Customers\Entities\Address');
+        return $this->hasOne('Groupeat\Customers\Entities\Address');
     }
 
 }

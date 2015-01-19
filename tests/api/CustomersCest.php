@@ -1,7 +1,5 @@
 <?php
 
-use Codeception\Module\ApiHelper;
-
 class CustomersCest {
 
     public function testThatACustomerNeedsACampusEmailToRegister(ApiTester $I)
