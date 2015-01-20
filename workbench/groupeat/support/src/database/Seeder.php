@@ -20,7 +20,7 @@ abstract class Seeder extends LaravelSeeder {
 
     public function __construct()
     {
-        $this->faker = $this->makeFaker('fr_FR', Config::get('database.seed'));
+        $this->faker = $this->makeFaker('fr_FR');
         $this->entries = (int) Config::get('database.entries');
     }
 
@@ -66,14 +66,11 @@ abstract class Seeder extends LaravelSeeder {
         DB::table($this->getTable())->delete();
     }
 
-    protected function makeFaker($locale, $seed)
+    protected function makeFaker($locale)
     {
         $faker = Factory::create($locale);
 
-        if ($seed)
-        {
-            $faker->seed($seed);
-        }
+        $faker->seed();
 
         return $faker;
     }

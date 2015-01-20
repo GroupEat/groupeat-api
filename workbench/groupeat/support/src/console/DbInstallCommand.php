@@ -20,9 +20,8 @@ class DbInstallCommand extends Command {
         $this->createMigrationsTable();
         $this->migrate();
 
-        if ($this->option('with-seeds'))
+        if ($this->option('seed'))
         {
-            $this->setSeed();
             $this->setEntries();
             $this->call('db:seed', $this->getDbOptions());
         }
@@ -72,26 +71,6 @@ class DbInstallCommand extends Command {
         File::delete(File::files(app_path('database/migrations')));
     }
 
-    private function setSeed()
-    {
-        if ($this->option('random'))
-        {
-            $seed = false;
-            $this->comment('Seeding the DB with random data');
-        }
-        else if ($this->option('seed'))
-        {
-            $seed = (int) $this->option('seed');
-            $this->comment("Using seed: $seed");
-        }
-        else
-        {
-            return;
-        }
-
-        Config::set('database.seed', $seed);
-    }
-
     private function setEntries()
     {
         $entriesKey = 'database.entries';
@@ -129,9 +108,7 @@ class DbInstallCommand extends Command {
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Force the operation to run when in production.', null],
-            ['with-seeds', 'w', InputOption::VALUE_NONE, 'Migrate and seed.', null],
-            ['random', 'r', InputOption::VALUE_NONE, 'Use random fake data to seed the DB.', null],
-            ['seed', 's', InputOption::VALUE_REQUIRED, 'Specify a seed for the fake data generator.', null],
+            ['seed', 's', InputOption::VALUE_NONE, 'Migrate and seed.', null],
             ['entries', 'e', InputOption::VALUE_REQUIRED, 'Number of fake entries to seed the DB with.', null],
             ['database', 'd', InputOption::VALUE_REQUIRED, 'The database connection to use.', null],
         ];

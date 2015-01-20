@@ -74,20 +74,6 @@ return [
 
     /*
 	|--------------------------------------------------------------------------
-	| Migration Seed
-	|--------------------------------------------------------------------------
-	|
-	| Seed used when seeding the DB so that the data is always the same.
-    | Used in the groupeat:db-refresh command, can be bypassed with the
-    | option --random that set this seed option to false.
-	|
-	*/
-
-    'seed' => 2014,
-
-
-    /*
-	|--------------------------------------------------------------------------
 	| Fake entries number
 	|--------------------------------------------------------------------------
 	|
@@ -96,7 +82,7 @@ return [
 	|
 	*/
 
-    'entries' => 100,
+    'entries' => 5,
 
 	/*
 	|--------------------------------------------------------------------------

@@ -51,7 +51,7 @@ return [
             {
                 // TODO: Remove this before app launch.
                 // This command need to be executed in another thread in order to work while deploying.
-                $migrationCommand = 'php artisan db:install --force --with-seeds --entries 50';
+                $migrationCommand = 'php artisan db:install --force --seed --entries 50';
                 process($migrationCommand, $task->command->getOutput());
             },
         ],
