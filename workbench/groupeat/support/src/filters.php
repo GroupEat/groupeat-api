@@ -21,6 +21,20 @@ Route::after(function($request, $response)
     }
 });
 
+// Allow query string for GET requests only
+Route::before(function($request)
+{
+    if ($request->method() != 'GET')
+    {
+        $queryString = ltrim($request->getRequestUri(), '/?');
+
+        if (!empty($queryString))
+        {
+            throw new \Groupeat\Support\Exceptions\Forbidden("Cannot pass data in the query string outside of a GET request.");
+        }
+    }
+});
+
 // CSRF Protection Filter
 Route::filter('csrf', function()
 {
