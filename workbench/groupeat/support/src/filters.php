@@ -26,9 +26,10 @@ Route::before(function($request)
 {
     if ($request->method() != 'GET')
     {
-        $queryString = ltrim($request->getRequestUri(), '/?');
+        $uriParts = explode('?', $request->getRequestUri());
 
-        if (!empty($queryString))
+        // The query string is everything after the interrogation mark
+        if (!empty($uriParts[1]))
         {
             throw new \Groupeat\Support\Exceptions\Forbidden("Cannot pass data in the query string outside of a GET request.");
         }
