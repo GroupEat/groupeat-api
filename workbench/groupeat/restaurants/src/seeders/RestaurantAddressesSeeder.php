@@ -1,38 +1,35 @@
-<?php namespace Groupeat\Customers\Seeders;
+<?php namespace Groupeat\Restaurants\Seeders;
 
-use Groupeat\Customers\Entities\Address;
+use Groupeat\Restaurants\Entities\Address;
 use Groupeat\Support\Database\Seeder;
 
-class AddressesSeeder extends Seeder {
+class RestaurantAddressesSeeder extends Seeder {
 
     protected function makeEntry($id, $max)
     {
         Address::create([
-            'customer_id' => $this->faker->numberBetween(1, $max),
+            'restaurant_id' => $id,
             'street' => $this->faker->streetAddress,
-            'details' => $this->faker->buildingNumber,
             'city' => $this->faker->city,
             'postcode' => $this->faker->postcode,
             'state' => $this->faker->departmentName,
             'country' => $this->faker->country,
             'longitude' => $this->faker->longitude,
             'latitude' => $this->faker->latitude,
-
         ]);
     }
 
     protected function insertAdditionalEntries($id)
     {
         Address::create([
-           'customer_id' => 1,
-           'street' => '828 Boulevard des Maréchaux',
-           'details' => 'Bâtiment E, studio 311',
+           'restaurant_id' => $id,
+           'street' => '84 Rue Maurice Berteaux',
            'city' => 'Palaiseau',
-           'postcode' => '91120',
+           'postcode' => 91120,
            'state' => 'Essonne',
            'country' => 'France',
-           'longitude' => 48.711042,
-           'latitude' => 2.219278,
+           'longitude' => 48.717104,
+           'latitude' => 2.239332,
         ]);
     }
 

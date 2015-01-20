@@ -131,6 +131,7 @@ return [
         'Former\FormerServiceProvider',
         'Kmd\Logviewer\LogviewerServiceProvider',
         'Tymon\JWTAuth\JWTAuthServiceProvider',
+		'Schickling\Backup\BackupServiceProvider',
 
         'Groupeat\Support\PackageProvider',
 
@@ -139,6 +140,7 @@ return [
         'Groupeat\Customers\PackageProvider',
         'Groupeat\Deploy\PackageProvider',
         'Groupeat\Documentation\PackageProvider',
+		'Groupeat\Restaurants\PackageProvider',
         'Groupeat\Showcase\PackageProvider',
 
     ],

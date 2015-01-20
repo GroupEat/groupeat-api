@@ -31,7 +31,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     }
 
     /**
-     * @param $email
+     * @param string $email
      *
      * @return UserCredentials
      */
@@ -48,7 +48,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     }
 
     /**
-     * @param $email
+     * @param string $email
      *
      * @return UserCredentials|null
      */

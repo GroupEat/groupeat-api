@@ -15,6 +15,8 @@ class DbInstallCommand extends Command {
 
     public function fire()
 	{
+        $this->call('db:backup');
+        $this->deleteAllTables();
         $this->createMigrationsTable();
         $this->migrate();
 
@@ -24,6 +26,16 @@ class DbInstallCommand extends Command {
             $this->setEntries();
             $this->call('db:seed', $this->getDbOptions());
         }
+    }
+
+    private function deleteAllTables()
+    {
+        $tables = array_map(function($info)
+        {
+            $this->comment('Droping table '.$info->table_name);
+            DB::statement('DROP TABLE IF EXISTS '.$info->table_name.' CASCADE');
+        },
+        DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"));
     }
 
     private function createMigrationsTable()

@@ -1,11 +1,11 @@
-<?php namespace Groupeat\Customers\Entities;
+<?php namespace Groupeat\Restaurants\Entities;
 
-use Groupeat\Customers\Migrations\CustomerAddressesMigration;
+use Groupeat\Restaurants\Migrations\RestaurantAddressesMigration;
 use Groupeat\Support\Entities\Entity;
 
 class Address extends Entity {
 
-    protected $fillable = ['street', 'details', 'city', 'postcode', 'state', 'country', 'latitude', 'longitude'];
+    protected $fillable = ['street', 'city', 'postcode', 'state', 'country', 'latitude', 'longitude'];
 
 
     public function getRules()
@@ -22,14 +22,14 @@ class Address extends Entity {
         ];
     }
 
-    public function customer()
+    public function restaurant()
     {
-        return $this->belongsTo('Groupeat\Customers\Entities\Customer');
+        return $this->belongsTo('Groupeat\Restaurants\Entities\Restaurant');
     }
 
     protected function getRelatedMigration()
     {
-        return new CustomerAddressesMigration;
+        return new RestaurantAddressesMigration;
     }
 
 }

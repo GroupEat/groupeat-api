@@ -1,7 +1,11 @@
 <?php namespace Groupeat\Support\Api\V1;
 
+use Aws\Ec2\Exception\Ec2Exception;
 use Dingo\Api\Routing\ControllerTrait as ApiController;
+use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Routing\Controller as IlluminateController;
+use Illuminate\Support\Collection;
+use League\Fractal\TransformerAbstract;
 
 abstract class Controller extends IlluminateController {
 
@@ -15,7 +19,33 @@ abstract class Controller extends IlluminateController {
      */
     protected function itemResponse($item)
     {
+        if (empty($item))
+        {
+            throw new Exception("Cannot make response from empty item.");
+        }
+
         return $this->response->item($item, $this->getTransformerFor($item));
+    }
+
+    /**
+     * @param Collection $collection
+     * @param TransformerAbstract $transfomer
+     *
+     * @return \Dingo\Api\Http\ResponseBuilder
+     */
+    protected function collectionResponse(Collection $collection, TransformerAbstract $transfomer = null)
+    {
+        if (is_null($transfomer))
+        {
+            if ($collection->isEmpty())
+            {
+                throw new Exception("Cannot find transfomer from empty collection.");
+            }
+
+            $transfomer = $this->getTransformerFor($collection->first());
+        }
+
+        return $this->response->collection($collection, $transfomer);
     }
 
     /**
@@ -31,7 +61,7 @@ abstract class Controller extends IlluminateController {
     /**
      * @param $item
      *
-     * @return \League\Fractal\TransformerAbstract
+     * @return TransformerAbstract
      */
     protected function getTransformerFor($item)
     {
