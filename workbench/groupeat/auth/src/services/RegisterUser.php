@@ -30,31 +30,26 @@ class RegisterUser {
     /**
      * @var GenerateTokenForUser
      */
-    private $tokenGenerator;
+    private $authTokenGenerator;
 
     /**
      * @var Locale
      */
     private $localeService;
 
-    /**
-     * @var UserCredentials
-     */
-    private $userCredentials;
-
 
     public function __construct(
         Mailer $mailer,
         Validation $validation,
         UrlGenerator $urlGenerator,
-        GenerateTokenForUser $tokenGenerator,
+        GenerateAuthToken $authTokenGenerator,
         Locale $localeService
     )
     {
         $this->mailer = $mailer;
         $this->validation = $validation;
         $this->urlGenerator = $urlGenerator;
-        $this->tokenGenerator = $tokenGenerator;
+        $this->authTokenGenerator = $authTokenGenerator;
         $this->localeService = $localeService;
     }
 
@@ -71,13 +66,24 @@ class RegisterUser {
         $newUser = $userType->newInstance();
         $this->localeService->assertAvailable($locale);
 
-        $this->insertUserWithCredentials($email, $plainPassword, $locale, $newUser)
-            ->generateActivationCode()
-            ->sendActivationCode($email, $locale);
+        $userCredentials = $this->insertUserWithCredentials($email, $plainPassword, $locale, $newUser);
+        $this->generateActivationCode($userCredentials);
+        $this->sendActivationCode($userCredentials, $email, $locale);
+        $this->generateAuthenticationToken($userCredentials);
 
-        return $this->userCredentials->user;
+        $userCredentials->save();
+
+        return $userCredentials->user;
     }
 
+    /**
+     * @param $email
+     * @param $password
+     * @param $locale
+     * @param User $user
+     *
+     * @return UserCredentials
+     */
     private function insertUserWithCredentials($email, $password, $locale, User $user)
     {
         $credentials = compact('email', 'password');
@@ -100,24 +106,20 @@ class RegisterUser {
         // We need to save the user to have its id
         $user->save();
 
-        $this->userCredentials = UserCredentials::register($email, $password, $locale, $user);
-        $this->userCredentials->save();
+        $userCredentials = UserCredentials::register($email, $password, $locale, $user);
 
-        return $this;
+        return $userCredentials;
     }
 
-    private function generateActivationCode()
+    private function generateActivationCode(UserCredentials $userCredentials)
     {
-        $this->userCredentials->activationToken = $this->generateRandomString();
-        $this->userCredentials->save();
-
-        return $this;
+        $userCredentials->activationToken = $this->generateRandomString();
     }
 
-    private function sendActivationCode($email, $locale)
+    private function sendActivationCode(UserCredentials $userCredentials, $email, $locale)
     {
         $view = 'auth::mails.activation';
-        $token = $this->userCredentials->activationToken;
+        $token = $userCredentials->activationToken;
         $url = $this->urlGenerator->route('auth.activate', compact('token'));
         $data = compact('url');
 
@@ -130,8 +132,11 @@ class RegisterUser {
                 $message->to($email)->subject($subject);
             });
         }, $locale);
+    }
 
-        return $this;
+    private function generateAuthenticationToken(UserCredentials $userCredentials)
+    {
+        $userCredentials->token = $this->authTokenGenerator->forUser($userCredentials);
     }
 
     private function generateRandomString($length = 42)

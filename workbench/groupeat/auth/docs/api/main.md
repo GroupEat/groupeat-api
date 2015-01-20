@@ -6,11 +6,20 @@ To authenticate against this API, you need to pass your token on each request th
 Authorization: bearer {token}
 ```
 
-## Generate token [/auth/token]
+## Token [/auth/token]
 
-### POST
++ Model
 
-Regenerate an authentication token for an already registered user. Once hit, this route will make the old token obsolete and you will have to use the new one to authenticate.
+        {
+            "id": 1,
+            "type": "customer",
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do",
+            "activated": false
+        }
+
+### Retrieve token [GET]
+
+Retrieve the authentication token of an already registered user.
 
 + Request
 
@@ -21,32 +30,42 @@ Regenerate an authentication token for an already registered user. Once hit, thi
 
 + Response 200
 
-        {
-            "id": 1,
-            "type": "customer",
-            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do",
-            "activated": false
-        }
+    [Token][]
 
-+ Response 403
++ Response 401
 
         {
-            "status_code": 403,
+            "status_code": 401,
             "message": "Bad credentials."
         }
-     
-+ Response 404
+        
+### Generate token [POST]
+
+Regenerate an authentication token for an already registered user. Once hit, this route will make the old token obsolete and you will have to use the new one to authenticate.
+
++ Request
 
         {
-            "status_code": 404,
-            "message": "Cannot retrieve user from token."
+            "email": "customer@ensta.fr",
+            "password": "password",
         }
+        
++ Response 200
 
+    [Token][]
+   
++ Response 401
+
+        {
+            "status_code": 401,
+            "message": "Bad credentials."
+        }
+        
 ## Send password reset link [/auth/reset-password]
 
 ### POST
 
-Send a password reset link to the given e-mail address and expire the previous authentication token. Once the link has been clicked, the user will have to fill a form to reset its password. A new token will then have to be asked.
+Send a password reset link to the given e-mail address and revoke the previous authentication token. Once the link has been clicked, the user will have to fill a form to reset its password. The new token will then have to be asked.
 
 + Request
 

@@ -2,6 +2,7 @@
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\ActivateUser;
+use Groupeat\Auth\Services\GenerateAuthToken;
 use Groupeat\Auth\Services\GenerateTokenForUser;
 use Groupeat\Auth\Services\RegisterUser;
 use Groupeat\Auth\Services\SendResetPasswordLink;
@@ -20,9 +21,9 @@ class PackageProvider extends WorkbenchPackageProvider {
             return new ActivateUser;
         });
 
-        $this->app->bind('GenerateTokenForUserService', function($app)
+        $this->app->bind('GenerateAuthTokenService', function($app)
         {
-            return new GenerateTokenForUser($app['tymon.jwt.auth'], $app['groupeat.auth']);
+            return new GenerateAuthToken($app['tymon.jwt.auth']);
         });
 
         $this->app->bind('RegisterUserService', function($app)
@@ -31,7 +32,7 @@ class PackageProvider extends WorkbenchPackageProvider {
                 $app['mailer'],
                 $app['validator'],
                 $app['url'],
-                $app['GenerateTokenForUserService'],
+                $app['GenerateAuthTokenService'],
                 $app['groupeat.locale']
             );
         });
@@ -43,7 +44,7 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->bind('ResetPasswordService', function($app)
         {
-            return new ResetPassword($app['auth.reminder']);
+            return new ResetPassword($app['GenerateAuthTokenService'], $app['auth.reminder']);
         });
 
         $this->app->bindShared('groupeat.auth', function($app)

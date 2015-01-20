@@ -31,7 +31,9 @@ Route::api(['version' => 'v1'], function()
     {
         $controller = 'Groupeat\Auth\Api\V1\AuthController';
 
-        Route::post('token', "$controller@refreshToken");
+        Route::get('token', "$controller@getToken");
+
+        Route::post('token', "$controller@resetToken");
 
         Route::post('reset-password', "$controller@sendResetPasswordLink");
     });

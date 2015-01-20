@@ -33,7 +33,7 @@ class CustomersController extends Controller {
         App::make('RegisterCustomerService')->call($email, $password, Input::get('locale'));
 
         return $this->api->raw()
-            ->post('auth/token', compact('email', 'password'))
+            ->get('auth/token', compact('email', 'password'))
             ->setStatusCode(Response::HTTP_CREATED);
     }
 

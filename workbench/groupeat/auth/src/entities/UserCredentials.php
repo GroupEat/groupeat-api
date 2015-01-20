@@ -117,19 +117,6 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
      *
      * @return $this
      */
-    public function resetPassword($plainPassword)
-    {
-        $this->setPassword($plainPassword);
-        $this->token = null;
-
-        return $this;
-    }
-
-    /**
-     * @param string $plainPassword
-     *
-     * @return $this
-     */
     public function setPassword($plainPassword)
     {
         $this->attributes['password'] = Hash::make($plainPassword);

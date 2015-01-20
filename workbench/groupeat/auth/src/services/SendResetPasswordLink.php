@@ -48,7 +48,7 @@ class SendResetPasswordLink {
 
         $userCredentials = $broker->getUser($credentials);
 
-        $userCredentials->token = null;
+        $userCredentials->token = 'WAITING FOR PASSWORD RESET';
         $userCredentials->save();
     }
 

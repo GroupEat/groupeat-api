@@ -40,25 +40,33 @@ class AuthCest {
         $I->seeResponseCodeIs(200);
     }
 
-    public function testThatAUserCanAskForANewTokenInExchangeOfValidCredentials(ApiTester $I)
+    public function testThatAUserCanResetItsTokenInExchangeOfValidCredentials(ApiTester $I)
     {
         $email = 'user@ensta.fr';
         $password = 'password';
         list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $password);
 
-        sleep(1.1);
+        sleep(1.5);
         $I->sendApiPost('auth/token', compact('email', 'password'));
         $I->seeResponseCodeIs(200);
-
         $newToken = $I->grabDataFromResponse('token');
         $I->assertNotEmpty($newToken);
         $I->assertNotEquals($oldToken, $newToken);
-
         $I->sendApiGetWithToken($newToken, $this->getUserResource().'/'.$id);
         $I->seeResponseCodeIs(200);
-
         $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
-        $I->seeErrorResponse(401, "Obsolete token.");
+        $I->seeErrorResponse(403, "Obsolete token.");
+    }
+
+    public function testThatAUserCanAskItsTokenInExchangeOfValidCredentials(ApiTester $I)
+    {
+        $email = 'user@ensta.fr';
+        $password = 'password';
+        list($originalToken, $id) = $this->sendRegistrationRequest($I, $email, $password);
+
+        $I->sendApiGet('auth/token', compact('email', 'password'));
+        $I->seeResponseCodeIs(200);
+        $I->assertEquals($originalToken, $I->grabDataFromResponse('token'));
     }
 
     public function testThatAUserMustGiveAWellFormattedEmailToRegister(ApiTester $I)
@@ -106,7 +114,7 @@ class AuthCest {
     {
         $email = 'user@ensta.fr';
         $oldPassword = 'password';
-        $this->sendRegistrationRequest($I, $email, $oldPassword);
+        list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $oldPassword);
 
         $I->sendApiPost('auth/reset-password', compact('email'));
         $I->seeResponseCodeIs(200);
@@ -115,6 +123,7 @@ class AuthCest {
         $I->sendGET($link);
         $I->seeResponseCodeIs(200);
 
+        sleep(1.5);
         $newPassword = 'new_password';
         $I->sendPOST($link, [
             'email' => $email,
@@ -123,17 +132,26 @@ class AuthCest {
         ]);
         $I->seeResponseCodeIs(200);
 
-        $I->sendApiPost('auth/token', [
+        $I->sendApiGet('auth/token', [
             'email' => $email,
             'password' => $newPassword,
         ]);
         $I->seeResponseCodeIs(200);
+        $newToken = $I->grabDataFromResponse('token');
+        $I->assertNotEmpty($newToken);
+        $I->assertNotEquals($oldToken, $newToken);
 
-        $I->sendApiPost('auth/token', [
+        $I->sendApiGetWithToken($newToken, $this->getUserResource().'/'.$id);
+        $I->seeResponseCodeIs(200);
+
+        $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
+        $I->seeErrorResponse(403, "Obsolete token.");
+
+        $I->sendApiGet('auth/token', [
             'email' => $email,
             'password' => $oldPassword,
         ]);
-        $I->seeErrorResponse(403, "Bad credentials.");
+        $I->seeErrorResponse(401, "Bad credentials.");
     }
 
     protected function sendRegistrationRequest(

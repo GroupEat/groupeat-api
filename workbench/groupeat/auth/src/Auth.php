@@ -4,6 +4,7 @@ use App;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
+use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -27,6 +28,7 @@ class Auth extends JWTAuth {
      */
     public function login($token = false)
     {
+        $this->logout();
         $this->requireToken($token);
 
         $id = $this->provider->getSubject($this->token);
@@ -42,7 +44,7 @@ class Auth extends JWTAuth {
 
         if ($userCredentials->token != $this->token)
         {
-            throw new Unauthorized("Obsolete token.");
+            throw new Forbidden("Obsolete token.");
         }
 
         return $this->forceSetUserCredentials($userCredentials);
@@ -64,6 +66,8 @@ class Auth extends JWTAuth {
      */
     public function attemptByCredentials($email, $password)
     {
+        $this->logout();
+
         if ($this->auth->once(compact('email', 'password')))
         {
             $user = $this->auth->user();

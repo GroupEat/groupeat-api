@@ -7,13 +7,19 @@ use Illuminate\Auth\Reminders\PasswordBroker;
 class ResetPassword {
 
     /**
+     * @var GenerateTokenForUser
+     */
+    private $authTokenGenerator;
+
+    /**
      * @var PasswordBroker
      */
     private $passwordBroker;
 
 
-    public function __construct(PasswordBroker $passwordBroker)
+    public function __construct(GenerateAuthToken $authTokenGenerator, PasswordBroker $passwordBroker)
     {
+        $this->authTokenGenerator = $authTokenGenerator;
         $this->passwordBroker = $passwordBroker;
     }
 
@@ -30,7 +36,10 @@ class ResetPassword {
 
         $status = $broker->reset($credentials, function(UserCredentials $userCredentials, $plainPassword)
         {
-            $userCredentials->resetPassword($plainPassword)->save();
+            $userCredentials->token = $this->authTokenGenerator->forUser($userCredentials);
+            $userCredentials->setPassword($plainPassword);
+            $userCredentials->save();
+            dump('at reset: '.$userCredentials->token);
         });
 
         if ($status != $broker::PASSWORD_RESET)
