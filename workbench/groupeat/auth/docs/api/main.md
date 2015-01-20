@@ -17,9 +17,9 @@ Authorization: bearer {token}
             "activated": false
         }
 
-### Retrieve token [GET]
+### Retrieve token [PUT]
 
-Retrieve the authentication token of an already registered user.
+Retrieve the authentication token of an already registered user. This route should be a GET but for security reasons (the plain password should not appear in a URL) it is a PUT.
 
 + Request
 

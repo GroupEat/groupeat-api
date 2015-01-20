@@ -64,7 +64,7 @@ class AuthCest {
         $password = 'password';
         list($originalToken, $id) = $this->sendRegistrationRequest($I, $email, $password);
 
-        $I->sendApiGet('auth/token', compact('email', 'password'));
+        $I->sendApiPut('auth/token', compact('email', 'password'));
         $I->seeResponseCodeIs(200);
         $I->assertEquals($originalToken, $I->grabDataFromResponse('token'));
     }
@@ -132,7 +132,7 @@ class AuthCest {
         ]);
         $I->seeResponseCodeIs(200);
 
-        $I->sendApiGet('auth/token', [
+        $I->sendApiPut('auth/token', [
             'email' => $email,
             'password' => $newPassword,
         ]);
@@ -147,7 +147,7 @@ class AuthCest {
         $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
         $I->seeErrorResponse(403, "Obsolete token.");
 
-        $I->sendApiGet('auth/token', [
+        $I->sendApiPut('auth/token', [
             'email' => $email,
             'password' => $oldPassword,
         ]);
