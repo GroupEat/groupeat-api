@@ -70,7 +70,7 @@ abstract class Seeder extends LaravelSeeder {
     {
         $faker = Factory::create($locale);
 
-        $faker->seed();
+        $faker->seed(rand(1, 1000));
 
         return $faker;
     }
