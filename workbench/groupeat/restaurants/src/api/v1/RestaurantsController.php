@@ -1,6 +1,8 @@
 <?php namespace Groupeat\Restaurants\Api\V1;
 
 use Groupeat\Restaurants\Entities\Category;
+use Groupeat\Restaurants\Entities\FoodType;
+use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
@@ -32,6 +34,30 @@ class RestaurantsController extends Controller {
         return $this->collectionResponse(
             Category::all(),
             new CategoryTransformer
+        );
+    }
+
+    public function foodTypesIndex()
+    {
+        return $this->collectionResponse(
+            FoodType::all(),
+            new FoodTypeTransformer
+        );
+    }
+
+    public function productsIndex(Restaurant $restaurant)
+    {
+        return $this->collectionResponse(
+            $restaurant->products,
+            new ProductTransformer
+        );
+    }
+
+    public function productFormatsIndex(Product $product)
+    {
+        return $this->collectionResponse(
+            $product->formats,
+            new ProductFormatTransformer
         );
     }
 

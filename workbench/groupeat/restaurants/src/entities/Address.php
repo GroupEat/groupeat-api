@@ -11,7 +11,7 @@ class Address extends Entity {
     public function getRules()
     {
         return [
-            'customer_id' => 'required|integer',
+            'restaurant_id' => 'required|integer',
             'street' => 'required',
             'city' => 'required',
             'postcode' => 'required',

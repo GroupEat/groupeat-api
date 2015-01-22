@@ -33,6 +33,11 @@ class Restaurant extends Entity implements User {
         return $this->hasOne('Groupeat\Restaurants\Entities\Address');
     }
 
+    public function products()
+    {
+        return $this->hasMany('Groupeat\Restaurants\Entities\Product');
+    }
+
     public function openingWindows()
     {
         return $this->hasMany('Groupeat\Restaurants\Entities\OpeningWindow');

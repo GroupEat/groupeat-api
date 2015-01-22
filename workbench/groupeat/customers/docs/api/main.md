@@ -49,7 +49,7 @@ It is important to send the user locale in addition to its email and password. I
 
 + Parameters
 
-    + id (required, string, `123`) ... The customer ID
+    + id (required, integer, `123`) ... The customer ID
 
 + Model
 
@@ -129,7 +129,7 @@ Replace the customer data with the one passed in the request. However, a custome
 
 + Parameters
 
-    + id (required, string, `123`) ... The customer ID
+    + id (required, integer, `123`) ... The customer ID
 
 + Model
 

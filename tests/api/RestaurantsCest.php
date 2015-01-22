@@ -21,4 +21,32 @@ class RestaurantsCest {
         $I->seeResponseCodeIs(200);
     }
 
+    public function testThatTheFoodTypesCanBeListed(ApiTester $I)
+    {
+        list($token, $id) = $I->sendRegistrationRequest();
+
+        $I->sendApiGetWithToken($token, 'food-types');
+        $I->seeResponseCodeIs(200);
+    }
+
+    public function testThatTheProductsOfARestaurantCanBeListed(ApiTester $I)
+    {
+        list($token, $id) = $I->sendRegistrationRequest();
+
+        $I->sendApiGetWithToken($token, 'restaurants/1/products');
+        $I->seeResponseCodeIs(200);
+    }
+
+    public function testThatTheFormatsOfAProductCanBeListed(ApiTester $I)
+    {
+        list($token, $id) = $I->sendRegistrationRequest();
+
+        $I->sendApiGetWithToken($token, 'restaurants/1/products');
+        $I->seeResponseCodeIs(200);
+        $product = $I->grabDataFromResponse('')[0];
+
+        $I->sendApiGetWithToken($token, 'products/'.$product['id'].'/formats');
+        $I->seeResponseCodeIs(200);
+    }
+
 }

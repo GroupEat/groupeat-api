@@ -113,7 +113,12 @@ class ApiHelper extends \Codeception\Module {
 
     public function grabDataFromResponse($path)
     {
-        return $this->getModule('REST')->grabDataFromJsonResponse("data.$path");
+        if ($path)
+        {
+            $path = ".$path";
+        }
+
+        return $this->getModule('REST')->grabDataFromJsonResponse('data'.$path);
     }
 
     public function watchEmailSending()

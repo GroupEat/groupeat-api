@@ -65,4 +65,93 @@ Returns the list of restaurants sorted by name in alphabetical order.
                 "latitude": 2.23933
             }
         ]
+        
+## List food types [/food-types]
+
+### GET
+
++ Response 200
+
+        [
+            {
+                "id": 1,
+                "label": "pizza"
+            },
+            {
+                "id": 2,
+                "label": "kebab"
+            },
+            {
+                "id": 3,
+                "label": "salad"
+            }
+        ]
     
+## List restaurant's products  [/restaurant/{id}/products]
+
+### GET
+
++ Parameters
+
+    + id (required, integer, `123`) ... The restaurant ID.
+
++ Response 200
+
+        [
+            {
+                "id": 4,
+                "type_id": 1,
+                "name": "napolitaine",
+                "description": "Tomate, mozzarella, anchois, câpres et olives."
+            },
+            {
+                "id": 3,
+                "type_id": 1,
+                "name": "classica",
+                "description": "Tomate, mozzarella et origan."
+            },
+            {
+                "id": 2,
+                "type_id": 1,
+                "name": "paysanne",
+                "description": "Tomate, mozzarella, poitrine fumée et œuf."
+            },
+            {
+                "id": 1,
+                "type_id": 1,
+                "name": "paysanne",
+                "description": "Mozzarella, basilic frais et tomates."
+            }
+        ]
+
++ Response 404
+
+## List product's format  [/products/{id}/formats]
+
+### GET
+
++ Parameters
+
+    + id (required, integer, `123`) ... The product ID.
+
++ Response 200
+
+        [
+            {
+                "id": 1,
+                "name": "junior",
+                "price": "7.2"
+            },
+            {
+                "id": 2,
+                "name": "sénior",
+                "price": "9.7"
+            },
+            {
+                "id": 3,
+                "name": "méga",
+                "price": "13.8"
+            }
+        ]
+
++ Response 404

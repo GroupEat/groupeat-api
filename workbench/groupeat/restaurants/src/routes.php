@@ -1,6 +1,7 @@
 <?php
 
 Route::model('restaurant', 'Groupeat\Restaurants\Entities\Restaurant');
+Route::model('product', 'Groupeat\Restaurants\Entities\Product');
 
 Route::api(['version' => 'v1', 'protected' => true], function()
 {
@@ -8,8 +9,17 @@ Route::api(['version' => 'v1', 'protected' => true], function()
 
     Route::get('restaurant-categories', "$controller@categoriesIndex");
 
+    Route::get('food-types', "$controller@foodTypesIndex");
+
+    Route::get('products/{product}/formats', "$controller@productFormatsIndex");
+
     Route::group(['prefix' => 'restaurants'], function() use ($controller)
     {
         Route::get('/', "$controller@index");
+
+        Route::group(['prefix' => '{restaurant}'], function() use ($controller)
+        {
+            Route::get('products', "$controller@productsIndex");
+        });
     });
 });
