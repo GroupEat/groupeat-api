@@ -140,6 +140,7 @@ return [
         'Groupeat\Customers\PackageProvider',
         'Groupeat\Deploy\PackageProvider',
         'Groupeat\Documentation\PackageProvider',
+		'Groupeat\Notifications\PackageProvider',
 		'Groupeat\Restaurants\PackageProvider',
         'Groupeat\Showcase\PackageProvider',
 

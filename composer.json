@@ -15,7 +15,8 @@
         "fzaninotto/faker": "1.4.*",
         "laravel/framework": "4.2.*",
         "anahkiasen/former": "3.5.*",
-        "schickling/backup":  "0.6.*"
+        "schickling/backup":  "0.6.*",
+        "sly/notification-pusher": "2.2.*"
     },
     "require-dev": {
         "itsgoingd/clockwork": "1.*",
