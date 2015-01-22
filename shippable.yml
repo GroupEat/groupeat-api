@@ -25,7 +25,7 @@ before_script:
   - ./vendor/bin/codecept build
 
 script:
-  - ./vendor/bin/codecept run --fail-fast --xml ../../shippable/testresults/results.xml
+  - ./vendor/bin/codecept run --fail-fast --debug -vvv --xml ../../shippable/testresults/results.xml
 
 after_success:
   - php artisan deploy -v

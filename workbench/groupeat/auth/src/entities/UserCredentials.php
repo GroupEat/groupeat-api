@@ -113,6 +113,34 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     }
 
     /**
+     * @param string $token
+     *
+     * @return $this
+     */
+    public function replaceAuthenticationToken($token)
+    {
+        $this->token = $token;
+        $this->save();
+
+        return $this;
+    }
+
+    /**
+     * @param string $plainPassword
+     * @param string $authenticationToken
+     *
+     * @return $this
+     */
+    public function resetPassword($plainPassword, $authenticationToken)
+    {
+        $this->token = $authenticationToken;
+        $this->setPassword($plainPassword);
+        $this->save();
+
+        return $this;
+    }
+
+    /**
      * @param string $plainPassword
      *
      * @return $this

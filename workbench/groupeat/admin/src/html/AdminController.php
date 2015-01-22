@@ -56,7 +56,7 @@ class AdminController extends Controller {
             $data['passwd'] = DB::getConfig('password');
         }
 
-        $url = URL::to('packages/groupeat/admin/resources/adminer.php').'?'.http_build_query($data);
+        $url = URL::to('packages/groupeat/admin/adminer.php').'?'.http_build_query($data);
 
         return Redirect::to($url);
     }

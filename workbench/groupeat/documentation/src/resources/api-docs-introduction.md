@@ -15,7 +15,11 @@ Then you need to prefix all of the paths below by {{ app.url }}/{{ api::prefix }
 
 ### About PUT, PATCH and DELETE requests
 
-Because of some PHP limitations, you cannot send data along with a PUT, PATCH or DELETE request through the usual `form-data` parameter. Instead, you have to send the data through the `x-www-form-urlencoded`. Of course, you can still send parameters by query string if you like it but it may not be the most elegant solution and it will be less secure.
+Because of some PHP limitations, you cannot send data along with a PUT, PATCH or DELETE request through the usual `form-data` parameter. Instead, you have to send the data through the `x-www-form-urlencoded`.
+
+### Passing data through the URL
+
+You can pass data through the URL only for GET requests. For PUT, PATCH, DELETE and POST, you should use the request body to attach data to the request. This is partly for security reasons because writing passwords or tokens in the URL reduce privacy even if HTTPS is set up.
 
 ### Data scope
 

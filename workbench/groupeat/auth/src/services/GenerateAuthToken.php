@@ -34,10 +34,7 @@ class GenerateAuthToken {
             throw new Unauthorized("Bad credentials.");
         }
 
-        $user->token = $token;
-        $user->save();
-
-        return $user;
+        return $user->replaceAuthenticationToken($token);
     }
 
     /**

@@ -4,9 +4,9 @@ use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FoodTypeRestaurantMigration extends Migration {
+class CategoryRestaurantMigration extends Migration {
 
-    const TABLE = 'food_type_restaurant';
+    const TABLE = 'category_restaurant';
 
 
     public function up()
@@ -14,7 +14,7 @@ class FoodTypeRestaurantMigration extends Migration {
         Schema::create(static::TABLE, function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('food_type_id')->index();
+            $table->integer('category_id')->index();
             $table->integer('restaurant_id')->index();
         });
     }

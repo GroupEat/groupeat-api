@@ -136,7 +136,7 @@ class RegisterUser {
 
     private function generateAuthenticationToken(UserCredentials $userCredentials)
     {
-        $userCredentials->token = $this->authTokenGenerator->forUser($userCredentials);
+        $userCredentials->replaceAuthenticationToken($this->authTokenGenerator->forUser($userCredentials));
     }
 
     private function generateRandomString($length = 42)

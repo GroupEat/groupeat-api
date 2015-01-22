@@ -1,23 +1,23 @@
 <?php namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Restaurants\Entities\FoodType;
+use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Database\Seeder;
 
 class RestaurantsSeeder extends Seeder {
 
     /**
-     * @var FoodType
+     * @var Category
      */
-    private $pizzaType;
+    private $pizzeriaCategory;
 
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->pizzaType = FoodType::findByType('pizza');
+        $this->pizzeriaCategory = Category::findByLabel('pizzeria');
     }
 
     protected function makeEntry($id, $max)
@@ -34,7 +34,7 @@ class RestaurantsSeeder extends Seeder {
             'locale' => 'fr',
         ]);
 
-        $this->setPizzaTypeFor($restaurant);
+        $this->setPizzeriaCategoryFor($restaurant);
     }
 
     protected function insertAdditionalEntries($id)
@@ -51,12 +51,12 @@ class RestaurantsSeeder extends Seeder {
             'locale' => 'fr',
         ]);
 
-        $this->setPizzaTypeFor($restaurant);
+        $this->setPizzeriaCategoryFor($restaurant);
     }
 
-    private function setPizzaTypeFor(Restaurant $restaurant)
+    private function setPizzeriaCategoryFor(Restaurant $restaurant)
     {
-        $restaurant->foodTypes()->sync([$this->pizzaType->id]);
+        $restaurant->categories()->sync([$this->pizzeriaCategory->id]);
     }
 
 }

@@ -10,7 +10,7 @@ class RestaurantTransformer extends TransformerAbstract
         return [
             'id' => (int) $restaurant->id,
             'name' => $restaurant->name,
-            'foodTypes' => $restaurant->foodTypes->lists('id'),
+            'categories' => $restaurant->categories->lists('id'),
             'longitude' => (float) $restaurant->address->longitude,
             'latitude' => (float) $restaurant->address->latitude,
         ];

@@ -16,6 +16,7 @@ return [
     'order' => [
         'auth',
         'customers',
+        'restaurants',
     ],
 
 ];

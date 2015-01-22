@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cbcb5a799c62c17e86240fb5b8e35787",
+    "hash": "20a9e95d3a58875ade7982be8e104603",
     "packages": [
         {
             "name": "anahkiasen/former",
@@ -145,16 +145,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "2.7.15",
+            "version": "2.7.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7dd429f8916eb384fcaf43c6510c519eaf3b900e"
+                "reference": "144d1c70e326a5dc83a325790d1b760acb1c2fbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7dd429f8916eb384fcaf43c6510c519eaf3b900e",
-                "reference": "7dd429f8916eb384fcaf43c6510c519eaf3b900e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/144d1c70e326a5dc83a325790d1b760acb1c2fbd",
+                "reference": "144d1c70e326a5dc83a325790d1b760acb1c2fbd",
                 "shasum": ""
             },
             "require": {
@@ -208,7 +208,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2015-01-16 01:44:42"
+            "time": "2015-01-20 22:34:30"
         },
         {
             "name": "aws/aws-sdk-php-laravel",
@@ -2818,6 +2818,51 @@
                 "stream"
             ],
             "time": "2014-10-12 19:18:40"
+        },
+        {
+            "name": "itsgoingd/clockwork",
+            "version": "v1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/itsgoingd/clockwork.git",
+                "reference": "80c990bca6f57f059b8343c2848b8c98fcd86d97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/itsgoingd/clockwork/zipball/80c990bca6f57f059b8343c2848b8c98fcd86d97",
+                "reference": "80c990bca6f57f059b8343c2848b8c98fcd86d97",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "psr/log": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Clockwork": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "itsgoingd",
+                    "email": "itsgoingd@luzer.sk",
+                    "homepage": "http://twitter.com/itsgoingd"
+                }
+            ],
+            "description": "Server-side component of Clockwork, a Chrome extension for PHP development",
+            "homepage": "http://github.com/itsgoingd/clockwork",
+            "keywords": [
+                "debugging",
+                "laravel",
+                "logging",
+                "profiling"
+            ],
+            "time": "2014-09-24 23:06:07"
         },
         {
             "name": "kzykhys/parallel",

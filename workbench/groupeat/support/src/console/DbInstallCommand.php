@@ -4,7 +4,7 @@ use App;
 use Config;
 use DB;
 use File;
-use Schema;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Input\InputOption;
 
 class DbInstallCommand extends Command {
@@ -15,7 +15,11 @@ class DbInstallCommand extends Command {
 
     public function fire()
 	{
-        $this->call('db:backup');
+        if (App::environment('production'))
+        {
+            $this->call('db:backup');
+        }
+
         $this->deleteAllTables();
         $this->createMigrationsTable();
         $this->migrate();
@@ -62,7 +66,7 @@ class DbInstallCommand extends Command {
             }
         }
 
-        $this->process('composer dump-autoload');
+        system('composer dump-autoload');
         $this->call('migrate:refresh', $this->getDbOptions());
     }
 

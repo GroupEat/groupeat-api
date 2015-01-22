@@ -14,7 +14,7 @@ class PullCommand extends Command {
         $this->process('git pull');
 
         $this->line('Installing Composer dependencies');
-        $this->process('composer install');
+        system('composer install');
 
         $this->line('Install the database');
         $this->call('db:install', ['--seed' => true]);

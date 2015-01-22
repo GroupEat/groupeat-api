@@ -2,25 +2,25 @@
 
 use Groupeat\Support\Entities\Entity;
 
-class FoodType extends Entity {
+class Category extends Entity {
 
     public $timestamps = false;
 
 
     /**
-     * @param string $name
+     * @param string $label
      *
-     * @return FoodType|null
+     * @return Category|null
      */
-    public static function findByType($name)
+    public static function findByLabel($label)
     {
-        return static::where('name', $name)->first();
+        return static::where('label', $label)->first();
     }
 
     public function getRules()
     {
         return [
-            'name' => 'required',
+            'label' => 'required',
         ];
     }
 

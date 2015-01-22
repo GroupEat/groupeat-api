@@ -8,6 +8,7 @@ return [
         'Illuminate\Foundation\Providers\TinkerServiceProvider',
 
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+        'Clockwork\Support\Laravel\ClockworkServiceProvider',
         'Rocketeer\RocketeerServiceProvider',
     ]),
 ];

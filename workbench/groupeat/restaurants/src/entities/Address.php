@@ -22,11 +22,6 @@ class Address extends Entity {
         ];
     }
 
-    public function restaurant()
-    {
-        return $this->belongsTo('Groupeat\Restaurants\Entities\Restaurant');
-    }
-
     protected function getRelatedMigration()
     {
         return new RestaurantAddressesMigration;

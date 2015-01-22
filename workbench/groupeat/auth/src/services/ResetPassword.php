@@ -36,9 +36,7 @@ class ResetPassword {
 
         $status = $broker->reset($credentials, function(UserCredentials $userCredentials, $plainPassword)
         {
-            $userCredentials->token = $this->authTokenGenerator->forUser($userCredentials);
-            $userCredentials->setPassword($plainPassword);
-            $userCredentials->save();
+            $userCredentials->resetPassword($plainPassword, $this->authTokenGenerator->forUser($userCredentials));
         });
 
         if ($status != $broker::PASSWORD_RESET)

@@ -15,6 +15,6 @@
         "CHANGELOG.md"
     ],
     "dependencies": {
-        "bootstrap-sass-official": "3.3.1"
+        "bootstrap-sass-official": "3.3.2"
     }
 }
