@@ -9,8 +9,6 @@ use Sly\NotificationPusher\PushManager;
 
 Route::get('send-push-notification/{deviceId}', function($deviceId)
 {
-    var_dump('Device ID: '.$deviceId);
-
     $pushManager = new PushManager(PushManager::ENVIRONMENT_DEV);
 
     $gcmAdapter = new \Sly\NotificationPusher\Adapter\Gcm([
@@ -24,5 +22,5 @@ Route::get('send-push-notification/{deviceId}', function($deviceId)
     $push = new Push($gcmAdapter, $devices, $message);
     $pushManager->add($push);
 
-    dump($pushManager->push());
+    echo 'Sent to device ID: '.$deviceId;
 });
