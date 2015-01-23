@@ -14,7 +14,7 @@ class Address extends Entity {
             'restaurant_id' => 'required|integer',
             'street' => 'required',
             'city' => 'required',
-            'postcode' => 'required',
+            'postcode' => 'required|digits:5',
             'state' => 'required',
             'country' => 'required',
             'latitude' => 'required|numeric',

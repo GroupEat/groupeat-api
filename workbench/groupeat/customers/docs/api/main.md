@@ -166,4 +166,42 @@ For the MVP, all the addresses must be valid campus addresses. That's why the on
 + Response 200
 
     [Address][]
-    
+
+## List predefined addresses  [/predefined-addresses]
+
+### GET
+
++ Response 200
+
+        [
+            {
+                "street": "Boulevard des Maréchaux",
+                "details": "Foyer de l'ENSTA ParisTech",
+                "city": "Palaiseau",
+                "postcode": 91120,
+                "state": "Essonne",
+                "country": "France",
+                "latitude": 2.21874,
+                "longitude": 48.711
+            },
+            {
+                "street": "Avenue Augustin Fresnel",
+                "details": "BôBar",
+                "city": "Palaiseau",
+                "postcode": 91120,
+                "state": "Essonne",
+                "country": "France",
+                "latitude": 2.21108,
+                "longitude": 48.7117
+            },
+            {
+                "street": "2 Avenue Augustin Fresnel",
+                "details": "Institut d'Optique",
+                "city": "Palaiseau",
+                "postcode": 91120,
+                "state": "Essonne",
+                "country": "France",
+                "latitude": 2.20349,
+                "longitude": 48.7139
+            }
+        ]

@@ -25,4 +25,12 @@ class CustomerAddressesCest {
         $I->seeResponseContainsData(['street' => "Allée des techniques avancées"]);
     }
 
+    public function testThatThePredefinedAddressesCanBeListed(ApiTester $I)
+    {
+        list($token, $id) = $I->sendRegistrationRequest();
+
+        $I->sendApiGetWithToken($token, "predefined-addresses");
+        $I->seeResponseCodeIs(200);
+    }
+
 }

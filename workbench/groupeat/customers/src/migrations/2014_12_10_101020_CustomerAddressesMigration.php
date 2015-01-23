@@ -1,32 +1,19 @@
 <?php namespace Groupeat\Customers\Migrations;
 
-use Groupeat\Support\Database\Migration;
+use Groupeat\Customers\Migrations\Abstracts\AddressesMigration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class CustomerAddressesMigration extends Migration {
+class CustomerAddressesMigration extends AddressesMigration {
 
-    const TABLE = 'customer_adresses';
+    const TABLE = 'customer_addresses';
 
 
-    public function up()
+    protected function addFields(Blueprint $table)
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
-            $table->increments('id');
-            $table->integer('customer_id')->unsigned()->index();
-            $table->string('street');
-            $table->string('details');
-            $table->string('city');
-            $table->string('postcode');
-            $table->string('state');
-            $table->string('country');
-            $table->float('latitude');
-            $table->float('longitude');
-            $table->timestamps();
+        $table->integer('customer_id')->unsigned()->index();
+        $table->timestamps();
 
-            $table->foreign('customer_id')->references('id')->on(CustomersMigration::TABLE);
-        });
+        $table->foreign('customer_id')->references('id')->on(CustomersMigration::TABLE);
     }
 
 }

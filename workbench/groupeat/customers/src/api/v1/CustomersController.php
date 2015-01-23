@@ -3,6 +3,7 @@
 use App;
 use Auth;
 use Groupeat\Customers\Entities\Customer;
+use Groupeat\Customers\Entities\PredefinedAddress;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,6 +64,14 @@ class CustomersController extends Controller {
         $address = App::make('ChangeCustomerAddressService')->call($customer, Input::all());
 
         return $this->itemResponse($address);
+    }
+
+    public function predefinedAddressesIndex()
+    {
+        return $this->collectionResponse(
+            PredefinedAddress::all(),
+            new AddressTransformer
+        );
     }
 
 }

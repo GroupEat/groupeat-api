@@ -25,12 +25,12 @@ class CustomerAddressesSeeder extends Seeder {
     {
         Address::create([
            'customer_id' => 1,
-           'street' => '828 Boulevard des Maréchaux',
-           'details' => 'Bâtiment E, studio 311',
-           'city' => 'Palaiseau',
+           'street' => "828 Boulevard des Maréchaux",
+           'details' => "Bâtiment E, studio 311",
+           'city' => "Palaiseau",
            'postcode' => 91120,
-           'state' => 'Essonne',
-           'country' => 'France',
+           'state' => "Essonne",
+           'country' => "France",
            'longitude' => 48.711042,
            'latitude' => 2.219278,
         ]);
