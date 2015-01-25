@@ -13,4 +13,5 @@ class ProductFormatTransformer extends TransformerAbstract
             'price' => $format->price,
         ];
     }
+
 }

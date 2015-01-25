@@ -6,7 +6,7 @@ use Groupeat\Support\Exceptions\NotFound;
 class ActivateUser {
 
     /**
-     * @param string          $activationToken
+     * @param string $activationToken
      */
     public function call($activationToken)
     {

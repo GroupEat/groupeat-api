@@ -1,4 +1,4 @@
-<?php namespace Groupeat\Customers\Migrations\Abstracts;
+<?php namespace Groupeat\Support\Migrations\Abstracts;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,16 +13,19 @@ abstract class AddressesMigration extends Migration {
             $table->increments('id');
             $this->addFields($table);
             $table->string('street');
-            $table->string('details');
+            $table->string('details')->nullable();
             $table->string('city');
             $table->string('postcode');
             $table->string('state');
             $table->string('country');
-            $table->float('latitude');
-            $table->float('longitude');
+            $table->float('latitude')->index();
+            $table->float('longitude')->index();
         });
     }
 
-    abstract protected function addFields(Blueprint $table);
+    protected function addFields(Blueprint $table)
+    {
+        // Implement by inheritance if needed
+    }
 
 }

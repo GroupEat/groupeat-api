@@ -5,6 +5,7 @@ use Groupeat\Auth\Services\ActivateUser;
 use Groupeat\Auth\Services\GenerateAuthToken;
 use Groupeat\Auth\Services\GenerateTokenForUser;
 use Groupeat\Auth\Services\RegisterUser;
+use Groupeat\Auth\Services\SendActivationLink;
 use Groupeat\Auth\Services\SendResetPasswordLink;
 use Groupeat\Auth\Services\ResetPassword;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
@@ -29,12 +30,16 @@ class PackageProvider extends WorkbenchPackageProvider {
         $this->app->bind('RegisterUserService', function($app)
         {
             return new RegisterUser(
-                $app['mailer'],
                 $app['validator'],
-                $app['url'],
+                $app['SendActivationLinkService'],
                 $app['GenerateAuthTokenService'],
                 $app['groupeat.locale']
             );
+        });
+
+        $this->app->bind('SendActivationLinkService', function($app)
+        {
+            return new SendActivationLink($app['mailer'], $app['url'], $app['groupeat.locale']);
         });
 
         $this->app->bind('SendResetPasswordLinkService', function($app)

@@ -5,6 +5,7 @@ use Config;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Exceptions\BadRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
@@ -74,29 +75,39 @@ class Restaurant extends Entity implements User {
         });
     }
 
-    public function scopeOpened(Builder $query, $starting = null, $durationInMinutes = null)
+    public function assertOpened(Carbon $from = null, Carbon $to = null)
     {
-        $starting = $starting ?: Carbon::now();
-        $durationInMinutes = $durationInMinutes ?:
-            Config::get('restaurants::opening_duration_in_minutes');
-        $ending = $starting->addMinutes($durationInMinutes);
+        $from = $from ?: Carbon::now();
+        $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
+        $restaurant = static::opened($from, $to)->where($this->getTableField('id'), $this->id)->first();
 
-        $query->whereHas('openingWindows', function(Builder $subQuery) use ($starting, $ending)
+        if (!$restaurant || $restaurant->id != $this->id)
+        {
+            throw new BadRequest("The {$this->toShortString()} is not opened from $from to $to.");
+        }
+    }
+
+    public function scopeOpened(Builder $query, Carbon $from = null, Carbon $to = null)
+    {
+        $from = $from ?: Carbon::now();
+        $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
+
+        $query->whereHas('openingWindows', function(Builder $subQuery) use ($from, $to)
         {
             $openingWindow = $subQuery->getModel();
 
-            $subQuery->where($openingWindow->getTableField('dayOfWeek'), $starting->dayOfWeek)
-                ->where($openingWindow->getTableField('starting_at'), '<=', $starting->toTimeString())
-                ->where($openingWindow->getTableField('ending_at'), '>=', $ending->toTimeString());
+            $subQuery->where($openingWindow->getTableField('dayOfWeek'), $from->dayOfWeek)
+                ->where($openingWindow->getTableField('from'), '<=', $from->toTimeString())
+                ->where($openingWindow->getTableField('to'), '>=', $to->toTimeString());
         });
 
-        $query->whereDoesntHave('closingWindows', function(Builder $subQuery) use ($starting, $ending)
+        $query->whereDoesntHave('closingWindows', function(Builder $subQuery) use ($from, $to)
         {
             $closingWindow = $subQuery->getModel();
 
-            $subQuery->where($closingWindow->getTableField('day'), $starting->toDateString())
-                ->where($closingWindow->getTableField('starting_at'), '<=', $starting->toTimeString())
-                ->where($closingWindow->getTableField('ending_at'), '>=', $ending->toTimeString());
+            $subQuery->where($closingWindow->getTableField('day'), $from->toDateString())
+                ->where($closingWindow->getTableField('from'), '<=', $from->toTimeString())
+                ->where($closingWindow->getTableField('to'), '>=', $to->toTimeString());
         });
     }
 

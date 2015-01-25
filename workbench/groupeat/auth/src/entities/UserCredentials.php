@@ -71,7 +71,14 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         $userCredentials->email = $email;
         $userCredentials->password = $password;
         $userCredentials->locale = $locale;
-        $userCredentials->user = $user;
+
+        dbTransaction(function() use ($userCredentials, $user)
+        {
+            // The user should be save in order to have its id
+            $user->save();
+            $userCredentials->user = $user;
+            $userCredentials->save();
+        });
 
         return $userCredentials;
     }

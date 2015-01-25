@@ -58,11 +58,15 @@ class GenerateApiDocumentation {
         $inputPath = $this->getInputPath();
         $outputPath = $this->getOutputPath();
 
-        $this->filesystem->put($inputPath, $this->parseConfig($docContent));
+        $this->filesystem->put($inputPath, $docContent);
 
         $command = "aglio -t flatly -i $inputPath -o $outputPath";
 
-        return process($command, $output)->getErrorOutput();
+        $status = process($command, $output)->getErrorOutput();
+
+        $this->filesystem->put($outputPath, $this->parseConfig($this->filesystem->get($outputPath)));
+
+        return $status;
     }
 
     /**

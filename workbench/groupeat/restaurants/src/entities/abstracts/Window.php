@@ -11,8 +11,8 @@ abstract class Window extends Entity {
     {
         return [
             'restaurant_id' => 'required|integer',
-            'starting_at' => 'required',
-            'ending_at' => 'required',
+            'from' => 'required',
+            'to' => 'required',
         ];
     }
 

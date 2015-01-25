@@ -3,8 +3,11 @@
 echo "Installing some PPAs"
 apt-get install -y software-properties-common
 apt-add-repository ppa:nginx/stable -y
+apt-add-repository ppa:rwky/redis -y
 apt-add-repository ppa:ondrej/php5-5.6 -y
 apt-add-repository ppa:chris-lea/node.js -y
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list.d/postgresql.list'
 
 echo "Updating packages list"
 apt-get update
@@ -26,7 +29,7 @@ ln -sf /usr/share/zoneinfo/CET /etc/localtime
 
 echo "Installing PHP stuffs"
 apt-get install -y php5-cli php5-dev php-pear php5-pgsql \
-php5-json php5-curl php5-gd php5-gmp php5-imap php5-mcrypt
+php5-json php5-curl php5-gd php5-gmp php5-imap php5-mcrypt php5-redis
 
 if [[ $1 == 'local' ]]; then
     echo "Installing PHP Xdebug"
@@ -127,11 +130,19 @@ id vagrant
 groups vagrant
 
 echo "Installing PostgreSQL"
-apt-get install -y postgresql-9.3 postgresql-contrib
+apt-get install -y postgresql-9.4 postgresql-contrib-9.4
 
 echo "Configuring PostgreSQL remote access"
-sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.3/main/postgresql.conf
-echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.3/main/pg_hba.conf
+sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/9.4/main/postgresql.conf
+echo "host    all             all             10.0.2.2/32               md5" | tee -a /etc/postgresql/9.4/main/pg_hba.conf
+
+echo "Installing Redis"
+apt-get install -y redis-server
+
+echo "Installing Beanstalkd"
+apt-get install -y beanstalkd
+sudo sed -i "s/#START=yes/START=yes/" /etc/default/beanstalkd
+sudo /etc/init.d/beanstalkd start
 
 echo "Installing Node.js and NPM packages"
 apt-get install -y nodejs
@@ -218,4 +229,14 @@ echo "alias cri='composer install'" >> ~vagrant/.zshrc
 echo "alias cru='composer update'" >> ~vagrant/.zshrc
 echo "alias crd='composer dump-autoload'" >> ~vagrant/.zshrc
 
+echo "Reducing the size of the box"
 
+echo "Removing APT cache and files"
+apt-get clean -y
+apt-get autoclean -y
+
+echo "Removing Virtualbox specific files"
+rm -rf /usr/src/vboxguest* /usr/src/virtualbox-ose-guest*
+
+echo "Removing Linux headers"
+rm -rf /usr/src/linux-headers*

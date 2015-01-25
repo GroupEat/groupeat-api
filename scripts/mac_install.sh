@@ -64,13 +64,16 @@ fi
 echo "Cleanup Brew"
 brew cleanup
 
-echo 'Deleting old running VM'
+echo "Deleting old running VM"
 vagrant destroy -f
 
-echo 'Booting up the VM'
+echo "Updating Vagrant boxes"
+vagrant box update
+
+echo "Booting up the VM"
 vagrant up
 
-echo 'Opening the app in the default browser to check if everything works'
+echo "Opening the app in the default browser to check if everything works"
 open "https://groupeat.dev"
 
 echo "SSH into the VM"

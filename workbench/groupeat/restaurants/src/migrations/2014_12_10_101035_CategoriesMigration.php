@@ -14,7 +14,7 @@ class CategoriesMigration extends Migration {
         Schema::create(static::TABLE, function(Blueprint $table)
         {
             $table->increments('id');
-            $table->string('label')->index()->unique();
+            $table->string('label')->unique();
         });
     }
 

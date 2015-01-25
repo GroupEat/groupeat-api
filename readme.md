@@ -19,7 +19,7 @@ Clone this repository on your machine. Place it where you like and rename it if 
  - Add the line `192.168.10.10  groupeat.dev` to your hosts file:
    - Windows: `c:\windows\systeme32\drivers\etc`
    - Unix: `/etc/hosts`
- - Run the `vagrant up` command and wait for it to finish (a few minutes depending on your internet connection).
+ - Run the `vagrant box update` and `vagrant up` commands and wait for them to finish (a few minutes depending on your internet connection).
  - Browse to https://groupeat.dev and make sure it works.
 
 # Local Usage
@@ -51,7 +51,7 @@ This zone is always available on local environment but on the production server 
 
 Some useful admin routes are defined to tinker with the application :
 
- - https://groupeat.dev/docs: Read the API documentation (on the local environment, use the `?generate=1` query string to regenerate it if you have edited some doc files)
+ - https://groupeat.dev/docs: Read the API documentation (on the local environment, use the `?generate=true` query string to regenerate it if you have edited some doc files)
  - https://groupeat.dev/db: PostgreSQL management (ignore the eventual error message and click on 'Login')
  - https://groupeat.dev/logs: View the application logs (from both Nginx and CLI)
  - https://groupeat.dev/phpinfo: Open the PHPinfo page

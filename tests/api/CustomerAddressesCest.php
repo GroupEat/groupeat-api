@@ -4,7 +4,7 @@ class CustomerAddressesCest {
 
     public function testThatACustomerCanUpdateAndGetItsAddress(ApiTester $I)
     {
-        list($token, $id) = $I->sendRegistrationRequest();
+        list($token, $id) = $I->amAnActivatedCustomer();
 
         $address = [
             'street' => "Allée des techniques avancées",
@@ -27,7 +27,7 @@ class CustomerAddressesCest {
 
     public function testThatThePredefinedAddressesCanBeListed(ApiTester $I)
     {
-        list($token, $id) = $I->sendRegistrationRequest();
+        list($token, $id) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, "predefined-addresses");
         $I->seeResponseCodeIs(200);

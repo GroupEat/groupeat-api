@@ -5,7 +5,7 @@ class AuthCest {
     public function testThatPassingATokenInTheQueryStringIsForbidden(ApiTester $I)
     {
         $I->sendApiGet('auth/token?token=shouldBePassedInHeader');
-        $I->seeErrorResponse(403, "Trying to authenticate via token in query string is forbidden.");
+        $I->seeErrorResponse(400, "Trying to authenticate via token in query string is forbidden.");
     }
 
     public function testThatAUserCanBeRegistered(ApiTester $I)

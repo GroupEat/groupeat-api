@@ -5,6 +5,9 @@ use League\Fractal\TransformerAbstract;
 
 class ProductTransformer extends TransformerAbstract
 {
+    protected $availableIncludes = ['formats'];
+
+
     public function transform(Product $product)
     {
         return [
@@ -14,4 +17,10 @@ class ProductTransformer extends TransformerAbstract
             'description' => $product->description,
         ];
     }
+
+    public function includeFormats(Product $product)
+    {
+        return $this->collection($product->formats, new ProductFormatTransformer);
+    }
+
 }

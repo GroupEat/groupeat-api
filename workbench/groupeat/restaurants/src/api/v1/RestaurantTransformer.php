@@ -15,4 +15,5 @@ class RestaurantTransformer extends TransformerAbstract
             'latitude' => (float) $restaurant->address->latitude,
         ];
     }
+
 }

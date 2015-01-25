@@ -14,8 +14,8 @@ abstract class WindowsMigration extends Migration {
             $table->increments('id');
             $table->integer('restaurant_id')->unsigned()->index();
             $this->addFieldsTo($table);
-            $table->time('starting_at')->index();
-            $table->time('ending_at')->index();
+            $table->time('from')->index();
+            $table->time('to')->index();
 
             $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
         });

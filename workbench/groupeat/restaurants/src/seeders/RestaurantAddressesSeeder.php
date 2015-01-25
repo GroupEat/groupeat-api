@@ -14,23 +14,26 @@ class RestaurantAddressesSeeder extends Seeder {
             'postcode' => $this->faker->postcode,
             'state' => $this->faker->departmentName,
             'country' => $this->faker->country,
-            'longitude' => $this->faker->longitude,
             'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude,
         ]);
     }
 
     protected function insertAdditionalEntries($id)
     {
-        Address::create([
-           'restaurant_id' => $id,
-           'street' => '84 Rue Maurice Berteaux',
-           'city' => 'Palaiseau',
-           'postcode' => 91120,
-           'state' => 'Essonne',
-           'country' => 'France',
-           'longitude' => 48.717104,
-           'latitude' => 2.239332,
-        ]);
+        foreach ([$id, $id + 1, $id + 2] as $currentId)
+        {
+            Address::create([
+                'restaurant_id' => $currentId,
+                'street' => "8{$currentId} Rue Maurice Berteaux",
+                'city' => "Palaiseau",
+                'postcode' => 91120,
+                'state' => "Essonne",
+                'country' => "France",
+                'latitude' => 48.717104,
+                'longitude' => 2.239332,
+            ]);
+        }
     }
 
 }

@@ -34,6 +34,43 @@ if (!function_exists('ddd') && function_exists('dump'))
     }
 }
 
+if (!function_exists('dbTransaction'))
+{
+    /**
+     * Execute callback in a database transaction
+     *
+     * @param Closure $callback
+     *
+     * @return mixed
+     */
+    function dbTransaction(Closure $callback)
+    {
+        return DB::transaction($callback);
+    }
+}
+
+if (!function_exists('decodeJSON'))
+{
+    /**
+     * Decode JSON
+     *
+     * @param string $JSON
+     *
+     * @return array
+     */
+    function decodeJSON($JSON, $throwOnNull = true)
+    {
+        $data = json_decode($JSON, true);
+
+        if (is_null($data) && $throwOnNull)
+        {
+            throw new \Groupeat\Support\Exceptions\BadRequest("Cannot decode JSON: $JSON.");
+        }
+
+        return $data;
+    }
+}
+
 if (!function_exists('getNamespaceOf'))
 {
     /**

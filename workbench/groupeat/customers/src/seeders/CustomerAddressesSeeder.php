@@ -8,7 +8,7 @@ class CustomerAddressesSeeder extends Seeder {
     protected function makeEntry($id, $max)
     {
         Address::create([
-            'customer_id' => $this->faker->numberBetween(1, $max),
+            'customer_id' => $id,
             'street' => $this->faker->streetAddress,
             'details' => $this->faker->buildingNumber,
             'city' => $this->faker->city,
@@ -24,15 +24,15 @@ class CustomerAddressesSeeder extends Seeder {
     protected function insertAdditionalEntries($id)
     {
         Address::create([
-           'customer_id' => 1,
+           'customer_id' => $id,
            'street' => "828 Boulevard des Maréchaux",
            'details' => "Bâtiment E, studio 311",
            'city' => "Palaiseau",
            'postcode' => 91120,
            'state' => "Essonne",
            'country' => "France",
-           'longitude' => 48.711042,
-           'latitude' => 2.219278,
+           'latitude' => 48.711042,
+           'longitude' => 2.219278,
         ]);
     }
 

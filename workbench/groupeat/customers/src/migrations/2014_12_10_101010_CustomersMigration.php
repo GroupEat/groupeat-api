@@ -18,7 +18,7 @@ class CustomersMigration extends Migration {
             $table->string('lastName')->nullable();
             $table->string('phoneNumber', 25)->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            $table->softDeletes()->index();
         });
     }
 

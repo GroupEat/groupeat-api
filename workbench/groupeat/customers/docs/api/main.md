@@ -1,10 +1,12 @@
 # Group Customers
 
-## Register a customer [/customers]
+## Register customer [/customers]
 
 ### POST
 
-It is important to send the user locale in addition to its email and password. In fact, even if the API will always use the English language, we need to know the language of the user in order to send him e-mails he can understand.
+The user locale should be sent in addition to the classical email and password fields. In fact, even if the API will always use the English language, we need to know the language of the user in order to send him e-mails he can understand.
+
+An e-mail will be sent to the given address with an activation link that must be clicked in order to fully activate the created account.
 
 + Request
 
@@ -81,7 +83,7 @@ It is important to send the user locale in addition to its email and password. I
 
 ### Update customer [PATCH]
 
-Replace the customer data with the one passed in the request. However, a customer must have a first name, a last name and a phone number. That means that, when you hit this route for the first time, all of these fields must be given.
+Replace the customer data with the one passed in the request. However, a customer must have a first name, a last name and a phone number thus, when hitting this route for the first time, valid information for all these fields must be given.
 
 + Request
     

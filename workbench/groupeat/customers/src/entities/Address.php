@@ -1,7 +1,7 @@
 <?php namespace Groupeat\Customers\Entities;
 
 use Groupeat\Customers\Migrations\CustomerAddressesMigration;
-use Groupeat\Customers\Entities\Abstracts\Address as AbstractAddress;
+use Groupeat\Support\Entities\Abstracts\Address as AbstractAddress;
 
 class Address extends AbstractAddress {
 

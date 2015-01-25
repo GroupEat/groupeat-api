@@ -14,7 +14,7 @@ class ProductFormatsMigration extends Migration {
         Schema::create(static::TABLE, function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('product_id')->unsigned()->index();
+            $table->unsignedInteger('product_id')->index();
             $table->string('name');
             $table->float('price');
 

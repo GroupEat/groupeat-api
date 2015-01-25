@@ -17,6 +17,7 @@ return [
         'auth',
         'customers',
         'restaurants',
+        'orders',
     ],
 
 ];

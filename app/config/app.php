@@ -141,6 +141,7 @@ return [
         'Groupeat\Deploy\PackageProvider',
         'Groupeat\Documentation\PackageProvider',
 		'Groupeat\Notifications\PackageProvider',
+		'Groupeat\Orders\PackageProvider',
 		'Groupeat\Restaurants\PackageProvider',
         'Groupeat\Showcase\PackageProvider',
 

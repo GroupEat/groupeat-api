@@ -1,6 +1,7 @@
-<?php namespace Groupeat\Customers\Entities\Abstracts;
+<?php namespace Groupeat\Support\Entities\Abstracts;
 
 use Groupeat\Support\Entities\Entity;
+use Treffynnon\Navigator;
 
 abstract class Address extends Entity {
 
@@ -18,6 +19,21 @@ abstract class Address extends Entity {
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ];
+    }
+
+    /**
+     * @param Address $other
+     *
+     * @return float
+     */
+    public function distanceInKmsWith(Address $other)
+    {
+        return Navigator::getDistance(
+            $this->latitude,
+            $this->longitude,
+            $other->latitude,
+            $other->longitude
+        ) / 1000;
     }
 
 }

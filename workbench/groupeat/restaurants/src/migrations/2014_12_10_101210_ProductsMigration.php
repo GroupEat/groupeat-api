@@ -14,8 +14,8 @@ class ProductsMigration extends Migration {
         Schema::create(static::TABLE, function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('restaurant_id')->unsigned()->index();
-            $table->integer('type_id')->unsigned()->index();
+            $table->unsignedInteger('restaurant_id')->index();
+            $table->unsignedInteger('type_id')->index();
             $table->string('name');
             $table->string('description');
 

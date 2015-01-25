@@ -17,7 +17,7 @@ class RestaurantsMigration extends Migration {
             $table->string('name');
             $table->string('phoneNumber', 25);
             $table->timestamps();
-            $table->softDeletes();
+            $table->softDeletes()->index();
         });
     }
 

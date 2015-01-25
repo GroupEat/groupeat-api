@@ -2,6 +2,7 @@
 
 use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
+use Groupeat\Support\Exceptions\NotFound;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\MessageBag;
 use Validator;
@@ -20,6 +21,18 @@ abstract class Entity extends Model {
      */
     protected $validationErrors;
 
+
+    public static function findOrFail($id, $columns = ['*'])
+    {
+        $model = static::find($id, $columns);
+
+        if (is_null($model))
+        {
+            throw new NotFound(removeNamespaceFromClassName(static::CLASS)."#$id does not exist.");
+        }
+
+        return $model;
+    }
 
     protected static function boot()
     {
@@ -156,7 +169,7 @@ abstract class Entity extends Model {
     {
         $id = $relatedEntity->getKey();
 
-        if (!$id)
+        if (empty($id))
         {
             $message = 'Cannot set polymorphic relation '
                 . $relatedEntity->toShortString().' on '
@@ -165,11 +178,7 @@ abstract class Entity extends Model {
             throw new Exception($message);
         }
 
-        $this->setRelation($name, $relatedEntity);
-        $typeAttribute = "{$name}_type";
-        $idAttribute = "{$name}_id";
-        $this->$typeAttribute = get_class($relatedEntity);
-        $this->$idAttribute = $id;
+        $this->$name()->associate($relatedEntity);
 
         return $this;
     }

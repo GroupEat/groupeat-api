@@ -13,19 +13,14 @@ use Illuminate\Validation\Factory as Validation;
 class RegisterUser {
 
     /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    /**
      * @var Validation
      */
     private $validation;
 
     /**
-     * @var UrlGenerator
+     * @var SendActivationLink
      */
-    private $urlGenerator;
+    private $sendActivationLinkService;
 
     /**
      * @var GenerateTokenForUser
@@ -39,16 +34,14 @@ class RegisterUser {
 
 
     public function __construct(
-        Mailer $mailer,
         Validation $validation,
-        UrlGenerator $urlGenerator,
+        SendActivationLink $sendActivationLinkService,
         GenerateAuthToken $authTokenGenerator,
         Locale $localeService
     )
     {
-        $this->mailer = $mailer;
         $this->validation = $validation;
-        $this->urlGenerator = $urlGenerator;
+        $this->sendActivationLinkService = $sendActivationLinkService;
         $this->authTokenGenerator = $authTokenGenerator;
         $this->localeService = $localeService;
     }
@@ -67,23 +60,12 @@ class RegisterUser {
         $this->localeService->assertAvailable($locale);
 
         $userCredentials = $this->insertUserWithCredentials($email, $plainPassword, $locale, $newUser);
-        $this->generateActivationCode($userCredentials);
-        $this->sendActivationCode($userCredentials, $email, $locale);
-        $this->generateAuthenticationToken($userCredentials);
-
-        $userCredentials->save();
+        $userCredentials->replaceAuthenticationToken($this->authTokenGenerator->forUser($userCredentials));
+        $this->sendActivationLinkService->call($userCredentials, $locale);
 
         return $userCredentials->user;
     }
 
-    /**
-     * @param $email
-     * @param $password
-     * @param $locale
-     * @param User $user
-     *
-     * @return UserCredentials
-     */
     private function insertUserWithCredentials($email, $password, $locale, User $user)
     {
         $credentials = compact('email', 'password');
@@ -97,61 +79,10 @@ class RegisterUser {
 
         if (!$errors->isEmpty())
         {
-            // Delete the user if the credentials are invalid.
-            $user->forceDelete();
-
             throw new BadRequest("Invalid credentials.", $errors);
         }
 
-        // We need to save the user to have its id
-        $user->save();
-
-        $userCredentials = UserCredentials::register($email, $password, $locale, $user);
-
-        return $userCredentials;
-    }
-
-    private function generateActivationCode(UserCredentials $userCredentials)
-    {
-        $userCredentials->activationToken = $this->generateRandomString();
-    }
-
-    private function sendActivationCode(UserCredentials $userCredentials, $email, $locale)
-    {
-        $view = 'auth::mails.activation';
-        $token = $userCredentials->activationToken;
-        $url = $this->urlGenerator->route('auth.activate', compact('token'));
-        $data = compact('url');
-
-        $this->localeService->executeWithUserLocale(function() use ($view, $data, $email)
-        {
-            $this->mailer->send($view, $data, function($message) use ($email)
-            {
-                $subject = $this->localeService->getTranslator()->get('auth::activation.mail.subject');
-
-                $message->to($email)->subject($subject);
-            });
-        }, $locale);
-    }
-
-    private function generateAuthenticationToken(UserCredentials $userCredentials)
-    {
-        $userCredentials->replaceAuthenticationToken($this->authTokenGenerator->forUser($userCredentials));
-    }
-
-    private function generateRandomString($length = 42)
-    {
-        // We generate twice as many bytes here because we want to ensure we have
-        // enough after we base64 encode it to get the length we need because we
-        // take out the "/", "+", and "=" characters.
-        $bytes = openssl_random_pseudo_bytes($length * 2);
-
-        if ($bytes === false)
-        {
-            throw new Exception("Unable to generate random string.");
-        }
-
-        return substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $length);
+        return UserCredentials::register($email, $password, $locale, $user);
     }
 
 }

@@ -45,7 +45,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Configure the public key for SSH access
   config.vm.provision "shell" do |s|
-    s.inline = "echo \"$1\" >> /home/vagrant/.ssh/authorized_keys"
+    s.inline = "echo \"$1\" | grep -xq \"$1\" /home/vagrant/.ssh/authorized_keys || echo \"$1\" | tee -a /home/vagrant/.ssh/authorized_keys"
     s.args = [File.read(File.expand_path("~/.ssh/id_rsa.pub"))]
   end
 

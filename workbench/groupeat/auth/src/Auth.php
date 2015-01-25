@@ -298,6 +298,8 @@ class Auth extends JWTAuth {
         {
             throw new Unauthorized("The user corresponding to these credentials has been deleted.");
         }
+
+        $credentials->user()->associate($user);
     }
 
     /**

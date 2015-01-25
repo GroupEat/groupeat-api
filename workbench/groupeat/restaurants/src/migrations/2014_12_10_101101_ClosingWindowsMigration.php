@@ -7,6 +7,7 @@ class ClosingWindowsMigration extends WindowsMigration {
 
     const TABLE = 'closing_windows';
 
+
     protected function addFieldsTo(Blueprint $table)
     {
         $table->date('day')->index();

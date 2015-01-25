@@ -17,7 +17,7 @@ class AdminsMigration extends Migration {
             $table->string('firstName');
             $table->string('lastName');
             $table->timestamps();
-            $table->softDeletes();
+            $table->softDeletes()->index();
         });
     }
 

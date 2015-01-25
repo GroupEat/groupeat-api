@@ -39,19 +39,34 @@ class RestaurantsSeeder extends Seeder {
 
     protected function insertAdditionalEntries($id)
     {
-        $restaurant = Restaurant::create([
-            'name' => 'Pizza Di Genova',
-            'phoneNumber' => '0605040302',
-        ]);
+        $restaurantsData = [
+            [
+                'name' => "Pizza Di Genova",
+                'phoneNumber' => '0605040302',
+            ],
+            [
+                'name' => "Toujours ouvert",
+                'phoneNumber' => '0605040301',
+            ],
+            [
+                'name' => "Toujours fermé",
+                'phoneNumber' => '0605040300',
+            ],
+        ];
 
-        UserCredentials::create([
-            'user' => $restaurant,
-            'email' => $this->faker->email,
-            'password' => $restaurant->name,
-            'locale' => 'fr',
-        ]);
+        foreach ($restaurantsData as $restaurantData)
+        {
+            $restaurant = Restaurant::create($restaurantData);
 
-        $this->setPizzeriaCategoryFor($restaurant);
+            UserCredentials::create([
+                'user' => $restaurant,
+                'email' => $this->faker->email,
+                'password' => $restaurant->name,
+                'locale' => 'fr',
+            ]);
+
+            $this->setPizzeriaCategoryFor($restaurant);
+        }
     }
 
     private function setPizzeriaCategoryFor(Restaurant $restaurant)

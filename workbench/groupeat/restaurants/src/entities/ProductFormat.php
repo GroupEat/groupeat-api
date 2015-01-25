@@ -18,4 +18,9 @@ class ProductFormat extends Entity {
         ];
     }
 
+    public function product()
+    {
+        return $this->belongsTo('Groupeat\Restaurants\Entities\Product');
+    }
+
 }

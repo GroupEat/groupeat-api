@@ -2,6 +2,7 @@
 
 use App;
 use Auth;
+use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Entities\PredefinedAddress;
 use Groupeat\Support\Api\V1\Controller;
@@ -61,7 +62,10 @@ class CustomersController extends Controller {
     {
         Auth::assertSame($customer);
 
-        $address = App::make('ChangeCustomerAddressService')->call($customer, Input::all());
+        $address = App::make('ChangeCustomerAddressService')->call(
+            $customer,
+            Input::only((new Address())->getFillable())
+        );
 
         return $this->itemResponse($address);
     }

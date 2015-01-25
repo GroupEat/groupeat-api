@@ -19,9 +19,19 @@ class Product extends Entity {
         ];
     }
 
+    public function type()
+    {
+        return $this->belongsTo('Groupeat\Restaurants\Entities\FoodType');
+    }
+
     public function formats()
     {
         return $this->hasMany('Groupeat\Restaurants\Entities\ProductFormat');
+    }
+
+    public function restaurant()
+    {
+        return $this->belongsTo('Groupeat\Restaurants\Entities\Restaurant');
     }
 
 }

@@ -7,6 +7,7 @@ class OpeningWindowsMigration extends WindowsMigration {
 
     const TABLE = 'opening_windows';
 
+
     protected function addFieldsTo(Blueprint $table)
     {
         $table->tinyInteger('dayOfWeek')->index();

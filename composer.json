@@ -16,6 +16,7 @@
         "laravel/framework": "4.2.*",
         "anahkiasen/former": "3.5.*",
         "schickling/backup":  "0.6.*",
+        "Treffynnon/Navigator": "1.0.*",
         "sly/notification-pusher": "2.2.*"
     },
     "require-dev": {

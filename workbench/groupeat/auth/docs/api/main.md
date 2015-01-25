@@ -1,6 +1,6 @@
 # Group Authentication
 
-To authenticate against this API, you need to pass your token on each request through the Authorization header like so:
+To access protected routes, the authentication token should be passed on each request through the Authorization header like so:
 
 ```http
 Authorization: bearer {token}
@@ -19,7 +19,9 @@ Authorization: bearer {token}
 
 ### Retrieve token [PUT]
 
-Retrieve the authentication token of an already registered user. This route should be a GET but for security reasons (the plain password should not appear in a URL) it is a PUT.
+Retrieve the authentication token of an already registered user.
+
+According to RESTful principles, this route should be a GET but, for security reasons (the plain password should not appear in a URL), it is a PUT.
 
 + Request
 
@@ -41,7 +43,7 @@ Retrieve the authentication token of an already registered user. This route shou
         
 ### Generate token [POST]
 
-Regenerate an authentication token for an already registered user. Once hit, this route will make the old token obsolete and you will have to use the new one to authenticate.
+Regenerate an authentication token for an already registered user. Once hit, this route will make the old token obsolete so only the new one should be used to authenticate.
 
 + Request
 

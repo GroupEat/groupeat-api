@@ -87,13 +87,14 @@ Returns the list of restaurants sorted by name in alphabetical order.
             }
         ]
     
-## List restaurant's products  [/restaurant/{id}/products]
+## List restaurant's products  [/restaurants/{id}/products/{?include}]
 
 ### GET
 
 + Parameters
 
     + id (required, integer, `123`) ... The restaurant ID.
+    + include (optional, string, `formats`) ... Adding include=formats to the query string will include the formats of each product in the response.
 
 + Response 200
 
@@ -121,6 +122,111 @@ Returns the list of restaurants sorted by name in alphabetical order.
                 "type_id": 1,
                 "name": "paysanne",
                 "description": "Mozzarella, basilic frais et tomates."
+            }
+        ]
+        
++ Response 200
+
+        [
+            {
+                "id": 4,
+                "type_id": 1,
+                "name": "napolitaine",
+                "description": "Tomate, mozzarella, anchois, câpres et olives.",
+                "formats": {
+                    "data": [
+                        {
+                            "id": 10,
+                            "name": "junior",
+                            "price": "7.5"
+                        },
+                        {
+                            "id": 11,
+                            "name": "sénior",
+                            "price": "11.4"
+                        },
+                        {
+                            "id": 12,
+                            "name": "méga",
+                            "price": "14.1"
+                        }
+                    ]
+                }
+            },
+            {
+                "id": 3,
+                "type_id": 1,
+                "name": "classica",
+                "description": "Tomate, mozzarella et origan.",
+                "formats": {
+                    "data": [
+                        {
+                            "id": 7,
+                            "name": "junior",
+                            "price": "7.4"
+                        },
+                        {
+                            "id": 8,
+                            "name": "sénior",
+                            "price": "9.7"
+                        },
+                        {
+                            "id": 9,
+                            "name": "méga",
+                            "price": "12.8"
+                        }
+                    ]
+                }
+            },
+            {
+                "id": 2,
+                "type_id": 1,
+                "name": "paysanne",
+                "description": "Tomate, mozzarella, poitrine fumée et œuf.",
+                "formats": {
+                    "data": [
+                        {
+                            "id": 4,
+                            "name": "junior",
+                            "price": "8.2"
+                        },
+                        {
+                            "id": 5,
+                            "name": "sénior",
+                            "price": "9.5"
+                        },
+                        {
+                            "id": 6,
+                            "name": "méga",
+                            "price": "12.3"
+                        }
+                    ]
+                }
+            },
+            {
+                "id": 1,
+                "type_id": 1,
+                "name": "paysanne",
+                "description": "Mozzarella, basilic frais et tomates.",
+                "formats": {
+                    "data": [
+                        {
+                            "id": 1,
+                            "name": "junior",
+                            "price": "8.1"
+                        },
+                        {
+                            "id": 2,
+                            "name": "sénior",
+                            "price": "9.6"
+                        },
+                        {
+                            "id": 3,
+                            "name": "méga",
+                            "price": "13.7"
+                        }
+                    ]
+                }
             }
         ]
 

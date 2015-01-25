@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Restaurant Around Distance in Kilometers
+    | Maximum Restaurant Around Distance in Kilometers
     |--------------------------------------------------------------------------
     |
     | When asking restaurants around specific coordonates we will consider that
@@ -16,7 +16,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Restaurant Opening Duration in Minutes
+    | Minimum Restaurant Opening Duration in Minutes
     |--------------------------------------------------------------------------
     |
     | When asking which restaurants are opened we will consider that a

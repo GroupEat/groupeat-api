@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Customers\Seeders;
 
+use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Database\Seeder;
@@ -25,15 +26,16 @@ class CustomersSeeder extends Seeder {
     protected function insertAdditionalEntries($id)
     {
         $customer = Customer::create([
-            'firstName' => 'Jean-Nathanael',
-            'lastName' => 'Hérault',
+            'firstName' => 'Groupeat',
+            'lastName' => 'User',
             'phoneNumber' => '0605040302',
         ]);
 
         UserCredentials::create([
             'user' => $customer,
-            'email' => 'groupeat@groupeat.fr',
-            'password' => 'MRSmaTuer',
+            'email' => 'groupeat@ensta.fr',
+            'password' => 'groupeat',
+            'activated_at' => Carbon::now(),
             'locale' => 'fr',
         ]);
     }

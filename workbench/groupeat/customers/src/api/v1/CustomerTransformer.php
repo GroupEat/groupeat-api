@@ -17,4 +17,5 @@ class CustomerTransformer extends TransformerAbstract
             'activated' => $customer->isActivated(),
         ];
     }
+
 }

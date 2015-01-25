@@ -12,4 +12,5 @@ class FoodTypeTransformer extends TransformerAbstract
             'label' => $foodType->label,
         ];
     }
+
 }

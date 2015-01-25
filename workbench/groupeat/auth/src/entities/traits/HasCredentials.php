@@ -3,6 +3,7 @@
 use App;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Support\Exceptions\Forbidden;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait HasCredentials {
@@ -47,6 +48,22 @@ trait HasCredentials {
     public function isActivated()
     {
         return $this->credentials->isActivated();
+    }
+
+    /**
+     * @param string $exceptionMessage
+     */
+    public function assertActivated($exceptionMessage = null)
+    {
+        if (!$this->isActivated())
+        {
+            if (empty($exceptionMessage))
+            {
+                $exceptionMessage = "The {$this->toShortString} should be activated.";
+            }
+
+            throw new Forbidden($exceptionMessage);
+        }
     }
 
     public function credentials()

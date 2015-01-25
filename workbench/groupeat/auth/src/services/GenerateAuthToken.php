@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Tymon\JWTAuth\JWTAuth;
 

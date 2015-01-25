@@ -13,8 +13,8 @@ class PasswordResetTokensMigration extends Migration {
     {
         Schema::create(static::TABLE, function(Blueprint $table)
         {
-            $table->string('email')->index();
-            $table->string('token')->unique()->index();
+            $table->string('email')->unique();
+            $table->string('token')->unique();
             $table->timestamp('created_at');
         });
     }

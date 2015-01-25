@@ -14,8 +14,8 @@ class PredefinedAddressesSeeder extends Seeder {
             'postcode' => 91120,
             'state' => "Essonne",
             'country' => "France",
-            'longitude' => 48.7110028,
-            'latitude' => 2.21874,
+            'latitude' => 48.7110028,
+            'longitude' => 2.21874,
         ]);
 
         PredefinedAddress::create([
@@ -25,8 +25,8 @@ class PredefinedAddressesSeeder extends Seeder {
             'postcode' => 91120,
             'state' => "Essonne",
             'country' => "France",
-            'longitude' => 48.71167,
-            'latitude' => 2.2110769,
+            'latitude' => 48.71167,
+            'longitude' => 2.2110769,
         ]);
 
         PredefinedAddress::create([
@@ -36,8 +36,8 @@ class PredefinedAddressesSeeder extends Seeder {
             'postcode' => 91120,
             'state' => "Essonne",
             'country' => "France",
-            'longitude' => 48.7138983,
-            'latitude' => 2.2034917,
+            'latitude' => 48.7138983,
+            'longitude' => 2.2034917,
         ]);
     }
 
