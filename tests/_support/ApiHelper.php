@@ -2,25 +2,19 @@
 
 class ApiHelper extends \Codeception\Module {
 
-    private $customerId;
-    private $customerToken;
-
     public function amAnActivatedCustomer()
     {
-        if (!$this->customerId)
-        {
-            $this->sendApiPost('auth/token', [
-                'email' => 'groupeat@ensta.fr',
-                'password' => 'groupeat',
-            ]);
+        $this->sendApiPost('auth/token', [
+            'email' => 'groupeat@ensta.fr',
+            'password' => 'groupeat',
+        ]);
 
-            $this->getModule('REST')->seeResponseCodeIs(200);
+        $this->getModule('REST')->seeResponseCodeIs(200);
 
-            $this->customerId = $this->grabDataFromResponse('id');
-            $this->customerToken = $this->grabDataFromResponse('token');
-        }
+        $id = $this->grabDataFromResponse('id');
+        $token = $this->grabDataFromResponse('token');
 
-        return [$this->customerToken, $this->customerId];
+        return [$token, $id];
     }
 
     public function sendRegistrationRequest(
