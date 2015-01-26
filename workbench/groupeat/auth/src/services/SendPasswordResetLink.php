@@ -4,7 +4,7 @@ use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Services\Locale;
 use Illuminate\Auth\Reminders\PasswordBroker;
 
-class SendResetPasswordLink {
+class SendPasswordResetLink {
 
     /**
      * @var PasswordBroker
@@ -43,7 +43,10 @@ class SendResetPasswordLink {
 
         if ($status == $broker::INVALID_USER)
         {
-            throw new NotFound($status);
+            throw new NotFound(
+                'noUserForEmail',
+                "No user with this e-mail address found."
+            );
         }
 
         $userCredentials = $broker->getUser($credentials);

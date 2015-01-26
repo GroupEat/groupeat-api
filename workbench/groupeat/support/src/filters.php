@@ -31,7 +31,10 @@ Route::before(function($request)
         // The query string is everything after the interrogation mark
         if (!empty($uriParts[1]))
         {
-            throw new \Groupeat\Support\Exceptions\BadRequest("Cannot pass data in the query string outside of a GET request.");
+            throw new \Groupeat\Support\Exceptions\BadRequest(
+                'queryStringForbiddenForCurrentHttpVerb',
+                "Cannot pass data in the query string outside of a GET request."
+            );
         }
     }
 });

@@ -16,7 +16,10 @@ class AuthController extends Controller {
 
         if (!Auth::check())
         {
-            throw new Unauthorized("Bad credentials.");
+            throw new Unauthorized(
+                "badAuthenticationCredentials",
+                "Cannot retrieve authentication token because of bad credentials."
+            );
         }
 
         return $this->getTokenResponseFromUser(Auth::user());
@@ -32,7 +35,7 @@ class AuthController extends Controller {
 
     public function sendResetPasswordLink()
     {
-        App::make('SendResetPasswordLinkService')->call(Input::get('email'));
+        App::make('SendPasswordResetLinkService')->call(Input::get('email'));
     }
 
     /**

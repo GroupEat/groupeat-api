@@ -24,13 +24,14 @@ The maximum distance between the given address and the restaurant is {{ restaura
             "latitude": 48.711042,
             "longitude": 2.219278
         }
-        
+
 + Response 201
 
 + Response 403
 
         {
             "status_code": 403,
+            "error_key": "userShouldBeActivated",
             "message": "The customer #26 should be activated to place an order."
         }
 

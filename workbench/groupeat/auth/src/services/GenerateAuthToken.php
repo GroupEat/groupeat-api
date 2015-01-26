@@ -1,7 +1,7 @@
 <?php namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Exceptions\Forbidden;
+use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -32,7 +32,10 @@ class GenerateAuthToken {
 
         if (!$user)
         {
-            throw new Unauthorized("Bad credentials.");
+            throw new NotFound(
+                "noUserWithSameCredentials",
+                "The user corresponding to these credentials does not exist."
+            );
         }
 
         return $user->replaceAuthenticationToken($token);
@@ -63,7 +66,10 @@ class GenerateAuthToken {
     {
         if (!$token)
         {
-            throw new Forbidden("Bad credentials.");
+            throw new Unauthorized(
+                "badAuthenticationCredentials",
+                "Cannot reset authentication token because of bad credentials."
+            );
         }
 
         return $token;

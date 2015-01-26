@@ -83,7 +83,10 @@ class Restaurant extends Entity implements User {
 
         if (!$restaurant || $restaurant->id != $this->id)
         {
-            throw new BadRequest("The {$this->toShortString()} is not opened from $from to $to.");
+            throw new BadRequest(
+                'restaurantClosed',
+                "The {$this->toShortString()} is not opened from $from to $to."
+            );
         }
     }
 

@@ -69,7 +69,10 @@ class SendActivationLink {
 
         if ($bytes === false)
         {
-            throw new Exception("Unable to generate random string.");
+            throw new Exception(
+                'cannotGenerateActivationToken',
+                "Unable to generate a random string for the activation token."
+            );
         }
 
         $token = substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $length);

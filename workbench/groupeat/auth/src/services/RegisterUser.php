@@ -75,11 +75,16 @@ class RegisterUser {
             'password' => 'min:6',
         ];
 
-        $errors = $this->validation->make($credentials, $rules)->messages();
+        $validator = $this->validation->make($credentials, $rules);
+        $errors = $validator->messages();
 
         if (!$errors->isEmpty())
         {
-            throw new BadRequest("Invalid credentials.", $errors);
+            throw new BadRequest(
+                getErrorKeyFrom($validator->failed()),
+                "Cannot register user with invalid credentials.",
+                $errors
+            );
         }
 
         return UserCredentials::register($email, $password, $locale, $user);

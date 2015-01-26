@@ -47,7 +47,10 @@ class RegisterCustomer {
             }
         }
 
-        throw new Forbidden("E-mail should correspond to a Saclay campus account.");
+        throw new Forbidden(
+            'emailNotFromCampus',
+            "E-mail should correspond to a Saclay campus account."
+        );
     }
 
 }

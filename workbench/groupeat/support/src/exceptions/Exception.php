@@ -7,7 +7,14 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Exception extends ResourceException {
 
+    /**
+     * @var string
+     */
+    protected $errorKey;
+
+
     public function __construct(
+        $errorKey,
         $message = null,
         $statusCode = 500,
         $errors = null,
@@ -16,6 +23,8 @@ class Exception extends ResourceException {
         $code = 0
     )
     {
+        $this->errorKey = $errorKey;
+
         if (is_null($errors))
         {
             $this->errors = new Bag;
@@ -26,6 +35,14 @@ class Exception extends ResourceException {
         }
 
         HttpException::__construct($statusCode, $message, $previous, $headers, $code);
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorKey()
+    {
+        return $this->errorKey;
     }
 
 }

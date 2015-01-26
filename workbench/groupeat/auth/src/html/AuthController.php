@@ -2,7 +2,7 @@
 
 use App;
 use Groupeat\Admin\Forms\ResetPasswordForm;
-use Groupeat\Support\Exceptions\Forbidden;
+use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Html\Controller;
 use Input;
@@ -59,7 +59,7 @@ class AuthController extends Controller {
                 'info'
             );
         }
-        catch (Forbidden $exception)
+        catch (Exception $exception)
         {
             return $this->redirectBackWithError('auth::resetPassword.'.$exception->getMessage());
         }

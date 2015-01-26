@@ -14,7 +14,10 @@ class ActivateUser {
 
         if (!$userCredentials)
         {
-            throw new NotFound("Cannot retrieve user from token.");
+            throw new NotFound(
+                "noUserForActivationToken",
+                "Cannot retrieve user from activation token."
+            );
         }
 
         $userCredentials->activate()->save();

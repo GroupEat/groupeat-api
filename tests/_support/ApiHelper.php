@@ -105,15 +105,15 @@ class ApiHelper extends \Codeception\Module {
         return '/'.$this->getModule('Laravel4')->kernel['config']->get('api::prefix').'/'.$path;
     }
 
-    public function seeResponseMessageIs($message)
+    public function seeResponseErrorKeyIs($errorKey)
     {
-        $this->getModule('REST')->seeResponseContainsJson(compact('message'));
+        $this->getModule('REST')->seeResponseContainsJson(['error_key' => $errorKey]);
     }
 
-    public function seeErrorResponse($code, $message)
+    public function seeErrorResponse($code, $errorKey)
     {
         $this->getModule('REST')->seeResponseCodeIs($code);
-        $this->seeResponseMessageIs($message);
+        $this->seeResponseErrorKeyIs($errorKey);
     }
 
     public function seeErrorsContain(array $errors)

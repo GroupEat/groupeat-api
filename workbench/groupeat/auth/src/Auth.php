@@ -37,14 +37,20 @@ class Auth extends JWTAuth {
 
         if (! $userCredentials instanceof UserCredentials)
         {
-            throw new Unauthorized("The user corresponding to the authentication token does not exist.");
+            throw new Unauthorized(
+                "noUserForAuthenticationToken",
+                "The user corresponding to the authentication token does not exist."
+            );
         }
 
         $this->assertCorrespondingUserExists($userCredentials);
 
         if ($userCredentials->token != $this->token)
         {
-            throw new Forbidden("Obsolete token.");
+            throw new Forbidden(
+                "obsoleteAuthenticationToken",
+                "Obsolete authentication token."
+            );
         }
 
         return $this->forceSetUserCredentials($userCredentials);
@@ -92,7 +98,10 @@ class Auth extends JWTAuth {
     {
         if (!$this->check())
         {
-            throw new Unauthorized("No authenticated user.");
+            throw new Unauthorized(
+                "userMustAuthenticate",
+                "No authenticated user."
+            );
         }
     }
 
@@ -129,7 +138,10 @@ class Auth extends JWTAuth {
             $givenId = $user->id;
             $currentId = $this->user()->id;
 
-            throw new Unauthorized("Should be authenticated as {$this->toShortType($type)} $givenId instead of $currentId.");
+            throw new Forbidden(
+                "wrongAuthenticatedUser",
+                "Should be authenticated as {$this->toShortType($type)} $givenId instead of $currentId."
+            );
         }
     }
 
@@ -158,7 +170,10 @@ class Auth extends JWTAuth {
 
         if ($currentType != $givenType)
         {
-            throw new Unauthorized("Should be authenticated as {$this->toShortType($givenType)} instead of {$this->toShortType($currentType)}.");
+            throw new Forbidden(
+                "wrongAuthenticatedUser",
+                "Should be authenticated as {$this->toShortType($givenType)} instead of {$this->toShortType($currentType)}."
+            );
         }
     }
 
@@ -212,7 +227,10 @@ class Auth extends JWTAuth {
 
         if ($shortType === false)
         {
-            throw new Exception("Type $type has not been added to the available user types.");
+            throw new Exception(
+                "userTypeNotAvailableForAuthentication",
+                "Type $type has not been added to the available user types."
+            );
         }
 
         return $shortType;
@@ -291,12 +309,18 @@ class Auth extends JWTAuth {
 
         if (! $user instanceof User)
         {
-            throw new Unauthorized("The user corresponding to these credentials does not exist.");
+            throw new Unauthorized(
+                "noUserWithSameCredentials",
+                "The user corresponding to these credentials does not exist."
+            );
         }
 
         if ($usesSoftDelete && $user->trashed())
         {
-            throw new Unauthorized("The user corresponding to these credentials has been deleted.");
+            throw new Unauthorized(
+                "userHasBeenDeleted",
+                "The user corresponding to these credentials has been deleted."
+            );
         }
 
         $credentials->user()->associate($user);

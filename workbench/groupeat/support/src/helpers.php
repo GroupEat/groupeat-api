@@ -64,7 +64,10 @@ if (!function_exists('decodeJSON'))
 
         if (is_null($data) && $throwOnNull)
         {
-            throw new \Groupeat\Support\Exceptions\BadRequest("Cannot decode JSON: $JSON.");
+            throw new \Groupeat\Support\Exceptions\BadRequest(
+                'cannotDecodeJson',
+                "Cannot decode JSON: $JSON."
+            );
         }
 
         return $data;
@@ -161,6 +164,34 @@ if (!function_exists('panelView'))
         }
 
         return \View::make('support::panel', compact('title', 'panelBody', 'panelClass', 'panelId'));
+    }
+}
+
+if (!function_exists('getErrorKeyFrom'))
+{
+    /**
+     * @param array $failedRules
+     *
+     * @return string
+     */
+    function getErrorKeyFrom(array $failedRules)
+    {
+        if (empty($failedRules))
+        {
+            return 'validationHasPassed';
+        }
+
+        foreach ($failedRules as $attribute => $rules)
+        {
+            $rule = lcfirst(array_keys($rules)[0]);
+
+            if (Lang::has("errorKeys.$rule"))
+            {
+                return lcfirst($attribute).ucfirst(Lang::get("errorKeys.$rule"));
+            }
+
+            return 'invalid'.ucfirst($attribute);
+        }
     }
 }
 

@@ -21,14 +21,23 @@ abstract class Entity extends Model {
      */
     protected $validationErrors;
 
+    /**
+     * @var array
+     */
+    protected $failedRules;
+
 
     public static function findOrFail($id, $columns = ['*'])
     {
         $model = static::find($id, $columns);
+        $shortClassName = removeNamespaceFromClassName(static::CLASS);
 
         if (is_null($model))
         {
-            throw new NotFound(removeNamespaceFromClassName(static::CLASS)."#$id does not exist.");
+            throw new NotFound(
+                lcfirst($shortClassName).'NotFound',
+                $shortClassName."#$id does not exist."
+            );
         }
 
         return $model;
@@ -42,12 +51,26 @@ abstract class Entity extends Model {
             {
                 if (!$entity->validate())
                 {
-                    throw new BadRequest("Cannot save {$entity->toShortString()}.", $entity->errors());
+                    throw new BadRequest(
+                        getErrorKeyFrom($entity->getFailedRules()),
+                        "Cannot save {$entity->toShortString()}.",
+                        $entity->errors()
+                    );
                 }
             }
         });
 
         parent::boot();
+    }
+
+    protected static function throwNotFoundException()
+    {
+        $shortClass = removeNamespaceFromClassName(static::class);
+
+        throw new NotFound(
+            lcfirst($shortClass).'NotFound',
+            $shortClass." not found."
+        );
     }
 
     /**
@@ -67,9 +90,18 @@ abstract class Entity extends Model {
     {
         $validator = Validator::make($this->attributes, $this->getRules());
         $isValid = $validator->passes();
+        $this->failedRules = $validator->failed();
         $this->validationErrors = $validator->messages();
 
         return $isValid;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFailedRules()
+    {
+        return $this->failedRules;
     }
 
     /**
@@ -134,7 +166,7 @@ abstract class Entity extends Model {
      */
     public function toShortString()
     {
-        $str = strtolower(getClassNameWithoutNamespace($this));
+        $str = lcfirst(getClassNameWithoutNamespace($this));
 
         if ($id = $this->getKey())
         {
@@ -175,7 +207,10 @@ abstract class Entity extends Model {
                 . $relatedEntity->toShortString().' on '
                 . $this->toShortString().'.';
 
-            throw new Exception($message);
+            throw new Exception(
+                'polymorphicRelationCannotBeSet',
+                $message
+            );
         }
 
         $this->$name()->associate($relatedEntity);

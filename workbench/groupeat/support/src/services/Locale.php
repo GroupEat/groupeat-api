@@ -2,8 +2,7 @@
 
 use Closure;
 use Dingo\Api\Routing\Router;
-use Groupeat\Support\Exceptions\Exception;
-use Groupeat\Support\Exceptions\Forbidden;
+use Groupeat\Support\Exceptions\BadRequest;
 use Illuminate\Config\Repository;
 use Illuminate\Http\Request;
 use Illuminate\Translation\Translator;
@@ -120,7 +119,10 @@ class Locale {
         {
             $availableLocalesTest = implode(', ', $this->availableLocales);
 
-            throw new Forbidden("The locale $locale should belong to [$availableLocalesTest].");
+            throw new BadRequest(
+                'unavailableLocale',
+                "The locale $locale should belong to [$availableLocalesTest]."
+            );
         }
     }
 
@@ -183,7 +185,10 @@ class Locale {
     {
         if (empty($locale))
         {
-            throw new Exception("No valid locale given.");
+            throw new BadRequest(
+                'noValidLocaleGiven',
+                "A valid locale must be given."
+            );
         }
     }
 

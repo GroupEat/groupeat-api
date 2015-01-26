@@ -34,7 +34,7 @@ trait HasCredentials {
 
         if (!$credentials->user)
         {
-            throw (new ModelNotFoundException)->setModel(get_called_class());
+            static::throwNotFoundException();
         }
 
         return $credentials->user;
@@ -62,7 +62,10 @@ trait HasCredentials {
                 $exceptionMessage = "The {$this->toShortString} should be activated.";
             }
 
-            throw new Forbidden($exceptionMessage);
+            throw new Forbidden(
+                "userShouldBeActivated",
+                $exceptionMessage
+            );
         }
     }
 

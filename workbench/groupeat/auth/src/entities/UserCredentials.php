@@ -41,7 +41,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
 
         if (!$userCredentials)
         {
-            throw (new ModelNotFoundException)->setModel(get_called_class());
+            static::throwNotFoundException();
         }
 
         return $userCredentials;

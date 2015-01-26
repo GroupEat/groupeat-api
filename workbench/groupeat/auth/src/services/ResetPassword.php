@@ -1,7 +1,9 @@
 <?php namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Forbidden;
+use Groupeat\Support\Exceptions\NotFound;
 use Illuminate\Auth\Reminders\PasswordBroker;
 
 class ResetPassword {
@@ -39,9 +41,25 @@ class ResetPassword {
             $userCredentials->resetPassword($plainPassword, $this->authTokenGenerator->forUser($userCredentials));
         });
 
-        if ($status != $broker::PASSWORD_RESET)
+        switch ($status)
         {
-            throw new Forbidden($status);
+            case $broker::INVALID_USER:
+                throw new NotFound(
+                    'noUserForPasswordResetToken',
+                    $status
+                );
+
+            case $broker::INVALID_PASSWORD:
+                throw new BadRequest(
+                    'badPassword',
+                    $status
+                );
+
+            case $broker::INVALID_TOKEN:
+                throw new Forbidden(
+                    'invalidPasswordResetToken',
+                    "Cannot reset password because of invalid token."
+                );
         }
     }
 

@@ -38,9 +38,10 @@ According to RESTful principles, this route should be a GET but, for security re
 
         {
             "status_code": 401,
-            "message": "Bad credentials."
+            "error_key": "badAuthenticationCredentials",
+            "message": "Cannot retrieve authentication token because of bad credentials."
         }
-        
+
 ### Generate token [POST]
 
 Regenerate an authentication token for an already registered user. Once hit, this route will make the old token obsolete so only the new one should be used to authenticate.
@@ -51,18 +52,19 @@ Regenerate an authentication token for an already registered user. Once hit, thi
             "email": "customer@ensta.fr",
             "password": "password",
         }
-        
+
 + Response 200
 
     [Token][]
-   
+
 + Response 401
 
         {
             "status_code": 401,
-            "message": "Bad credentials."
+            "error_key": "badAuthenticationCredentials",
+            "message": "Cannot reset authentication token because of bad credentials."
         }
-        
+
 ## Send password reset link [/auth/reset-password]
 
 ### POST
@@ -77,9 +79,10 @@ Send a password reset link to the given e-mail address and revoke the previous a
 
 + Response 200
 
-+ Response 404 
++ Response 404
 
         {
             "status_code": 404,
+            "error_key": "noUserForEmail",
             "message": "No user with this e-mail address found."
         }

@@ -21,7 +21,10 @@ abstract class Controller extends IlluminateController {
     {
         if (empty($item))
         {
-            throw new Exception("Cannot make response from empty item.");
+            throw new Exception(
+                'cannotMakeResponseFromEmptyItem',
+                "Cannot make response from empty item."
+            );
         }
 
         return $this->response->item($item, $this->getTransformerFor($item));
@@ -39,7 +42,10 @@ abstract class Controller extends IlluminateController {
         {
             if ($collection->isEmpty())
             {
-                throw new Exception("Cannot find transfomer from empty collection.");
+                throw new Exception(
+                    'cannotFindTransformerFromEmptyCollection',
+                    "Cannot find transfomer from empty collection."
+                );
             }
 
             $transfomer = $this->getTransformerFor($collection->first());

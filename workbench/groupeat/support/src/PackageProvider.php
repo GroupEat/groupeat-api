@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Support;
 
+use Groupeat\Support\Exceptions\ExceptionHandler;
 use Groupeat\Support\Services\Locale;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
@@ -28,6 +29,11 @@ class PackageProvider extends WorkbenchPackageProvider {
         $this->app['router']->before(function($request)
         {
             $this->app['groupeat.locale']->detectAndSetIfNeeded($request);
+        });
+
+        $this->app->bind('Dingo\Api\Event\ExceptionHandler', function ($app)
+        {
+            return new ExceptionHandler($app['api.exception'], $app['config']->get('api::debug'));
         });
     }
 

@@ -20,7 +20,7 @@
                 "label": "chinese"
             }
         ]
-        
+
 ## List restaurants [/restaurants/{?opened,around,latitude,longitude}]
 
 ### GET
@@ -65,7 +65,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
                 "latitude": 2.23933
             }
         ]
-        
+
 ## List food types [/food-types]
 
 ### GET
@@ -86,7 +86,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
                 "label": "salad"
             }
         ]
-    
+
 ## List restaurant's products  [/restaurants/{id}/products/{?include}]
 
 ### GET
@@ -124,7 +124,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
                 "description": "Mozzarella, basilic frais et tomates."
             }
         ]
-        
+
 + Response 200
 
         [

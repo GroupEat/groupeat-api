@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 class Forbidden extends Exception {
 
     public function __construct(
+        $errorKey,
         $message = null,
         $errors = null,
         array $headers = [],
@@ -13,7 +14,7 @@ class Forbidden extends Exception {
         $code = 0
     )
     {
-        Exception::__construct($message, Response::HTTP_FORBIDDEN, $errors, $headers, $previous, $code);
+        Exception::__construct($errorKey, $message, Response::HTTP_FORBIDDEN, $errors, $headers, $previous, $code);
     }
 
 }

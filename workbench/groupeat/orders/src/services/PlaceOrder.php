@@ -114,7 +114,9 @@ class PlaceOrder {
     {
         if ($foodRushDurationInMinutes > $this->maximumFoodRushDurationInMinutes)
         {
-            throw new BadRequest("The FoodRush duration should not exceed "
+            throw new BadRequest(
+                "foodRushTooLong",
+                "The FoodRush duration should not exceed "
                 . $this->maximumFoodRushDurationInMinutes . ', '
                 . $foodRushDurationInMinutes . ' given.'
             );
@@ -125,7 +127,10 @@ class PlaceOrder {
     {
         if (empty($productFormats) || (array_sum($productFormats) == 0))
         {
-            throw new BadRequest("An order must contains one or more product formats.");
+            throw new BadRequest(
+                'emptyOrder',
+                "An order must contains one or more product formats."
+            );
         }
     }
 
@@ -136,7 +141,10 @@ class PlaceOrder {
 
         if (!empty($missingIds))
         {
-            throw new NotFound("The products formats #" . implode(',', $missingIds) . " do not exist");
+            throw new NotFound(
+                'unexistingProductFormats',
+                "The products formats #" . implode(',', $missingIds) . " do not exist"
+            );
         }
     }
 
@@ -154,7 +162,10 @@ class PlaceOrder {
 
         if ($restaurants->count() > 1)
         {
-            throw new BadRequest("An order should have products from one restaurant only.");
+            throw new BadRequest(
+                'productFormatsFromDifferentRestaurants',
+                "An order should have products from one restaurant only."
+            );
         }
 
         return $restaurants->first();
@@ -179,6 +190,7 @@ class PlaceOrder {
         if ($distanceInKms > $this->maximumDeliveryDistanceInKms)
         {
             throw new BadRequest(
+                'deliveryDistanceTooLong',
                 'The distance between the given delivery address and the '
                 . $restaurant->toShortString() . ' should be less than '
                 . $this->maximumDeliveryDistanceInKms . ' kms, '

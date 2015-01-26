@@ -5,7 +5,7 @@ class AuthCest {
     public function testThatPassingATokenInTheQueryStringIsForbidden(ApiTester $I)
     {
         $I->sendApiGet('auth/token?token=shouldBePassedInHeader');
-        $I->seeErrorResponse(400, "Trying to authenticate via token in query string is forbidden.");
+        $I->seeErrorResponse(400, 'authenticationTokenInQueryStringForbidden');
     }
 
     public function testThatAUserCanBeRegistered(ApiTester $I)
@@ -55,7 +55,7 @@ class AuthCest {
         $I->sendApiGetWithToken($newToken, $this->getUserResource().'/'.$id);
         $I->seeResponseCodeIs(200);
         $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
-        $I->seeErrorResponse(403, "Obsolete token.");
+        $I->seeErrorResponse(403, 'obsoleteAuthenticationToken');
     }
 
     public function testThatAUserCanAskItsTokenInExchangeOfValidCredentials(ApiTester $I)
@@ -79,7 +79,7 @@ class AuthCest {
                 'locale' => 'fr',
             ]);
 
-            $I->seeErrorResponse(400, "Invalid credentials.");
+            $I->seeErrorResponse(400, 'invalidEmail');
             $I->seeErrorsContain(['email' => ["The e-mail must be a valid e-mail address."]]);
         }
     }
@@ -93,7 +93,7 @@ class AuthCest {
             'locale' => 'fr',
         ]);
 
-        $I->seeErrorResponse(400, "Invalid credentials.");
+        $I->seeErrorResponse(400, 'emailAlreadyTaken');
         $I->seeErrorsContain(['email' => ["The e-mail has already been taken."]]);
     }
 
@@ -145,13 +145,13 @@ class AuthCest {
         $I->seeResponseCodeIs(200);
 
         $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
-        $I->seeErrorResponse(403, "Obsolete token.");
+        $I->seeErrorResponse(403, 'obsoleteAuthenticationToken');
 
         $I->sendApiPut('auth/token', [
             'email' => $email,
             'password' => $oldPassword,
         ]);
-        $I->seeErrorResponse(401, "Bad credentials.");
+        $I->seeErrorResponse(401, 'badAuthenticationCredentials');
     }
 
     protected function sendRegistrationRequest(

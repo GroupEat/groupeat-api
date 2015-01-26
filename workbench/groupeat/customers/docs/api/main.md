@@ -15,38 +15,66 @@ An e-mail will be sent to the given address with an activation link that must be
             "password": "password",
             "locale": "fr"
         }
-            
+
 + Response 201
- 
-         {
+
+        {
              "id": 1,
              "type": "customer",
              "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do",
              "activated": false
          }
-         
+
 + Response 400
 
         {
-             "message": "Invalid credentials.",
-             "status_code": 400,
-             "errors": {
-                 "email": [
-                     "The e-mail must be a valid e-mail address."
-                 ],
-                 "password": [
-                     "The password must be at least 6 characters."
-                 ]
-             }
-         }
-         
+            "status_code": 400,
+            "error_key": "emailAlreadyTaken",
+            "message": "Cannot register user with invalid credentials.",
+            "errors": {
+                "email": [
+                    "The e-mail has already been taken."
+                ],
+                "password": [
+                    "The password must be at least 6 characters."
+                ]
+            }
+        }
+        
++ Response 400
+
+        {
+            "status_code": 400,
+            "error_key": "invalidEmail",
+            "message": "Cannot register user with invalid credentials.",
+            "errors":{
+                "email": [
+                    "The e-mail must be a valid e-mail address."
+                ]
+            }
+        }
+        
++ Response 400
+
+        {
+            "status_code": 400,
+            "error_key": "passwordTooShort",
+            "message": "Cannot register user with invalid credentials.",
+            "errors": {
+                "password": [
+                    "The password must be at least 6 characters."
+                ]
+            }
+        }
+
 + Response 403
 
-         {
-             "message": "E-mail should correspond to a Saclay campus account.",
-             "status_code": 403
-         }
-         
+        {
+            "status_code": 403,
+            "error_key": "emailNotFromCampus",
+            "message": "E-mail should correspond to a Saclay campus account."
+        }
+
 ## Customer [/customers/{id}]
 
 + Parameters
@@ -73,10 +101,11 @@ An e-mail will be sent to the given address with an activation link that must be
     [Customer][]
 
 + Response 401
-            
+
         {
-            "message": "Should be authenticated as customer 1 instead of 5.",
-            "status_code": 401
+            "status_code": 403,
+            "error_key": "wrongAuthenticatedUser",
+            "message": "Should be authenticated as customer 5 instead of 6."
         }
 
 + Response 404
@@ -86,7 +115,7 @@ An e-mail will be sent to the given address with an activation link that must be
 Replace the customer data with the one passed in the request. However, a customer must have a first name, a last name and a phone number thus, when hitting this route for the first time, valid information for all these fields must be given.
 
 + Request
-    
+
         {
             "firstName": "Jean-Nathanaël",
             "lastName: "Hérault",
@@ -100,31 +129,34 @@ Replace the customer data with the one passed in the request. However, a custome
 + Response 400
             
         {
-            "message": "Cannot update customer data.",
             "status_code": 400,
+            "error_key": "phoneNumberFormatIsInvalid",
+            "message": "Cannot save customer #6.",
             "errors": {
                 "phoneNumber": [
                     "The phone number format is invalid."
                  ]
              }
         }
-            
-+ Response 401
-            
+
++ Response 403
+
         {
-            "message": "Should be authenticated as customer 1 instead of 5.",
-            "status_code": 401
+            "status_code": 403,
+            "error_key": "wrongAuthenticatedUser",
+            "message": "Should be authenticated as customer 1 instead of 5."
         }
 
 ### Unregister customer [DELETE]
 
 + Response 200
 
-+ Response 401
++ Response 403
 
         {
-            "message": "Should be authenticated as customer 1 instead of 5.",
-            "status_code": 401
+            "status_code": 403,
+            "error_key": "wrongAuthenticatedUser",
+            "message": "Should be authenticated as customer 1 instead of 5."
         }
 
 ## Address [/customers/{id}/address]
@@ -145,13 +177,13 @@ Replace the customer data with the one passed in the request. However, a custome
             "latitude": 48.711042,
             "longitude": 2.219278
         }
-        
+
 ### Get address [GET]
 
 + Response 200
 
     [Address][]
-    
+
 ### Add/Update address [PUT]
 
 For the MVP, all the addresses must be valid campus addresses. That's why the only writable attributes are: street, details, latitude and longitude. Logically, all of these fields should change together because they are not independent. That's why this request is a PUT and not a PATCH...
@@ -164,7 +196,7 @@ For the MVP, all the addresses must be valid campus addresses. That's why the on
             "latitude": 48.711042,
             "longitude": 2.219278
         }
-        
+
 + Response 200
 
     [Address][]

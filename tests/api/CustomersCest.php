@@ -12,7 +12,7 @@ class CustomersCest {
         foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain)
         {
             $I->sendApiPost('customers', ['email' => "user@$domain", 'password' => 'password']);
-            $I->seeErrorResponse(403, "E-mail should correspond to a Saclay campus account.");
+            $I->seeErrorResponse(403, 'emailNotFromCampus');
         }
     }
 
@@ -33,10 +33,10 @@ class CustomersCest {
         list($token2, $id2) = $this->sendRegistrationRequest($I, 'user2@ensta.fr');
 
         $I->sendApiGetWithToken($token1, "customers/$id2");
-        $I->seeErrorResponse(401, "Should be authenticated as customer $id2 instead of $id1.");
+        $I->seeErrorResponse(403, 'wrongAuthenticatedUser');
 
         $I->sendApiDeleteWithToken($token1, "customers/$id2");
-        $I->seeErrorResponse(401, "Should be authenticated as customer $id2 instead of $id1.");
+        $I->seeErrorResponse(403, 'wrongAuthenticatedUser');
     }
 
     public function testThatACustomerCanUpdateItsData(ApiTester $I)
