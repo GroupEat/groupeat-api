@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This project use Vagrant in order not to mess with your computer setup. Everything will be installed and run in a virtual machine, leaving your actual environment untouched! The added benefit is that the local development environment will be exactly the same than the production one
+This project use the Vagrant in order not to mess with your computer setup. Everything will be installed and run in a virtual machine, leaving your actual environment untouched! The added benefit is that the local development environment will be exactly the same than the production one.
 
 ## Common part
 
@@ -35,7 +35,7 @@ Remember that some useful aliases are specified at the end of `server/provision.
 
 ## Git commands
 
-Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically. However, before running `art pull` for the first time (i.e. after cloning this repo) you need to run `composer install` to install the required Composer dependencies.
+Instead of the usual `git pull` and `git push` commands, use the `art pull` and `art push` commands to interact with the Git repository as it will execute additional needed tasks automatically. However, before running `art pull` for the first time (i.e. after cloning this repo) you need to run `composer install` to install the required Composer dependencies. If something goes wrong it could mean that your Vagrant box is not up to date: please refer to the troubleshooting section below.
 
 ## Testing the code
 
@@ -55,3 +55,11 @@ Some useful admin routes are defined to tinker with the application :
  - https://groupeat.dev/db: PostgreSQL management (ignore the eventual error message and click on 'Login')
  - https://groupeat.dev/logs: View the application logs (from both Nginx and CLI)
  - https://groupeat.dev/phpinfo: Open the PHPinfo page
+
+## Troubleshooting
+
+Here are some procedures that you can try to fix known problematic situations :
+
+ - The `art pull` command failed or some software is missing on the VM: It means that your PizzeriaDev box is not up to date. Update it with `vagrant box update` and then destroy and recreate the VM with `vagrant destroy -f; vagrant up`. If you still have some problems, you may want to bring out the `./scripts/mac_install.sh` heavy artillery on Mac OS X to update Vagrant and Virtualbox.
+ 
+Whatever may happen, you should not try to run `./scripts/provision.sh` as it is only used to provision the production server or to create the PizzeriaDev box before distributing here https://atlas.hashicorp.com/tibdex/boxes/PizzeriaDev.
