@@ -61,5 +61,3 @@ Some useful admin routes are defined to tinker with the application :
 Here are some procedures that you can try to fix known problematic situations :
 
  - The `art pull` command failed or some software is missing on the VM: It means that your PizzeriaDev box is not up to date. Update it with `vagrant box update` and then destroy and recreate the VM with `vagrant destroy -f; vagrant up`. If you still have some problems, you may want to bring out the `./scripts/mac_install.sh` heavy artillery on Mac OS X to update Vagrant and Virtualbox.
- 
-Whatever may happen, you should not try to run `./scripts/provision.sh` as it is only used to provision the production server or to create the PizzeriaDev box before distributing here https://atlas.hashicorp.com/tibdex/boxes/PizzeriaDev.
