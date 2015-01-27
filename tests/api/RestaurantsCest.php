@@ -4,7 +4,7 @@ class RestaurantsCest {
 
     public function testThatAUserShouldAuthenticateToSeeTheRestaurantList(ApiTester $I)
     {
-        list($token, $id) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGet('restaurants');
         $I->seeResponseCodeIs(401);
@@ -15,7 +15,7 @@ class RestaurantsCest {
 
     public function testThatTheCategoriesCanBeListed(ApiTester $I)
     {
-        list($token, $id) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, 'restaurant-categories');
         $I->seeResponseCodeIs(200);
@@ -23,7 +23,7 @@ class RestaurantsCest {
 
     public function testThatTheFoodTypesCanBeListed(ApiTester $I)
     {
-        list($token, $id) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, 'food-types');
         $I->seeResponseCodeIs(200);
@@ -31,7 +31,7 @@ class RestaurantsCest {
 
     public function testThatTheProductsOfARestaurantCanBeListed(ApiTester $I)
     {
-        list($token, $id) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, 'restaurants/1/products');
         $I->seeResponseCodeIs(200);
@@ -39,7 +39,7 @@ class RestaurantsCest {
 
     public function testThatTheFormatsOfAProductCanBeListed(ApiTester $I)
     {
-        list($token, $id) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, 'restaurants/1/products');
         $I->seeResponseCodeIs(200);

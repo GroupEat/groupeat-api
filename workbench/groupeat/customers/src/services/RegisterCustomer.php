@@ -2,7 +2,7 @@
 
 use Groupeat\Auth\Services\RegisterUser;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Support\Exceptions\Forbidden;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 
 class RegisterCustomer {
 
@@ -47,8 +47,8 @@ class RegisterCustomer {
             }
         }
 
-        throw new Forbidden(
-            'emailNotFromCampus',
+        throw new UnprocessableEntity(
+            ['email' => ['notFromCampus' => []]],
             "E-mail should correspond to a Saclay campus account."
         );
     }

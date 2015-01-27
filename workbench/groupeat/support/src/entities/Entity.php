@@ -52,9 +52,8 @@ abstract class Entity extends Model {
                 if (!$entity->validate())
                 {
                     throw new UnprocessableEntity(
-                        getErrorKeyFrom($entity->getFailedRules()),
-                        "Cannot save {$entity->toShortString()}.",
-                        $entity->errors()
+                        $entity->getFailedRules(),
+                        "Cannot save {$entity->toShortString()}."
                     );
                 }
             }

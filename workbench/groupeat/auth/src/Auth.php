@@ -67,10 +67,8 @@ class Auth extends JWTAuth {
     /**
      * @param $email
      * @param $password
-     *
-     * @return bool
      */
-    public function attemptByCredentials($email, $password)
+    public function byCredentials($email, $password)
     {
         $this->logout();
 
@@ -80,10 +78,15 @@ class Auth extends JWTAuth {
 
             $this->setUserCredentials($user);
 
-            return true;
+            return;
         }
 
-        return false;
+        if (!$this->auth->getLastAttempted())
+        {
+            UserCredentials::throwNotFoundByEmailException($email);
+        }
+
+        UserCredentials::throwBadPasswordException();
     }
 
     /**

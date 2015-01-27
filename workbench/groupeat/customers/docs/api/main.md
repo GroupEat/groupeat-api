@@ -24,54 +24,33 @@ An e-mail will be sent to the given address with an activation link that must be
              "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do",
              "activated": false
          }
-
-+ Response 403
+        
++ Response 400
 
         {
-            "status_code": 403,
-            "error_key": "emailNotFromCampus",
-            "message": "E-mail should correspond to a Saclay campus account."
+            "status_code": 400,
+            "error_key": "unavailableLocale",
+            "message": "The locale ru should belong to [fr]."
         }
 
 + Response 422
 
         {
             "status_code": 422,
-            "error_key": "emailAlreadyTaken",
             "message": "Cannot register user with invalid credentials.",
             "errors": {
-                "email": [
-                    "The e-mail has already been taken."
-                ],
-                "password": [
-                    "The password must be at least 6 characters."
-                ]
-            }
-        }
-
-+ Response 422
-
-        {
-            "status_code": 422,
-            "error_key": "invalidEmail",
-            "message": "Cannot register user with invalid credentials.",
-            "errors":{
-                "email": [
-                    "The e-mail must be a valid e-mail address."
-                ]
-            }
-        }
-  
-+ Response 422
-
-        {
-            "status_code": 422,
-            "error_key": "passwordTooShort",
-            "message": "Cannot register user with invalid credentials.",
-            "errors": {
-                "password": [
-                    "The password must be at least 6 characters."
-                ]
+                "email": {
+                    "email": [], // Invalid email format
+                    "notFromCampus": [],
+                    "alreadyTaken": [
+                        "user_credentials"
+                    ]
+                },
+                "password": {
+                    "min": [
+                        "6"
+                    ]
+                }
             }
         }
 
@@ -118,7 +97,7 @@ Replace the customer data with the one passed in the request. However, a custome
 
         {
             "firstName": "Jean-Nathanaël",
-            "lastName: "Hérault",
+            "lastName": "Hérault",
             "phoneNumber": "06 05 04 03 02"
         }
 
@@ -138,13 +117,14 @@ Replace the customer data with the one passed in the request. However, a custome
             
         {
             "status_code": 422,
-            "error_key": "phoneNumberFormatIsInvalid",
             "message": "Cannot save customer #6.",
             "errors": {
-                "phoneNumber": [
-                    "The phone number format is invalid."
-                 ]
-             }
+                "phoneNumber": {
+                    "regex": [
+                        "/^0[0-9]([ .-]?[0-9]{2}){4}$/"
+                    ]
+                }
+            }
         }
 
 ### Unregister customer [DELETE]

@@ -117,7 +117,7 @@ class PlaceOrder {
             throw new UnprocessableEntity(
                 "foodRushTooLong",
                 "The FoodRush duration should not exceed "
-                . $this->maximumFoodRushDurationInMinutes . ', '
+                . $this->maximumFoodRushDurationInMinutes . ' minutes, '
                 . $foodRushDurationInMinutes . ' given.'
             );
         }

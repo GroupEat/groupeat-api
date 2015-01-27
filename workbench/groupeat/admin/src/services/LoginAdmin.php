@@ -2,6 +2,7 @@
 
 use Groupeat\Auth\Auth;
 use Groupeat\Admin\Entities\Admin;
+use Groupeat\Support\Exceptions\Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class LoginAdmin {
@@ -62,14 +63,18 @@ class LoginAdmin {
      */
     public function attempt($email, $password)
     {
-        if ($this->auth->attemptByCredentials($email, $password))
+        try
         {
+            $this->auth->byCredentials($email, $password);
+
             $this->login($this->auth->admin());
 
             return true;
         }
-
-        return false;
+        catch (Exception $exception)
+        {
+            return false;
+        }
     }
 
     public function logout()

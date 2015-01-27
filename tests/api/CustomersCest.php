@@ -12,7 +12,8 @@ class CustomersCest {
         foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain)
         {
             $I->sendApiPost('customers', ['email' => "user@$domain", 'password' => 'password']);
-            $I->seeErrorResponse(403, 'emailNotFromCampus');
+            $I->seeResponseCodeIs(422);
+            $I->seeErrorsContain(['email' => ['notFromCampus' => []]]);
         }
     }
 
@@ -27,10 +28,10 @@ class CustomersCest {
     public function testThatACustomerCannotAccessAnotherCustomerData(ApiTester $I)
     {
         list($token1, $id1) = $this->sendRegistrationRequest($I, 'user1@ensta.fr');
-        $id1 = $I->grabDataFromResponse('id');
-        $token1 = $I->grabDataFromResponse('token');
-
         list($token2, $id2) = $this->sendRegistrationRequest($I, 'user2@ensta.fr');
+
+        $I->sendApiGetWithToken($token1, "customers/$id1");
+        $I->seeResponseCodeIs(200);
 
         $I->sendApiGetWithToken($token1, "customers/$id2");
         $I->seeErrorResponse(403, 'wrongAuthenticatedUser');

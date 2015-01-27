@@ -7,16 +7,38 @@ class OrdersCest {
 
     public function testThatAUserShouldBeActivatedToPassAnOrder(ApiTester $I)
     {
-        list($token, $id) = $I->sendRegistrationRequest();
+        list($token) = $I->sendRegistrationRequest();
         $products = $this->getProducts($I, $token, ['around' => true, 'opened' => true]);
         $orderDetails = $this->getOrderDetails($I, $token);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeResponseCodeIs(403);
+        $I->seeErrorResponse(403, 'userShouldBeActivated');
 
-        list($token, $id) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomer();
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
+    }
+
+    public function testThatTheFoodRushDurationCannotBeTooLong(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+
+        $orderDetails['foodRushDurationInMinutes'] = 70;
+
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(422, 'foodRushTooLong');
+    }
+
+    public function testThatTheOrderCannotBeEmpty(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+
+        $orderDetails['productFormats'] = '{}';
+
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(422, 'emptyOrder');
     }
 
     private function getProducts(ApiTester $I, $token, array $options = [])

@@ -27,7 +27,7 @@ class CustomerAddressesCest {
 
     public function testThatThePredefinedAddressesCanBeListed(ApiTester $I)
     {
-        list($token, $id) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, "predefined-addresses");
         $I->seeResponseCodeIs(200);

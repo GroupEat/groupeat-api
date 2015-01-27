@@ -79,8 +79,8 @@ class AuthCest {
                 'locale' => 'fr',
             ]);
 
-            $I->seeErrorResponse(422, 'invalidEmail');
-            $I->seeErrorsContain(['email' => ["The e-mail must be a valid e-mail address."]]);
+            $I->seeResponseCodeIs(422);
+            $I->seeErrorsContain(['email' => ['email' => []]]);
         }
     }
 
@@ -93,8 +93,8 @@ class AuthCest {
             'locale' => 'fr',
         ]);
 
-        $I->seeErrorResponse(422, 'emailAlreadyTaken');
-        $I->seeErrorsContain(['email' => ["The e-mail has already been taken."]]);
+        $I->seeResponseCodeIs(422);
+        $I->seeErrorsContain(['email' => ['alreadyTaken' => ['user_credentials']]]);
     }
 
     public function testThatThePasswordMustBeAtLeastSixCharacters(ApiTester $I)
@@ -107,7 +107,8 @@ class AuthCest {
             'locale' => 'fr',
         ]);
 
-        $I->seeErrorsContain(['password' => ["The password must be at least 6 characters."]]);
+        $I->seeResponseCodeIs(422);
+        $I->seeErrorsContain(['password' => ['min' => ['6']]]);
     }
 
     public function testThatAUserCanResetItsPassword(ApiTester $I)
@@ -151,7 +152,8 @@ class AuthCest {
             'email' => $email,
             'password' => $oldPassword,
         ]);
-        $I->seeErrorResponse(401, 'badAuthenticationCredentials');
+        $I->seeResponseCodeIs(401);
+        $I->seeErrorsContain(['password' => ['invalid' => []]]);
     }
 
     protected function sendRegistrationRequest(

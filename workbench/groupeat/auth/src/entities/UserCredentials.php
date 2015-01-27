@@ -3,6 +3,8 @@
 use Carbon\Carbon;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Exceptions\NotFound;
+use Groupeat\Support\Exceptions\Unauthorized;
 use Hash;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
@@ -41,7 +43,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
 
         if (!$userCredentials)
         {
-            static::throwNotFoundException();
+            static::throwNotFoundByEmailException($email);
         }
 
         return $userCredentials;
@@ -55,6 +57,25 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     public static function findByEmail($email)
     {
         return static::where('email', $email)->first();
+    }
+
+    /**
+     * @param string $email
+     */
+    public static function throwNotFoundByEmailException($email)
+    {
+        throw new NotFound(
+            ['email' => ['notFound' => []]],
+            "No user with $email e-mail address found."
+        );
+    }
+
+    public static function throwBadPasswordException()
+    {
+        throw new Unauthorized(
+            ['password' => ['invalid' => []]],
+            "Cannot authenticate with bad password."
+        );
     }
 
     /**

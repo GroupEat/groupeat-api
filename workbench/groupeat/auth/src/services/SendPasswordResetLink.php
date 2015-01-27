@@ -1,6 +1,6 @@
 <?php namespace Groupeat\Auth\Services;
 
-use Groupeat\Support\Exceptions\NotFound;
+use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Services\Locale;
 use Illuminate\Auth\Reminders\PasswordBroker;
 
@@ -43,10 +43,7 @@ class SendPasswordResetLink {
 
         if ($status == $broker::INVALID_USER)
         {
-            throw new NotFound(
-                'noUserForEmail',
-                "No user with this e-mail address found."
-            );
+            UserCredentials::throwNotFoundByEmailException($email);
         }
 
         $userCredentials = $broker->getUser($credentials);

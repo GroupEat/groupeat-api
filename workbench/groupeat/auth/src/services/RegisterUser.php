@@ -72,18 +72,16 @@ class RegisterUser {
 
         $rules = [
             'email' => 'email|required|unique:'.UserCredentials::table(),
-            'password' => 'min:6',
+            'password' => 'required|min:6',
         ];
 
         $validator = $this->validation->make($credentials, $rules);
-        $errors = $validator->messages();
 
-        if (!$errors->isEmpty())
+        if (!$validator->passes())
         {
             throw new UnprocessableEntity(
-                getErrorKeyFrom($validator->failed()),
-                "Cannot register user with invalid credentials.",
-                $errors
+                $validator->failed(),
+                "Cannot register user with invalid credentials."
             );
         }
 

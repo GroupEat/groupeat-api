@@ -15,7 +15,14 @@ trait HasCredentials {
      */
     public static function findByEmailOrFail($email)
     {
-        return static::findByEmail($email);
+        $user = static::findByEmail($email);
+
+        if (!$user)
+        {
+            UserCredentials::throwNotFoundByEmailException($email);
+        }
+
+        return $user;
     }
 
     /**
@@ -34,7 +41,7 @@ trait HasCredentials {
 
         if (!$credentials->user)
         {
-            static::throwNotFoundException();
+            UserCredentials::throwNotFoundException();
         }
 
         return $credentials->user;

@@ -12,15 +12,7 @@ class AuthController extends Controller {
 
     public function getToken()
     {
-        Auth::attemptByCredentials(Input::get('email'), Input::get('password'));
-
-        if (!Auth::check())
-        {
-            throw new Unauthorized(
-                "badAuthenticationCredentials",
-                "Cannot retrieve authentication token because of bad credentials."
-            );
-        }
+        Auth::byCredentials(Input::get('email'), Input::get('password'));
 
         return $this->getTokenResponseFromUser(Auth::user());
     }

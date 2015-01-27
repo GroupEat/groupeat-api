@@ -23,6 +23,12 @@ class Exception extends ResourceException {
         $code = 0
     )
     {
+        if (is_array($errorKey))
+        {
+            $errors = $this->formatErrors($errorKey);
+            $errorKey = 'validationErrors';
+        }
+
         $this->errorKey = $errorKey;
 
         if (is_null($errors))
@@ -43,6 +49,35 @@ class Exception extends ResourceException {
     public function getErrorKey()
     {
         return $this->errorKey;
+    }
+
+    /**
+     * @param array $errors
+     *
+     * @return array
+     */
+    protected function formatErrors(array $errors)
+    {
+        $formattedErrors = [];
+
+        foreach ($errors as $attribute => $rules)
+        {
+            foreach ($rules as $rule => $details)
+            {
+                $rule = lcfirst($rule);
+
+                switch ($rule)
+                {
+                    case 'unique':
+                        $rule = 'alreadyTaken';
+                        break;
+                }
+
+                $formattedErrors[$attribute][$rule] = $details;
+            }
+        }
+
+        return $formattedErrors;
     }
 
 }

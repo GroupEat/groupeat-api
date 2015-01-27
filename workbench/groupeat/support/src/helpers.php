@@ -167,34 +167,6 @@ if (!function_exists('panelView'))
     }
 }
 
-if (!function_exists('getErrorKeyFrom'))
-{
-    /**
-     * @param array $failedRules
-     *
-     * @return string
-     */
-    function getErrorKeyFrom(array $failedRules)
-    {
-        if (empty($failedRules))
-        {
-            return 'validationHasPassed';
-        }
-
-        foreach ($failedRules as $attribute => $rules)
-        {
-            $rule = lcfirst(array_keys($rules)[0]);
-
-            if (Lang::has("errorKeys.$rule"))
-            {
-                return lcfirst($attribute).ucfirst(Lang::get("errorKeys.$rule"));
-            }
-
-            return 'invalid'.ucfirst($attribute);
-        }
-    }
-}
-
 if (!function_exists('process'))
 {
     /**

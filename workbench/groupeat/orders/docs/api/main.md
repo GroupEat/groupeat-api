@@ -34,4 +34,19 @@ The maximum distance between the given address and the restaurant is {{ restaura
             "error_key": "userShouldBeActivated",
             "message": "The customer #26 should be activated to place an order."
         }
+        
++ Response 422
 
+        {
+            "status_code": 422,
+            "error_key": "foodRushTooLong",
+            "message": "The FoodRush duration should not exceed 60 minutes, 70 given."
+        }
+
++ Response 422
+
+        {
+            "status_code": 422,
+            "error_key": "emptyOrder",
+            "message": "An order must contains one or more product formats."
+        }

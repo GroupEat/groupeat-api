@@ -26,19 +26,18 @@ class GenerateAuthToken {
      */
     public function resetFromCredentials($email, $password)
     {
-        $token = $this->assertValid($this->JWTauth->attempt(compact('email', 'password')));
+        $userCredentials = UserCredentials::findByEmailOrFail($email);
+        $token = $this->JWTauth->attempt(compact('email', 'password'));
 
-        $user = $this->JWTauth->toUser($token);
-
-        if (!$user)
+        if ($token === false)
         {
-            throw new NotFound(
-                "noUserWithSameCredentials",
-                "The user corresponding to these credentials does not exist."
-            );
+            UserCredentials::throwBadPasswordException();
         }
 
-        return $user->replaceAuthenticationToken($token);
+        $userCredentials = $userCredentials->replaceAuthenticationToken($token);
+        $this->JWTauth->login($token);
+
+        return $userCredentials;
     }
 
     /**
@@ -54,25 +53,7 @@ class GenerateAuthToken {
             $userCredentials->save();
         }
 
-        return $this->assertValid($this->JWTauth->fromUser($userCredentials));
-    }
-
-    /**
-     * @param string $token
-     *
-     * @return string The authentication token
-     */
-    private function assertValid($token)
-    {
-        if (!$token)
-        {
-            throw new Unauthorized(
-                "badAuthenticationCredentials",
-                "Cannot reset authentication token because of bad credentials."
-            );
-        }
-
-        return $token;
+        return $this->JWTauth->fromUser($userCredentials);
     }
 
 }
