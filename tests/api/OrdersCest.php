@@ -38,7 +38,18 @@ class OrdersCest {
         $orderDetails['productFormats'] = '{}';
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'emptyOrder');
+        $I->seeErrorResponse(422, 'noProductFormats');
+    }
+
+    public function testThatTheProductFormatsMustExist(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+
+        $orderDetails['productFormats'] = '{"66666": 1}';
+
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(404, 'unexistingProductFormats');
     }
 
     private function getProducts(ApiTester $I, $token, array $options = [])

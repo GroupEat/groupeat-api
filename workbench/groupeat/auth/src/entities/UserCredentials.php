@@ -19,6 +19,17 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     protected $hidden = ['password', 'token', 'activationToken'];
 
 
+    public function getRules()
+    {
+        return [
+            'email' => 'email|required',
+            'password' => 'min:6|required',
+            'user_id' => 'required',
+            'user_type' => 'required',
+            'locale' => 'max:6:required',
+        ];
+    }
+
     public static function boot()
     {
         static::saved(function(UserCredentials $credentials)
@@ -102,17 +113,6 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         });
 
         return $userCredentials;
-    }
-
-    public function getRules()
-    {
-        return [
-            'email' => 'email|required',
-            'password' => 'min:6|required',
-            'user_id' => 'required',
-            'user_type' => 'required',
-            'locale' => 'max:6:required',
-        ];
     }
 
     public function user()

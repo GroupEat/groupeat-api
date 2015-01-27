@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Orders\Entities;
 
+use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Entities\Entity;
 
 class Order extends Entity {
@@ -11,7 +12,7 @@ class Order extends Entity {
     {
         return [
             'customer_id' => 'required|integer',
-            'grouped_order_id' => 'required|integer',
+            'group_order_id' => 'required|integer',
         ];
     }
 
@@ -20,9 +21,9 @@ class Order extends Entity {
         return $this->belongsTo('Groupeat\Customers\Entities\Customer');
     }
 
-    public function groupedOrder()
+    public function groupOrder()
     {
-        return $this->belongsTo('Groupeat\Orders\Entities\GroupedOrder');
+        return $this->belongsTo('Groupeat\Orders\Entities\GroupOrder');
     }
 
     public function productFormats()

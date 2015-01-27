@@ -7,6 +7,13 @@ class Category extends Entity {
     public $timestamps = false;
 
 
+    public function getRules()
+    {
+        return [
+            'label' => 'required',
+        ];
+    }
+
     /**
      * @param string $label
      *
@@ -15,13 +22,6 @@ class Category extends Entity {
     public static function findByLabel($label)
     {
         return static::where('label', $label)->first();
-    }
-
-    public function getRules()
-    {
-        return [
-            'label' => 'required',
-        ];
     }
 
 }

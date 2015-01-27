@@ -16,11 +16,11 @@ class OrdersMigration extends Migration {
         {
             $table->increments('id');
             $table->unsignedInteger('customer_id')->index();
-            $table->unsignedInteger('grouped_order_id')->index();
+            $table->unsignedInteger('group_order_id')->index();
             $table->timestamp('created_at')->index();
 
             $table->foreign('customer_id')->references('id')->on(CustomersMigration::TABLE);
-            $table->foreign('grouped_order_id')->references('id')->on(GroupedOrdersMigration::TABLE);
+            $table->foreign('group_order_id')->references('id')->on(GroupOrdersMigration::TABLE);
         });
     }
 
