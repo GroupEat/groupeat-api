@@ -25,10 +25,18 @@ An e-mail will be sent to the given address with an activation link that must be
              "activated": false
          }
 
-+ Response 400
++ Response 403
 
         {
-            "status_code": 400,
+            "status_code": 403,
+            "error_key": "emailNotFromCampus",
+            "message": "E-mail should correspond to a Saclay campus account."
+        }
+
++ Response 422
+
+        {
+            "status_code": 422,
             "error_key": "emailAlreadyTaken",
             "message": "Cannot register user with invalid credentials.",
             "errors": {
@@ -40,11 +48,11 @@ An e-mail will be sent to the given address with an activation link that must be
                 ]
             }
         }
-        
-+ Response 400
+
++ Response 422
 
         {
-            "status_code": 400,
+            "status_code": 422,
             "error_key": "invalidEmail",
             "message": "Cannot register user with invalid credentials.",
             "errors":{
@@ -53,11 +61,11 @@ An e-mail will be sent to the given address with an activation link that must be
                 ]
             }
         }
-        
-+ Response 400
+  
++ Response 422
 
         {
-            "status_code": 400,
+            "status_code": 422,
             "error_key": "passwordTooShort",
             "message": "Cannot register user with invalid credentials.",
             "errors": {
@@ -65,14 +73,6 @@ An e-mail will be sent to the given address with an activation link that must be
                     "The password must be at least 6 characters."
                 ]
             }
-        }
-
-+ Response 403
-
-        {
-            "status_code": 403,
-            "error_key": "emailNotFromCampus",
-            "message": "E-mail should correspond to a Saclay campus account."
         }
 
 ## Customer [/customers/{id}]
@@ -126,10 +126,18 @@ Replace the customer data with the one passed in the request. However, a custome
 
     [Customer][]
 
-+ Response 400
++ Response 403
+
+        {
+            "status_code": 403,
+            "error_key": "wrongAuthenticatedUser",
+            "message": "Should be authenticated as customer 1 instead of 5."
+        }
+
++ Response 422
             
         {
-            "status_code": 400,
+            "status_code": 422,
             "error_key": "phoneNumberFormatIsInvalid",
             "message": "Cannot save customer #6.",
             "errors": {
@@ -137,14 +145,6 @@ Replace the customer data with the one passed in the request. However, a custome
                     "The phone number format is invalid."
                  ]
              }
-        }
-
-+ Response 403
-
-        {
-            "status_code": 403,
-            "error_key": "wrongAuthenticatedUser",
-            "message": "Should be authenticated as customer 1 instead of 5."
         }
 
 ### Unregister customer [DELETE]

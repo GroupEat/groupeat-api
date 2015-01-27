@@ -1,9 +1,9 @@
 <?php namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\NotFound;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Auth\Reminders\PasswordBroker;
 
 class ResetPassword {
@@ -50,7 +50,7 @@ class ResetPassword {
                 );
 
             case $broker::INVALID_PASSWORD:
-                throw new BadRequest(
+                throw new UnprocessableEntity(
                     'badPassword',
                     $status
                 );

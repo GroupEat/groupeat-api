@@ -7,9 +7,9 @@ use Groupeat\Orders\Entities\GroupedOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
-use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\NotFound;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Support\Collection;
 
 class PlaceOrder {
@@ -114,7 +114,7 @@ class PlaceOrder {
     {
         if ($foodRushDurationInMinutes > $this->maximumFoodRushDurationInMinutes)
         {
-            throw new BadRequest(
+            throw new UnprocessableEntity(
                 "foodRushTooLong",
                 "The FoodRush duration should not exceed "
                 . $this->maximumFoodRushDurationInMinutes . ', '
@@ -127,7 +127,7 @@ class PlaceOrder {
     {
         if (empty($productFormats) || (array_sum($productFormats) == 0))
         {
-            throw new BadRequest(
+            throw new UnprocessableEntity(
                 'emptyOrder',
                 "An order must contains one or more product formats."
             );
@@ -162,7 +162,7 @@ class PlaceOrder {
 
         if ($restaurants->count() > 1)
         {
-            throw new BadRequest(
+            throw new UnprocessableEntity(
                 'productFormatsFromDifferentRestaurants',
                 "An order should have products from one restaurant only."
             );
@@ -189,7 +189,7 @@ class PlaceOrder {
 
         if ($distanceInKms > $this->maximumDeliveryDistanceInKms)
         {
-            throw new BadRequest(
+            throw new UnprocessableEntity(
                 'deliveryDistanceTooLong',
                 'The distance between the given delivery address and the '
                 . $restaurant->toShortString() . ' should be less than '

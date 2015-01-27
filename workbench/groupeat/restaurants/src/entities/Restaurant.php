@@ -5,7 +5,7 @@ use Config;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Support\Entities\Entity;
-use Groupeat\Support\Exceptions\BadRequest;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
@@ -83,7 +83,7 @@ class Restaurant extends Entity implements User {
 
         if (!$restaurant || $restaurant->id != $this->id)
         {
-            throw new BadRequest(
+            throw new UnprocessableEntity(
                 'restaurantClosed',
                 "The {$this->toShortString()} is not opened from $from to $to."
             );

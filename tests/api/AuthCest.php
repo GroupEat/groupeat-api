@@ -79,7 +79,7 @@ class AuthCest {
                 'locale' => 'fr',
             ]);
 
-            $I->seeErrorResponse(400, 'invalidEmail');
+            $I->seeErrorResponse(422, 'invalidEmail');
             $I->seeErrorsContain(['email' => ["The e-mail must be a valid e-mail address."]]);
         }
     }
@@ -93,7 +93,7 @@ class AuthCest {
             'locale' => 'fr',
         ]);
 
-        $I->seeErrorResponse(400, 'emailAlreadyTaken');
+        $I->seeErrorResponse(422, 'emailAlreadyTaken');
         $I->seeErrorsContain(['email' => ["The e-mail has already been taken."]]);
     }
 

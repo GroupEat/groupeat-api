@@ -1,8 +1,8 @@
 <?php namespace Groupeat\Support\Entities;
 
-use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\MessageBag;
 use Validator;
@@ -51,7 +51,7 @@ abstract class Entity extends Model {
             {
                 if (!$entity->validate())
                 {
-                    throw new BadRequest(
+                    throw new UnprocessableEntity(
                         getErrorKeyFrom($entity->getFailedRules()),
                         "Cannot save {$entity->toShortString()}.",
                         $entity->errors()

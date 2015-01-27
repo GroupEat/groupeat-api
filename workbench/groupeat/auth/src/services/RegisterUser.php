@@ -2,8 +2,8 @@
 
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
 use Illuminate\Mail\Mailer;
 use Illuminate\Routing\UrlGenerator;
@@ -80,7 +80,7 @@ class RegisterUser {
 
         if (!$errors->isEmpty())
         {
-            throw new BadRequest(
+            throw new UnprocessableEntity(
                 getErrorKeyFrom($validator->failed()),
                 "Cannot register user with invalid credentials.",
                 $errors
