@@ -75,13 +75,45 @@ class Restaurant extends Entity implements User {
         });
     }
 
+    /**
+     * @param Carbon $from
+     * @param Carbon $to
+     *
+     * @return bool
+     */
+    public function isOpened(Carbon $from = null, Carbon $to = null)
+    {
+        $from = $from ?: Carbon::now();
+        $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
+        assertSameDay($from, $to);
+
+        $hasClosingWindow = ! $this->closingWindows->filter(function($closingWindow) use ($from, $to)
+        {
+            return $closingWindow->day == $from->toDateString()
+                && Carbon::createFromFormat('H:i:s', $closingWindow->from) <= $to
+                && Carbon::createFromFormat('H:i:s', $closingWindow->to) >= $from;
+        })->isEmpty();
+
+        if ($hasClosingWindow)
+        {
+            return false;
+        }
+
+        return ! $this->openingWindows->filter(function($openingWindow) use ($from, $to)
+        {
+            return $openingWindow->dayOfWeek == $from->dayOfWeek
+            && Carbon::createFromFormat('H:i:s', $openingWindow->from) <= $from
+            && Carbon::createFromFormat('H:i:s', $openingWindow->to) >= $to;
+        })->isEmpty();
+    }
+
     public function assertOpened(Carbon $from = null, Carbon $to = null)
     {
         $from = $from ?: Carbon::now();
         $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
-        $restaurant = static::opened($from, $to)->where($this->getTableField('id'), $this->id)->first();
+        assertSameDay($from, $to);
 
-        if (!$restaurant || $restaurant->id != $this->id)
+        if (!$this->isOpened($from, $to))
         {
             throw new UnprocessableEntity(
                 'restaurantClosed',
@@ -94,6 +126,7 @@ class Restaurant extends Entity implements User {
     {
         $from = $from ?: Carbon::now();
         $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
+        assertSameDay($from, $to);
 
         $query->whereHas('openingWindows', function(Builder $subQuery) use ($from, $to)
         {
@@ -109,8 +142,8 @@ class Restaurant extends Entity implements User {
             $closingWindow = $subQuery->getModel();
 
             $subQuery->where($closingWindow->getTableField('day'), $from->toDateString())
-                ->where($closingWindow->getTableField('from'), '<=', $from->toTimeString())
-                ->where($closingWindow->getTableField('to'), '>=', $to->toTimeString());
+                ->where($closingWindow->getTableField('from'), '<=', $to->toTimeString())
+                ->where($closingWindow->getTableField('to'), '>=', $from->toTimeString());
         });
     }
 

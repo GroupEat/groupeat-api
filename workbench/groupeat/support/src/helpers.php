@@ -74,6 +74,20 @@ if (!function_exists('decodeJSON'))
     }
 }
 
+if (!function_exists('assertSameDay'))
+{
+    function assertSameDay(\Carbon\Carbon $one, \Carbon\Carbon $two)
+    {
+        if ($one->toDateString() != $two->toDateString())
+        {
+            throw new \Groupeat\Support\Exceptions\BadRequest(
+                'dateTimesMustBeFromSameDay',
+                "The DateTime $one must be from the same day thant $two."
+            );
+        }
+    }
+}
+
 if (!function_exists('getNamespaceOf'))
 {
     /**

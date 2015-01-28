@@ -9,8 +9,6 @@ class ApiHelper extends \Codeception\Module {
             'password' => 'groupeat',
         ]);
 
-        $this->getModule('REST')->seeResponseCodeIs(200);
-
         $id = $this->grabDataFromResponse('id');
         $token = $this->grabDataFromResponse('token');
 
@@ -25,7 +23,6 @@ class ApiHelper extends \Codeception\Module {
     )
     {
         $this->sendApiPost($resource, compact('email', 'password', 'locale'));
-        $this->getModule('REST')->seeResponseCodeIs(201);
         $id = $this->grabDataFromResponse('id');
         $token = $this->grabDataFromResponse('token');
         $type = $this->grabDataFromResponse('type');

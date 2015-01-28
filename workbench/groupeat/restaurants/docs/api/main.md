@@ -39,6 +39,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
         [
             {
                 "id": 4,
+                "opened" => true,
                 "name": "Marchal Roussel S.A.S.",
                 "categories": [
                     1
@@ -48,6 +49,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
             },
             {
                 "id": 5,
+                "opened" => false,
                 "name": "Mathieu Tessier SA",
                 "categories": [
                     1
@@ -57,6 +59,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
             },
             {
                 "id": 6,
+                "opened" => true,
                 "name": "Pizza Di Genova",
                 "categories": [
                     1

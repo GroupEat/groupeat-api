@@ -11,7 +11,7 @@ class RestaurantsController extends Controller {
 
     public function index()
     {
-        $query = Restaurant::with('categories', 'address')->orderBy('name', 'asc');
+        $query = Restaurant::with('categories', 'address', 'closingWindows', 'openingWindows')->orderBy('name', 'asc');
 
         if (Input::has('opened'))
         {
