@@ -5,6 +5,7 @@ use Dingo\Api\Routing\ControllerTrait as ApiController;
 use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
+use Input;
 use League\Fractal\TransformerAbstract;
 
 abstract class Controller extends IlluminateController {
@@ -62,6 +63,16 @@ abstract class Controller extends IlluminateController {
     protected function arrayResponse($data)
     {
         return $this->response->array(compact('data'));
+    }
+
+    /**
+     * @param $relation
+     *
+     * @return bool
+     */
+    protected function shouldInclude($relation)
+    {
+        return str_contains(Input::get('include'), $relation);
     }
 
     /**

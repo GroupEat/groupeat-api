@@ -17,6 +17,7 @@ class OrdersMigration extends Migration {
             $table->increments('id');
             $table->unsignedInteger('customer_id')->index();
             $table->unsignedInteger('group_order_id')->index();
+            $table->boolean('initiator')->index()->default(false);
             $table->timestamp('created_at')->index();
 
             $table->foreign('customer_id')->references('id')->on(CustomersMigration::TABLE);

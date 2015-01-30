@@ -11,6 +11,25 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GroupOrdersController extends Controller {
 
+    public function index()
+    {
+        $query = GroupOrder::with('restaurant.categories');
+
+        if (Input::has('opened'))
+        {
+            $query->opened();
+        }
+
+        if (Input::has('around'))
+        {
+            $query->around(Input::get('latitude'), Input::get('longitude'));
+        }
+
+        $groupOrders = GroupOrder::with('restaurant.categories')->get();
+
+        return $this->collectionResponse($query->get(), new GroupOrderTransformer);
+    }
+
     public function placeOrder()
     {
         $customer = Auth::customer();

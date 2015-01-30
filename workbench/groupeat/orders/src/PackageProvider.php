@@ -17,6 +17,7 @@ class PackageProvider extends WorkbenchPackageProvider {
             return new CreateGroupOrder(
                 $app['config']->get('restaurants::around_distance_in_kilometers'),
                 $app['config']->get('customers::address_constraints'),
+                $app['config']->get('orders::minimum_foodrush_in_minutes'),
                 $app['config']->get('orders::maximum_foodrush_in_minutes'),
                 $app['config']->get('restaurants::opening_duration_in_minutes')
             );
@@ -25,7 +26,7 @@ class PackageProvider extends WorkbenchPackageProvider {
         $this->app->bind('JoinGroupOrderService', function($app)
         {
             return new JoinGroupOrder(
-                $app['config']->get('restaurants::around_distance_in_kilometers'),
+                $app['config']->get('orders::around_distance_in_kilometers'),
                 $app['config']->get('customers::address_constraints')
             );
         });

@@ -38,34 +38,30 @@ Returns the list of restaurants sorted by name in alphabetical order.
 
         [
             {
-                "id": 4,
-                "opened" => true,
-                "name": "Marchal Roussel S.A.S.",
-                "categories": [
-                    1
-                ],
-                "longitude": -132.547,
-                "latitude": -62.6898
-            },
-            {
-                "id": 5,
-                "opened" => false,
-                "name": "Mathieu Tessier SA",
-                "categories": [
-                    1
-                ],
-                "longitude": 44.1582,
-                "latitude": 13.5861
-            },
-            {
                 "id": 6,
-                "opened" => true,
+                "opened": true,
                 "name": "Pizza Di Genova",
+                "phoneNumber": "0605040302",
                 "categories": [
                     1
                 ],
-                "longitude": 48.7171,
-                "latitude": 2.23933
+                "minimumOrderPrice": 10,
+                "deliveryCapacity": 7,
+                "longitude": 2.23933,
+                "latitude": 48.7171
+            },
+            {
+                "id": 7,
+                "opened": true,
+                "name": "Toujours ouvert",
+                "phoneNumber": "0605040301",
+                "categories": [
+                    1
+                ],
+                "minimumOrderPrice": 7,
+                "deliveryCapacity": 6,
+                "longitude": 2.23933,
+                "latitude": 48.7171
             }
         ]
 
@@ -104,25 +100,25 @@ Returns the list of restaurants sorted by name in alphabetical order.
         [
             {
                 "id": 4,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "napolitaine",
                 "description": "Tomate, mozzarella, anchois, câpres et olives."
             },
             {
                 "id": 3,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "classica",
                 "description": "Tomate, mozzarella et origan."
             },
             {
                 "id": 2,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "paysanne",
                 "description": "Tomate, mozzarella, poitrine fumée et œuf."
             },
             {
                 "id": 1,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "paysanne",
                 "description": "Mozzarella, basilic frais et tomates."
             }
@@ -133,7 +129,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
         [
             {
                 "id": 4,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "napolitaine",
                 "description": "Tomate, mozzarella, anchois, câpres et olives.",
                 "formats": {
@@ -158,7 +154,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
             },
             {
                 "id": 3,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "classica",
                 "description": "Tomate, mozzarella et origan.",
                 "formats": {
@@ -183,7 +179,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
             },
             {
                 "id": 2,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "paysanne",
                 "description": "Tomate, mozzarella, poitrine fumée et œuf.",
                 "formats": {
@@ -208,7 +204,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
             },
             {
                 "id": 1,
-                "type_id": 1,
+                "typeId": 1,
                 "name": "paysanne",
                 "description": "Mozzarella, basilic frais et tomates.",
                 "formats": {

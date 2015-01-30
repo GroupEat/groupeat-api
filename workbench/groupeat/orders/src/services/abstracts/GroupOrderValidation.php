@@ -1,8 +1,7 @@
 <?php namespace Groupeat\Orders\Services\Abstracts;
 
-use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Entities\DeliveryAddress;
-use Groupeat\Restaurants\Entities\Restaurant;
+use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 
 abstract class GroupOrderValidation {
@@ -38,28 +37,19 @@ abstract class GroupOrderValidation {
     }
 
     /**
-     * @param Customer $customer
-     */
-    protected function assertActivatedCustomer(Customer $customer)
-    {
-        $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
-    }
-
-    /**
      * @param DeliveryAddress $deliveryAddress
-     * @param Restaurant      $restaurant
+     * @param Address         $other
      */
-    protected function assertCloseEnough(DeliveryAddress $deliveryAddress, Restaurant $restaurant)
+    protected function assertCloseEnough(DeliveryAddress $deliveryAddress, Address $other)
     {
-        $distanceInKms = $deliveryAddress->distanceInKmsWith($restaurant->address);
+        $distanceInKms = $deliveryAddress->distanceInKmsWith($other);
 
         if ($distanceInKms > $this->maximumDeliveryDistanceInKms)
         {
             throw new UnprocessableEntity(
                 'deliveryDistanceTooLong',
-                'The distance between the given delivery address and the '
-                . $restaurant->toShortString() . ' should be less than '
-                . $this->maximumDeliveryDistanceInKms . ' kms.'
+                'The delivery distance should be less than '
+                . $this->maximumDeliveryDistanceInKms . " kms, $distanceInKms given."
             );
         }
     }

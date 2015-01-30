@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'around_distance_in_kilometers' => 10,
+    'around_distance_in_kilometers' => 7,
 
     /*
     |--------------------------------------------------------------------------

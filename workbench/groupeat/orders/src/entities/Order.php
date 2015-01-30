@@ -7,6 +7,8 @@ class Order extends Entity {
 
     public $timestamps = false;
 
+    protected $dates = ['created_at'];
+
 
     public function getRules()
     {
@@ -14,6 +16,21 @@ class Order extends Entity {
             'customer_id' => 'required|integer',
             'group_order_id' => 'required|integer',
         ];
+    }
+
+    /**
+     * @return int The total price of the order without taking the possible reduction into account.
+     */
+    public function rawPrice()
+    {
+        $price = 0;
+
+        foreach ($this->productFormats as $productFormat)
+        {
+            $price += $productFormat->pivot->amount * $productFormat->price;
+        }
+
+        return $price;
     }
 
     public function customer()
@@ -28,22 +45,12 @@ class Order extends Entity {
 
     public function productFormats()
     {
-        return $this->belongsToMany('Groupeat\Restaurants\Entities\ProductFormat');
+        return $this->belongsToMany('Groupeat\Restaurants\Entities\ProductFormat')->withPivot('amount');
     }
 
     public function deliveryAddress()
     {
         return $this->hasOne('Groupeat\Orders\Entities\DeliveryAddress');
-    }
-
-    protected function updateTimestamps()
-    {
-        $time = $this->freshTimestamp();
-
-        if ( ! $this->exists && ! $this->isDirty(static::CREATED_AT))
-        {
-            $this->setCreatedAt($time);
-        }
     }
 
 }

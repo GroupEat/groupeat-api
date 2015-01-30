@@ -12,9 +12,8 @@ class ClosingWindowsSeeder extends Seeder {
 
         ClosingWindow::create([
             'restaurant_id' => $id,
-            'day' => $now->toDateString(),
-            'from' => $now->toTimeString(),
-            'to' => $now->copy()->addHour()->toTimeString(),
+            'from' => $now->toDateTimeString(),
+            'to' => $now->copy()->addHour()->toDateTimeString(),
         ]);
     }
 

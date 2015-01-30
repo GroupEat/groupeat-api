@@ -11,7 +11,10 @@ class RestaurantTransformer extends TransformerAbstract
             'id' => (int) $restaurant->id,
             'opened' => (bool) $restaurant->isOpened(),
             'name' => $restaurant->name,
+            'phoneNumber' => $restaurant->phoneNumber,
             'categories' => $restaurant->categories->lists('id'),
+            'minimumOrderPrice' => (float) $restaurant->minimumOrderPrice,
+            'deliveryCapacity' => (int) $restaurant->deliveryCapacity,
             'longitude' => (float) $restaurant->address->longitude,
             'latitude' => (float) $restaurant->address->latitude,
         ];

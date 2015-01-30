@@ -4,6 +4,7 @@ use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Services\Abstracts\GroupOrderValidation;
 use Groupeat\Orders\Support\ProductFormats;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 
 class JoinGroupOrder extends GroupOrderValidation {
 
@@ -22,11 +23,24 @@ class JoinGroupOrder extends GroupOrderValidation {
         array $deliveryAddressData
     )
     {
-        $this->assertActivatedCustomer($customer);
+        if (!$groupOrder->isOpened())
+        {
+            throw new UnprocessableEntity(
+                'groupOrderClosed',
+                "The {$groupOrder->toShortString()} cannot be joined because it has ended."
+            );
+        }
+
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
-        $this->assertCloseEnough($deliveryAddress, $productFormats->getRestaurant());
+        $firstOrder = $groupOrder->orders()->oldest()->first();
+        $this->assertCloseEnough($deliveryAddress, $firstOrder->deliveryAddress);
 
         return $groupOrder->addOrder($customer, $productFormats, $deliveryAddress);
+    }
+
+    private function assertStillOpened(GroupOrder $groupOrder)
+    {
+
     }
 
 }

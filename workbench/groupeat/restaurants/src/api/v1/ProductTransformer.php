@@ -12,7 +12,7 @@ class ProductTransformer extends TransformerAbstract
     {
         return [
             'id' => (int) $product->id,
-            'type_id' => (int) $product->type_id,
+            'typeId' => (int) $product->type_id,
             'name' => $product->name,
             'description' => $product->description,
         ];

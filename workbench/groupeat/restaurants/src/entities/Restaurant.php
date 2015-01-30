@@ -20,7 +20,9 @@ class Restaurant extends Entity implements User {
     {
         return [
             'name' => 'required',
-            'phoneNumber' => ['regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/'],
+            'phoneNumber' => ['required', 'regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/'],
+            'minimumOrderPrice' => 'required|numeric',
+            'deliveryCapacity' => 'required|integer',
         ];
     }
 
@@ -55,23 +57,7 @@ class Restaurant extends Entity implements User {
 
         $query->whereHas('address', function(Builder $subQuery) use ($latitude, $longitude, $distanceInKms)
         {
-            $address = $subQuery->getModel();
-            $table = $address->getTable();
-
-            $subQuery->whereRaw('(2 * (3959 * ATAN2(
-                SQRT(
-                    POWER(SIN(RADIANS('.$latitude.' - "'.$table.'"."latitude") / 2), 2) +
-                    COS(RADIANS("'.$table.'"."latitude")) *
-                    COS(RADIANS('.$latitude.')) *
-                    POWER(SIN(RADIANS('.$longitude.' - "'.$table.'"."longitude") / 2), 2)
-                ),
-                SQRT(1 - (
-                        POWER(SIN(RADIANS('.$latitude.' - "'.$table.'"."latitude") / 2), 2) +
-                        COS(RADIANS("'.$table.'"."latitude")) *
-                        COS(RADIANS('.$latitude.')) *
-                        POWER(SIN(RADIANS('.$longitude.' - "'.$table.'"."longitude") / 2), 2)
-                    ))
-            )) <= '.$distanceInKms.')');
+            whereAroundInKms($subQuery, $subQuery->getModel()->getTable(), $latitude, $longitude, $distanceInKms);
         });
     }
 
@@ -89,9 +75,7 @@ class Restaurant extends Entity implements User {
 
         $hasClosingWindow = ! $this->closingWindows->filter(function($closingWindow) use ($from, $to)
         {
-            return $closingWindow->day == $from->toDateString()
-                && Carbon::createFromFormat('H:i:s', $closingWindow->from) <= $to
-                && Carbon::createFromFormat('H:i:s', $closingWindow->to) >= $from;
+            return $closingWindow->from <= $to && $closingWindow->to >= $from;
         })->isEmpty();
 
         if ($hasClosingWindow)
@@ -102,8 +86,8 @@ class Restaurant extends Entity implements User {
         return ! $this->openingWindows->filter(function($openingWindow) use ($from, $to)
         {
             return $openingWindow->dayOfWeek == $from->dayOfWeek
-            && Carbon::createFromFormat('H:i:s', $openingWindow->from) <= $from
-            && Carbon::createFromFormat('H:i:s', $openingWindow->to) >= $to;
+                && $openingWindow->from <= $from
+                && $openingWindow->to >= $to;
         })->isEmpty();
     }
 
@@ -141,9 +125,8 @@ class Restaurant extends Entity implements User {
         {
             $closingWindow = $subQuery->getModel();
 
-            $subQuery->where($closingWindow->getTableField('day'), $from->toDateString())
-                ->where($closingWindow->getTableField('from'), '<=', $to->toTimeString())
-                ->where($closingWindow->getTableField('to'), '>=', $from->toTimeString());
+            $subQuery->where($closingWindow->getTableField('from'), '<=', $to)
+                ->where($closingWindow->getTableField('to'), '>=', $from);
         });
     }
 

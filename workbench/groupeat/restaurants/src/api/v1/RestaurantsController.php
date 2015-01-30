@@ -23,10 +23,7 @@ class RestaurantsController extends Controller {
             $query->around(Input::get('latitude'), Input::get('longitude'));
         }
 
-        return $this->collectionResponse(
-            $query->get(),
-            new RestaurantTransformer
-        );
+        return $this->collectionResponse($query->get(), new RestaurantTransformer);
     }
 
     public function categoriesIndex()

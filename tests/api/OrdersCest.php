@@ -2,10 +2,9 @@
 
 class OrdersCest {
 
-    public function testThatAUserShouldBeActivatedToPassAnOrder(ApiTester $I)
+    public function testThatAUserShouldBeActivatedToPlaceAnOrder(ApiTester $I)
     {
         list($token) = $I->sendRegistrationRequest();
-        $products = $this->getProducts($I, $token, ['around' => true, 'opened' => true]);
         $orderDetails = $this->getOrderDetails($I, $token);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
@@ -16,13 +15,17 @@ class OrdersCest {
         $I->seeResponseCodeIs(201);
     }
 
-    public function testThatTheFoodRushDurationCannotBeTooLong(ApiTester $I)
+    public function testThatTheFoodRushDurationMustBeValid(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
         $orderDetails = $this->getOrderDetails($I, $token, ['foodRushDurationInMinutes' => 70]);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'foodRushTooLong');
+        $I->seeErrorResponse(422, 'invalidFoodRushDuration');
+
+        $orderDetails['foodRushDurationInMinutes'] = 1;
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(422, 'invalidFoodRushDuration');
     }
 
     public function testThatTheOrderCannotBeEmpty(ApiTester $I)
@@ -129,6 +132,119 @@ class OrdersCest {
         $I->seeErrorResponse(422, 'productFormatsFromDifferentRestaurants');
     }
 
+    public function testThatTheOrderMustExceedTheMinimumPrice(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $options = ['around' => true, 'opened' => true];
+        $minimumPrice = 0;
+
+        $products = $this->getProducts($I, $token, $options, function($restaurants) use (&$minimumPrice)
+        {
+            $minimumPrice = $restaurants[0]['minimumOrderPrice'];
+
+            return $restaurants[0]['id'];
+        });
+
+        $price = 0;
+        $productFormats = [];
+
+        foreach ($products as $product)
+        {
+            foreach ($product['formats']['data'] as $format)
+            {
+                if (($price + $format['price']) < $minimumPrice)
+                {
+                    $price += $format['price'];
+                    $productFormats[$format['id']] = 1;
+                }
+            }
+        }
+
+        $orderDetails = $this->getOrderDetails($I, $token, compact('productFormats'));
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(422, 'minimumOrderPriceNotReached');
+    }
+
+    public function testThatTheOrderShouldNotExceedRestaurantDeliveryCapacity(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $options = ['around' => true, 'opened' => true];
+        $deliveryCapacity = 0;
+
+        $products = $this->getProducts($I, $token, $options, function($restaurants) use (&$deliveryCapacity)
+        {
+            $deliveryCapacity = $restaurants[0]['deliveryCapacity'];
+
+            return $restaurants[0]['id'];
+        });
+
+        $amount = 0;
+        $productFormats = [];
+
+        foreach ($products as $product)
+        {
+            foreach ($product['formats']['data'] as $format)
+            {
+                if ($amount <= $deliveryCapacity)
+                {
+                    $amount++;
+                    $productFormats[$format['id']] = 1;
+                }
+            }
+        }
+
+        $orderDetails = $this->getOrderDetails($I, $token, compact('productFormats'));
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(422, 'restaurantDeliveryCapacityExceeded');
+    }
+
+    public function testThatARestaurantCanHaveOnlyOneGroupOrderAtTheSameTime(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeResponseCodeIs(201);
+
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(422, 'groupOrderAlreadyExisting');
+    }
+
+    public function testThatGroupOrdersCanBeListed(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $I->sendApiGetWithToken($token, 'group-orders');
+        $I->seeResponseCodeIs(200);
+    }
+
+    public function testThatAGroupOrderCanBeJoined(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $groupOrderId = $I->grabDataFromResponse('groupOrderId');
+
+        $orderDetails['groupOrderId'] = $groupOrderId;
+        unset($orderDetails['foodRushDurationInMinutes']);
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeResponseCodeIs(201);
+    }
+
+    public function testThatTheDeliveryAddressMustBeCloseEnoughToJoinAGroupOrder(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $groupOrderId = $I->grabDataFromResponse('groupOrderId');
+
+        $orderDetails['groupOrderId'] = $groupOrderId;
+        $orderDetails['latitude']++;
+        unset($orderDetails['foodRushDurationInMinutes']);
+
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(422, 'deliveryDistanceTooLong');
+    }
+
     private function getProducts(
         ApiTester $I,
         $token,
@@ -136,23 +252,6 @@ class OrdersCest {
         Closure $getRestaurantIdCallback = null
     )
     {
-        $latitude = isset($options['latitude']) ? $options['latitude'] : $this->getDefaultLatitude();
-        $longitude = isset($options['longitude']) ? $options['longitude'] : $this->getDefaultLongitude();
-
-        $queryStringParams = [];
-
-        if (!empty($options['around']))
-        {
-            $queryStringParams['around'] = 'true';
-            $queryStringParams['latitude'] = $latitude;
-            $queryStringParams['longitude'] = $longitude;
-        }
-
-        if (!empty($options['opened']))
-        {
-            $queryStringParams['opened'] = 'true';
-        }
-
         if (is_null($getRestaurantIdCallback))
         {
             $getRestaurantIdCallback = function($restaurants)
@@ -161,7 +260,7 @@ class OrdersCest {
             };
         }
 
-        $restaurantsUrl = 'restaurants?'.http_build_query($queryStringParams);
+        $restaurantsUrl = 'restaurants?'.http_build_query($this->getQueryStringParamsFor($options));
         $I->sendApiGetWithToken($token, $restaurantsUrl);
         $restaurantId = $getRestaurantIdCallback($I->grabDataFromResponse(''));
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/products?include=formats");
@@ -172,7 +271,7 @@ class OrdersCest {
     private function getOrderDetails(ApiTester $I, $token, array $details = [])
     {
         $defaultProductFormats = '{}';
-        
+
         if (empty($details['productFormats']))
         {
             $defaultProductFormats = $this->getProductFormatsFrom($this->getProducts($I, $token));
@@ -192,6 +291,28 @@ class OrdersCest {
         return $details;
     }
 
+    private function getQueryStringParamsFor(array $options = [])
+    {
+        $latitude = isset($options['latitude']) ? $options['latitude'] : $this->getDefaultLatitude();
+        $longitude = isset($options['longitude']) ? $options['longitude'] : $this->getDefaultLongitude();
+
+        $queryStringParams = [];
+
+        if (!empty($options['around']))
+        {
+            $queryStringParams['around'] = 'true';
+            $queryStringParams['latitude'] = $latitude;
+            $queryStringParams['longitude'] = $longitude;
+        }
+
+        if (!empty($options['opened']))
+        {
+            $queryStringParams['opened'] = 'true';
+        }
+
+        return $queryStringParams;
+    }
+
     private function getProductFormatsFrom(array $products, array $selectedProducts = [[0,0,2], [1,2,1]])
     {
         $productFormats = [];
@@ -207,12 +328,12 @@ class OrdersCest {
 
     private function getDefaultLatitude()
     {
-        return 48.711042;
+        return 48.7173;
     }
 
     private function getDefaultLongitude()
     {
-        return 2.219278;
+        return 2.23935;
     }
 
 }

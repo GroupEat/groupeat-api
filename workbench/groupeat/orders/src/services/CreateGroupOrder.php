@@ -14,6 +14,11 @@ class CreateGroupOrder extends GroupOrderValidation {
     /**
      * @var int
      */
+    private $minimumFoodRushDurationInMinutes;
+
+    /**
+     * @var int
+     */
     private $maximumFoodRushDurationInMinutes;
 
     /**
@@ -25,12 +30,14 @@ class CreateGroupOrder extends GroupOrderValidation {
     public function __construct(
         $maximumDeliveryDistanceInKms,
         array $deliveryAddressConstraints,
+        $minimumFoodRushDurationInMinutes,
         $maximumFoodRushDurationInMinutes,
         $minimumRemainingOpeningMinutes
     )
     {
         parent::__construct($maximumDeliveryDistanceInKms, $deliveryAddressConstraints);
 
+        $this->minimumFoodRushDurationInMinutes = (int) $minimumFoodRushDurationInMinutes;
         $this->maximumFoodRushDurationInMinutes = (int) $maximumFoodRushDurationInMinutes;
         $this->minimumRemainingOpeningMinutes = $minimumRemainingOpeningMinutes;
     }
@@ -50,26 +57,29 @@ class CreateGroupOrder extends GroupOrderValidation {
         array $deliveryAddressData
     )
     {
-        $this->assertActivatedCustomer($customer);
         $foodRushDurationInMinutes = (int) $foodRushDurationInMinutes;
-        $this->guardAgainstTooLongFoodRush($foodRushDurationInMinutes);
+        $this->guardAgainstInvalidFoodRushDuration($foodRushDurationInMinutes);
 
         $restaurant = $productFormats->getRestaurant();
         $this->assertThatTheRestaurantWontCloseTooSoon($restaurant, $foodRushDurationInMinutes);
 
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
-        $this->assertCloseEnough($deliveryAddress, $restaurant);
+        $this->assertCloseEnough($deliveryAddress, $restaurant->address);
 
         return GroupOrder::createWith($customer, $deliveryAddress, $productFormats, $foodRushDurationInMinutes);
     }
 
-    private function guardAgainstTooLongFoodRush($foodRushDurationInMinutes)
+    private function guardAgainstInvalidFoodRushDuration($foodRushDurationInMinutes)
     {
-        if ($foodRushDurationInMinutes > $this->maximumFoodRushDurationInMinutes)
+        if (
+            $foodRushDurationInMinutes < $this->minimumFoodRushDurationInMinutes
+            || $foodRushDurationInMinutes > $this->maximumFoodRushDurationInMinutes
+        )
         {
             throw new UnprocessableEntity(
-                "foodRushTooLong",
-                "The FoodRush duration should not exceed "
+                "invalidFoodRushDuration",
+                "The FoodRush duration must be between "
+                . $this->minimumFoodRushDurationInMinutes . ' and '
                 . $this->maximumFoodRushDurationInMinutes . ' minutes, '
                 . $foodRushDurationInMinutes . ' given.'
             );

@@ -1,5 +1,34 @@
 # Group Orders
 
+## List group orders [/group-orders/{?opened,around,latitude,longitude}]
+
+### GET
+
++ Parameters
+
+    + opened (optional, boolean, `true`) ... Retrieve group orders that can currently be joined only.
+    + around (optional, boolean, `true`) ... Retrieve group orders around only. Needs latitude and longitude parameters.
+    + latitude (optional, float, `2.21928`) ... Client latitude.
+    + longitude (optional, float, `48.711`) ... Client longitude.
+    
++ Response 200
+
+        [
+            {
+                "id": 20,
+                "opened": true,
+                "restaurant": {
+                    "id": 7,
+                    "name": "Toujours ouvert",
+                    "categories": [
+                        1
+                    ]
+                },
+                "createdAt": "2015-01-30 16:09:26",
+                "endingAt": "2015-01-30 16:09:26"
+            }
+        ]
+
 ## Place order [/orders]
 
 ### POST
@@ -10,11 +39,11 @@ The request must contain all the data required to attach a delivery address to t
 
 To join an existing group order instead of creating a new one, just add the corresponding `groupOrderId` to the request.
 
-The attributes dedicated to the order itself are `foodRushDurationInMinutes` (useless when joining a group order) which cannot not exceed {{ orders::maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired amount of each product format. All the product formats must of course belong to the same restaurant.
+The attributes dedicated to the order itself are `foodRushDurationInMinutes` (useless when joining a group order) which must be between {{ orders::minimum_foodrush_in_minutes }} and {{ orders::maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired amount of each product format. All the product formats must of course belong to the same restaurant.
 
 The restaurant must stay opened at least {{ restaurants::opening_duration_in_minutes }} minutes more to create a group order.
 
-The maximum distance between the given address and the restaurant is {{ restaurants::around_distance_in_kilometers }} kilometers.
+When creating a group order, the distance between the given address and the restaurant must be less than {{ restaurants::around_distance_in_kilometers }} kilometers. To join a group order, the distance between the first delivery address and the given one must be less than {{ orders::around_distance_in_kilometers }} kilometers.
 
 + Request
 
@@ -31,7 +60,8 @@ The maximum distance between the given address and the restaurant is {{ restaura
 
         {
             "id": 8,
-            "groupOrderId": 2
+            "groupOrderId": 2,
+            "rawPrice": 46.6
         }
 
 + Response 403
@@ -54,8 +84,8 @@ The maximum distance between the given address and the restaurant is {{ restaura
 
         {
             "status_code": 422,
-            "error_key": "foodRushTooLong",
-            "message": "The FoodRush duration should not exceed 60 minutes, 70 given."
+            "error_key": "invalidFoodRushDuration",
+            "message": "The FoodRush duration must be between 5 and 60 minutes, 70 given."
         }
 
 + Response 422
@@ -73,12 +103,35 @@ The maximum distance between the given address and the restaurant is {{ restaura
             "error_key": "productFormatsFromDifferentRestaurants",
             "message": "The product formats must belong to the same restaurant."
         }
-
+        
 + Response 422
 
         {
             "status_code": 422,
             "error_key": "deliveryDistanceTooLong",
-            "message": "The distance between the given delivery address and the restaurant #7 should be less than 10 kms."
+            "message": "The delivery distance should be less than 7 kms, 10 given."
         }
 
++ Response 422
+
+        {
+            "status_code": 422,
+            "error_key": "restaurantDeliveryCapacityExceeded",
+            "message": "The restaurant #6 cannot deliver more than 10 items in the same group order, 11 items asked."
+        }
+
++ Response 422
+
+        {
+            "status_code": 422,
+            "error_key": "minimumOrderPriceNotReached",
+            "message": "The order price is 8.1 but must be greater than 11."
+        }
+
++ Response 422
+
+        {
+            "status_code": 422,
+            "error_key": "groupOrderAlreadyExisting",
+            "message": "A group order already exists for the restaurant #6."
+        }
