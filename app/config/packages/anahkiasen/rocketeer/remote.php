@@ -33,7 +33,6 @@ return [
         '.env.production.php',
 		'{path.storage}/logs',
 		'{path.storage}/sessions',
-        'node_modules'
 	],
 
 	// Execution

@@ -30,6 +30,14 @@ return [
 		],
 		'deploy'  => [
             'Groupeat\Deploy\Tasks\DeployDependingOnCommitMessageTask',
+            function ($task)
+            {
+                App::make('rocketeer.tasks')->listenTo(
+                    'deploy.before-symlink',
+                    'Groupeat\Deploy\Tasks\BeforeSymlinkTask'
+                );
+            },
+            'Groupeat\Deploy\Tasks\CopyDependenciesFolders',
         ],
 		'cleanup' => [],
 	],
@@ -44,9 +52,6 @@ return [
             },
         ],
 		'deploy'  => [
-            'php artisan optimize',
-            'php artisan opcache',
-            'php artisan asset:build',
             function($task)
             {
                 // TODO: Remove this before app launch.
