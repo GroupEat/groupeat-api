@@ -327,6 +327,7 @@ class Auth extends JWTAuth {
         }
 
         $credentials->user()->associate($user);
+        $user->setIsActivated(!is_null($credentials->activated_at));
     }
 
     /**

@@ -19,6 +19,8 @@ class GroupOrder extends Entity {
     {
         return [
             'restaurant_id' => 'required|integer',
+            'reduction' => 'required|numeric',
+            'ending_at' => 'required',
         ];
     }
 
@@ -93,10 +95,12 @@ class GroupOrder extends Entity {
     {
         $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
         $this->assertMinimumOrderPriceReached($productFormats);
-        $totalAmount = $this->getTotalAmountWith($productFormats);
+        list($totalAmount, $totalRawPrice) = $this->getTotalAmountAndRawPriceWith($productFormats);
         $this->assertMaximumCapacityNotExceeded($totalAmount);
+        $this->computeAndSetReductionFrom($totalRawPrice);
 
         $order = new Order;
+        $order->rawPrice = $productFormats->price();
         $order->customer()->associate($customer);
         $order->setCreatedAt($order->freshTimestamp());
 
@@ -180,14 +184,43 @@ class GroupOrder extends Entity {
         $this->ending_at = $this->created_at->copy()->addMinutes($minutes);
     }
 
-    private function getTotalAmountWith(ProductFormats $productFormats)
+    private function getTotalAmountAndRawPriceWith(ProductFormats $productFormats)
     {
         if ($this->exists)
         {
             $productFormats = $productFormats->mergeWith($this);
         }
 
-        return $productFormats->count();
+        return [$productFormats->count(), $productFormats->price()];
+    }
+
+    private function computeAndSetReductionFrom($totalRawPrice)
+    {
+        $reductionPrices = json_decode($this->restaurant->reductionPrices, true);
+        $reductionValues = Config::get('restaurants::reductionValues');
+
+        foreach ($reductionPrices as $index => $price)
+        {
+            if ($totalRawPrice <= $price)
+            {
+                if ($index == 0)
+                {
+                    $this->reduction = $reductionValues[$index];
+                }
+                else
+                {
+                    $slope = ($reductionValues[$index] - $reductionValues[$index - 1])
+                        / ($price - $reductionPrices[$index - 1]);
+                    $offset = $reductionValues[$index] - $slope * $price;
+
+                    $this->reduction = $slope * $totalRawPrice + $offset;
+                }
+
+                return;
+            }
+        }
+
+        $this->reduction = end($reductionValues);
     }
 
     private function assertMaximumCapacityNotExceeded($totalAmount)

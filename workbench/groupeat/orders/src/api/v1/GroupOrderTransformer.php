@@ -12,6 +12,7 @@ class GroupOrderTransformer extends TransformerAbstract
         return [
             'id' => (int) $groupOrder->id,
             'opened' => (bool) $groupOrder->isOpened(),
+            'reduction' => (float) $groupOrder->reduction,
             'restaurant' => [
                 'id' => (int) $restaurant->id,
                 'name' => $restaurant->name,

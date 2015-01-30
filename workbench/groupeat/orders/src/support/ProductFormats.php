@@ -109,7 +109,7 @@ class ProductFormats {
 
         $this->totalPrice = $this->models->sum(function(ProductFormat $productFormat)
         {
-            return $productFormat->price;
+            return $this->amounts[$productFormat->id] * $productFormat->price;
         });
     }
 

@@ -10,7 +10,8 @@ class OrderTransformer extends TransformerAbstract
         return [
             'id' => (int) $order->id,
             'groupOrderId' => $order->groupOrder->id,
-            'rawPrice' => $order->rawPrice(),
+            'rawPrice' => $order->rawPrice,
+            'reducedPrice' => $order->reducedPrice,
         ];
     }
 

@@ -15,22 +15,8 @@ class Order extends Entity {
         return [
             'customer_id' => 'required|integer',
             'group_order_id' => 'required|integer',
+            'rawPrice' => 'required|numeric',
         ];
-    }
-
-    /**
-     * @return int The total price of the order without taking the possible reduction into account.
-     */
-    public function rawPrice()
-    {
-        $price = 0;
-
-        foreach ($this->productFormats as $productFormat)
-        {
-            $price += $productFormat->pivot->amount * $productFormat->price;
-        }
-
-        return $price;
     }
 
     public function customer()
@@ -51,6 +37,11 @@ class Order extends Entity {
     public function deliveryAddress()
     {
         return $this->hasOne('Groupeat\Orders\Entities\DeliveryAddress');
+    }
+
+    public function getReducedPriceAttribute()
+    {
+        return (1 - $this->groupOrder->reduction) * $this->rawPrice;
     }
 
 }

@@ -16,6 +16,7 @@ class GroupOrdersMigration extends Migration {
         {
             $table->increments('id');
             $table->unsignedInteger('restaurant_id')->index();
+            $table->float('reduction')->index()->default(0);
             $table->timestamps();
             $table->index(['created_at', 'updated_at']);
             $table->timestamp('completed_at')->nullable()->index();

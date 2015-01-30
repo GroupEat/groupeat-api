@@ -27,7 +27,7 @@ class DbInstallCommand extends Command {
         if ($this->option('seed'))
         {
             $this->setEntries();
-            $this->call('db:seed', $this->getDbOptions());
+            $this->call('db:seed', ['--force' => $this->option('force')]);
         }
     }
 
@@ -43,9 +43,9 @@ class DbInstallCommand extends Command {
 
     private function createMigrationsTable()
     {
-        if (!Schema::connection($this->option('database'))->hasTable('migrations'))
+        if (!Schema::hasTable('migrations'))
         {
-            $this->call('migrate:install', ['--database' => $this->option('database')]);
+            $this->call('migrate:install');
         }
     }
 
@@ -67,7 +67,7 @@ class DbInstallCommand extends Command {
         }
 
         system('composer dump-autoload');
-        $this->call('migrate:refresh', $this->getDbOptions());
+        $this->call('migrate:refresh', ['--force' => $this->option('force')]);
     }
 
     private function deleteOldMigrationFiles()
@@ -100,21 +100,12 @@ class DbInstallCommand extends Command {
         File::put($dest, implode("\n", $lines));
     }
 
-    private function getDbOptions()
-    {
-        return [
-            '--force' => $this->option('force'),
-            '--database' => $this->option('database'),
-        ];
-    }
-
     protected function getOptions()
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Force the operation to run when in production.', null],
             ['seed', 's', InputOption::VALUE_NONE, 'Migrate and seed.', null],
             ['entries', 'e', InputOption::VALUE_REQUIRED, 'Number of fake entries to seed the DB with.', null],
-            ['database', 'd', InputOption::VALUE_REQUIRED, 'The database connection to use.', null],
         ];
     }
 

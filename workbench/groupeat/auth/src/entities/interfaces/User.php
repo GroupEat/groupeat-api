@@ -17,4 +17,9 @@ interface User {
      */
     public function newInstance($attributes = [], $exists = false);
 
+    /**
+     * @param bool $isActivated
+     */
+    public function setIsActivated($isActivated);
+
 }

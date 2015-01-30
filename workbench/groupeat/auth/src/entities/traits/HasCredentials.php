@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 trait HasCredentials {
 
     /**
+     * @var bool
+     */
+    protected $isActivated = false;
+
+
+    /**
      * @param $email
      *
      * @return User
@@ -54,7 +60,7 @@ trait HasCredentials {
 
     public function isActivated()
     {
-        return $this->credentials->isActivated();
+        return $this->isActivated;
     }
 
     /**
@@ -79,6 +85,11 @@ trait HasCredentials {
     public function credentials()
     {
         return $this->morphOne('Groupeat\Auth\Entities\UserCredentials', 'user');
+    }
+
+    public function setIsActivated($isActivated)
+    {
+        $this->isActivated = (bool) $isActivated;
     }
 
 }

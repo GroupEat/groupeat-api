@@ -27,6 +27,7 @@ class RestaurantsSeeder extends Seeder {
             'phoneNumber' => $this->faker->phoneNumber,
             'minimumOrderPrice' => $this->faker->numberBetween(7, 11),
             'deliveryCapacity' => $this->faker->numberBetween(5, 10),
+            'reductionPrices' => json_encode([9, 10, 20, 25, 35, 60]),
         ]);
 
         UserCredentials::create([
@@ -60,6 +61,7 @@ class RestaurantsSeeder extends Seeder {
         {
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(5, 10);
             $restaurantData['minimumOrderPrice'] = $this->faker->numberBetween(7, 11);
+            $restaurantData['reductionPrices'] = json_encode([9, 10, 20, 25, 35, 60]);
 
             $restaurant = Restaurant::create($restaurantData);
 
