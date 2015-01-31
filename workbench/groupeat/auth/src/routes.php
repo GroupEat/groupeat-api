@@ -14,15 +14,18 @@ Route::group(['prefix' => 'auth'], function()
         'uses' => "$controller@activate",
     ]);
 
-    Route::get('reset-password/{token}', [
-        'as' => 'auth.showResetPasswordForm',
-        'uses' => "$controller@showResetPasswordForm",
-    ]);
+    Route::group(['prefix' => 'resetPassword/{token}'], function() use ($controller)
+    {
+        Route::get('/', [
+            'as' => 'auth.showResetPasswordForm',
+            'uses' => "$controller@showResetPasswordForm",
+        ]);
 
-    Route::post('reset-password/{token}', [
-        'as' => 'auth.resetPassword',
-        'uses' => "$controller@resetPassword",
-    ]);
+        Route::post('/', [
+            'as' => 'auth.resetPassword',
+            'uses' => "$controller@resetPassword",
+        ]);
+    });
 });
 
 Route::api(['version' => 'v1'], function()
@@ -35,6 +38,6 @@ Route::api(['version' => 'v1'], function()
 
         Route::post('token', "$controller@resetToken");
 
-        Route::post('reset-password', "$controller@sendResetPasswordLink");
+        Route::post('resetPassword', "$controller@sendResetPasswordLink");
     });
 });

@@ -18,12 +18,7 @@ An e-mail will be sent to the given address with an activation link that must be
 
 + Response 201
 
-        {
-             "id": 1,
-             "type": "customer",
-             "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do",
-             "activated": false
-         }
+    [Token][]
         
 + Response 400
 
@@ -64,13 +59,12 @@ An e-mail will be sent to the given address with an activation link that must be
 
         {
             "id": 1,
+            "email": "contact@mangeo.fr",
             "firstName": "Jean-Nathanaël",
             "lastName": "Hérault",
             "phoneNumber": "06 05 04 03 02",
-            "created_at": "2015-01-06 09:22:31",
-            "updated_at": "2015-01-06 10:41:25",
             "locale": "fr",
-            "deleted_at": null
+            "activated": true
         }
 
 ### Get customer [GET]
@@ -79,7 +73,7 @@ An e-mail will be sent to the given address with an activation link that must be
 
     [Customer][]
 
-+ Response 401
++ Response 403
 
         {
             "status_code": 403,
@@ -155,7 +149,8 @@ Replace the customer data with the one passed in the request. However, a custome
             "state": "Essone",
             "country": "France",
             "latitude": 48.711042,
-            "longitude": 2.219278
+            "longitude": 2.219278,
+            "customerId": 6
         }
 
 ### Get address [GET]
@@ -181,7 +176,7 @@ For the MVP, all the addresses must be valid campus addresses. That's why the on
 
     [Address][]
 
-## List predefined addresses  [/predefined-addresses]
+## List predefined addresses  [/predefinedAddresses]
 
 ### GET
 

@@ -29,7 +29,7 @@ class CustomerAddressesCest {
     {
         list($token) = $I->amAnActivatedCustomer();
 
-        $I->sendApiGetWithToken($token, "predefined-addresses");
+        $I->sendApiGetWithToken($token, "predefinedAddresses");
         $I->seeResponseCodeIs(200);
     }
 

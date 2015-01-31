@@ -97,7 +97,7 @@ Regenerate an authentication token for an already registered user. Once hit, thi
             }
         }
 
-## Send password reset link [/auth/reset-password]
+## Send password reset link [/auth/resetPassword]
 
 ### POST
 

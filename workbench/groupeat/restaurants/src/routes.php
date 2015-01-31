@@ -7,7 +7,7 @@ Route::api(['version' => 'v1', 'protected' => true], function()
 {
     $controller = 'Groupeat\Restaurants\Api\V1\RestaurantsController';
 
-    Route::get('restaurant-categories', "$controller@categoriesIndex");
+    Route::get('restaurantCategories', "$controller@categoriesIndex");
 
     Route::get('food-types', "$controller@foodTypesIndex");
 
@@ -19,6 +19,8 @@ Route::api(['version' => 'v1', 'protected' => true], function()
 
         Route::group(['prefix' => '{restaurant}'], function() use ($controller)
         {
+            Route::get('address', "$controller@showAddress");
+
             Route::get('products', "$controller@productsIndex");
         });
     });

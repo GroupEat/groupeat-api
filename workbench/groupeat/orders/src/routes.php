@@ -1,10 +1,30 @@
 <?php
 
+Route::model('order', 'Groupeat\Orders\Entities\Order');
+Route::model('groupOrder', 'Groupeat\Orders\Entities\GroupOrder');
+
 Route::api(['version' => 'v1', 'protected' => true], function()
 {
-    $controller = 'Groupeat\Orders\Api\V1\GroupOrdersController';
+    Route::group(['prefix' => 'groupOrders'], function()
+    {
+        $controller = 'Groupeat\Orders\Api\V1\GroupOrdersController';
 
-    Route::get('group-orders', "$controller@index");
+        Route::get('{groupOrder}', "$controller@show");
 
-    Route::post('orders', "$controller@placeOrder");
+        Route::get('/', "$controller@index");
+    });
+
+    Route::group(['prefix' => 'orders'], function()
+    {
+        $controller = 'Groupeat\Orders\Api\V1\OrdersController';
+
+        Route::group(['prefix' => '{order}'], function() use ($controller)
+        {
+            Route::get('deliveryAddress', "$controller@showDeliveryAddress");
+
+            Route::get('/', "$controller@show");
+        });
+
+        Route::post('/', "$controller@place");
+    });
 });

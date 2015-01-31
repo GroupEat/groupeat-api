@@ -23,5 +23,16 @@ Passing data through the URL is allowed for GET requests only. For PUT, PATCH, D
 
 ### Data scope
 
-In order to be able to send meta-data (like pagination for example) in a response, the main data of interest is wrapped in the scope of the `data` sub-object. It means that, when sending a GET request with the intend of receiving a single resource from the API, its attributes will not be in the response body root but instead in the `data` sub-object. For instance an id field in a `$response` variable should be accessed like this: `$response['data']['id']`.
+In order to be able to send meta-data (like pagination for example) in a response, the main data of interest is wrapped in the scope of the `data` sub-object. It means that, when sending a GET request with the intend of receiving a single resource from the API, its attributes will not be in the response body root but instead in the `data` sub-object.
+
+For instance an id field in a `$response` variable should be accessed like this: `$response['data']['id']`.
+
 This `data` scope will not be repeated in the responses below for the sake of simplicity.
+
+### Include query parameter
+
+Some GET routes accept an `include` parameter in their query string. It is used to load and insert resource relations in the repsonse body so that you don't have to make a second (or more) request to retrieve it. When this behavior is available, the route parameters will indicate it as well as which relations can be included. Use a `,` to list relations and a `.` to include nested relations when possible.
+
+Example: /books?include=author,publishers.somethingelse
+
+Included relations' data is accessible under another `data` scope.

@@ -74,6 +74,14 @@ class GroupOrder extends Entity {
         });
     }
 
+    public function getInitiatingOrder()
+    {
+        return $this->orders->filter(function($order)
+        {
+            return $order->initiator;
+        })->first();
+    }
+
     public function orders()
     {
         return $this->hasMany('Groupeat\Orders\Entities\Order');

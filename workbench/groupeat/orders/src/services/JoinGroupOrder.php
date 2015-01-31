@@ -32,8 +32,7 @@ class JoinGroupOrder extends GroupOrderValidation {
         }
 
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
-        $firstOrder = $groupOrder->orders()->oldest()->first();
-        $this->assertCloseEnough($deliveryAddress, $firstOrder->deliveryAddress);
+        $this->assertCloseEnough($deliveryAddress, $groupOrder->getInitiatingOrder()->deliveryAddress);
 
         return $groupOrder->addOrder($customer, $productFormats, $deliveryAddress);
     }

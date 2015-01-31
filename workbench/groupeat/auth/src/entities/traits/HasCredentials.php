@@ -11,7 +11,7 @@ trait HasCredentials {
     /**
      * @var bool
      */
-    protected $isActivated = false;
+    protected $isActivated = null;
 
 
     /**
@@ -60,7 +60,12 @@ trait HasCredentials {
 
     public function isActivated()
     {
-        return $this->isActivated;
+        if (!is_null($this->isActivated))
+        {
+            return $this->isActivated;
+        }
+
+        return $this->credentials->isActivated();
     }
 
     /**

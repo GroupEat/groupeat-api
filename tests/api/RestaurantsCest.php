@@ -17,7 +17,7 @@ class RestaurantsCest {
     {
         list($token) = $I->amAnActivatedCustomer();
 
-        $I->sendApiGetWithToken($token, 'restaurant-categories');
+        $I->sendApiGetWithToken($token, 'restaurantCategories');
         $I->seeResponseCodeIs(200);
     }
 

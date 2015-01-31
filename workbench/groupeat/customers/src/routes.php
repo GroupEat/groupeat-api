@@ -8,7 +8,7 @@ Route::api(['version' => 'v1'], function()
 
     Route::group(['protected' => true], function() use ($controller)
     {
-        Route::get('predefined-addresses', "$controller@predefinedAddressesIndex");
+        Route::get('predefinedAddresses', "$controller@predefinedAddressesIndex");
     });
 
     Route::group(['prefix' => 'customers'], function() use ($controller)

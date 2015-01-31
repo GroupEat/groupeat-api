@@ -2,6 +2,13 @@
 
 class OrdersCest {
 
+    public function _before(ApiTester $I)
+    {
+        \DB::table(\Groupeat\Orders\Migrations\GroupOrdersMigration::TABLE)
+            ->whereNull('completed_at')
+            ->update(['completed_at' => new \Carbon\Carbon]);
+    }
+
     public function testThatAUserShouldBeActivatedToPlaceAnOrder(ApiTester $I)
     {
         list($token) = $I->sendRegistrationRequest();
@@ -79,8 +86,8 @@ class OrdersCest {
             function($restaurants) use ($latitude, $longitude)
         {
             $restaurant = $restaurants[0];
-            $latitude = $restaurant['latitude'];
-            $longitude = $restaurant['longitude'];
+            $latitude = $restaurant['address']['data']['latitude'];
+            $longitude = $restaurant['address']['data']['longitude'];
 
             return $restaurant['id'];
         });
@@ -213,21 +220,52 @@ class OrdersCest {
     public function testThatGroupOrdersCanBeListed(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
-        $I->sendApiGetWithToken($token, 'group-orders');
+        $I->sendApiGetWithToken($token, 'groupOrders');
         $I->seeResponseCodeIs(200);
     }
 
-    public function testThatAGroupOrderCanBeJoined(ApiTester $I)
+    public function testThatAnOrderCanBeShownByTheCustomerWhoPlacedItOnly(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
         $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $groupOrderId = $I->grabDataFromResponse('groupOrderId');
+        $orderId = $I->grabDataFromResponse('id');
+        $I->sendApiGetWithToken($token, "orders/$orderId");
+        $I->seeResponseCodeIs(200);
+        $I->assertEquals($orderId, $I->grabDataFromResponse('id'));
+
+        list($token2) = $I->sendRegistrationRequest();
+        $I->sendApiGetWithToken($token2, "orders/$orderId");
+        $I->seeErrorResponse(403, 'wrongAuthenticatedUser');
+    }
+
+    public function testThatTheReductionIncreaseWhenAGroupOrderIsJoined(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $orderId = $I->grabDataFromResponse('id');
+        $oldRawPrice = $I->grabDataFromResponse('rawPrice');
+        $oldReduction = 1 - $I->grabDataFromResponse('reducedPrice') / $oldRawPrice;
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
 
         $orderDetails['groupOrderId'] = $groupOrderId;
         unset($orderDetails['foodRushDurationInMinutes']);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
+        $newReduction = 1 - $I->grabDataFromResponse('reducedPrice') / $I->grabDataFromResponse('rawPrice');
+        $I->sendApiGetWithToken($token , "groupOrders/$groupOrderId");
+        $newReductionFormGroupOrder = $I->grabDataFromResponse('reduction');
+
+        $I->assertGreaterThan($oldReduction, $newReduction);
+        $I->assertEquals($newReduction, $newReductionFormGroupOrder);
+
+        $I->sendApiGetWithToken($token, "orders/$orderId");
+        $newRawPrice = $I->grabDataFromResponse('rawPrice');
+        $I->assertEquals($oldRawPrice, $newRawPrice);
+        $newReductionFromOrder = 1 - $I->grabDataFromResponse('reducedPrice') / $newRawPrice;
+        $I->assertEquals($newReduction, $newReductionFromOrder);
     }
 
     public function testThatTheDeliveryAddressMustBeCloseEnoughToJoinAGroupOrder(ApiTester $I)
@@ -235,7 +273,9 @@ class OrdersCest {
         list($token) = $I->amAnActivatedCustomer();
         $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $groupOrderId = $I->grabDataFromResponse('groupOrderId');
+        $orderId = $I->grabDataFromResponse('id');
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
 
         $orderDetails['groupOrderId'] = $groupOrderId;
         $orderDetails['latitude']++;
@@ -300,6 +340,7 @@ class OrdersCest {
 
         if (!empty($options['around']))
         {
+            $queryStringParams['include'][] = 'address';
             $queryStringParams['around'] = 'true';
             $queryStringParams['latitude'] = $latitude;
             $queryStringParams['longitude'] = $longitude;
@@ -309,6 +350,8 @@ class OrdersCest {
         {
             $queryStringParams['opened'] = 'true';
         }
+
+        $queryStringParams['include'] = implode(',', $queryStringParams['include']);
 
         return $queryStringParams;
     }

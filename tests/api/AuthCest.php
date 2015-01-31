@@ -117,7 +117,7 @@ class AuthCest {
         $oldPassword = 'password';
         list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $oldPassword);
 
-        $I->sendApiPost('auth/reset-password', compact('email'));
+        $I->sendApiPost('auth/resetPassword', compact('email'));
         $I->seeResponseCodeIs(200);
         $link = $I->grabLastMailCrawlableBody()->filter('#reset-password-link')->text();
         $I->assertNotEmpty($link);

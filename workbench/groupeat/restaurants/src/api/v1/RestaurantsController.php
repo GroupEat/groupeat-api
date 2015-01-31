@@ -11,7 +11,7 @@ class RestaurantsController extends Controller {
 
     public function index()
     {
-        $query = Restaurant::with('categories', 'address', 'closingWindows', 'openingWindows')->orderBy('name', 'asc');
+        $query = Restaurant::with('closingWindows', 'openingWindows')->orderBy('name', 'asc');
 
         if (Input::has('opened'))
         {
@@ -56,6 +56,11 @@ class RestaurantsController extends Controller {
             $product->formats,
             new ProductFormatTransformer
         );
+    }
+
+    public function showAddress(Restaurant $restaurant)
+    {
+        return $this->itemResponse($restaurant->address);
     }
 
 }
