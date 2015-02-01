@@ -3,8 +3,14 @@
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
+use Illuminate\Events\Dispatcher;
 
 abstract class GroupOrderValidation {
+
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
 
     /**
      * @var int
@@ -17,8 +23,13 @@ abstract class GroupOrderValidation {
     protected $deliveryAddressConstraints;
 
 
-    public function __construct($maximumDeliveryDistanceInKms, array $deliveryAddressConstraints)
+    public function __construct(
+        Dispatcher $events,
+        $maximumDeliveryDistanceInKms,
+        array $deliveryAddressConstraints
+    )
     {
+        $this->events = $events;
         $this->maximumDeliveryDistanceInKms = (float) $maximumDeliveryDistanceInKms;
         $this->deliveryAddressConstraints = $deliveryAddressConstraints;
     }

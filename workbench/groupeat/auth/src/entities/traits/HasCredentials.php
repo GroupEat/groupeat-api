@@ -58,6 +58,11 @@ trait HasCredentials {
         return $this->credentials->email;
     }
 
+    public function getLocaleAttribute()
+    {
+        return $this->credentials->locale;
+    }
+
     public function isActivated()
     {
         if (!is_null($this->isActivated))

@@ -8,6 +8,7 @@ use Groupeat\Orders\Services\Abstracts\GroupOrderValidation;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
+use Illuminate\Events\Dispatcher;
 
 class CreateGroupOrder extends GroupOrderValidation {
 
@@ -28,6 +29,7 @@ class CreateGroupOrder extends GroupOrderValidation {
 
 
     public function __construct(
+        Dispatcher $events,
         $maximumDeliveryDistanceInKms,
         array $deliveryAddressConstraints,
         $minimumFoodRushDurationInMinutes,
@@ -35,7 +37,7 @@ class CreateGroupOrder extends GroupOrderValidation {
         $minimumRemainingOpeningMinutes
     )
     {
-        parent::__construct($maximumDeliveryDistanceInKms, $deliveryAddressConstraints);
+        parent::__construct($events, $maximumDeliveryDistanceInKms, $deliveryAddressConstraints);
 
         $this->minimumFoodRushDurationInMinutes = (int) $minimumFoodRushDurationInMinutes;
         $this->maximumFoodRushDurationInMinutes = (int) $maximumFoodRushDurationInMinutes;
@@ -66,7 +68,11 @@ class CreateGroupOrder extends GroupOrderValidation {
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
         $this->assertCloseEnough($deliveryAddress, $restaurant->address);
 
-        return GroupOrder::createWith($customer, $deliveryAddress, $productFormats, $foodRushDurationInMinutes);
+        $order = GroupOrder::createWith($customer, $deliveryAddress, $productFormats, $foodRushDurationInMinutes);
+
+        $this->events->fire('groupOrderHasBeenCreated', [$order]);
+
+        return $order;
     }
 
     private function guardAgainstInvalidFoodRushDuration($foodRushDurationInMinutes)

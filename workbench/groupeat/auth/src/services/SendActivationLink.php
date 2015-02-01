@@ -41,7 +41,7 @@ class SendActivationLink {
      *
      * @return User
      */
-    public function call(UserCredentials $userCredentials, $locale)
+    public function call(UserCredentials $userCredentials)
     {
         $view = 'auth::mails.activation';
         $token = $this->generateActivationToken($userCredentials);
@@ -57,7 +57,7 @@ class SendActivationLink {
 
                 $message->to($email)->subject($subject);
             });
-        }, $locale);
+        }, $userCredentials->locale);
     }
 
     private function generateActivationToken(UserCredentials $userCredentials, $length = 42)

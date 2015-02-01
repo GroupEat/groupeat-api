@@ -5,6 +5,7 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Mail\Mailer;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Translation\Translator;
@@ -18,9 +19,9 @@ class RegisterUser {
     private $validation;
 
     /**
-     * @var SendActivationLink
+     * @var Dispatcher
      */
-    private $sendActivationLinkService;
+    private $events;
 
     /**
      * @var GenerateTokenForUser
@@ -35,13 +36,13 @@ class RegisterUser {
 
     public function __construct(
         Validation $validation,
-        SendActivationLink $sendActivationLinkService,
+        Dispatcher $events,
         GenerateAuthToken $authTokenGenerator,
         Locale $localeService
     )
     {
         $this->validation = $validation;
-        $this->sendActivationLinkService = $sendActivationLinkService;
+        $this->events = $events;
         $this->authTokenGenerator = $authTokenGenerator;
         $this->localeService = $localeService;
     }
@@ -61,7 +62,8 @@ class RegisterUser {
 
         $userCredentials = $this->insertUserWithCredentials($email, $plainPassword, $locale, $newUser);
         $userCredentials->replaceAuthenticationToken($this->authTokenGenerator->forUser($userCredentials));
-        $this->sendActivationLinkService->call($userCredentials, $locale);
+
+        $this->events->fire('userHasRegistered', [$userCredentials]);
 
         return $userCredentials->user;
     }

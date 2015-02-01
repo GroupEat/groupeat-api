@@ -2,6 +2,7 @@
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Entities\GroupOrder;
+use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Services\Abstracts\GroupOrderValidation;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
@@ -14,7 +15,7 @@ class JoinGroupOrder extends GroupOrderValidation {
      * @param ProductFormats $productFormats
      * @param array          $deliveryAddressData
      *
-     * @return GroupOrder
+     * @return Order
      */
     public function call(
         GroupOrder $groupOrder,
@@ -23,6 +24,19 @@ class JoinGroupOrder extends GroupOrderValidation {
         array $deliveryAddressData
     )
     {
+        $this->assertStillOpened($groupOrder);
+        $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
+        $this->assertCloseEnough($deliveryAddress, $groupOrder->getInitiatingOrder()->deliveryAddress);
+
+        $order = $groupOrder->addOrder($customer, $productFormats, $deliveryAddress);
+
+        $this->events->fire('groupOrderHasBeenJoined', [$order]);
+
+        return $order;
+    }
+
+    private function assertStillOpened(GroupOrder $groupOrder)
+    {
         if (!$groupOrder->isOpened())
         {
             throw new UnprocessableEntity(
@@ -30,16 +44,6 @@ class JoinGroupOrder extends GroupOrderValidation {
                 "The {$groupOrder->toShortString()} cannot be joined because it has ended."
             );
         }
-
-        $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
-        $this->assertCloseEnough($deliveryAddress, $groupOrder->getInitiatingOrder()->deliveryAddress);
-
-        return $groupOrder->addOrder($customer, $productFormats, $deliveryAddress);
-    }
-
-    private function assertStillOpened(GroupOrder $groupOrder)
-    {
-
     }
 
 }

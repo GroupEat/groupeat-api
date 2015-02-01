@@ -41,7 +41,12 @@ class Order extends Entity {
 
     public function getReducedPriceAttribute()
     {
-        return (1 - $this->groupOrder->reduction) * $this->rawPrice;
+        return round((1 - $this->groupOrder->reduction) * $this->rawPrice, 2);
+    }
+
+    protected function setRawPriceAttribute($rawPrice)
+    {
+        $this->attributes['rawPrice'] = round($rawPrice, 2);
     }
 
 }

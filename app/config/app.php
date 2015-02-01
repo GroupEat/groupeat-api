@@ -130,7 +130,8 @@ return [
         'Dingo\Api\Provider\ApiServiceProvider',
         'Former\FormerServiceProvider',
         'Kmd\Logviewer\LogviewerServiceProvider',
-        'Tymon\JWTAuth\JWTAuthServiceProvider',
+		'Robbo\Presenter\PresenterServiceProvider',
+		'Tymon\JWTAuth\JWTAuthServiceProvider',
 		'Schickling\Backup\BackupServiceProvider',
 
         'Groupeat\Support\PackageProvider',

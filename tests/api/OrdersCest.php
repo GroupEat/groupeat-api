@@ -82,7 +82,7 @@ class OrdersCest {
         $products = $this->getProducts(
             $I,
             $token,
-            ['around' => true],
+            ['around' => true, 'opened' => true],
             function($restaurants) use ($latitude, $longitude)
         {
             $restaurant = $restaurants[0];

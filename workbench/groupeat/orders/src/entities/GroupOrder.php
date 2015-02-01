@@ -162,6 +162,11 @@ class GroupOrder extends Entity {
         });
     }
 
+    protected function setReductionAttribute($reduction)
+    {
+        $this->attributes['reduction'] = round($reduction, 2);
+    }
+
     private static function assertNotExistingFor(Restaurant $restaurant)
     {
         $now = new Carbon;

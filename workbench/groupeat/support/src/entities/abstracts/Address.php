@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Support\Entities\Abstracts;
 
 use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Presenters\Address as AddressPresenter;
 use Treffynnon\Navigator;
 
 abstract class Address extends Entity {
@@ -34,6 +35,11 @@ abstract class Address extends Entity {
             $other->latitude,
             $other->longitude
         ) / 1000;
+    }
+
+    public function getPresenter()
+    {
+        return new AddressPresenter($this);
     }
 
 }

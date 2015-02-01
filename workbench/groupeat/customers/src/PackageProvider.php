@@ -29,7 +29,7 @@ class PackageProvider extends WorkbenchPackageProvider {
     {
         parent::boot();
 
-        $this->app->make('groupeat.auth')->addUserType(new Customer);
+        $this->app['groupeat.auth']->addUserType(new Customer);
     }
 
 }

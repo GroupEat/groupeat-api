@@ -31,7 +31,7 @@ class PackageProvider extends WorkbenchPackageProvider {
         {
             return new RegisterUser(
                 $app['validator'],
-                $app['SendActivationLinkService'],
+                $app['events'],
                 $app['GenerateAuthTokenService'],
                 $app['groupeat.locale']
             );
@@ -58,6 +58,13 @@ class PackageProvider extends WorkbenchPackageProvider {
 
             return $auth->setIdentifier($app['config']->get('jwt::identifier'));
         });
+    }
+
+    public function boot()
+    {
+        parent::boot();
+
+        $this->app['events']->listen('userHasRegistered', 'SendActivationLinkService@call');
     }
 
 }

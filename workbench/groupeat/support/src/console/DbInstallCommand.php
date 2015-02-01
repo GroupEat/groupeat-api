@@ -66,6 +66,8 @@ class DbInstallCommand extends Command {
             }
         }
 
+        $this->call('queue:failed-table');
+
         system('composer dump-autoload');
         $this->call('migrate:refresh', ['--force' => $this->option('force')]);
     }

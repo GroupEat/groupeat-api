@@ -3,11 +3,13 @@
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
+use Groupeat\Support\Presenters\Presenter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\MessageBag;
+use Robbo\Presenter\PresentableInterface;
 use Validator;
 
-abstract class Entity extends Model {
+abstract class Entity extends Model implements PresentableInterface {
 
     /**
      * Can be set to true for easier seeding.
@@ -177,6 +179,21 @@ abstract class Entity extends Model {
         }
 
         return $str;
+    }
+
+    /**
+     * @return Presenter
+     */
+    public function getPresenter()
+    {
+        $class = str_replace('Entities', 'Presenters', static::class);
+
+        if (class_exists($class))
+        {
+            return new $class($this);
+        }
+
+        return new Presenter($this);
     }
 
     /**
