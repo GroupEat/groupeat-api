@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Deploy\Tasks;
 
-use App;
 use Config;
 use File;
 use Rocketeer\Abstracts\AbstractTask;
@@ -66,7 +65,7 @@ class ProvisionTask extends AbstractTask {
         $output = $this->explainer;
         $onError = function() { exit; };
 
-        return App::make('GitHubApi', compact('username', 'password', 'output', 'onError'));
+        return app('GitHubApi', compact('username', 'password', 'output', 'onError'));
     }
 
     private function addVagrantUserAndShippableKey($email, $shippableKey)

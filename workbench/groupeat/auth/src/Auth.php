@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Auth;
 
-use App;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
@@ -60,7 +59,7 @@ class Auth extends JWTAuth {
     {
         $this->token = null;
         $this->userCredentials = null;
-        App::make('api.auth')->setUser(null);
+        app('api.auth')->setUser(null);
         $this->auth->logout();
     }
 

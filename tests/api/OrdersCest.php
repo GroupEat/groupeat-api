@@ -259,13 +259,13 @@ class OrdersCest {
         $newReductionFormGroupOrder = $I->grabDataFromResponse('reduction');
 
         $I->assertGreaterThan($oldReduction, $newReduction);
-        $I->assertEquals($newReduction, $newReductionFormGroupOrder);
+        $I->assertCentsEquals($newReduction, $newReductionFormGroupOrder);
 
         $I->sendApiGetWithToken($token, "orders/$orderId");
         $newRawPrice = $I->grabDataFromResponse('rawPrice');
-        $I->assertEquals($oldRawPrice, $newRawPrice);
+        $I->assertCentsEquals($oldRawPrice, $newRawPrice);
         $newReductionFromOrder = 1 - $I->grabDataFromResponse('reducedPrice') / $newRawPrice;
-        $I->assertEquals($newReduction, $newReductionFromOrder);
+        $I->assertCentsEquals($newReduction, $newReductionFromOrder);
     }
 
     public function testThatTheDeliveryAddressMustBeCloseEnoughToJoinAGroupOrder(ApiTester $I)

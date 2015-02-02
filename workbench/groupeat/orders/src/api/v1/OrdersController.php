@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Orders\Api\V1;
 
-use App;
 use Auth;
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
@@ -36,7 +35,7 @@ class OrdersController extends Controller {
         {
             $groupOrder = GroupOrder::findOrFail(Input::get('groupOrderId'));
 
-            $order = App::make('JoinGroupOrderService')->call(
+            $order = app('JoinGroupOrderService')->call(
                 $groupOrder,
                 $customer,
                 $productFormats,
@@ -45,7 +44,7 @@ class OrdersController extends Controller {
         }
         else
         {
-            $order = App::make('CreateGroupOrderService')->call(
+            $order = app('CreateGroupOrderService')->call(
                 $customer,
                 $productFormats,
                 (int) Input::get('foodRushDurationInMinutes'),

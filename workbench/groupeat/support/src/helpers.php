@@ -179,10 +179,58 @@ if (!function_exists('translateIfNeeded'))
     {
         if (preg_match('/^\w+((\.|::)\w+)+\w+$/', $text))
         {
-            return \Lang::get($text);
+            return trans($text);
         }
 
         return $text;
+    }
+}
+
+if (!function_exists('mb_ucfirst'))
+{
+    /**
+     * Return the given string with the first letter uppercased
+     *
+     * @param  string  $str The string to use
+     * @param  boolean $lowerEnd Indicates if the rest of the string should be lowercased
+     * @param  string  $encoding Encoding type
+     *
+     * @return string
+     */
+    function mb_ucfirst($str, $lowerEnd = false, $encoding = 'UTF-8')
+    {
+        $firstLetter = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding);
+
+        if ($lowerEnd)
+        {
+            return $firstLetter.mb_strtolower(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding), $encoding);
+        }
+
+        return $firstLetter.mb_substr($str, 1, mb_strlen($str, $encoding), $encoding);
+    }
+}
+
+if (!function_exists('mb_lcfirst'))
+{
+    /**
+     * Return the given string with the first letter lowercased
+     *
+     * @param  string  $str The string to use
+     * @param  boolean $lowerEnd Indicates if the rest of the string should be uppercased
+     * @param  string  $encoding Encoding type
+     *
+     * @return string
+     */
+    function mb_lcfirst($str, $upperEnd = false, $encoding = 'UTF-8')
+    {
+        $firstLetter = mb_strtolower(mb_substr($str, 0, 1, $encoding), $encoding);
+
+        if ($upperEnd)
+        {
+            return $firstLetter.mb_strtoupper(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding), $encoding);
+        }
+
+        return $firstLetter.mb_substr($str, 1, mb_strlen($str, $encoding), $encoding);
     }
 }
 

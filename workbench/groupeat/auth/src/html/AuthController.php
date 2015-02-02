@@ -1,12 +1,10 @@
 <?php namespace Groupeat\Auth\Html;
 
-use App;
 use Groupeat\Admin\Forms\ResetPasswordForm;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Html\Controller;
 use Input;
-use Lang;
 use Password;
 
 class AuthController extends Controller {
@@ -15,11 +13,11 @@ class AuthController extends Controller {
     {
         try
         {
-            App::make('ActivateUserService')->call($token);
+            app('ActivateUserService')->call($token);
 
             return panelView(
                 'auth::activation.panel.title',
-                Lang::get('auth::activation.panel.text'),
+                trans('auth::activation.panel.text'),
                 'success'
             );
         }
@@ -27,7 +25,7 @@ class AuthController extends Controller {
         {
             return panelView(
                 'auth::activation.panel.errors.title',
-                Lang::get('auth::activation.panel.errors.wrongToken'),
+                trans('auth::activation.panel.errors.wrongToken'),
                 'danger'
             );
         }
@@ -46,7 +44,7 @@ class AuthController extends Controller {
     {
         try
         {
-            App::make('ResetPasswordService')->call(
+            app('ResetPasswordService')->call(
                 $token,
                 Input::get('email'),
                 Input::get('password'),
@@ -55,7 +53,7 @@ class AuthController extends Controller {
 
             return panelView(
                 'auth::resetPassword.panel.title',
-                Lang::get('auth::resetPassword.panel.text'),
+                trans('auth::resetPassword.panel.text'),
                 'info'
             );
         }

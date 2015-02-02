@@ -3,7 +3,6 @@
 use anlutro\cURL\cURL;
 use App;
 use Groupeat\Support\Console\Command;
-use URL;
 
 class OpCacheResetCommand extends Command {
 
@@ -21,7 +20,7 @@ class OpCacheResetCommand extends Command {
 
     private function resetServer($path)
     {
-        $url = URL::to($path);
+        $url = url($path);
         $request = (new cURL)->newRequest('GET', $url);
 
         if (App::isLocal())

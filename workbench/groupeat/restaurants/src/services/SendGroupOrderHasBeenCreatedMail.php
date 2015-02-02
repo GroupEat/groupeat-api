@@ -25,7 +25,7 @@ class SendGroupOrderHasBeenCreatedMail {
 
     public function call(Order $order)
     {
-        $order->productFormats->load('product');
+        $order->productFormats->load('product.type');
 
         $view = 'restaurants::mails.groupOrderHasBeenCreated';
         $customer = $order->customer;
@@ -37,6 +37,8 @@ class SendGroupOrderHasBeenCreatedMail {
 
         return $this->localeService->executeWithUserLocale(function() use ($view, $data, $email)
         {
+            return \Response::view($view, $data);
+
             $this->mailer->send($view, $data, function($message) use ($email)
             {
                 $subject = $this->localeService->getTranslator()

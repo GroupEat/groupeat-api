@@ -3,7 +3,6 @@
 use Groupeat\Support\Forms\Form;
 use Illuminate\Routing\Controller as IlluminateController;
 use Input;
-use Lang;
 use Redirect;
 use Validator;
 
@@ -31,7 +30,7 @@ abstract class Controller extends IlluminateController {
 
     protected function redirectBackWithError($langKey)
     {
-        $error = Lang::get($langKey);
+        $error = trans($langKey);
 
         return Redirect::back()->withErrors(compact('error'))->withInput();
     }

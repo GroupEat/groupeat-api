@@ -7,12 +7,18 @@ class Order extends Presenter {
 
     public function presentHtmlTable()
     {
-        $headers = ['quantité', 'pizza', 'taille', 'prix sans réduction'];
+        $attributes = trans('restaurants::products.attributes');
+
+        foreach (['amount', 'foodType', 'product', 'format', 'rawPrice'] as $key)
+        {
+            $headers[] = mb_ucfirst($attributes[$key]);
+        }
 
         foreach ($this->productFormats as $productFormat)
         {
             $rows[] = [
                 $productFormat->pivot->amount,
+                $productFormat->product->type->label,
                 $productFormat->product->name,
                 $productFormat->name,
                 $productFormat->price

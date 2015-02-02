@@ -13,7 +13,7 @@ class Address extends Presenter {
             $str .= " ($object->details)";
         }
 
-        $str .= ', '.$object->city;
+        $str .= ', '.$object->city.' '.$object->postcode;
 
         return $str;
     }

@@ -6,8 +6,6 @@ use Groupeat\Admin\Forms\LoginForm;
 use Groupeat\Support\Html\Controller;
 use Input;
 use Redirect;
-use URL;
-use View;
 
 class AdminController extends Controller {
 
@@ -23,7 +21,7 @@ class AdminController extends Controller {
             return $response;
         }
 
-        if (App::make('LoginAdminService')->attempt(Input::get('email'), Input::get('password')))
+        if (app('LoginAdminService')->attempt(Input::get('email'), Input::get('password')))
         {
             return Redirect::intended();
         }
@@ -33,7 +31,7 @@ class AdminController extends Controller {
 
     public function logout()
     {
-        App::make('LoginAdminService')->logout();
+        app('LoginAdminService')->logout();
 
         return Redirect::home();
     }
@@ -56,7 +54,7 @@ class AdminController extends Controller {
             $data['passwd'] = DB::getConfig('password');
         }
 
-        $url = URL::to('packages/groupeat/admin/adminer.php').'?'.http_build_query($data);
+        $url = url('packages/groupeat/admin/adminer.php').'?'.http_build_query($data);
 
         return Redirect::to($url);
     }
@@ -65,7 +63,7 @@ class AdminController extends Controller {
     {
         $forceRegenerate = App::isLocal() && Input::get('generate');
 
-        return App::make('GenerateApiDocumentationService')->getHTML($forceRegenerate);
+        return app('GenerateApiDocumentationService')->getHTML($forceRegenerate);
     }
 
 }

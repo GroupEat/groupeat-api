@@ -2,8 +2,8 @@
 
 Route::filter('admin', function()
 {
-    if (!App::make('LoginAdminService')->check())
+    if (!app('LoginAdminService')->check())
     {
-        return Redirect::guest(URL::route('admin.showLoginForm'));
+        return Redirect::guest(route('admin.showLoginForm'));
     }
 });

@@ -1,11 +1,8 @@
 <?php namespace Groupeat\Auth\Api\V1;
 
-use App;
 use Auth;
 use Groupeat\Auth\Entities\Interfaces\User;
-use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Api\V1\Controller;
-use Groupeat\Support\Exceptions\Unauthorized;
 use Input;
 
 class AuthController extends Controller {
@@ -19,7 +16,7 @@ class AuthController extends Controller {
 
     public function resetToken()
     {
-        $userCredentials = App::make('GenerateAuthTokenService')
+        $userCredentials = app('GenerateAuthTokenService')
             ->resetFromCredentials(Input::get('email'), Input::get('password'));
 
         return $this->getTokenResponseFromUser($userCredentials->user);
@@ -27,7 +24,7 @@ class AuthController extends Controller {
 
     public function sendResetPasswordLink()
     {
-        App::make('SendPasswordResetLinkService')->call(Input::get('email'));
+        app('SendPasswordResetLinkService')->call(Input::get('email'));
     }
 
     /**

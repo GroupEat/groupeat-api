@@ -1,7 +1,5 @@
 <?php namespace Groupeat\Support\Forms;
 
-use App;
-use Lang;
 use Session;
 
 abstract class Form {
@@ -34,7 +32,7 @@ abstract class Form {
 
     public function __construct()
     {
-        $this->former = App::make('former');
+        $this->former = app('former');
     }
 
     /**
@@ -97,7 +95,7 @@ abstract class Form {
 
     protected function submit($action, $class = 'primary')
     {
-        return $this->former->button(Lang::get("validation.attributes.$action"))
+        return $this->former->button(trans("validation.attributes.$action"))
             ->class('btn btn-lg btn-block btn-'.$class)
             ->type('submit');
     }

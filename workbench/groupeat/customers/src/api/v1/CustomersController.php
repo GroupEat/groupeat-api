@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Customers\Api\V1;
 
-use App;
 use Auth;
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
@@ -32,7 +31,7 @@ class CustomersController extends Controller {
         $email = Input::get('email');
         $password = Input::get('password');
 
-        App::make('RegisterCustomerService')->call($email, $password, Input::get('locale'));
+        app('RegisterCustomerService')->call($email, $password, Input::get('locale'));
 
         return $this->api->raw()
             ->put('auth/token', compact('email', 'password'))
@@ -62,7 +61,7 @@ class CustomersController extends Controller {
     {
         Auth::assertSame($customer);
 
-        $address = App::make('ChangeCustomerAddressService')->call(
+        $address = app('ChangeCustomerAddressService')->call(
             $customer,
             Input::only((new Address())->getFillable())
         );
