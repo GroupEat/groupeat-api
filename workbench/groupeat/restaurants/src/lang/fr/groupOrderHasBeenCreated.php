@@ -10,7 +10,7 @@ return [
 
     'orderRawPrice' => "Le montant de cette commande est de :rawPrice sans appliquer de réduction.",
 
-    'deliveryAddress' => "L'adresse de livraison est : :deliveryAddress.",
+    'deliveryAddress' => "L'adresse de livraison est :",
 
     'customerCanBeReached' => "Vous pouvez joindre ce client par téléphone au :phoneNumber."
 

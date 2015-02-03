@@ -4,7 +4,7 @@ return [
 
     'panel' => [
         'title' => "Activation de compte",
-        'text' => "Merci d'avoir activé votre compte. Vous pouvez désormais lancer une commande sur l'application mobile !",
+        'text' => "Merci d'avoir activé votre compte. Vous pouvez désormais utiliser pleinement l'application !",
 
         'errors' => [
             'title' => "Problème d'activation",
@@ -15,7 +15,8 @@ return [
     'mail' => [
         'subject' => "Activation de votre compte GroupEat",
         'welcome' => "Bienvenue sur l'application GroupEat !",
-        'indication' => "Merci d'activer votre compte en cliquant sur ce lien :",
+        'indication' => "Merci d'avoir créé un compte GroupEat. Pour utiliser pleinement l'application, il ne vous reste plus qu'à valider votre adresse mail en cliquant sur le bouton suivant :",
+        'button' => "Activer votre compte",
     ]
 
 

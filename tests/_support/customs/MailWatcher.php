@@ -27,6 +27,11 @@ class MailWatcher extends \Codeception\Module {
         return new Crawler($this->grabLastMail()->getBody());
     }
 
+    public function grabHrefInLinkByIdInLastMail($id)
+    {
+        return trim($this->grabLastMailCrawlableBody()->filter("#$id")->attr('href'));
+    }
+
     public function grabLastMailBody()
     {
         return $this->grabLastMail()->getBody();

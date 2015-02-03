@@ -1,19 +1,25 @@
-@include('restaurants::mails.partials.simple-table')
+@extends('layout.mails.simple')
 
-<p>
-@lang('restaurants::groupOrderHasBeenCreated.whoAndWhen', [
-    'customerFullName' => $customer->fullName,
-    'creationTime' => $groupOrder->creationTime,
-    'endingTime' => $groupOrder->endingTime,
-])
-</p>
+@section('beforeButton')
+    <p>
+        @lang('restaurants::groupOrderHasBeenCreated.whoAndWhen', [
+            'customerFullName' => $customer->fullName,
+            'creationTime' => $groupOrder->creationTime,
+            'endingTime' => $groupOrder->endingTime,
+        ])
+    </p>
 
-<p>@lang('restaurants::groupOrderHasBeenCreated.orderedProducts')</p>
+    <p>@lang('restaurants::groupOrderHasBeenCreated.orderedProducts')</p>
 
-{{ $order->htmlTable }}
+    {{ $order->htmlTableForEmail }}
 
-<p>@lang('restaurants::groupOrderHasBeenCreated.orderRawPrice', ['rawPrice' => $order->rawPrice])</p>
+    <p>@lang('restaurants::groupOrderHasBeenCreated.orderRawPrice', ['rawPrice' => $order->rawPrice])</p>
 
-<p>@lang('restaurants::groupOrderHasBeenCreated.deliveryAddress', compact('deliveryAddress'))</p>
+    <p>
+        @lang('restaurants::groupOrderHasBeenCreated.deliveryAddress')
+        <br>
+        {{ $deliveryAddress }}
+    </p>
 
-<p>@lang('restaurants::groupOrderHasBeenCreated.customerCanBeReached', ['phoneNumber' => $customer->phoneNumber ])</p>
+    <p>@lang('restaurants::groupOrderHasBeenCreated.customerCanBeReached', ['phoneNumber' => $customer->phoneNumber ])</p>
+@stop

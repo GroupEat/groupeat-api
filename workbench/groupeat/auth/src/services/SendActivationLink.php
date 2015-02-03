@@ -53,7 +53,8 @@ class SendActivationLink {
         {
             $this->mailer->send($view, $data, function($message) use ($email)
             {
-                $subject = $this->localeService->getTranslator()->get('auth::activation.mail.subject');
+                $subject = $this->localeService->getTranslator()
+                    ->get('auth::activation.mail.subject');
 
                 $message->to($email)->subject($subject);
             });

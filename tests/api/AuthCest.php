@@ -23,7 +23,7 @@ class AuthCest {
         $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
         $I->assertFalse($I->grabDataFromResponse('activated'));
 
-        $activationLink = $I->grabLastMailCrawlableBody()->filter('#activation-link')->text();
+        $activationLink = $I->grabHrefInLinkByIdInLastMail('activation-link');
         $I->assertNotEmpty($activationLink);
         $I->sendGET($activationLink);
         $I->seeResponseCodeIs(200);
@@ -119,7 +119,7 @@ class AuthCest {
 
         $I->sendApiPost('auth/resetPassword', compact('email'));
         $I->seeResponseCodeIs(200);
-        $link = $I->grabLastMailCrawlableBody()->filter('#reset-password-link')->text();
+        $link = $I->grabHrefInLinkByIdInLastMail('reset-password-link');
         $I->assertNotEmpty($link);
         $I->sendGET($link);
         $I->seeResponseCodeIs(200);
