@@ -9,7 +9,6 @@ Route::after(function($request, $response)
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS',
             'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept, Authorization, X-Request-With',
-            'Access-Control-Allow-Credentials' => 'true',
         ];
 
         $replace = true;
@@ -21,10 +20,10 @@ Route::after(function($request, $response)
     }
 });
 
-// Allow query string for GET requests only
+// Allow query string for GET, OPTIONS and HEAD requests only
 Route::before(function($request)
 {
-    if ($request->method() != 'GET')
+    if (!in_array($request->method(), ['GET', 'OPTIONS', 'HEAD']))
     {
         $uriParts = explode('?', $request->getRequestUri());
 
@@ -33,7 +32,7 @@ Route::before(function($request)
         {
             throw new \Groupeat\Support\Exceptions\BadRequest(
                 'queryStringForbiddenForCurrentHttpVerb',
-                "Cannot pass data in the query string outside of a GET request."
+                "Cannot pass data in the query string outside of a GET, OPTIONS or HEAD request."
             );
         }
     }
