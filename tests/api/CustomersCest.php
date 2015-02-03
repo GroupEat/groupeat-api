@@ -11,7 +11,7 @@ class CustomersCest {
 
         foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain)
         {
-            $I->sendApiPost('customers', ['email' => "user@$domain", 'password' => 'password']);
+            $I->sendApiPost('customers', ['email' => "user@$domain", 'password' => 'password', 'locale' => 'fr']);
             $I->seeResponseCodeIs(422);
             $I->seeErrorsContain(['email' => ['notFromCampus' => []]]);
         }

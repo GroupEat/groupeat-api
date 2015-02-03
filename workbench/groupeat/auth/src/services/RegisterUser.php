@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Auth\Services;
 
+use Closure;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
@@ -55,12 +56,12 @@ class RegisterUser {
      *
      * @return User
      */
-    public function call($email, $plainPassword, $locale, User $userType)
+    public function call($email, $plainPassword, $locale, User $userType, Closure $additionalValidationCallback = null)
     {
-        $newUser = $userType->newInstance();
         $this->localeService->assertAvailable($locale);
+        $this->assertValidCredentials($email, $plainPassword, $additionalValidationCallback);
 
-        $userCredentials = $this->insertUserWithCredentials($email, $plainPassword, $locale, $newUser);
+        $userCredentials = UserCredentials::register($email, $plainPassword, $locale, $userType->newInstance());
         $userCredentials->replaceAuthenticationToken($this->authTokenGenerator->forUser($userCredentials));
 
         $this->events->fire('userHasRegistered', [$userCredentials]);
@@ -68,7 +69,7 @@ class RegisterUser {
         return $userCredentials->user;
     }
 
-    private function insertUserWithCredentials($email, $password, $locale, User $user)
+    private function assertValidCredentials($email, $password, Closure $additionalCallback = null)
     {
         $credentials = compact('email', 'password');
 
@@ -87,7 +88,10 @@ class RegisterUser {
             );
         }
 
-        return UserCredentials::register($email, $password, $locale, $user);
+        if (!is_null($additionalCallback))
+        {
+            $additionalCallback($credentials);
+        }
     }
 
 }

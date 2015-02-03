@@ -26,31 +26,23 @@ class RegisterCustomer {
      */
     public function call($email, $plainPassword, $locale)
     {
-        $this->assertCampusEmail($email);
-
-        return $this->registerUser->call($email, $plainPassword, $locale, new Customer);
+        return $this->registerUser->call($email, $plainPassword, $locale, new Customer, function($credentials)
+        {
+            $this->assertEmailFromCampus($credentials['email']);
+        });
     }
 
-    private function assertCampusEmail($email)
+    private function assertEmailFromCampus($email)
     {
-        $domains = ['ensta-paristech.fr', 'ensta.fr', 'polytechnique.edu', 'institutoptique.fr'];
+        $domains = 'ensta-paristech\.fr|ensta\.fr|polytechnique\.edu|institutoptique\.fr';
 
-        preg_match('/@([^@]+)$/', $email, $matches);
-
-        if (!empty($matches[1]))
+        if (!preg_match("/@($domains)$/", $email))
         {
-            $domain = $matches[1];
-
-            if (in_array($domain, $domains))
-            {
-                return true;
-            }
+            throw new UnprocessableEntity(
+                ['email' => ['notFromCampus' => []]],
+                "E-mail should correspond to a Saclay campus account."
+            );
         }
-
-        throw new UnprocessableEntity(
-            ['email' => ['notFromCampus' => []]],
-            "E-mail should correspond to a Saclay campus account."
-        );
     }
 
 }
