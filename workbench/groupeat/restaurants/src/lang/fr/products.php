@@ -7,7 +7,7 @@ return [
         'foodType' => 'catégorie',
         'product' => 'produit',
         'format' => 'format',
-        'rawPrice' => 'prix sans réduction',
+        'rawPrice' => 'prix unitaire',
     ],
 
 ];

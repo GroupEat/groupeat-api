@@ -2,6 +2,7 @@
 
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
+use Groupeat\Orders\Presenters\ProductFormats as ProductFormatsPresenter;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Exceptions\Exception;

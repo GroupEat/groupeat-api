@@ -55,7 +55,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => 'no-reply@groupeat.fr', 'name' => 'GroupEat'],
+	'from' => ['address' => 'service@groupeat.fr', 'name' => 'GroupEat'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return [
 	|
 	*/
 
-	'username' => 'no-reply@groupeat.fr',
+	'username' => 'service@groupeat.fr',
 
 	/*
 	|--------------------------------------------------------------------------

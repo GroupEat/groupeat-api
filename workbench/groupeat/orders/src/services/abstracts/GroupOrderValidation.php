@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Orders\Services\Abstracts;
 
 use Groupeat\Orders\Entities\DeliveryAddress;
+use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Events\Dispatcher;
@@ -62,6 +63,18 @@ abstract class GroupOrderValidation {
                 'The delivery distance should be less than '
                 . $this->maximumDeliveryDistanceInKms . " kms, $distanceInKms given."
             );
+        }
+    }
+
+    protected function fireSuitableEventsFor(Order $order, $default)
+    {
+        $groupOrder = $order->groupOrder;
+
+        $this->events->fire($default, [$order]);
+
+        if (!$groupOrder->isJoinable())
+        {
+            $this->events->fire('groupOrderHasEnded', [$groupOrder]);
         }
     }
 

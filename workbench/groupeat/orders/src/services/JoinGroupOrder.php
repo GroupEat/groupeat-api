@@ -24,24 +24,24 @@ class JoinGroupOrder extends GroupOrderValidation {
         array $deliveryAddressData
     )
     {
-        $this->assertStillOpened($groupOrder);
+        $this->assertJoinable($groupOrder);
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
         $this->assertCloseEnough($deliveryAddress, $groupOrder->getInitiatingOrder()->deliveryAddress);
 
         $order = $groupOrder->addOrder($customer, $productFormats, $deliveryAddress);
 
-        $this->events->fire('groupOrderHasBeenJoined', [$order]);
+        $this->fireSuitableEventsFor($order, 'groupOrderHasBeenJoined');
 
         return $order;
     }
 
-    private function assertStillOpened(GroupOrder $groupOrder)
+    private function assertJoinable(GroupOrder $groupOrder)
     {
-        if (!$groupOrder->isOpened())
+        if (!$groupOrder->isJoinable())
         {
             throw new UnprocessableEntity(
-                'groupOrderClosed',
-                "The {$groupOrder->toShortString()} cannot be joined because it has ended."
+                'groupOrderCannotBeJoined',
+                "The {$groupOrder->toShortString()} cannot be joined anymore."
             );
         }
     }

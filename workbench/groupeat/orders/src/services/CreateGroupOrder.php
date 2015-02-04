@@ -70,7 +70,7 @@ class CreateGroupOrder extends GroupOrderValidation {
 
         $order = GroupOrder::createWith($customer, $deliveryAddress, $productFormats, $foodRushDurationInMinutes);
 
-        $this->events->fire('groupOrderHasBeenCreated', [$order]);
+        $this->fireSuitableEventsFor($order, 'groupOrderHasBeenCreated');
 
         return $order;
     }

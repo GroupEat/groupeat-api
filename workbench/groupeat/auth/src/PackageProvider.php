@@ -39,7 +39,7 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->bind('SendActivationLinkService', function($app)
         {
-            return new SendActivationLink($app['mailer'], $app['url'], $app['groupeat.locale']);
+            return new SendActivationLink($app['SendMailService'], $app['url']);
         });
 
         $this->app->bind('SendPasswordResetLinkService', function($app)

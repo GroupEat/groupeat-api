@@ -12,4 +12,9 @@ class Customer extends Presenter {
         return $this->firstName.' '.$this->lastName;
     }
 
+    public function presentFullNameWithPhoneNumber()
+    {
+        return $this->presentFullName().' ('.$this->phoneNumber.')';
+    }
+
 }

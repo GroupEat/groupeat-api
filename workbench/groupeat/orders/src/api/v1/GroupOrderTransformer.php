@@ -15,10 +15,10 @@ class GroupOrderTransformer extends TransformerAbstract
 
         return [
             'id' => (int) $groupOrder->id,
-            'opened' => (bool) $groupOrder->isOpened(),
+            'joinable' => (bool) $groupOrder->isJoinable(),
             'reduction' => (float) $groupOrder->reduction,
             'createdAt' => (string) $groupOrder->created_at,
-            'endingAt' => (string) $groupOrder->created_at,
+            'endingAt' => (string) $groupOrder->ending_at,
         ];
     }
 

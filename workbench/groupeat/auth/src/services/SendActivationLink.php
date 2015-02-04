@@ -2,8 +2,7 @@
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
-use Groupeat\Support\Services\Locale;
-use Illuminate\Mail\Mailer;
+use Groupeat\Support\Services\SendMail;
 use Illuminate\Routing\UrlGenerator;
 
 class SendActivationLink {
@@ -18,21 +17,11 @@ class SendActivationLink {
      */
     private $urlGenerator;
 
-    /**
-     * @var Locale
-     */
-    private $localeService;
 
-
-    public function __construct(
-        Mailer $mailer,
-        UrlGenerator $urlGenerator,
-        Locale $localeService
-    )
+    public function __construct(SendMail $mailer, UrlGenerator $urlGenerator)
     {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
-        $this->localeService = $localeService;
     }
 
     /**
@@ -43,22 +32,15 @@ class SendActivationLink {
      */
     public function call(UserCredentials $userCredentials)
     {
-        $view = 'auth::mails.activation';
         $token = $this->generateActivationToken($userCredentials);
-        $email = $userCredentials->email;
         $url = $this->urlGenerator->route('auth.activate', compact('token'));
-        $data = compact('url');
 
-        $this->localeService->executeWithUserLocale(function() use ($view, $data, $email)
-        {
-            $this->mailer->send($view, $data, function($message) use ($email)
-            {
-                $subject = $this->localeService->getTranslator()
-                    ->get('auth::activation.mail.subject');
-
-                $message->to($email)->subject($subject);
-            });
-        }, $userCredentials->locale);
+        $this->mailer->call(
+            $userCredentials,
+            'auth::mails.activation',
+            'auth::activation.mail.subject',
+            compact('url')
+        );
     }
 
     private function generateActivationToken(UserCredentials $userCredentials, $length = 42)

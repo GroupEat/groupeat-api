@@ -15,7 +15,7 @@ class ProductsSeeder extends Seeder {
         {
             $products = [
                 [
-                    'name' => 'paysanne',
+                    'name' => 'margherita',
                     'description' => "Mozzarella, basilic frais et tomates.",
                 ],
                 [

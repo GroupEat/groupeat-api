@@ -5,22 +5,31 @@ use HtmlObject\Table;
 
 class Order extends Presenter {
 
-    public function presentHtmlTable()
+    public function presentProductsTable($withRawPrice = true)
     {
-        return (string) $this->getHtmlTable();
+        return (string) $this->getProductsTable($withRawPrice);
     }
 
-    public function presentHtmlTableForEmail()
+    public function presentProductsTableForMail($withRawPrice = true)
     {
-        $table = (string) $this->getHtmlTable();
+        return $this->formatTableForMail($this->getProductsTable($withRawPrice));
+    }
 
-        $table = str_replace('<table>', '<table width="100%" style="border-collapse: collapse;">', $table);
-        $table = str_replace('<thead>', '<thead style="border-bottom: 2px solid #a0a0a0;">', $table);
-        $table = str_replace('<tr>', '<tr style="border-bottom: 1px solid #a0a0a0;">', $table);
-        $table = str_replace('<th>', '<th style="text-align: center; padding: 6px;">', $table);
-        $table = str_replace('<td>', '<td style="text-align: center; padding: 6px;">', $table);
+    public function presentSummaryForMail()
+    {
+        return $this->presentDetailsTableForMail()
+            .'<br>'
+            .$this->presentProductsTableForMail(false);
+    }
 
-        return $table;
+    public function presentDetailsTable()
+    {
+        return $this->getDetailsTable();
+    }
+
+    public function presentDetailsTableForMail()
+    {
+        return $this->formatTableForMail($this->getDetailsTable());
     }
 
     public function presentRawPrice()
@@ -28,25 +37,54 @@ class Order extends Presenter {
         return $this->formatPriceWithCurrency($this->object->rawPrice);
     }
 
-    protected function getHtmlTable()
+    public function presentReducedPrice()
     {
-        $attributes = trans('restaurants::products.attributes');
+        return $this->formatPriceWithCurrency($this->object->reducedPrice);
+    }
 
-        foreach (['amount', 'foodType', 'product', 'format', 'rawPrice'] as $key)
+    private function getProductsTable($withRawPrice = true)
+    {
+        $keys = ['amount', 'foodType', 'product', 'format'];
+
+        if ($withRawPrice)
         {
-            $headers[] = mb_ucfirst($attributes[$key]);
+            $keys[] = 'rawPrice';
         }
+
+        $headers = $this->translate($keys, trans('restaurants::products.attributes'), true);
 
         foreach ($this->productFormats as $productFormat)
         {
-            $rows[] = [
+            $details = [
                 $productFormat->pivot->amount,
                 $productFormat->product->type->label,
                 $productFormat->product->name,
-                $productFormat->name,
-                $productFormat->price
+                $productFormat->name
             ];
+
+            if ($withRawPrice)
+            {
+                $details[] = $productFormat->price;
+            }
+
+            $rows[] = $details;
         }
+
+        return Table::create($headers, $rows);
+    }
+
+    private function getDetailsTable()
+    {
+        $keys = ['reference', 'customer', 'deliveryAddress', 'priceToPay'];
+
+        $headers = $this->translate($keys, trans('orders::orders.attributes'), true);
+
+        $rows[] = [
+            $this->id,
+            $this->customer->fullNameWithPhoneNumber,
+            (string) $this->deliveryAddress,
+            $this->presentReducedPrice(),
+        ];
 
         return Table::create($headers, $rows);
     }

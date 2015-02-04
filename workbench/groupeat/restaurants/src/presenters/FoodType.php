@@ -7,14 +7,17 @@ class FoodType extends Presenter {
     /**
      * @var array
      */
-    private $translations;
+    private static $translations;
 
 
     public function __construct($object)
     {
         parent::__construct($object);
 
-        $this->translations = trans('restaurants::foodTypes');
+        if (is_null(static::$translations))
+        {
+            static::$translations = trans('restaurants::foodTypes');
+        }
     }
 
     public function __toString()
@@ -24,7 +27,7 @@ class FoodType extends Presenter {
 
     public function presentLabel()
     {
-        return (string) $this->translations[$this->object->label];
+        return (string) static::$translations[$this->object->label];
     }
 
 }

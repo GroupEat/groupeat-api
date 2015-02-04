@@ -3,7 +3,7 @@
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Services\SendMail;
 
-class SendGroupOrderHasBeenCreatedMail {
+class SendGroupOrderHasBeenJoinedMail {
 
     /**
      * @var SendMail
@@ -26,8 +26,8 @@ class SendGroupOrderHasBeenCreatedMail {
 
         $this->mailer->call(
             $groupOrder->restaurant->credentials,
-            'restaurants::mails.groupOrderHasBeenCreated',
-            'restaurants::groupOrders.created.subject',
+            'restaurants::mails.groupOrderHasBeenJoined',
+            'restaurants::groupOrders.joined.subject',
             compact('order', 'customer', 'deliveryAddress', 'groupOrder')
         );
     }

@@ -3,6 +3,7 @@
 use Groupeat\Support\Exceptions\ExceptionHandler;
 use Groupeat\Support\Services\Locale;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
+use Groupeat\Support\Services\SendMail;
 
 class PackageProvider extends WorkbenchPackageProvider {
 
@@ -19,6 +20,11 @@ class PackageProvider extends WorkbenchPackageProvider {
                 $app['translator'],
                 $app['config']->get('app.available_frontend_locales')
             );
+        });
+
+        $this->app->bind('SendMailService', function($app)
+        {
+            return new SendMail($app['mailer'], $app['groupeat.locale']);
         });
 
         $this->app['events']->listen('groupeat.auth.login', function($userCredentials)

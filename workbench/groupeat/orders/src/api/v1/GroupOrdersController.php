@@ -15,9 +15,9 @@ class GroupOrdersController extends Controller {
     {
         $query = GroupOrder::with('restaurant');
 
-        if (Input::has('opened'))
+        if (Input::has('joinable'))
         {
-            $query->opened();
+            $query->joinable();
         }
 
         if (Input::has('around'))

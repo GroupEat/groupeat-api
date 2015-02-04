@@ -234,6 +234,27 @@ if (!function_exists('mb_lcfirst'))
     }
 }
 
+if (!function_exists('formatPrice'))
+{
+    function formatPrice($price, $decimalSeparator = ',', $thousandsSeparator = ' ')
+    {
+        return number_format($price, 2, $decimalSeparator, $thousandsSeparator);
+    }
+
+    function formatPriceWithCurrency(
+        $price,
+        $decimalSeparator = ',',
+        $thousandsSeparator = ' ',
+        $currency = '€',
+        $after = true
+    )
+    {
+        $formattedPrice = formatPrice($price, $decimalSeparator, $thousandsSeparator);
+
+        return $after ? $formattedPrice.'&nbsp;'.$currency : $currency.'&nbsp;'.$formattedPrice;
+    }
+}
+
 if (!function_exists('panelView'))
 {
     /**

@@ -11,7 +11,7 @@
 
         {
             "id": 20,
-            "opened": true,
+            "joinable": true,
             "reduction": 0.2928,
             "createdAt": "2015-01-30 16:09:26",
             "endingAt": "2015-01-30 16:09:26"
@@ -25,13 +25,13 @@
     
 + Response 404
 
-## List group orders [/groupOrders/{?opened,around,latitude,longitude,include}]
+## List group orders [/groupOrders/{?joinable,around,latitude,longitude,include}]
 
 ### GET
 
 + Parameters
 
-    + opened (optional, boolean, `true`) ... Retrieve group orders that can currently be joined only.
+    + joinable (optional, boolean, `true`) ... Retrieve group orders that can currently be joined only.
     + around (optional, boolean, `true`) ... Retrieve group orders around only. Needs latitude and longitude parameters.
     + latitude (optional, float, `2.21928`) ... Client latitude.
     + longitude (optional, float, `48.711`) ... Client longitude.
@@ -50,7 +50,7 @@
             }
         ]
         
-## Order [/order/{id}/{?include}]
+## Order [/orders/{id}/{?include}]
 
 + Parameters
 
@@ -217,3 +217,12 @@ When creating a group order, the distance between the given address and the rest
             "error_key": "groupOrderAlreadyExisting",
             "message": "A group order already exists for the restaurant #6."
         }
+
++ Response 422
+
+        {
+            "status_code": 422,
+            "error_key": "groupOrderCannotBeJoined",
+            "message": "The groupOrder #6 cannot be joined anymore."
+        }
+

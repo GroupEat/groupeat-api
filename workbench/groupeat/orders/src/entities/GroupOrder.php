@@ -52,7 +52,7 @@ class GroupOrder extends Entity {
     /**
      * @return bool
      */
-    public function isOpened(Carbon $time = null)
+    public function isJoinable(Carbon $time = null)
     {
         $time = $time ?: new Carbon;
 
@@ -134,7 +134,17 @@ class GroupOrder extends Entity {
         return $order;
     }
 
-    public function scopeOpened(Builder $query, Carbon $time = null)
+    public function getTotalRawPriceAttribute()
+    {
+        return $this->orders->sum('rawPrice');
+    }
+
+    public function getTotalReducedPriceAttribute()
+    {
+        return round((1 - $this->reduction) * $this->totalRawPrice, 2);
+    }
+
+    public function scopeJoinable(Builder $query, Carbon $time = null)
     {
         $time = $time ?: new Carbon;
         $model = $query->getModel();
