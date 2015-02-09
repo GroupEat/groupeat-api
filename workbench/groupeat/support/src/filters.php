@@ -9,7 +9,6 @@ Route::after(function($request, $response)
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS',
             'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept, Authorization, X-Request-With',
-            'Access-Control-Allow-Credentials' => 'true',
         ];
 
         $replace = true;
