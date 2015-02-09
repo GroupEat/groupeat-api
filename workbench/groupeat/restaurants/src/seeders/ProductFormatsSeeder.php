@@ -13,7 +13,7 @@ class ProductFormatsSeeder extends Seeder {
             ProductFormat::create([
                 'product_id' => $product->id,
                 'name' => 'junior',
-                'price' => $this->faker->randomFloat(1, 7, 9),
+                'price' => $this->faker->randomFloat(1, 7, 8.9),
             ]);
 
             ProductFormat::create([

@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Config;
+use DB;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Restaurants\Entities\ProductFormat;
@@ -103,8 +104,8 @@ class GroupOrder extends Entity {
     {
         $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
         $this->assertMinimumOrderPriceReached($productFormats);
-        list($totalAmount, $totalRawPrice) = $this->getTotalAmountAndRawPriceWith($productFormats);
-        $this->assertMaximumCapacityNotExceeded($totalAmount);
+        list($nbProductFormats, $totalRawPrice) = $this->getNbProductFormatsAndRawPriceWith($productFormats);
+        $this->assertMaximumCapacityNotExceeded($nbProductFormats);
         $this->computeAndSetReductionFrom($totalRawPrice);
 
         $order = new Order;
@@ -117,7 +118,7 @@ class GroupOrder extends Entity {
             $order->initiator = true;
         }
 
-        if ($totalAmount == $this->restaurant->deliveryCapacity)
+        if ($nbProductFormats == $this->restaurant->deliveryCapacity)
         {
             $this->completed_at = $this->freshTimestamp();
         }
@@ -147,6 +148,18 @@ class GroupOrder extends Entity {
     public function isConfirmed()
     {
         return !is_null($this->confirmed_at);
+    }
+
+    /**
+     * @return int The number of product formats that can still be added to the group order
+     */
+    public function computeRemainingCapacity()
+    {
+        $nbProductFormats = DB::table((new Order)->productFormats()->getTable())
+            ->whereIn('order_id', $this->orders()->lists('id'))
+            ->sum('amount');
+
+        return $this->restaurant->deliveryCapacity - $nbProductFormats;
     }
 
     public function getTotalRawPriceAttribute()
@@ -222,7 +235,7 @@ class GroupOrder extends Entity {
         $this->ending_at = $this->created_at->copy()->addMinutes($minutes);
     }
 
-    private function getTotalAmountAndRawPriceWith(ProductFormats $productFormats)
+    private function getNbProductFormatsAndRawPriceWith(ProductFormats $productFormats)
     {
         if ($this->exists)
         {
@@ -261,13 +274,13 @@ class GroupOrder extends Entity {
         $this->reduction = end($reductionValues);
     }
 
-    private function assertMaximumCapacityNotExceeded($totalAmount)
+    private function assertMaximumCapacityNotExceeded($nbProductFormats)
     {
-        if ($totalAmount > $this->restaurant->deliveryCapacity)
+        if ($nbProductFormats > $this->restaurant->deliveryCapacity)
         {
             throw new UnprocessableEntity(
                 'restaurantDeliveryCapacityExceeded',
-                "The {$this->restaurant->toShortString()} cannot deliver more than {$this->restaurant->deliveryCapacity} items in the same group order, $totalAmount items asked."
+                "The {$this->restaurant->toShortString()} cannot deliver more than {$this->restaurant->deliveryCapacity} items in the same group order, {$nbProductFormats} items asked."
             );
         }
     }

@@ -18,7 +18,10 @@ class GroupOrderTransformer extends TransformerAbstract
             'joinable' => (bool) $groupOrder->isJoinable(),
             'reduction' => (float) $groupOrder->reduction,
             'createdAt' => (string) $groupOrder->created_at,
+            'remainingCapacity' => (int) $groupOrder->computeRemainingCapacity(),
             'endingAt' => (string) $groupOrder->ending_at,
+            'confirmed' => (bool) !is_null($groupOrder->confirmed_at),
+            'preparedAt' => $groupOrder->prepared_at,
         ];
     }
 

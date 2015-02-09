@@ -60,7 +60,7 @@ class GenerateApiDocumentation {
 
         $this->filesystem->put($inputPath, $docContent);
 
-        $command = "aglio -t flatly -i $inputPath -o $outputPath";
+        $command = "aglio -t flatly --full-width -i $inputPath -o $outputPath";
 
         $status = process($command, $output)->getErrorOutput();
 

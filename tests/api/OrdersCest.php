@@ -2,13 +2,6 @@
 
 class OrdersCest {
 
-    public function _before(ApiTester $I)
-    {
-        \DB::table(\Groupeat\Orders\Migrations\GroupOrdersMigration::TABLE)
-            ->whereNull('completed_at')
-            ->update(['completed_at' => new \Carbon\Carbon]);
-    }
-
     public function testThatAUserShouldBeActivatedToPlaceAnOrder(ApiTester $I)
     {
         list($token) = $I->sendRegistrationRequest();

@@ -11,10 +11,13 @@
 
         {
             "id": 20,
-            "joinable": true,
+            "joinable": false,
             "reduction": 0.2928,
             "createdAt": "2015-01-30 16:09:26",
-            "endingAt": "2015-01-30 16:09:26"
+            "remainingCapacity": 5, // The number of product formats that can still be added
+            "endingAt": "2015-01-30 16:39:26",
+            "confirmed": true, // The restaurant must confirm the ended group order to attest that he will deliver it
+            "preparedAt": "2015-01-30 17:09:26" // Indicates approximately the beginning of the delivery round
         }
 
 ### Get group order [GET]
