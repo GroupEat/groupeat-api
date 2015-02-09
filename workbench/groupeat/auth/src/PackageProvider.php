@@ -12,7 +12,7 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider {
 
-    protected $require = [self::FILTERS, self::ROUTES];
+    protected $require = [self::HELPERS, self::FILTERS, self::ROUTES];
 
 
     public function register()
@@ -24,7 +24,10 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->bind('GenerateAuthTokenService', function($app)
         {
-            return new GenerateAuthToken($app['tymon.jwt.auth']);
+            return new GenerateAuthToken(
+                $app['tymon.jwt.auth'],
+                $app['config']->get('jwt-auth::ttl')
+            );
         });
 
         $this->app->bind('RegisterUserService', function($app)

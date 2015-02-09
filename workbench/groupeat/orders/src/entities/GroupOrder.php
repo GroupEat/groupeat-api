@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class GroupOrder extends Entity {
 
-    protected $dates = ['completed_at', 'ending_at', 'confirmed_at'];
+    protected $dates = ['completed_at', 'ending_at', 'confirmed_at', 'prepared_at'];
 
 
     public function getRules()
@@ -132,6 +132,21 @@ class GroupOrder extends Entity {
         });
 
         return $order;
+    }
+
+    /**
+     * @param Carbon $preparedAt
+     */
+    public function confirm(Carbon $preparedAt)
+    {
+        $this->confirmed_at = $this->freshTimestamp();
+        $this->prepared_at = $preparedAt;
+        $this->save();
+    }
+
+    public function isConfirmed()
+    {
+        return !is_null($this->confirmed_at);
     }
 
     public function getTotalRawPriceAttribute()

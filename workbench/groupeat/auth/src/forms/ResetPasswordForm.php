@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Admin\Forms;
 
-use Former;
 use Groupeat\Support\Forms\Form;
 
 class ResetPasswordForm extends Form {
@@ -10,18 +9,6 @@ class ResetPasswordForm extends Form {
         'password_confirmation' => 'same:password',
     ];
 
-    /**
-     * @var string
-     */
-    protected $token;
-
-
-    public function __construct($token)
-    {
-        parent::__construct();
-
-        $this->token = $token;
-    }
 
     protected function add($content)
     {

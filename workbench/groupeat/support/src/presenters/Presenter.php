@@ -7,7 +7,7 @@ class Presenter extends BasePresenter {
 
     public function __toString()
     {
-        return $this->object->__toString();
+        return (string) $this->object->__toString();
     }
 
     public function presentReference()
@@ -33,14 +33,7 @@ class Presenter extends BasePresenter {
 
     protected function formatTime(Carbon $time, $hoursSuffix = '\h', $withSeconds = false)
     {
-        $format = 'H'.$hoursSuffix.'i';
-
-        if ($withSeconds)
-        {
-            $format .= ':s';
-        }
-
-        return $time->format($format);
+        return formatTime($time, $hoursSuffix, $withSeconds);
     }
 
     protected function formatTableForMail($table)

@@ -19,7 +19,7 @@ class UserCredentialsMigration extends Migration {
             $table->timestamp('activated_at')->nullable();
             $table->string('activationToken')->nullable()->unique();
             $table->string('password');
-            $table->string('token')->unique()->nullable();
+            $table->text('token')->unique()->nullable();
             $table->string('locale', 6);
         });
     }

@@ -21,7 +21,8 @@ class GroupOrdersMigration extends Migration {
             $table->index(['created_at', 'updated_at']);
             $table->timestamp('completed_at')->nullable()->index();
             $table->timestamp('ending_at')->index();
-            $table->timestamp('confirmed_at')->nullable()->index();
+            $table->timestamp('confirmed_at')->nullable();
+            $table->timestamp('prepared_at')->nullable();
 
             $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
         });

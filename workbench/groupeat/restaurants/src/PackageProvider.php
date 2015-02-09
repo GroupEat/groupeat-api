@@ -27,7 +27,14 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->bind('SendGroupOrderHasEndedMailService', function($app)
         {
-            return new SendGroupOrderHasEndedMail($app['SendMailService']);
+            $tokenTtlInMinutes = 2 * $app['config']->get('orders::maximum_preparation_time_in_minutes');
+
+            return new SendGroupOrderHasEndedMail(
+                $app['SendMailService'],
+                $app['url'],
+                $app['GenerateAuthTokenService'],
+                $tokenTtlInMinutes
+            );
         });
     }
 

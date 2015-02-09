@@ -10,7 +10,7 @@
                     <td align="center" height="45" c-style="not6ButBG" bgcolor="#e77e23" style="border-radius: 5px; padding-left: 30px; padding-right: 30px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; color: rgb(255, 255, 255); background-color: rgb(231, 126, 35);" t-style="not6ButText" mc:edit="42">
                         <multiline>
                             <span style="font-family: 'proxima_nova_rgbold', Helvetica; font-weight: normal;">
-                                <a id="@yield('buttonId', 'mail-button')" href="@yield('buttonLink', '#')" style="color: rgb(255, 255, 255); font-size: 15px; text-decoration: none; line-height: 34px; width: 100%;" t-style="not6ButText" object="link-editable">
+                                <a id="@yield('buttonId', 'mail-button')" href="@yield('buttonUrl', '#')" style="color: rgb(255, 255, 255); font-size: 15px; text-decoration: none; line-height: 34px; width: 100%;" t-style="not6ButText" object="link-editable">
                                     @yield('button')
                                 </a>
                             </span>

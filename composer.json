@@ -34,10 +34,14 @@
             "workbench",
             "app/console",
             "app/database/seeds",
-			"app/database/migrations",
-            "tests/_support/customs"
+			"app/database/migrations"
 		]
 	},
+    "autoload-dev": {
+        "classmap": [
+            "tests/_support/customs"
+        ]
+    },
     "config": {
 		"preferred-install": "dist"
 	},

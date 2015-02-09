@@ -37,4 +37,15 @@ return [
 
     'maximum_foodrush_in_minutes' => 60,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Maximum Preparation time in Minutes
+    |--------------------------------------------------------------------------
+    |
+    | The duration in minutes that a restaurant can take to prepare a groupOrder.
+    |
+    */
+
+    'maximum_preparation_time_in_minutes' => 45,
+
 ];

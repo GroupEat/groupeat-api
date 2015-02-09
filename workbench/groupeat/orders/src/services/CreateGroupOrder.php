@@ -41,7 +41,7 @@ class CreateGroupOrder extends GroupOrderValidation {
 
         $this->minimumFoodRushDurationInMinutes = (int) $minimumFoodRushDurationInMinutes;
         $this->maximumFoodRushDurationInMinutes = (int) $maximumFoodRushDurationInMinutes;
-        $this->minimumRemainingOpeningMinutes = $minimumRemainingOpeningMinutes;
+        $this->minimumRemainingOpeningMinutes = (int) $minimumRemainingOpeningMinutes;
     }
 
     /**

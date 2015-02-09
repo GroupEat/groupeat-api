@@ -11,7 +11,7 @@ class AdminController extends Controller {
 
     public function showLoginForm()
     {
-        return panelView('admin::login.panel.title', new LoginForm, 'danger');
+        return $this->panelView('admin::login.panel.title', new LoginForm, 'danger');
     }
 
     public function loginCheck()

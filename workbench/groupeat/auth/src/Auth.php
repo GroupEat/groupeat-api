@@ -25,7 +25,7 @@ class Auth extends JWTAuth {
      *
      * @return UserCredentials
      */
-    public function login($token = false)
+    public function login($token = false, $assertSameToken = true)
     {
         $this->logout();
         $this->requireToken($token);
@@ -44,7 +44,7 @@ class Auth extends JWTAuth {
 
         $this->assertCorrespondingUserExists($userCredentials);
 
-        if ($userCredentials->token != $this->token)
+        if ($assertSameToken && ($userCredentials->token != $this->token))
         {
             throw new Forbidden(
                 "obsoleteAuthenticationToken",

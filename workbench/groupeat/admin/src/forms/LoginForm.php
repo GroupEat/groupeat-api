@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Admin\Forms;
 
-use Former;
 use Groupeat\Support\Forms\Form;
 
 class LoginForm extends Form {

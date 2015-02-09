@@ -1,4 +1,4 @@
-@extends('layout.mails.simple')
+@extends('layout.mails.main')
 
 @section('beforeButton')
     <p>
@@ -33,4 +33,14 @@
         ])
         </b>
     </p>
+@stop
+
+@section('buttoId'){{ 'confirm-group-order' }}@stop
+
+@section('buttonUrl')
+    {{ $confirmationUrl }}
+@stop
+
+@section('button')
+    @lang('orders::confirmation.mail.button')
 @stop

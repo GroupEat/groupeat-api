@@ -116,10 +116,6 @@
                                 </tr>
                                 </tbody>
                             </table>
-
-                            @section('footerWrapper')
-                                @include('partials.mails.footer')
-                            @show
                         </td>
                     </tr>
                     </tbody>

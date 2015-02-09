@@ -18,8 +18,8 @@ class Order extends Presenter {
     public function presentSummaryForMail()
     {
         return $this->presentDetailsTableForMail()
-            .'<br>'
-            .$this->presentProductsTableForMail(false);
+            . '<br>'
+            . $this->presentProductsTableForMail(false);
     }
 
     public function presentDetailsTable()

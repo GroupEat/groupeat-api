@@ -1,11 +1,17 @@
 <?php namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Services\GenerateAuthToken;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Database\Seeder;
 
 class RestaurantsSeeder extends Seeder {
+
+    /**
+     * @var GenerateAuthToken
+     */
+    private $tokenGenerator;
 
     /**
      * @var Category
@@ -17,6 +23,7 @@ class RestaurantsSeeder extends Seeder {
     {
         parent::__construct();
 
+        $this->tokenGenerator = app('GenerateAuthTokenService');
         $this->pizzeriaCategory = Category::findByLabel('pizzeria');
     }
 
@@ -30,7 +37,7 @@ class RestaurantsSeeder extends Seeder {
             'reductionPrices' => json_encode([9, 10, 20, 25, 35, 60]),
         ]);
 
-        UserCredentials::create([
+        $userCredentials = UserCredentials::create([
             'user' => $restaurant,
             'email' => $this->faker->email,
             'password' => $restaurant->name,
@@ -38,6 +45,7 @@ class RestaurantsSeeder extends Seeder {
         ]);
 
         $this->setPizzeriaCategoryFor($restaurant);
+        $this->setAuthTokenFor($userCredentials);
     }
 
     protected function insertAdditionalEntries($id)
@@ -65,7 +73,7 @@ class RestaurantsSeeder extends Seeder {
 
             $restaurant = Restaurant::create($restaurantData);
 
-            UserCredentials::create([
+            $userCredentials = UserCredentials::create([
                 'user' => $restaurant,
                 'email' => $this->faker->email,
                 'password' => $restaurant->name,
@@ -73,12 +81,18 @@ class RestaurantsSeeder extends Seeder {
             ]);
 
             $this->setPizzeriaCategoryFor($restaurant);
+            $this->setAuthTokenFor($userCredentials);
         }
     }
 
     private function setPizzeriaCategoryFor(Restaurant $restaurant)
     {
         $restaurant->categories()->sync([$this->pizzeriaCategory->id]);
+    }
+
+    private function setAuthTokenFor(UserCredentials $userCredentials)
+    {
+        $userCredentials->replaceAuthenticationToken($this->tokenGenerator->forUser($userCredentials));
     }
 
 }

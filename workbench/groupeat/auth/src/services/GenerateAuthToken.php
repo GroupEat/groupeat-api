@@ -12,10 +12,16 @@ class GenerateAuthToken {
      */
     private $JWTauth;
 
+    /**
+     * @var int
+     */
+    private $defaultDurationInMinutes;
 
-    public function __construct(JWTAuth $JWTauth)
+
+    public function __construct(JWTAuth $JWTauth, $defaultDurationInMinutes)
     {
         $this->JWTauth = $JWTauth;
+        $this->defaultDurationInMinutes = $defaultDurationInMinutes;
     }
 
     /**
@@ -42,10 +48,11 @@ class GenerateAuthToken {
 
     /**
      * @param UserCredentials $userCredentials
+     * @param int|null        $durationInMinutes
      *
      * @return string The authentication token
      */
-    public function forUser(UserCredentials $userCredentials)
+    public function forUser(UserCredentials $userCredentials, $durationInMinutes = null)
     {
         if (!$userCredentials->exists)
         {
@@ -53,7 +60,19 @@ class GenerateAuthToken {
             $userCredentials->save();
         }
 
-        return $this->JWTauth->fromUser($userCredentials);
+        if (!is_null($durationInMinutes))
+        {
+            $this->JWTauth->getProvider()->setTTL($durationInMinutes);
+        }
+
+        $token = $this->JWTauth->fromUser($userCredentials);
+
+        if (!is_null($durationInMinutes))
+        {
+            $this->JWTauth->getProvider()->setTTL($this->defaultDurationInMinutes);
+        }
+
+        return $token;
     }
 
 }

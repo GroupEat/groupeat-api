@@ -37,7 +37,7 @@ class SendMail {
      * @param string          $subjectLangKey
      * @param array           $data
      */
-    public function call(UserCredentials $user, $view, $subjectLangKey, array $data)
+    public function call(UserCredentials $user, $view, $subjectLangKey, array $data = [])
     {
         $this->localeService->executeWithUserLocale(function() use ($user, $view, $subjectLangKey, $data)
         {

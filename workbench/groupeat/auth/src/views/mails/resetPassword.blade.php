@@ -9,7 +9,7 @@
 
 @section('buttonId'){{ 'reset-password-link' }}@stop
 
-@section('buttonLink')
+@section('buttonUrl')
     {{ route('auth.showResetPasswordForm', compact('token')) }}
 @stop
 

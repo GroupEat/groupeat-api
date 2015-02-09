@@ -50,7 +50,10 @@ Route::filter('csrf', function()
 // Register error handler
 App::down(function()
 {
-    return Response::make("Be right back!", 503);
+    return Response::view('support::error', [
+        'code' => 503,
+        'title' => "503: Maintenance",
+    ], 503);
 });
 
 App::error(function($exception, $code)

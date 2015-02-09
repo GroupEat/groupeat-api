@@ -15,7 +15,7 @@ class AuthController extends Controller {
         {
             app('ActivateUserService')->call($token);
 
-            return panelView(
+            return $this->panelView(
                 'auth::activation.panel.title',
                 trans('auth::activation.panel.text'),
                 'success'
@@ -23,7 +23,7 @@ class AuthController extends Controller {
         }
         catch (NotFound $exception)
         {
-            return panelView(
+            return $this->panelView(
                 'auth::activation.panel.errors.title',
                 trans('auth::activation.panel.errors.wrongToken'),
                 'danger'
@@ -33,9 +33,9 @@ class AuthController extends Controller {
 
     public function showResetPasswordForm($token)
     {
-        return panelView(
+        return $this->panelView(
             'auth::resetPassword.panel.title',
-            new ResetPasswordForm($token),
+            new ResetPasswordForm,
             'warning'
         );
     }
@@ -51,7 +51,7 @@ class AuthController extends Controller {
                 Input::get('password_confirmation')
             );
 
-            return panelView(
+            return $this->panelView(
                 'auth::resetPassword.panel.title',
                 trans('auth::resetPassword.panel.text'),
                 'info'

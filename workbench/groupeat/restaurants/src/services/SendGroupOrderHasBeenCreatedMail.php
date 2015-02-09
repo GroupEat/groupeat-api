@@ -16,6 +16,9 @@ class SendGroupOrderHasBeenCreatedMail {
         $this->mailer = $mailer;
     }
 
+    /**
+     * @param Order $order
+     */
     public function call(Order $order)
     {
         $order->productFormats->load('product.type');

@@ -58,7 +58,7 @@ class ResetPassword {
             case $broker::INVALID_TOKEN:
                 throw new Forbidden(
                     'invalidPasswordResetToken',
-                    "Cannot reset password because of invalid token."
+                    $status
                 );
         }
     }

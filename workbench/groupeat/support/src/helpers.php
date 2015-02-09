@@ -34,6 +34,28 @@ if (!function_exists('ddd') && function_exists('dump'))
     }
 }
 
+if (!function_exists('formatTime'))
+{
+    /**
+     * @param \Carbon\Carbon $time
+     * @param string $hoursSuffix
+     * @param bool   $withSeconds
+     *
+     * @return string
+     */
+    function formatTime(\Carbon\Carbon $time, $hoursSuffix = '\h', $withSeconds = false)
+    {
+        $format = 'H'.$hoursSuffix.'i';
+
+        if ($withSeconds)
+        {
+            $format .= ':s';
+        }
+
+        return $time->format($format);
+    }
+}
+
 if (!function_exists('dbTransaction'))
 {
     /**
@@ -252,29 +274,6 @@ if (!function_exists('formatPrice'))
         $formattedPrice = formatPrice($price, $decimalSeparator, $thousandsSeparator);
 
         return $after ? $formattedPrice.'&nbsp;'.$currency : $currency.'&nbsp;'.$formattedPrice;
-    }
-}
-
-if (!function_exists('panelView'))
-{
-    /**
-     * @param string $title
-     * @param mixed  $panelBody
-     * @param string $panelClass
-     * @param string $panelId
-     *
-     * @return \Illuminate\View\View
-     */
-    function panelView($title, $panelBody, $panelClass = 'primary', $panelId = 'groupeat-panel')
-    {
-        $title = translateIfNeeded($title);
-
-        if ($panelBody instanceof \Groupeat\Support\Forms\Form)
-        {
-            $panelBody = $panelBody->render();
-        }
-
-        return \View::make('support::panel', compact('title', 'panelBody', 'panelClass', 'panelId'));
     }
 }
 

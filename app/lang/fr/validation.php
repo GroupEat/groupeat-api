@@ -134,6 +134,7 @@ return [
 
         'login' => 'se connecter',
         'submit' => 'valider',
+        'confirm' => 'confirmer',
     ],
 
 ];
