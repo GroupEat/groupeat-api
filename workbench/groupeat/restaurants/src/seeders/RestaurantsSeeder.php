@@ -68,7 +68,7 @@ class RestaurantsSeeder extends Seeder {
         foreach ($restaurantsData as $restaurantData)
         {
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
-            $restaurantData['minimumOrderPrice'] = $this->faker->numberBetween(9);
+            $restaurantData['minimumOrderPrice'] = 9;
             $restaurantData['reductionPrices'] = json_encode([9, 10, 20, 25, 35, 60]);
 
             $restaurant = Restaurant::create($restaurantData);
