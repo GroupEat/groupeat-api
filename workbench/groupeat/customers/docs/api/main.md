@@ -158,6 +158,8 @@ Replace the customer data with the one passed in the request. However, a custome
 + Response 200
 
     [Address][]
+    
++ Response 404
 
 ### Add/Update address [PUT]
 
@@ -175,6 +177,21 @@ For the MVP, all the addresses must be valid campus addresses. That's why the on
 + Response 200
 
     [Address][]
+    
++ Response 404
+
++ Response 422
+
+        {
+            "status_code": 422,
+            "error_key": "validationErrors",
+            "errors": {
+                "longitude": {
+                    "numeric": []
+                }
+            },
+            "message": "Cannot save address #6."
+        }
 
 ## List predefined addresses  [/predefinedAddresses]
 

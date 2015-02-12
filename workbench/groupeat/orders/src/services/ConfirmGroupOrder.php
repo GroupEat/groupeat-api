@@ -33,7 +33,7 @@ class ConfirmGroupOrder {
     public function call(GroupOrder $groupOrder, $preparedAt)
     {
         $preparedAt = Carbon::createFromFormat(Carbon::DEFAULT_TO_STRING_FORMAT, $preparedAt)->second(0);
-        $this->guardAgainstTooLongPreparationTime($groupOrder->completed_at, $preparedAt);
+        $this->guardAgainstInvalidPreparationTime($groupOrder->completed_at, $preparedAt);
 
         $groupOrder->confirm($preparedAt);
 
@@ -50,14 +50,22 @@ class ConfirmGroupOrder {
         return $this->maximumPreparationTimeInMinutes;
     }
 
-    private function guardAgainstTooLongPreparationTime(Carbon $completedAt, Carbon $preparedAt)
+    private function guardAgainstInvalidPreparationTime(Carbon $completedAt, Carbon $preparedAt)
     {
+        if ($preparedAt <$completedAt)
+        {
+            throw new UnprocessableEntity(
+                'cannotBePreparedBeforeBeingCompleted',
+                "A group order cannot be completely prepared before being completed."
+            );
+        }
+
         $preparationTimeInMinutes = $completedAt->diffInMinutes($preparedAt, false);
 
         if ($preparationTimeInMinutes > $this->maximumPreparationTimeInMinutes)
         {
             throw new UnprocessableEntity(
-                'invalidPreparationTime',
+                'preparationTimeTooLong',
                 "The preration time should not exceed {$this->maximumPreparationTimeInMinutes} minutes, $preparationTimeInMinutes given."
             );
         }

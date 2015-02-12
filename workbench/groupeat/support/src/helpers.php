@@ -107,6 +107,22 @@ if (!function_exists('whereAroundInKms'))
      */
     function whereAroundInKms(\Illuminate\Database\Eloquent\Builder $query, $table, $latitude, $longitude, $kilometers)
     {
+        if (!is_numeric($latitude) || !is_numeric($longitude))
+        {
+            throw new \Groupeat\Support\Exceptions\BadRequest(
+                'invalidCoordinates',
+                "The latitude and longitude must be numeric values."
+            );
+        }
+
+        if (!is_numeric($kilometers))
+        {
+            throw new \Groupeat\Support\Exceptions\BadRequest(
+                'invalidDistance',
+                "The kilometers must be a numeric value."
+            );
+        }
+
         $query->whereRaw('(2 * (3959 * ATAN2(
                 SQRT(
                     POWER(SIN(RADIANS('.$latitude.' - "'.$table.'"."latitude") / 2), 2) +

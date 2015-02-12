@@ -56,8 +56,17 @@ class GroupOrdersCest {
         $I->seeResponseCodeIs(200);
         $preparedAtField = $I->grabCrawlableResponse()->filter('#preparedAt')->html();
         $I->assertNotEmpty($preparedAtField);
-        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->addMinutes(10)]);
+
+        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->subMinute()]);
         $I->seeResponseCodeIs(200);
+        $I->dontSeeSuccessfulPanel();
+
+        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->addHours(2)]);
+        $I->seeResponseCodeIs(200);
+        $I->dontSeeSuccessfulPanel();
+
+        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->addMinutes(10)]);
+        $I->seeSuccessfulPanel();
     }
 
 }

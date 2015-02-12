@@ -17,7 +17,7 @@ abstract class Address extends Entity {
             'postcode' => 'required|digits:5',
             'state' => 'required',
             'country' => 'required',
-            'latitude' => 'required|numeric',
+            'latitude' => 'required|numaeric',
             'longitude' => 'required|numeric',
         ];
     }

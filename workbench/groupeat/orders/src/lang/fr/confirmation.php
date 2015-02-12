@@ -20,7 +20,9 @@ return [
 
     'maximumPreparationTimeAlreadyExceeded' => "Le temps de préparation a été dépassé. La commande a donc été annulée.",
 
-    'invalidPreparationTime' => "Le temps de préparation ne peut pas dépasser :maximumMinutes minutes.",
+    'cannotBePreparedBeforeBeingCompleted' => "Une commande groupée ne pas pas avoir été préparée complètement avant d'avoir été complétée.",
+
+    'preparationTimeTooLong' => "Le temps de préparation ne peut pas dépasser :maximumMinutes minutes.",
 
     'success' => [
 
