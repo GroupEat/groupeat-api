@@ -41,7 +41,9 @@ class SendMail {
     {
         $this->localeService->executeWithUserLocale(function() use ($user, $view, $subjectLangKey, $data)
         {
-            $this->mailer->send($view, $data, function($message) use ($user, $subjectLangKey)
+            $views = ["$view-html", "$view-text"];
+
+            $this->mailer->send($views, $data, function($message) use ($user, $subjectLangKey)
             {
                 $subject = $this->localeService->getTranslator()->get($subjectLangKey);
 

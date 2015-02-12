@@ -60,11 +60,11 @@ class Presenter extends BasePresenter {
 
     protected function translate(array $keys, $translations, $ucfirst = false)
     {
-        return array_map(function($key) use ($translations, $ucfirst)
+        return array_map(function ($key) use ($translations, $ucfirst)
         {
             return $ucfirst ? mb_ucfirst($translations[$key]) : $translations[$key];
         },
-            $keys);
+        $keys);
     }
 
 }

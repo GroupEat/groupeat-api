@@ -60,7 +60,7 @@ return [
 
 	'reminder' => [
 
-		'email' => 'auth::mails.resetPassword',
+		'email' => ['auth::mails.resetPassword-html', 'auth::mails.resetPassword-text'],
 
 		'table' => \Groupeat\Auth\Migrations\PasswordResetTokensMigration::TABLE,
 

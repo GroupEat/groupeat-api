@@ -3,7 +3,7 @@
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Services\SendMail;
 
-class SendGroupOrderHasBeenCreatedMail {
+class SendOrderHasBeenPlacedMail {
 
     /**
      * @var SendMail
@@ -19,7 +19,24 @@ class SendGroupOrderHasBeenCreatedMail {
     /**
      * @param Order $order
      */
-    public function call(Order $order)
+    public function created(Order $order)
+    {
+        $this->call($order, 'created');
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function joined(Order $order)
+    {
+        $this->call($order, 'joined');
+    }
+
+    /**
+     * @param Order  $order
+     * @param string $action
+     */
+    private function call(Order $order, $action)
     {
         $order->productFormats->load('product.type');
 
@@ -29,9 +46,9 @@ class SendGroupOrderHasBeenCreatedMail {
 
         $this->mailer->call(
             $groupOrder->restaurant->credentials,
-            'restaurants::mails.groupOrderHasBeenCreated',
+            'restaurants::mails.orderHasBeenPlaced',
             'restaurants::groupOrders.created.subject',
-            compact('order', 'customer', 'deliveryAddress', 'groupOrder')
+            compact('order', 'customer', 'deliveryAddress', 'groupOrder', 'action')
         );
     }
 

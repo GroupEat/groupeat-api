@@ -1,6 +1,5 @@
 <?php namespace Codeception\Module;
 
-use Codeception\Util\Debug;
 use Symfony\Component\DomCrawler\Crawler;
 
 class MailWatcher extends \Codeception\Module {
@@ -17,8 +16,12 @@ class MailWatcher extends \Codeception\Module {
 
         $this->getModule('Laravel4')->kernel['events']->listen('mailer.sending', function($message)
         {
-            Debug::debug('[Mail] '.$message);
             $this->lastMail = $message;
+
+            $parts = explode('Content-Type: text/html;', (string) $message);
+            $mailWithoutHtml = $parts[0];
+
+            $this->debugSection('Mail', $mailWithoutHtml);
         });
     }
 

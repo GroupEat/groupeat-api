@@ -94,8 +94,7 @@ return [
 	|
 	*/
 
-    // Replace by $_SERVER['GANDI_MAIL_PASSWORD'] if you really want to send mails
-	'password' => 'SHOULD_NOT_SEND_MAILS',
+    'password' => $_SERVER['GANDI_MAIL_PASSWORD'],
 
 	/*
 	|--------------------------------------------------------------------------

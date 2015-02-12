@@ -15,11 +15,38 @@ class Order extends Presenter {
         return $this->formatTableForMail($this->getProductsTable($withRawPrice));
     }
 
+    public function presentProductsListAsPlainText($withRawPrice = true)
+    {
+        $str = '';
+
+        foreach ($this->productFormats as $productFormat)
+        {
+            $str .= $productFormat->product->type->label
+                . ' '.$productFormat->product->name.' ';
+
+            if ($withRawPrice)
+            {
+                $str .= '('.$productFormat->price.') ';
+            }
+
+            $str .= '-> '.$productFormat->pivot->amount.', ';
+        }
+
+        return trim($str, ', ');
+    }
+
     public function presentSummaryForMail()
     {
         return $this->presentDetailsTableForMail()
             . '<br>'
             . $this->presentProductsTableForMail(false);
+    }
+
+    public function presentSummaryAsPlainText()
+    {
+        return $this->presentDetailsAsPlainText()
+            . '; '
+            . $this->presentProductsListAsPlainText(false);
     }
 
     public function presentDetailsTable()
@@ -30,6 +57,16 @@ class Order extends Presenter {
     public function presentDetailsTableForMail()
     {
         return $this->formatTableForMail($this->getDetailsTable());
+    }
+
+    public function presentDetailsAsPlainText()
+    {
+        $attributes = trans('orders::orders.attributes');
+
+        return $this->presentReference()
+            . ', '.mb_ucfirst($attributes['customer']).': '.$this->customer->fullNameWithPhoneNumber
+            . ', '.mb_ucfirst($attributes['deliveryAddress']).': '.$this->deliveryAddress
+            . ', '.mb_ucfirst($attributes['priceToPay']).': '.$this->presentReducedPrice();
     }
 
     public function presentRawPrice()
