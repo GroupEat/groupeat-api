@@ -32,4 +32,8 @@ after_success:
   - php artisan deploy -v
 
 notifications:
-  email: false
+     email:
+         recipients:
+             - tib.dex@gmail.com
+         on_success: change
+         on_failure: always
