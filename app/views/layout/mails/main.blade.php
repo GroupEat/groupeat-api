@@ -1,4 +1,4 @@
-<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="full2" object="drag-module" bgcolor="#303030" c-style="not6BG" style="background-color: rgb(48, 48, 48);">
+<table id="@yield('mailId', 'groupeat-mail')" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="full2" object="drag-module" bgcolor="#303030" c-style="not6BG" style="background-color: rgb(48, 48, 48);">
     <tbody>
     <tr mc:repeatable="">
         <td style="background-color: #2c2c2c; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background-position: center center; background-repeat: no-repeat;" id="not6">

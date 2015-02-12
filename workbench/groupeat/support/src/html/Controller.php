@@ -7,6 +7,7 @@ use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Forms\Form;
 use Illuminate\Routing\Controller as IlluminateController;
 use Input;
+use Log;
 use Redirect;
 use Response;
 use Validator;
@@ -61,7 +62,8 @@ abstract class Controller extends IlluminateController {
         }
         catch (Exception $exception)
         {
-            App::abort(403);
+            Log::error($exception);
+            App::abort(403, $exception->getMessage());
         }
     }
 

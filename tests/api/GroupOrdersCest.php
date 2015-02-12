@@ -2,7 +2,7 @@
 
 class GroupOrdersCest {
 
-    public function testThatAGroupOrderCanBeCompleted(ApiTester $I)
+    public function testThatAGroupOrderCanBeConfirmedWhenCompleted(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
 
@@ -45,9 +45,19 @@ class GroupOrdersCest {
         $orderDetails['groupOrderId'] = $groupOrderId;
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
+        $I->assertEquals('restaurants.groupOrderHasEnded', $I->grabLastMailId());
+        $confirmUrl = $I->grabHrefInLinkByIdInLastMail('confirm-group-order-link');
+
         $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
         $I->assertEquals(0, $I->grabDataFromResponse('remainingCapacity'));
         $I->assertFalse($I->grabDataFromResponse('joinable'));
+
+        $I->sendGET($confirmUrl);
+        $I->seeResponseCodeIs(200);
+        $preparedAtField = $I->grabCrawlableResponse()->filter('#preparedAt')->html();
+        $I->assertNotEmpty($preparedAtField);
+        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->addMinutes(10)]);
+        $I->seeResponseCodeIs(200);
     }
 
 }

@@ -1,5 +1,7 @@
 @extends('layout.mails.main')
 
+@section('mailId'){{ 'auth.resesPassword' }}@stop
+
 @section('firstLineWrapper')
 @overwrite
 

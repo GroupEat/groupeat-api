@@ -1,5 +1,7 @@
 @extends('layout.mails.simple')
 
+@section('mailId'){{ 'restaurants.orderHasBeenPlaced' }}@stop
+
 @section('beforeButton')
     <p>
         @lang("restaurants::groupOrders.$action.whoAndWhen", [

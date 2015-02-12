@@ -1,5 +1,7 @@
 @extends('layout.mails.main')
 
+@section('mailId'){{ 'auth.activation' }}@stop
+
 @section('firstLine')
     @lang('auth::activation.mail.welcome')
 @stop

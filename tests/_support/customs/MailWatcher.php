@@ -32,7 +32,21 @@ class MailWatcher extends \Codeception\Module {
 
     public function grabHrefInLinkByIdInLastMail($id)
     {
-        return trim($this->grabLastMailCrawlableBody()->filter("#$id")->attr('href'));
+        $href = trim($this->grabLastMailCrawlableBody()->filter("#$id")->attr('href'));
+
+        $this->debugSection('Href in Mail', $href);
+
+        return $href;
+    }
+
+    public function grabLastMailRecipient()
+    {
+        return array_keys($this->grabLastMail()->getTo())[0];
+    }
+
+    public function grabLastMailId()
+    {
+        return trim($this->grabLastMailCrawlableBody()->filter('table')->first()->attr('id'));
     }
 
     public function grabLastMailBody()
@@ -40,6 +54,9 @@ class MailWatcher extends \Codeception\Module {
         return $this->grabLastMail()->getBody();
     }
 
+    /**
+     * @return Swift_Message
+     */
     public function grabLastMail()
     {
         if (empty($this->lastMail))

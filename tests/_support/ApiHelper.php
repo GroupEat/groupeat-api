@@ -1,5 +1,7 @@
 <?php namespace Codeception\Module;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 class ApiHelper extends \Codeception\Module {
 
     public function amAnActivatedCustomer()
@@ -82,7 +84,7 @@ class ApiHelper extends \Codeception\Module {
 
     public function sendApiWithToken($token, $verb, $path, $params = [])
     {
-        $this->haveAuthenticationToken($token);
+        $this->getModule('REST')->amBearerAuthenticated($token);
         $this->sendApi($verb, $path, $params);
     }
 
@@ -133,9 +135,9 @@ class ApiHelper extends \Codeception\Module {
         return $this->getModule('REST')->grabDataFromJsonResponse('data'.$path);
     }
 
-    public function watchEmailSending()
+    public function grabCrawlableResponse()
     {
-        $this->getModule('Laravel4');
+        return new Crawler($this->getModule('REST')->grabResponse());
     }
 
     public function haveAcceptHeader()
@@ -144,11 +146,6 @@ class ApiHelper extends \Codeception\Module {
         $accept = "application/vnd.{$config['vendor']}.{$config['version']}+{$config['default_format']}";
 
         $this->getModule('REST')->haveHttpHeader('Accept', $accept);
-    }
-
-    public function haveAuthenticationToken($token)
-    {
-        $this->getModule('REST')->haveHttpHeader('Authorization', "bearer $token");
     }
 
     public function assertCentsEquals($expected, $actual, $decimals = 2)

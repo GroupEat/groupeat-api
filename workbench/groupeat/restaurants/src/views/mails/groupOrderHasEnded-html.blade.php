@@ -1,5 +1,7 @@
 @extends('layout.mails.main')
 
+@section('mailId'){{ 'restaurants.groupOrderHasEnded' }}@stop
+
 @section('beforeButton')
     <p>
         @lang('restaurants::groupOrders.ended.indication', [
@@ -35,7 +37,7 @@
     </p>
 @stop
 
-@section('buttoId'){{ 'confirm-group-order' }}@stop
+@section('buttonId'){{ 'confirm-group-order-link' }}@stop
 
 @section('buttonUrl')
     {{ $confirmationUrl }}

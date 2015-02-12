@@ -15,6 +15,17 @@ class OrdersCest {
         $I->seeResponseCodeIs(201);
     }
 
+    public function testThatTheRestaurantReceiveAnEmailWhenAnOrderIsPlaced(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $productFormatId = array_keys(json_decode($orderDetails['productFormats'], true))[0];
+        $restaurantEmail = $this->getRestaurantEmailFromProductFormat($productFormatId);
+        $I->assertEquals('restaurants.orderHasBeenPlaced', $I->grabLastMailId());
+        $I->assertEquals($restaurantEmail, $I->grabLastMailRecipient());
+    }
+
     public function testThatTheFoodRushDurationMustBeValid(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
@@ -370,6 +381,11 @@ class OrdersCest {
     private function getDefaultLongitude()
     {
         return 2.23935;
+    }
+
+    private function getRestaurantEmailFromProductFormat($productFormatId)
+    {
+        return \Groupeat\Restaurants\Entities\ProductFormat::find($productFormatId)->product->restaurant->email;
     }
 
 }
