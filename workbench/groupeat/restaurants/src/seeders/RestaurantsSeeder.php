@@ -32,9 +32,9 @@ class RestaurantsSeeder extends Seeder {
         $restaurant = Restaurant::create([
             'name' => $this->faker->company,
             'phoneNumber' => $this->faker->phoneNumber,
-            'minimumOrderPrice' => $this->faker->numberBetween(10, 11),
+            'minimumOrderPrice' => $this->faker->numberBetween(1000, 1100),
             'deliveryCapacity' => $this->faker->numberBetween(7, 10),
-            'reductionPrices' => json_encode([9, 10, 20, 25, 35, 60]),
+            'discountPrices' => json_encode([900, 1000, 2000, 2500, 3500, 6000]),
         ]);
 
         $userCredentials = UserCredentials::create([
@@ -68,8 +68,8 @@ class RestaurantsSeeder extends Seeder {
         foreach ($restaurantsData as $restaurantData)
         {
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
-            $restaurantData['minimumOrderPrice'] = 9;
-            $restaurantData['reductionPrices'] = json_encode([9, 10, 20, 25, 35, 60]);
+            $restaurantData['minimumOrderPrice'] = 900;
+            $restaurantData['discountPrices'] = json_encode([900, 1000, 2000, 2500, 3500, 6000]);
 
             $restaurant = Restaurant::create($restaurantData);
 

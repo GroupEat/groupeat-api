@@ -16,7 +16,7 @@ class ProductFormatsMigration extends Migration {
             $table->increments('id');
             $table->unsignedInteger('product_id')->index();
             $table->string('name');
-            $table->float('price');
+            $table->unsignedInteger('price');
 
             $table->foreign('product_id')->references('id')->on(ProductsMigration::TABLE);
         });

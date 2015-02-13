@@ -58,6 +58,11 @@ class RestaurantsController extends Controller {
         );
     }
 
+    public function show(Restaurant $restaurant)
+    {
+        return $this->itemResponse($restaurant);
+    }
+
     public function showAddress(Restaurant $restaurant)
     {
         return $this->itemResponse($restaurant->address);

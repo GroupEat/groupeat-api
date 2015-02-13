@@ -16,9 +16,9 @@ class RestaurantsMigration extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->string('phoneNumber', 25);
-            $table->float('minimumOrderPrice');
+            $table->unsignedInteger('minimumOrderPrice');
             $table->tinyInteger('deliveryCapacity');
-            $table->string('reductionPrices');
+            $table->string('discountPrices');
             $table->timestamps();
             $table->softDeletes()->index();
         });

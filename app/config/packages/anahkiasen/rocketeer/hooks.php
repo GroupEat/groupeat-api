@@ -30,6 +30,7 @@ return [
 		],
 		'deploy'  => [
             'Groupeat\Deploy\Tasks\DeployDependingOnCommitMessageTask',
+            'sudo composer self-update',
             function ($task)
             {
                 App::make('rocketeer.tasks')->listenTo(
@@ -37,7 +38,6 @@ return [
                     'Groupeat\Deploy\Tasks\BeforeSymlinkTask'
                 );
             },
-            'Groupeat\Deploy\Tasks\CopyDependenciesFolders',
         ],
 		'cleanup' => [],
 	],

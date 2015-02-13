@@ -13,19 +13,19 @@ class ProductFormatsSeeder extends Seeder {
             ProductFormat::create([
                 'product_id' => $product->id,
                 'name' => 'junior',
-                'price' => $this->faker->randomFloat(1, 7, 8.9),
+                'price' => $this->faker->numberBetween(600, 890),
             ]);
 
             ProductFormat::create([
                 'product_id' => $product->id,
                 'name' => 'sénior',
-                'price' => $this->faker->randomFloat(1, 9, 12),
+                'price' => $this->faker->numberBetween(900, 1200),
             ]);
 
             ProductFormat::create([
                 'product_id' => $product->id,
                 'name' => 'méga',
-                'price' => $this->faker->randomFloat(1, 12, 15),
+                'price' => $this->faker->numberBetween(1200, 1500),
             ]);
         }
     }

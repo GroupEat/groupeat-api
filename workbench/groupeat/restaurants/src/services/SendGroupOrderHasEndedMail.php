@@ -48,14 +48,14 @@ class SendGroupOrderHasEndedMail {
     {
         $groupOrder->load('orders.productFormats.product.type');
         $orders = $groupOrder->orders;
-        $totalReducedPrice = formatPriceWithCurrency($groupOrder->totalReducedPrice);
+        $totalDiscountedPrice = formatPrice($groupOrder->totalDiscountedPrice);
         $confirmationUrl = $this->makeConfirmationUrl($groupOrder);
 
         $this->mailer->call(
             $groupOrder->restaurant->credentials,
             'restaurants::mails.groupOrderHasEnded',
             'restaurants::groupOrders.ended.subject',
-            compact('groupOrder', 'orders', 'totalReducedPrice', 'confirmationUrl')
+            compact('groupOrder', 'orders', 'totalDiscountedPrice', 'confirmationUrl')
         );
     }
 

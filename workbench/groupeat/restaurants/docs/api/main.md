@@ -21,6 +21,40 @@
             }
         ]
 
+## Restaurant [/restaurants/{id}/{?include}]
+
++ Parameters
+
+    + id (required, integer, `123`) ... The restaurant ID.
+    + include (optional, string, `address`) ... [address, categories].
+    
++ Model
+
+        {
+            "id": 1,
+            "opened": false,
+            "name": "Pizza di Genova",
+            "phoneNumber": "0689731323",
+            "minimumOrderPrice": 1088,
+            "deliveryCapacity": 7,
+            "discountPolicy": { // The key is the price and the value is the corresponding discount rate
+                "900": 0,
+                "1000": 10,
+                "2000": 20,
+                "2500": 30,
+                "3500": 40,
+                "6000": 50
+            }
+        }
+
+### Get restaurant [GET]
+
++ Response 200
+
+    [Restaurant][]
+    
++ Response 404
+
 ## List restaurants [/restaurants/{?opened,around,latitude,longitude,include}]
 
 ### GET
@@ -40,21 +74,11 @@ Returns the list of restaurants sorted by name in alphabetical order.
         [
             {
                 "id": 6,
-                "opened": true,
-                "name": "Pizza Di Genova",
-                "phoneNumber": "0605040302",
-                "minimumOrderPrice": 10,
-                "deliveryCapacity": 7,
-                "reductionPrices": "[9, 10, 20, 25, 35, 60]"
+                ... // Same data as the GET /restaurants/{id} response
             },
             {
                 "id": 7,
-                "opened": true,
-                "name": "Rapid Pizza",
-                "phoneNumber": "0605040301",
-                "minimumOrderPrice": 7,
-                "deliveryCapacity": 6,
-                "reductionPrices": "[9, 15, 20, 25, 40, 70]"
+                ...
             }
         ]
 
@@ -156,17 +180,17 @@ Returns the list of restaurants sorted by name in alphabetical order.
             {
                 "id": 1,
                 "name": "junior",
-                "price": "7.2"
+                "price": 7200
             },
             {
                 "id": 2,
                 "name": "sénior",
-                "price": "9.7"
+                "price": 9700
             },
             {
                 "id": 3,
                 "name": "méga",
-                "price": "13.8"
+                "price": 1380
             }
         ]
 

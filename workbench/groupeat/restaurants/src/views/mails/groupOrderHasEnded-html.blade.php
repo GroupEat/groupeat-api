@@ -29,9 +29,9 @@
 
     <p>
         <b>
-        @lang('restaurants::groupOrders.ended.reductionAndPrice', [
-            'reductionRate' => (100 * $groupOrder->reduction).'%',
-            'totalReducedPrice' => $totalReducedPrice,
+        @lang('restaurants::groupOrders.ended.discountAndPrice', [
+            'discountRate' => $groupOrder->discountRate->toPercentage(),
+            'totalDiscountedPrice' => $totalDiscountedPrice,
         ])
         </b>
     </p>

@@ -33,7 +33,7 @@ class ProductFormats {
     private $totalNumberOfProductFormats;
 
     /**
-     * @var float
+     * @var \SebastianBergmann\Money\Money
      */
     private $totalPrice;
 
@@ -108,10 +108,10 @@ class ProductFormats {
 
         $this->totalNumberOfProductFormats = array_sum($this->amounts);
 
-        $this->totalPrice = round($this->models->sum(function(ProductFormat $productFormat)
+        $this->totalPrice = sumPrices($this->models->map(function(ProductFormat $productFormat)
         {
-            return $this->amounts[$productFormat->id] * $productFormat->price;
-        }), 2);
+            return $productFormat->price->multiply($this->amounts[$productFormat->id]);
+        }));
     }
 
     public function getAmounts()
@@ -139,7 +139,10 @@ class ProductFormats {
         return $this->totalNumberOfProductFormats;
     }
 
-    public function price()
+    /**
+     * @return \SebastianBergmann\Money\Money
+     */
+    public function totalPrice()
     {
         return $this->totalPrice;
     }

@@ -19,6 +19,8 @@ Route::api(['version' => 'v1', 'protected' => true], function()
 
         Route::group(['prefix' => '{restaurant}'], function() use ($controller)
         {
+            Route::get('/', "$controller@show");
+
             Route::get('address', "$controller@showAddress");
 
             Route::get('products', "$controller@productsIndex");

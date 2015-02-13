@@ -4,14 +4,21 @@ use Carbon\Carbon;
 use Config;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
+use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use SebastianBergmann\Money\EUR;
+use SebastianBergmann\Money\Money;
 
 class Restaurant extends Entity implements User {
 
     use HasCredentials, SoftDeletingTrait;
+
+    private static $discountRates;
+    private static $aroundDistanceInKms;
+    private static $openingDurationInMinutes;
 
     protected $fillable = ['name', 'phoneNumber'];
 
@@ -21,9 +28,18 @@ class Restaurant extends Entity implements User {
         return [
             'name' => 'required',
             'phoneNumber' => ['required', 'regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/'],
-            'minimumOrderPrice' => 'required|numeric',
+            'minimumOrderPrice' => 'required|integer',
             'deliveryCapacity' => 'required|integer',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::$discountRates = Config::get('restaurants::discountRates');
+        static::$aroundDistanceInKms = Config::get('restaurants::around_distance_in_kilometers');
+        static::$openingDurationInMinutes = Config::get('restaurants::opening_duration_in_minutes');
     }
 
     public function categories()
@@ -53,7 +69,7 @@ class Restaurant extends Entity implements User {
 
     public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
     {
-        $distanceInKms = $distanceInKms ?: Config::get('restaurants::around_distance_in_kilometers');
+        $distanceInKms = $distanceInKms ?: static::$aroundDistanceInKms;
 
         $query->whereHas('address', function(Builder $subQuery) use ($latitude, $longitude, $distanceInKms)
         {
@@ -70,7 +86,7 @@ class Restaurant extends Entity implements User {
     public function isOpened(Carbon $from = null, Carbon $to = null)
     {
         $from = $from ?: Carbon::now();
-        $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
+        $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
         assertSameDay($from, $to);
 
         $hasClosingWindow = ! $this->closingWindows->filter(function($closingWindow) use ($from, $to)
@@ -94,7 +110,7 @@ class Restaurant extends Entity implements User {
     public function assertOpened(Carbon $from = null, Carbon $to = null)
     {
         $from = $from ?: Carbon::now();
-        $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
+        $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
         assertSameDay($from, $to);
 
         if (!$this->isOpened($from, $to))
@@ -109,7 +125,7 @@ class Restaurant extends Entity implements User {
     public function scopeOpened(Builder $query, Carbon $from = null, Carbon $to = null)
     {
         $from = $from ?: Carbon::now();
-        $to = $to ?: $from->copy()->addMinutes(Config::get('restaurants::opening_duration_in_minutes'));
+        $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
         assertSameDay($from, $to);
 
         $query->whereHas('openingWindows', function(Builder $subQuery) use ($from, $to)
@@ -128,6 +144,51 @@ class Restaurant extends Entity implements User {
             $subQuery->where($closingWindow->getTableField('from'), '<=', $to)
                 ->where($closingWindow->getTableField('to'), '>=', $from);
         });
+    }
+
+    /**
+     * @param Money $rawPrice
+     *
+     * @return DiscountRate
+     */
+    public function getDiscountRateFor(Money $rawPrice)
+    {
+        foreach ($this->discountPrices as $index => $amount)
+        {
+            if ($rawPrice->getAmount() <= $amount)
+            {
+                if ($index == 0)
+                {
+                    return new DiscountRate(static::$discountRates[$index]);
+                }
+                else
+                {
+                    $slope = ((float) (static::$discountRates[$index] - static::$discountRates[$index - 1]))
+                        / ($amount - $this->discountPrices[$index - 1]);
+
+                    $offset = static::$discountRates[$index] - $slope * $amount;
+
+                    return new DiscountRate((int) round($slope * $rawPrice->getAmount() + $offset));
+                }
+            }
+        }
+
+        return new DiscountRate((int) end(static::$discountRates));
+    }
+
+    protected function getDiscountPricesAttribute()
+    {
+        return json_decode($this->attributes['discountPrices'], true);
+    }
+
+    protected function getMinimumOrderPriceAttribute()
+    {
+        return new EUR($this->attributes['minimumOrderPrice']); // TODO: Don't enforce a default currency
+    }
+
+    protected function getDiscountPolicyAttribute()
+    {
+        return array_combine($this->discountPrices, static::$discountRates);
     }
 
 }

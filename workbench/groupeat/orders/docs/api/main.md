@@ -4,15 +4,15 @@
 
 + Parameters
 
-    + id (required, integer, `123`) ... The group order ID
-    + include (optional, string, `restaurant`) ... [restaurant]
+    + id (required, integer, `123`) ... The group order ID.
+    + include (optional, string, `restaurant`) ... [restaurant].
     
 + Model
 
         {
             "id": 20,
             "joinable": false,
-            "reduction": 0.2928,
+            "discountRate": 28, // Percentage
             "createdAt": "2015-01-30 16:09:26",
             "remainingCapacity": 5, // The number of product formats that can still be added
             "endingAt": "2015-01-30 16:39:26",
@@ -45,7 +45,7 @@
         [
             {
                 "id": 10,
-                ... // Same data as the GET /group-order/{id} response
+                ... // Same data as the GET /groupOrders/{id} response
             },
             {
                 "id": 12,
@@ -64,14 +64,14 @@
 
         {
             "id": 8,
-            "rawPrice": 46.6,
-            "reducedPrice": 39.7,
+            "rawPrice": 4660,
+            "discountedPrice": 3970,
             "createdAt": "2015-01-30 16:09:26",
         }
 
 ### Get order [GET]
 
-Only the customer who created it or the corresponding restaurant can see the order. The `rawPrice` is the sum of the price of all the ordered product formats and will stay unchanged. On the other hand, the `reducedPrice` might decrease if people join the group order.
+Only the customer who created it or the corresponding restaurant can see the order. The `rawPrice` is the sum of the price of all the ordered product formats and will stay unchanged. On the other hand, the `discountedPrice` might decrease if people join the group order.
 
 + Response 200
 
@@ -210,7 +210,7 @@ When creating a group order, the distance between the given address and the rest
         {
             "status_code": 422,
             "error_key": "minimumOrderPriceNotReached",
-            "message": "The order price is 8.1 but must be greater than 11."
+            "message": "The order price is 810 but must be greater than 1100."
         }
 
 + Response 422

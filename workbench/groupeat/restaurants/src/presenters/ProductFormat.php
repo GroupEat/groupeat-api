@@ -6,7 +6,7 @@ class ProductFormat extends Presenter {
 
     public function presentPrice()
     {
-        return $this->formatPriceWithCurrency($this->object->price);
+        return $this->formatPrice($this->object->price);
     }
 
 }

@@ -274,22 +274,35 @@ if (!function_exists('mb_lcfirst'))
 
 if (!function_exists('formatPrice'))
 {
-    function formatPrice($price, $decimalSeparator = ',', $thousandsSeparator = ' ')
+    function formatPrice(\SebastianBergmann\Money\Money $price)
     {
-        return number_format($price, 2, $decimalSeparator, $thousandsSeparator);
+        // TODO: Add support for other locales
+        return (new \SebastianBergmann\Money\IntlFormatter('fr_FR'))->format($price);
     }
+}
 
-    function formatPriceWithCurrency(
-        $price,
-        $decimalSeparator = ',',
-        $thousandsSeparator = ' ',
-        $currency = '€',
-        $after = true
-    )
+if (!function_exists('sumPrices'))
+{
+    /**
+     * @param \Illuminate\Support\Collection $prices
+     *
+     * @return \SebastianBergmann\Money\Money
+     */
+    function sumPrices(\Illuminate\Support\Collection $prices)
     {
-        $formattedPrice = formatPrice($price, $decimalSeparator, $thousandsSeparator);
+        if ($prices->isEmpty())
+        {
+            return new \SebastianBergmann\Money\EUR(0); // TODO: Find out how to choose default currency
+        }
 
-        return $after ? $formattedPrice.'&nbsp;'.$currency : $currency.'&nbsp;'.$formattedPrice;
+        $total = new \SebastianBergmann\Money\Money(0, $prices->first()->getCurrency());
+
+        foreach ($prices as $price)
+        {
+            $total = $total->add($price);
+        }
+
+        return $total;
     }
 }
 

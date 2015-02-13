@@ -7,11 +7,15 @@ use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
+use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class GroupOrder extends Entity {
+
+    private static $aroundDistanceInKms;
 
     protected $dates = ['completed_at', 'ending_at', 'confirmed_at', 'prepared_at'];
 
@@ -20,9 +24,16 @@ class GroupOrder extends Entity {
     {
         return [
             'restaurant_id' => 'required|integer',
-            'reduction' => 'required|numeric',
+            'discountRate' => 'required|integer',
             'ending_at' => 'required',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::$aroundDistanceInKms = Config::get('orders::around_distance_in_kilometers');
     }
 
     /**
@@ -106,10 +117,10 @@ class GroupOrder extends Entity {
         $this->assertMinimumOrderPriceReached($productFormats);
         list($nbProductFormats, $totalRawPrice) = $this->getNbProductFormatsAndRawPriceWith($productFormats);
         $this->assertMaximumCapacityNotExceeded($nbProductFormats);
-        $this->computeAndSetReductionFrom($totalRawPrice);
+        $this->discountRate = $productFormats->getRestaurant()->getDiscountRateFor($totalRawPrice);
 
         $order = new Order;
-        $order->rawPrice = $productFormats->price();
+        $order->rawPrice = $productFormats->totalPrice();
         $order->customer()->associate($customer);
         $order->setCreatedAt($order->freshTimestamp());
 
@@ -162,14 +173,20 @@ class GroupOrder extends Entity {
         return $this->restaurant->deliveryCapacity - $nbProductFormats;
     }
 
+    /**
+     * @return \SebastianBergmann\Money\Money
+     */
     public function getTotalRawPriceAttribute()
     {
-        return $this->orders->sum('rawPrice');
+        return sumPrices(Collection::make($this->orders->lists('rawPrice')));
     }
 
-    public function getTotalReducedPriceAttribute()
+    /**
+     * @return \SebastianBergmann\Money\Money
+     */
+    public function getTotalDiscountedPriceAttribute()
     {
-        return round((1 - $this->reduction) * $this->totalRawPrice, 2);
+        return $this->discountRate->applyTo($this->totalRawPrice);
     }
 
     public function scopeJoinable(Builder $query, Carbon $time = null)
@@ -183,7 +200,7 @@ class GroupOrder extends Entity {
 
     public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
     {
-        $distanceInKms = $distanceInKms ?: Config::get('orders::around_distance_in_kilometers');
+        $distanceInKms = $distanceInKms ?: static::$aroundDistanceInKms;
 
         $query->whereHas('orders', function(Builder $subQuery) use ($latitude, $longitude, $distanceInKms)
         {
@@ -200,9 +217,14 @@ class GroupOrder extends Entity {
         });
     }
 
-    protected function setReductionAttribute($reduction)
+    protected function getDiscountRateAttribute()
     {
-        $this->attributes['reduction'] = round($reduction, 2);
+        return new DiscountRate((int) $this->attributes['discountRate']);
+    }
+
+    protected function setDiscountRateAttribute(DiscountRate $discountRate)
+    {
+        $this->attributes['discountRate'] = $discountRate->toPercentage();
     }
 
     private static function assertNotExistingFor(Restaurant $restaurant)
@@ -242,36 +264,7 @@ class GroupOrder extends Entity {
             $productFormats = $productFormats->mergeWith($this);
         }
 
-        return [$productFormats->count(), $productFormats->price()];
-    }
-
-    private function computeAndSetReductionFrom($totalRawPrice)
-    {
-        $reductionPrices = json_decode($this->restaurant->reductionPrices, true);
-        $reductionValues = Config::get('restaurants::reductionValues');
-
-        foreach ($reductionPrices as $index => $price)
-        {
-            if ($totalRawPrice <= $price)
-            {
-                if ($index == 0)
-                {
-                    $this->reduction = $reductionValues[$index];
-                }
-                else
-                {
-                    $slope = ($reductionValues[$index] - $reductionValues[$index - 1])
-                        / ($price - $reductionPrices[$index - 1]);
-                    $offset = $reductionValues[$index] - $slope * $price;
-
-                    $this->reduction = $slope * $totalRawPrice + $offset;
-                }
-
-                return;
-            }
-        }
-
-        $this->reduction = end($reductionValues);
+        return [$productFormats->count(), $productFormats->totalPrice()];
     }
 
     private function assertMaximumCapacityNotExceeded($nbProductFormats)
@@ -287,11 +280,11 @@ class GroupOrder extends Entity {
 
     private function assertMinimumOrderPriceReached(ProductFormats $productFormats)
     {
-        if ($productFormats->price() < $this->restaurant->minimumOrderPrice)
+        if ($productFormats->totalPrice()->lessThan($this->restaurant->minimumOrderPrice))
         {
             throw new UnprocessableEntity(
                 'minimumOrderPriceNotReached',
-                "The order price is {$productFormats->price()} but must be greater than {$this->restaurant->minimumOrderPrice}."
+                "The order price is {$productFormats->totalPrice()->getAmount()} but must be greater than {$this->restaurant->minimumOrderPrice->getAmount()}."
             );
         }
     }

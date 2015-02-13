@@ -14,9 +14,9 @@ class RestaurantTransformer extends TransformerAbstract
             'opened' => (bool) $restaurant->isOpened(),
             'name' => $restaurant->name,
             'phoneNumber' => $restaurant->phoneNumber,
-            'minimumOrderPrice' => (float) $restaurant->minimumOrderPrice,
+            'minimumOrderPrice' => (int) $restaurant->minimumOrderPrice->getAmount(),
             'deliveryCapacity' => (int) $restaurant->deliveryCapacity,
-            'reductionPrices' => $restaurant->reductionPrices,
+            'discountPolicy' => $restaurant->discountPolicy, // TODO: return discount policy instead
         ];
     }
 

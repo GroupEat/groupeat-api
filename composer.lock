@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a78e0d12b81457fba73a74405068c5d0",
+    "hash": "1404f30d2f40dfaf9eaa00e5b87aceb9",
     "packages": [
         {
             "name": "anahkiasen/former",
@@ -1580,6 +1580,55 @@
             "time": "2014-12-14 09:18:56"
         },
         {
+            "name": "sebastian/money",
+            "version": "v1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/money.git",
+                "reference": "70f928d5a0ca766f358e7226b3074ebf0ecd6082"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/money/zipball/70f928d5a0ca766f358e7226b3074ebf0ecd6082",
+                "reference": "70f928d5a0ca766f358e7226b3074ebf0ecd6082",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de"
+                }
+            ],
+            "description": "Value Object that represents a monetary value (using a currency's smallest unit)",
+            "homepage": "http://www.github.com/sebastianbergmann/money",
+            "keywords": [
+                "money"
+            ],
+            "time": "2014-09-05 14:59:05"
+        },
+        {
             "name": "sly/notification-pusher",
             "version": "v2.2.8",
             "source": {
@@ -3096,16 +3145,16 @@
     "packages-dev": [
         {
             "name": "anahkiasen/rocketeer",
-            "version": "2.0.5",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rocketeers/rocketeer.git",
-                "reference": "9a8877dc3abb8de522904b682cf54588d8fc5598"
+                "reference": "390f05cac24d6d4173d11f088cb381e6219f1944"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rocketeers/rocketeer/zipball/9a8877dc3abb8de522904b682cf54588d8fc5598",
-                "reference": "9a8877dc3abb8de522904b682cf54588d8fc5598",
+                "url": "https://api.github.com/repos/rocketeers/rocketeer/zipball/390f05cac24d6d4173d11f088cb381e6219f1944",
+                "reference": "390f05cac24d6d4173d11f088cb381e6219f1944",
                 "shasum": ""
             },
             "require": {
@@ -3123,13 +3172,11 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "herrera-io/box": "~1.5.3",
                 "johnkary/phpunit-speedtrap": "dev-master",
                 "mockery/mockery": "^0.9.1",
                 "nesbot/carbon": "~1.4",
                 "phpseclib/phpseclib": "~0.3.5",
-                "phpunit/phpunit": "~4.0",
-                "raveren/kint": "~0.9.1"
+                "phpunit/phpunit": "~4.0"
             },
             "suggest": {
                 "anahkiasen/rocketeer-campfire": "Campfire plugin to create deployments notifications",
@@ -3170,7 +3217,7 @@
                 "ssh",
                 "task"
             ],
-            "time": "2015-02-11 21:29:25"
+            "time": "2015-02-12 19:35:05"
         },
         {
             "name": "barryvdh/laravel-ide-helper",

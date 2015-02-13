@@ -163,9 +163,4 @@ class ApiHelper extends \Codeception\Module {
         $this->getModule('REST')->haveHttpHeader('Accept', $accept);
     }
 
-    public function assertCentsEquals($expected, $actual, $decimals = 2)
-    {
-        $this->getModule('Asserts')->assertEquals(round($expected, $decimals), round($actual, $decimals));
-    }
-
 }

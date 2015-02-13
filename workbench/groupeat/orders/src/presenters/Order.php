@@ -71,12 +71,12 @@ class Order extends Presenter {
 
     public function presentRawPrice()
     {
-        return $this->formatPriceWithCurrency($this->object->rawPrice);
+        return $this->formatPrice($this->object->rawPrice);
     }
 
     public function presentReducedPrice()
     {
-        return $this->formatPriceWithCurrency($this->object->reducedPrice);
+        return $this->formatPrice($this->object->discountedPrice);
     }
 
     private function getProductsTable($withRawPrice = true)

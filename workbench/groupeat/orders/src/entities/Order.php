@@ -2,6 +2,9 @@
 
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Exceptions\Exception;
+use SebastianBergmann\Money\EUR;
+use SebastianBergmann\Money\Money;
 
 class Order extends Entity {
 
@@ -15,7 +18,7 @@ class Order extends Entity {
         return [
             'customer_id' => 'required|integer',
             'group_order_id' => 'required|integer',
-            'rawPrice' => 'required|numeric',
+            'rawPrice' => 'required|integer',
         ];
     }
 
@@ -39,14 +42,19 @@ class Order extends Entity {
         return $this->hasOne('Groupeat\Orders\Entities\DeliveryAddress');
     }
 
-    public function getReducedPriceAttribute()
+    public function getDiscountedPriceAttribute()
     {
-        return round((1 - $this->groupOrder->reduction) * $this->rawPrice, 2);
+        return $this->groupOrder->discountRate->applyTo($this->rawPrice);
     }
 
-    protected function setRawPriceAttribute($rawPrice)
+    protected function getRawPriceAttribute()
     {
-        $this->attributes['rawPrice'] = round($rawPrice, 2);
+        return new EUR($this->attributes['rawPrice']); // TODO: Don't enforce a default currency
+    }
+
+    protected function setRawPriceAttribute(Money $rawPrice)
+    {
+        $this->attributes['rawPrice'] = $rawPrice->getAmount();
     }
 
 }

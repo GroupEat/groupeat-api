@@ -10,7 +10,7 @@ class ProductFormatTransformer extends TransformerAbstract
         return [
             'id' => (int) $format->id,
             'name' => $format->name,
-            'price' => $format->price,
+            'price' => (int) $format->price->getAmount(),
         ];
     }
 

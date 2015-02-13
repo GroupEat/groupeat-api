@@ -243,14 +243,18 @@ class OrdersCest {
         $I->seeErrorResponse(403, 'wrongAuthenticatedUser');
     }
 
-    public function testThatTheReductionIncreaseWhenAGroupOrderIsJoined(ApiTester $I)
+    public function testThatTheDiscountRateIncreaseWhenAGroupOrderIsJoined(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
         $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $orderId = $I->grabDataFromResponse('id');
         $oldRawPrice = $I->grabDataFromResponse('rawPrice');
-        $oldReduction = 1 - $I->grabDataFromResponse('reducedPrice') / $oldRawPrice;
+
+        $oldDiscountRate = $this->computeDiscountRate(
+            $I->grabDataFromResponse('discountedPrice'),
+            $oldRawPrice
+        );
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
 
@@ -258,18 +262,24 @@ class OrdersCest {
         unset($orderDetails['foodRushDurationInMinutes']);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
-        $newReduction = 1 - $I->grabDataFromResponse('reducedPrice') / $I->grabDataFromResponse('rawPrice');
+        $newDiscountRate = $this->computeDiscountRate(
+                $I->grabDataFromResponse('discountedPrice'),
+                $I->grabDataFromResponse('rawPrice')
+        );
         $I->sendApiGetWithToken($token , "groupOrders/$groupOrderId");
-        $newReductionFormGroupOrder = $I->grabDataFromResponse('reduction');
+        $newDiscountRateFormGroupOrder = $I->grabDataFromResponse('discountRate');
 
-        $I->assertGreaterThan($oldReduction, $newReduction);
-        $I->assertCentsEquals($newReduction, $newReductionFormGroupOrder);
+        $I->assertGreaterThan($oldDiscountRate, $newDiscountRate);
+        $I->assertEquals($newDiscountRate, $newDiscountRateFormGroupOrder);
 
         $I->sendApiGetWithToken($token, "orders/$orderId");
         $newRawPrice = $I->grabDataFromResponse('rawPrice');
-        $I->assertCentsEquals($oldRawPrice, $newRawPrice);
-        $newReductionFromOrder = 1 - $I->grabDataFromResponse('reducedPrice') / $newRawPrice;
-        $I->assertCentsEquals($newReduction, $newReductionFromOrder);
+        $I->assertEquals($oldRawPrice, $newRawPrice);
+        $newDiscountRateFromOrder = $this->computeDiscountRate(
+            $I->grabDataFromResponse('discountedPrice'),
+            $newRawPrice
+        );
+        $I->assertEquals($newDiscountRate, $newDiscountRateFromOrder);
     }
 
     public function testThatTheDeliveryAddressMustBeCloseEnoughToJoinAGroupOrder(ApiTester $I)
@@ -386,6 +396,11 @@ class OrdersCest {
     private function getRestaurantEmailFromProductFormat($productFormatId)
     {
         return \Groupeat\Restaurants\Entities\ProductFormat::find($productFormatId)->product->restaurant->email;
+    }
+
+    private function computeDiscountRate($discountedPrice, $rawPrice)
+    {
+        return (int) round(100 * (1 - $discountedPrice / $rawPrice));
     }
 
 }

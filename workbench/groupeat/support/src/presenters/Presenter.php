@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Robbo\Presenter\Presenter as BasePresenter;
+use SebastianBergmann\Money\Money;
 
 class Presenter extends BasePresenter {
 
@@ -15,20 +16,9 @@ class Presenter extends BasePresenter {
         return '('.trans('support::general.referenceAbbreviation', ['reference' => $this->object->id]).')';
     }
 
-    protected function formatPrice($price, $decimalSeparator = ',', $thousandsSeparator = ' ')
+    protected function formatPrice(Money $price)
     {
-        return formatPrice($price, $decimalSeparator, $thousandsSeparator);
-    }
-
-    protected function formatPriceWithCurrency(
-        $price,
-        $decimalSeparator = ',',
-        $thousandsSeparator = ' ',
-        $currency = '€',
-        $after = true
-    )
-    {
-        return formatPriceWithCurrency($price, $decimalSeparator, $thousandsSeparator, $currency, $after);
+        return formatPrice($price);
     }
 
     protected function formatTime(Carbon $time, $hoursSuffix = '\h', $withSeconds = false)
