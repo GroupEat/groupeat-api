@@ -32,7 +32,7 @@ return [
 
         'indication' => "La commande groupée :groupOrderRef commencée à :creationTime est complète.",
 
-        'discountAndPrice' => "La réduction finale est de :discountRate% ce qui donne un prix total de :totalDiscountedPrice.",
+        'discountAndPrice' => "La réduction finale est de :discountRate ce qui donne un prix total de :totalDiscountedPrice.",
 
         'composedOf' => "Elle comporte une unique commande :|Elle comporte les :count commandes suivantes :",
 

@@ -15,6 +15,16 @@ class GroupOrder extends Presenter {
         return $this->formatTime($this->ending_at);
     }
 
+    public function presentPreparedAtTime()
+    {
+        return $this->formatTime($this->prepared_at);
+    }
+
+    public function presentDiscountRate()
+    {
+        return $this->object->discountRate->toPercentage().'%';
+    }
+
     public function presentProductsTable()
     {
         return (string) $this->getProductsTable();

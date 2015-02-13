@@ -16,7 +16,7 @@
 @endif
 
 @lang('restaurants::groupOrders.ended.discountAndPrice', [
-    'discountRate' => $groupOrder->discountRate->toPercentage(),
+    'discountRate' => $groupOrder->discountRate,
     'totalDiscountedPrice' => $totalDiscountedPrice,
 ])
 

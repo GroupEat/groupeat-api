@@ -59,14 +59,35 @@ class Order extends Presenter {
         return $this->formatTableForMail($this->getDetailsTable());
     }
 
-    public function presentDetailsAsPlainText()
+    public function presentDetailsAsPlainText($withCustomer = true)
     {
         $attributes = trans('orders::orders.attributes');
 
-        return $this->presentReference()
-            . ', '.mb_ucfirst($attributes['customer']).': '.$this->customer->fullNameWithPhoneNumber
-            . ', '.mb_ucfirst($attributes['deliveryAddress']).': '.$this->deliveryAddress
-            . ', '.mb_ucfirst($attributes['priceToPay']).': '.$this->presentReducedPrice();
+        $str = $this->presentReference();
+
+        if ($withCustomer)
+        {
+            $str .= ', '.mb_ucfirst($attributes['customer']).': '.$this->customer->fullNameWithPhoneNumber;
+        }
+            $str .= ', '.mb_ucfirst($attributes['deliveryAddress']).': '.$this->deliveryAddress
+            . ', '.mb_ucfirst($attributes['priceToPay']).': '.$this->presentDiscountedPrice();
+
+        return $str;
+    }
+
+    public function presentDetailsTableForCustomer()
+    {
+        return $this->getDetailsTable(false);
+    }
+
+    public function presentDetailsTableForCustomerForMail()
+    {
+        return $this->formatTableForMail($this->getDetailsTable(false));
+    }
+
+    public function presentDetailsTableForCustomerAsPlainText()
+    {
+        return $this->presentDetailsAsPlainText(false);
     }
 
     public function presentRawPrice()
@@ -74,7 +95,7 @@ class Order extends Presenter {
         return $this->formatPrice($this->object->rawPrice);
     }
 
-    public function presentReducedPrice()
+    public function presentDiscountedPrice()
     {
         return $this->formatPrice($this->object->discountedPrice);
     }
@@ -110,20 +131,31 @@ class Order extends Presenter {
         return Table::create($headers, $rows);
     }
 
-    private function getDetailsTable()
+    private function getDetailsTable($withCustomer = true)
     {
-        $keys = ['reference', 'customer', 'deliveryAddress', 'priceToPay'];
+        $keys[] = 'reference';
+
+        if ($withCustomer)
+        {
+            $keys[] = 'customer';
+        }
+
+        $keys[] = 'deliveryAddress';
+        $keys[] = 'priceToPay';
 
         $headers = $this->translate($keys, trans('orders::orders.attributes'), true);
 
-        $rows[] = [
-            $this->id,
-            $this->customer->fullNameWithPhoneNumber,
-            (string) $this->deliveryAddress,
-            $this->presentReducedPrice(),
-        ];
+        $row[] = $this->id;
 
-        return Table::create($headers, $rows);
+        if ($withCustomer)
+        {
+            $row[] = $this->customer->fullNameWithPhoneNumber;
+        }
+
+        $row[] = (string) $this->deliveryAddress;
+        $row[] = $this->presentDiscountedPrice();
+
+        return Table::create($headers, [$row]);
     }
 
 }

@@ -39,7 +39,7 @@ class ProductFormats {
 
 
     /**
-     * @param string $json
+     * @param mixed $json
      *
      * @return static
      */

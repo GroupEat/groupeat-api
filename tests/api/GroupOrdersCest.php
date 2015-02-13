@@ -2,7 +2,7 @@
 
 class GroupOrdersCest {
 
-    public function testThatAGroupOrderCanBeConfirmedWhenCompleted(ApiTester $I)
+    public function testThatACustomerReceiveAMailWhenAGroupOrderIsConfirmed(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
 
@@ -67,6 +67,8 @@ class GroupOrdersCest {
 
         $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->addMinutes(10)]);
         $I->seeSuccessfulPanel();
+
+        $I->assertEquals('customers.orderHasBeenConfirmed', $I->grabLastMailId());
     }
 
 }

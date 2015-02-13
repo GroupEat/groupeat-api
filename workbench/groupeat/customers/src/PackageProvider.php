@@ -3,6 +3,7 @@
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Services\ChangeCustomerAddress;
 use Groupeat\Customers\Services\RegisterCustomer;
+use Groupeat\Customers\Services\SendGroupOrderHasBeenConfirmedMails;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider {
@@ -23,6 +24,11 @@ class PackageProvider extends WorkbenchPackageProvider {
         {
             return new ChangeCustomerAddress($app['config']->get('customers::address_constraints'));
         });
+
+        $this->app->bind('SendGroupOrderHasBeenConfirmedMailsService', function($app)
+        {
+            return new SendGroupOrderHasBeenConfirmedMails($app['SendMailService']);
+        });
     }
 
     public function boot()
@@ -30,6 +36,7 @@ class PackageProvider extends WorkbenchPackageProvider {
         parent::boot();
 
         $this->app['groupeat.auth']->addUserType(new Customer);
+        $this->app['events']->listen('groupOrderHasBeenConfirmed', 'SendGroupOrderHasBeenConfirmedMailsService@call');
     }
 
 }

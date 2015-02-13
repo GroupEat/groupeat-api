@@ -2,6 +2,9 @@
 
 @section('mailId'){{ 'restaurants.groupOrderHasEnded' }}@stop
 
+@section('firstLineWrapper')
+@overwrite
+
 @section('beforeButton')
     <p>
         @lang('restaurants::groupOrders.ended.indication', [
@@ -30,7 +33,7 @@
     <p>
         <b>
         @lang('restaurants::groupOrders.ended.discountAndPrice', [
-            'discountRate' => $groupOrder->discountRate->toPercentage(),
+            'discountRate' => $groupOrder->discountRate,
             'totalDiscountedPrice' => $totalDiscountedPrice,
         ])
         </b>

@@ -71,6 +71,7 @@
 
                                             @section('firstLineWrapper')
                                                 @include('partials.mails.first-line')
+                                                @include('partials.mails.vertical-space')
                                             @show
 
                                             @section('beforeButtonWrapper')

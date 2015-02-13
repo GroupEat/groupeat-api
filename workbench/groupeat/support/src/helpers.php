@@ -76,12 +76,17 @@ if (!function_exists('decodeJSON'))
     /**
      * Decode JSON
      *
-     * @param string $JSON
+     * @param string|array $JSON
      *
      * @return array
      */
     function decodeJSON($JSON, $throwOnNull = true)
     {
+        if (is_array($JSON))
+        {
+            return $JSON;
+        }
+
         $data = json_decode($JSON, true);
 
         if (is_null($data) && $throwOnNull)
