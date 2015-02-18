@@ -82,7 +82,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
             }
         ]
 
-## List food types [/food-types]
+## List food types [/foodTypes]
 
 ### GET
 

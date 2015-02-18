@@ -9,7 +9,7 @@ Route::api(['version' => 'v1', 'protected' => true], function()
 
     Route::get('restaurantCategories', "$controller@categoriesIndex");
 
-    Route::get('food-types', "$controller@foodTypesIndex");
+    Route::get('foodTypes', "$controller@foodTypesIndex");
 
     Route::get('products/{product}/formats', "$controller@productFormatsIndex");
 
