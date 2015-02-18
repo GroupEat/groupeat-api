@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
 
     # Give the VM 1/4 system memory & access to all cpu cores on the host
-    host = RbConfig::CONFIG['host_os']
+    host = RbConfig::CONFIG["host_os"]
 
     if host =~ /darwin/
         cpus = `sysctl -n hw.ncpu`.to_i
@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     elsif host =~ /linux/
         cpus = `nproc`.to_i
         # meminfo shows KB and we need to convert to MB
-        memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 4
+        memory = `grep "MemTotal" /proc/meminfo | sed -e "s/MemTotal://" -e "s/ kB//"`.to_i / 1024 / 4
     else # sorry Windows folks
         cpus = 2
         memory = 2048
@@ -43,7 +43,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 443, host: 44300
   config.vm.network "forwarded_port", guest: 5432, host: 54320
 
-  # Configure the public key for SSH access
+  # Configure SSH access
+  config.ssh.insert_key = false
   config.vm.provision "shell" do |s|
     s.inline = "echo \"$1\" | grep -xq \"$1\" /home/vagrant/.ssh/authorized_keys || echo \"$1\" | tee -a /home/vagrant/.ssh/authorized_keys"
     s.args = [File.read(File.expand_path("~/.ssh/id_rsa.pub"))]
@@ -57,15 +58,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Copy the Git config into the VM
-  config.vm.provision :file, source: '~/.gitconfig', destination: '/home/vagrant/.gitconfig' if File.exist?(ENV['HOME'] + '/.gitconfig')
+  config.vm.provision :file, source: "~/.gitconfig", destination: "/home/vagrant/.gitconfig" if File.exist?(ENV["HOME"] + "/.gitconfig")
 
-  # Run the base provisioning script
+  # Run the setup script
   config.vm.provision "shell" do |s|
-    domain = 'groupeat.dev'
-    postgresPassword = 'groupeat'
-    environment = 'local'
     s.path = "./scripts/setup.sh"
-    s.args = [environment, domain, postgresPassword]
   end
 
   # Install the project Composer dependencies

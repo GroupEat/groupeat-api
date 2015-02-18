@@ -3,7 +3,7 @@
 return [
     'connections' => [
         'pgsql' => [
-            'password' => $_SERVER['PGSQL_PASSWORD'],
+            'password' => $_SERVER['POSTGRESQL_PASSWORD'],
         ],
     ],
 ];

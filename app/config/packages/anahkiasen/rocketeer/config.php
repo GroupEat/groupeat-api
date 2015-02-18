@@ -2,7 +2,7 @@
 
 use Rocketeer\Services\Connections\ConnectionsHandler;
 
-$connections = Config::get('remote.connections');
+$production = Config::get('remote.connections.production');
 
 return [
 
@@ -41,24 +41,14 @@ return [
 	// and store them locally
 	'connections'      => [
 		'production' => [
-			'host'      => $connections['production']['host'],
-			'username'  => $connections['production']['username'],
-			'password'  => $connections['production']['password'],
-			'key'       => $connections['production']['key'],
-			'keyphrase' => $connections['production']['keyphrase'],
+			'host'      => $production['host'],
+			'username'  => $production['username'],
+			'password'  => $production['password'],
+			'key'       => $production['key'],
+			'keyphrase' => $production['keyphrase'],
 			'agent'     => '',
 			'db_role'   => true,
 		],
-
-        'production_root' => [
-            'host'      => $connections['production_root']['host'],
-            'username'  => $connections['production_root']['username'],
-            'password'  => $connections['production_root']['password'],
-            'key'       => $connections['production_root']['key'],
-            'keyphrase' => $connections['production_root']['keyphrase'],
-            'agent'     => '',
-            'db_role'   => true,
-        ],
 	],
 
 	/*

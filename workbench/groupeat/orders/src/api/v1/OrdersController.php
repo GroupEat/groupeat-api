@@ -28,12 +28,12 @@ class OrdersController extends Controller {
     public function place()
     {
         $customer = Auth::customer();
-        $productFormats = ProductFormats::fromJSON(Input::get('productFormats'));
-        $deliveryAddressData = Input::only((new DeliveryAddress())->getFillable());
+        $productFormats = new ProductFormats($this->decodeJSON(Input::json('productFormats')));
+        $deliveryAddressData = Input::json()->all();
 
-        if (Input::has('groupOrderId'))
+        if (Input::json()->has('groupOrderId'))
         {
-            $groupOrder = GroupOrder::findOrFail(Input::get('groupOrderId'));
+            $groupOrder = GroupOrder::findOrFail(Input::json('groupOrderId'));
 
             $order = app('JoinGroupOrderService')->call(
                 $groupOrder,
@@ -47,7 +47,7 @@ class OrdersController extends Controller {
             $order = app('CreateGroupOrderService')->call(
                 $customer,
                 $productFormats,
-                (int) Input::get('foodRushDurationInMinutes'),
+                Input::json()->getInt('foodRushDurationInMinutes'),
                 $deliveryAddressData
             );
         }

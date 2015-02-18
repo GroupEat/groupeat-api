@@ -21,20 +21,20 @@ class CustomersController extends Controller {
     {
         Auth::assertSame($customer);
 
-        $customer->update(Input::all());
+        $customer->update(Input::json()->all());
 
         return $this->itemResponse($customer);
     }
 
     public function register()
     {
-        $email = Input::get('email');
-        $password = Input::get('password');
+        $email = Input::json('email');
+        $password = Input::json('password');
 
-        app('RegisterCustomerService')->call($email, $password, Input::get('locale'));
+        app('RegisterCustomerService')->call($email, $password, Input::json('locale'));
 
         return $this->api->raw()
-            ->put('auth/token', compact('email', 'password'))
+            ->put('auth/token', [], json_encode(compact('email', 'password')))
             ->setStatusCode(Response::HTTP_CREATED);
     }
 
@@ -63,7 +63,7 @@ class CustomersController extends Controller {
 
         $address = app('ChangeCustomerAddressService')->call(
             $customer,
-            Input::only((new Address())->getFillable())
+            Input::json()->all()
         );
 
         return $this->itemResponse($address);

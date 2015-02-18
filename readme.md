@@ -11,7 +11,7 @@ This project use the Vagrant in order not to mess with your computer setup. Ever
 Clone this repository on your machine. Place it where you like and rename it if you want but make sure you won't change your mind because moving it after the following steps will break things... Then `cd` into the project root so that you are in the folder of the `Vagrantfile`.
 
 ## Mac OS X
- - Run the `./scripts/mac_install.sh` command, sit back and you're done! Just stay around at the beginning of the process because your password may be asked a few times.
+ - Run the `./mac_install.sh` command, sit back and you're done! Just stay around at the beginning of the process because your password may be asked a few times.
 
 ## Other
  - Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads.html).
@@ -51,7 +51,7 @@ This zone is always available on local environment but on the production server 
 
 Some useful admin routes are defined to tinker with the application :
 
- - https://groupeat.dev/docs: Read the API documentation (on the local environment, use the `?generate=true` query string to regenerate it if you have edited some doc files)
+ - https://groupeat.dev/docs: Read the API documentation (on the local environment, use the `?generate=1` query string to regenerate it if you have edited some doc files)
  - https://groupeat.dev/db: PostgreSQL management (ignore the eventual error message and click on 'Login')
  - https://groupeat.dev/logs: View the application logs (from both Nginx and CLI)
  - https://groupeat.dev/phpinfo: Open the PHPinfo page
@@ -60,4 +60,4 @@ Some useful admin routes are defined to tinker with the application :
 
 Here are some procedures that you can try to fix known problematic situations :
 
- - The `art pull` command failed or some software is missing on the VM: It means that your PizzeriaDev box is not up to date. Update it with `vagrant box update` and then destroy and recreate the VM with `vagrant destroy -f; vagrant up`. If you still have some problems, you may want to bring out the `./scripts/mac_install.sh` heavy artillery on Mac OS X to update Vagrant and Virtualbox.
+ - The `art pull` command failed or some software is missing on the VM: It means that your PizzeriaDev box is not up to date. Update it with `vagrant box update` and then destroy and recreate the VM with `vagrant destroy -f; vagrant up`. If you still have some problems, you may want to bring out the `./mac_install.sh` heavy artillery on Mac OS X to update Vagrant and Virtualbox.

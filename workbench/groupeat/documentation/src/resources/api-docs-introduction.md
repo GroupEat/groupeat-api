@@ -13,9 +13,9 @@ Accept: application/vnd.{{ api::vendor }}.{{ api::version }}+{{ api::default_for
 
 All of the paths below must be prefixed by {{ app.url }}/{{ api::prefix }} to have the full and correct URL.
 
-### About PUT, PATCH and DELETE requests
+### Sending requests with the Postman Chrome extension
 
-Because of some PHP limitations, sending data with a PUT, PATCH or DELETE request through the usual `form-data` parameter is impossible. Instead, the data should be sent through the `x-www-form-urlencoded`. This is mainly relevant for getting the Postman Chrome extension to work properly.
+For POST, PUT and PATCH requests, the API expects to receive data through the request body, usually in JSON format. Thus, when creating a request with the Postman Chrome extension, the `raw` mode should be used instead of the `form-data` and `x-www-form-urlencoded` modes.
 
 ### Passing data through the URL
 

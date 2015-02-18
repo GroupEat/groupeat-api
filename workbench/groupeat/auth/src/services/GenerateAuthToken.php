@@ -1,8 +1,6 @@
 <?php namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Exceptions\NotFound;
-use Groupeat\Support\Exceptions\Unauthorized;
 use Tymon\JWTAuth\JWTAuth;
 
 class GenerateAuthToken {

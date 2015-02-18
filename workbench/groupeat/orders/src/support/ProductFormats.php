@@ -39,21 +39,11 @@ class ProductFormats {
 
 
     /**
-     * @param mixed $json
-     *
-     * @return static
-     */
-    public static function fromJSON($json)
-    {
-        return new static(decodeJSON($json));
-    }
-
-    /**
      * @param array      $amounts
      * @param Collection $models
      * @param Restaurant $restaurant
      */
-    private function __construct(array $amounts, Collection $models = null, Restaurant $restaurant = null)
+    public function __construct(array $amounts, Collection $models = null, Restaurant $restaurant = null)
     {
         if (empty($amounts) || (array_sum($amounts) == 0))
         {

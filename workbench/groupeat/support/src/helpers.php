@@ -71,36 +71,6 @@ if (!function_exists('dbTransaction'))
     }
 }
 
-if (!function_exists('decodeJSON'))
-{
-    /**
-     * Decode JSON
-     *
-     * @param string|array $JSON
-     *
-     * @return array
-     */
-    function decodeJSON($JSON, $throwOnNull = true)
-    {
-        if (is_array($JSON))
-        {
-            return $JSON;
-        }
-
-        $data = json_decode($JSON, true);
-
-        if (is_null($data) && $throwOnNull)
-        {
-            throw new \Groupeat\Support\Exceptions\BadRequest(
-                'cannotDecodeJson',
-                "Cannot decode JSON: $JSON."
-            );
-        }
-
-        return $data;
-    }
-}
-
 if (!function_exists('whereAroundInKms'))
 {
     /**

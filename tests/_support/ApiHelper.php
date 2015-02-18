@@ -90,13 +90,45 @@ class ApiHelper extends \Codeception\Module {
 
     public function sendApi($verb, $path, $params = [])
     {
-        $method = 'send'.strtoupper($verb);
+        $verb = strtoupper($verb);
         $url = $this->getApiUrl($path);
 
         $this->getModule('Laravel4')->kernel['groupeat.auth']->logout();
 
         $this->haveAcceptHeader();
-        $this->getModule('REST')->$method($url, $params);
+        $body = $verb != 'GET' ? json_encode($params) : null;
+        $RESTmodule = $this->getModule('REST');
+        $client = $RESTmodule->client;
+
+        foreach ($RESTmodule->headers as $header => $val)
+        {
+            $header = str_replace('-','_',strtoupper($header));
+            $client->setServerParameter("HTTP_$header", $val);
+
+            if (strtolower($header) == 'host')
+            {
+                $client->setServerParameter("HTTP_ HOST", $val);
+            }
+
+            if ($RESTmodule->isFunctional and $header == 'CONTENT_TYPE')
+            {
+                $client->setServerParameter($header, $val);
+            }
+        }
+
+        $this->debugSection("Request", "$verb $url " . $body);
+        $this->debugSection("Headers", json_encode($RESTmodule->headers));
+        $client->request($verb, $url, [], [], [], $body);
+        $RESTmodule->response = (string) $client->getInternalResponse()->getContent();
+        $this->debugSection("Response", $RESTmodule->response);
+
+        if (count($client->getInternalRequest()->getCookies()))
+        {
+            $this->debugSection('Cookies', $client->getInternalRequest()->getCookies());
+        }
+
+        $this->debugSection("Headers", $client->getInternalResponse()->getHeaders());
+        $this->debugSection("Status", $client->getInternalResponse()->getStatus());
     }
 
     public function getApiUrl($path)

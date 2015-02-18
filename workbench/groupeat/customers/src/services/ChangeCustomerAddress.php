@@ -22,7 +22,7 @@ class ChangeCustomerAddress {
      *
      * @return Address
      */
-    public function call(Customer $customer, array $attributes)
+    public function call(Customer $customer, $attributes)
     {
         if ($customer->address)
         {

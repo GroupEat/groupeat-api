@@ -9,7 +9,7 @@ class AuthController extends Controller {
 
     public function getToken()
     {
-        Auth::byCredentials(Input::get('email'), Input::get('password'));
+        Auth::byCredentials(Input::json('email'), Input::json('password'));
 
         return $this->getTokenResponseFromUser(Auth::user());
     }
@@ -17,14 +17,14 @@ class AuthController extends Controller {
     public function resetToken()
     {
         $userCredentials = app('GenerateAuthTokenService')
-            ->resetFromCredentials(Input::get('email'), Input::get('password'));
+            ->resetFromCredentials(Input::json('email'), Input::json('password'));
 
         return $this->getTokenResponseFromUser($userCredentials->user);
     }
 
     public function sendResetPasswordLink()
     {
-        app('SendPasswordResetLinkService')->call(Input::get('email'));
+        app('SendPasswordResetLinkService')->call(Input::json('email'));
     }
 
     /**

@@ -3,7 +3,7 @@
 To access protected routes, the authentication token should be passed on each request through the Authorization header like so:
 
 ```http
-Authorization: bearer {token}
+Authorization: Bearer {token}
 ```
 
 ## Token [/auth/token]
@@ -60,7 +60,7 @@ According to RESTful principles, this route should be a GET but, for security re
 
 ### Generate token [POST]
 
-Regenerate an authentication token for an already registered user. Once hit, this route will make the old token obsolete so only the new one should be used to authenticate.
+Generate a new authentication token for an already registered user. Once hit, this route will make the old token obsolete so only the new one should be used to authenticate.
 
 + Request
 

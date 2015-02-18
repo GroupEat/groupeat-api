@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'key' => $_SERVER['APP_KEY'],
+    'key' => $_SERVER['APPLICATION_KEY'],
 ];

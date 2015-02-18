@@ -16,21 +16,9 @@ return [
 
 	// Tasks to execute before the core Rocketeer Tasks
 	'before' => [
-		'setup'   => [
-            function($task)
-            {
-                $host = $task->connections->getConnectionCredentials()[0]['host'];
-
-                $task->onLocal(function($localTask) use ($host)
-                {
-                    $localTask->run('ssh-keygen -R '.$host);
-                });
-            },
-            'Groupeat\Deploy\Tasks\ProvisionTask',
-		],
+		'setup'   => [],
 		'deploy'  => [
             'Groupeat\Deploy\Tasks\DeployDependingOnCommitMessageTask',
-            'sudo composer self-update',
             function ($task)
             {
                 App::make('rocketeer.tasks')->listenTo(
@@ -48,7 +36,7 @@ return [
             function($task)
             {
                 $sharedFolder = $task->paths->getFolder('shared');
-                $task->run('mv '.Groupeat\Deploy\Tasks\ProvisionTask::ENV_FILE_TEMP_PATH.' '.$sharedFolder);
+                $task->run('mv ~vagrant/.env.production.php '.$sharedFolder);
             },
         ],
 		'deploy'  => [

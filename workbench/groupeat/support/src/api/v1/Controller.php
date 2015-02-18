@@ -2,6 +2,7 @@
 
 use Aws\Ec2\Exception\Ec2Exception;
 use Dingo\Api\Routing\ControllerTrait as ApiController;
+use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
@@ -66,13 +67,29 @@ abstract class Controller extends IlluminateController {
     }
 
     /**
-     * @param $relation
+     * @param string $JSON
+     * @param bool   $throwOnNull
      *
-     * @return bool
+     * @return array
      */
-    protected function shouldInclude($relation)
+    protected function decodeJSON($JSON, $throwOnNull = true)
     {
-        return str_contains(Input::get('include'), $relation);
+        if (is_array($JSON))
+        {
+            return $JSON;
+        }
+
+        $data = json_decode($JSON, true);
+
+        if (is_null($data) && $throwOnNull)
+        {
+            throw new BadRequest(
+                'cannotDecodeJson',
+                "Cannot decode JSON: $JSON."
+            );
+        }
+
+        return $data;
     }
 
     /**
