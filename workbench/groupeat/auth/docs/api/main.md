@@ -21,7 +21,7 @@ Authorization: Bearer {token}
 
 Retrieve the authentication token of an already registered user.
 
-According to RESTful principles, this route should be a GET but, for security reasons (the plain password should not appear in a URL), it is a PUT.
+According to the RESTful principles, this route should be a GET but, for security reasons it is a PUT.
 
 + Request
 
@@ -99,7 +99,7 @@ Generate a new authentication token for an already registered user. Once hit, th
 
 ## Send password reset link [/auth/resetPassword]
 
-### POST
+### PUT
 
 Send a password reset link to the given e-mail address and revoke the previous authentication token. Once the link has been clicked, the user will have to fill a form to reset its password. The new token will then have to be asked.
 

@@ -28,7 +28,7 @@ class OrdersController extends Controller {
     public function place()
     {
         $customer = Auth::customer();
-        $productFormats = new ProductFormats($this->decodeJSON(Input::json('productFormats')));
+        $productFormats = new ProductFormats(Input::json('productFormats'));
         $deliveryAddressData = Input::json()->all();
 
         if (Input::json()->has('groupOrderId'))

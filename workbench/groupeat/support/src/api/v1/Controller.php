@@ -1,12 +1,9 @@
 <?php namespace Groupeat\Support\Api\V1;
 
-use Aws\Ec2\Exception\Ec2Exception;
 use Dingo\Api\Routing\ControllerTrait as ApiController;
-use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
-use Input;
 use League\Fractal\TransformerAbstract;
 
 abstract class Controller extends IlluminateController {
@@ -64,32 +61,6 @@ abstract class Controller extends IlluminateController {
     protected function arrayResponse($data)
     {
         return $this->response->array(compact('data'));
-    }
-
-    /**
-     * @param string $JSON
-     * @param bool   $throwOnNull
-     *
-     * @return array
-     */
-    protected function decodeJSON($JSON, $throwOnNull = true)
-    {
-        if (is_array($JSON))
-        {
-            return $JSON;
-        }
-
-        $data = json_decode($JSON, true);
-
-        if (is_null($data) && $throwOnNull)
-        {
-            throw new BadRequest(
-                'cannotDecodeJson',
-                "Cannot decode JSON: $JSON."
-            );
-        }
-
-        return $data;
     }
 
     /**

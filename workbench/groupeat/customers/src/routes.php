@@ -24,7 +24,7 @@ Route::api(['version' => 'v1'], function()
             {
                 Route::get('/', "$controller@show");
 
-                Route::patch('/', "$controller@update");
+                Route::put('/', "$controller@update");
 
                 Route::delete('/', "$controller@unregister");
 

@@ -83,7 +83,7 @@ An e-mail will be sent to the given address with an activation link that must be
 
 + Response 404
 
-### Update customer [PATCH]
+### Update customer [PUT]
 
 Replace the customer data with the one passed in the request. However, a customer must have a first name, a last name and a phone number thus, when hitting this route for the first time, valid information for all these fields must be given.
 

@@ -1,7 +1,7 @@
 FORMAT: 1A
 HOST: {{ app.url }}/{{ api::prefix }}
 
-# GroupEat Backend API
+# GroupEat RESTful API
 
 ## Introduction
 
@@ -13,13 +13,10 @@ Accept: application/vnd.{{ api::vendor }}.{{ api::version }}+{{ api::default_for
 
 All of the paths below must be prefixed by {{ app.url }}/{{ api::prefix }} to have the full and correct URL.
 
-### Sending requests with the Postman Chrome extension
+### Attaching data to a request
 
-For POST, PUT and PATCH requests, the API expects to receive data through the request body, usually in JSON format. Thus, when creating a request with the Postman Chrome extension, the `raw` mode should be used instead of the `form-data` and `x-www-form-urlencoded` modes.
-
-### Passing data through the URL
-
-Passing data through the URL is allowed for GET requests only. For PUT, PATCH, DELETE and POST, the request body should be used to attach data to the request. This is partly for security reasons because writing passwords or tokens in the URL reduce privacy even if HTTPS is set up.
+ - For security reasons (_sending passwords or tokens in the URL is not safe even on HTTPS_), passing data through the URL query string is allowed for GET requests only.
+ - For POST, PUT, PATCH and DELETE requests, the data should be sent through the body. Thus, when creating a request with the Postman Chrome extension, the `raw` mode should be used instead of the `form-data` and `x-www-form-urlencoded` modes.
 
 ### Data scope
 
@@ -33,6 +30,6 @@ This `data` scope will not be repeated in the responses below for the sake of si
 
 Some GET routes accept an `include` parameter in their query string. It is used to load and insert resource relations in the repsonse body so that you don't have to make a second (or more) request to retrieve it. When this behavior is available, the route parameters will indicate it as well as which relations can be included. Use a `,` to list relations and a `.` to include nested relations when possible.
 
-Example: /books?include=author,publishers.somethingelse
+Example: _/books?include=author,publishers.somethingelse_
 
 Included relations' data is accessible under another `data` scope.

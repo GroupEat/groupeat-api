@@ -38,6 +38,6 @@ Route::api(['version' => 'v1'], function()
 
         Route::post('token', "$controller@resetToken");
 
-        Route::post('resetPassword', "$controller@sendResetPasswordLink");
+        Route::put('resetPassword', "$controller@sendResetPasswordLink");
     });
 });

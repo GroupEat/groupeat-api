@@ -50,7 +50,7 @@ class CustomersCest {
             'phoneNumber' => '06 06 06 06 06',
         ];
 
-        $I->sendApiPatchWithToken($token, "customers/$id", $data);
+        $I->sendApiPutWithToken($token, "customers/$id", $data);
         $I->seeResponseCodeIs(200);
 
         foreach ($data as $key => $value)
