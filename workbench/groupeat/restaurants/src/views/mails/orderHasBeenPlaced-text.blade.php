@@ -9,6 +9,8 @@
 
 {{ $order->productsListAsPlainText }}.
 
+@include('orders::mails.partials.comment-text')
+
 @lang('restaurants::groupOrders.orderRawPrice', ['rawPrice' => $order->rawPrice])
 
 @lang('restaurants::groupOrders.deliveryAddress')

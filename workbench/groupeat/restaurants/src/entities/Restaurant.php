@@ -186,6 +186,11 @@ class Restaurant extends Entity implements User {
         return new EUR($this->attributes['minimumOrderPrice']); // TODO: Don't enforce a default currency
     }
 
+    protected function getDeliveryCapacityAttribute()
+    {
+        return (int) $this->attributes['deliveryCapacity'];
+    }
+
     protected function getDiscountPolicyAttribute()
     {
         return array_combine($this->discountPrices, static::$discountRates);

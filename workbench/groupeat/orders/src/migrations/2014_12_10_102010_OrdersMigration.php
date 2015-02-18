@@ -18,6 +18,7 @@ class OrdersMigration extends Migration {
             $table->unsignedInteger('customer_id')->index();
             $table->unsignedInteger('group_order_id')->index();
             $table->unsignedInteger('rawPrice');
+            $table->text('comment')->nullable();
             $table->boolean('initiator')->index()->default(false);
             $table->timestamp('created_at')->index();
 

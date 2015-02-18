@@ -38,7 +38,7 @@ abstract class Entity extends Model implements PresentableInterface {
         {
             throw new NotFound(
                 lcfirst($shortClassName).'NotFound',
-                $shortClassName."#$id does not exist."
+                $shortClassName." #$id does not exist."
             );
         }
 
@@ -205,6 +205,11 @@ abstract class Entity extends Model implements PresentableInterface {
         $migrationClass = str_plural($temp).'Migration';
 
         return new $migrationClass;
+    }
+
+    protected function getIdAttribute()
+    {
+        return isset($this->attributes['id']) ? (string) $this->attributes['id'] : null;
     }
 
     /**

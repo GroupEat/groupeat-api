@@ -5,7 +5,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class MailWatcher extends \Codeception\Module {
 
     /**
-     * @var Swift_Message|null
+     * @var \Swift_Message
      */
     private $lastMail;
 
@@ -13,16 +13,19 @@ class MailWatcher extends \Codeception\Module {
     public function _before()
     {
         $this->lastMail = null;
+        $this->plainTextPart = null;
 
-        $this->getModule('Laravel4')->kernel['events']->listen('mailer.sending', function($message)
+        $this->getModule('Laravel4')->kernel['events']->listen('mailer.sending', function($mail)
         {
-            $this->lastMail = $message;
-
-            $parts = explode('Content-Type: text/html;', (string) $message);
-            $mailWithoutHtml = $parts[0];
-
-            $this->debugSection('Mail', $mailWithoutHtml);
+            $this->lastMail = $mail;
+            $this->debugSection('Mail', $this->getPlainText($mail));
         });
+    }
+
+    public function assertLastMailContains($needle)
+    {
+        $lastMail = $this->grabLastMail();
+        $this->assertContains($needle, $lastMail->getBody());
     }
 
     public function grabLastMailCrawlableBody()
@@ -65,6 +68,16 @@ class MailWatcher extends \Codeception\Module {
         }
 
         return $this->lastMail;
+    }
+
+    /**
+     * @param Swift_Message $mail
+     *
+     * @return string
+     */
+    private function getPlainText(\Swift_Message $mail)
+    {
+        return explode('Content-Type: text/html;', (string) $mail)[0];
     }
 
 }

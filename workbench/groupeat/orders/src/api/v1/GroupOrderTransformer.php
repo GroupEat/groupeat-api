@@ -14,13 +14,13 @@ class GroupOrderTransformer extends TransformerAbstract
         $restaurant = $groupOrder->restaurant;
 
         return [
-            'id' => (int) $groupOrder->id,
-            'joinable' => (bool) $groupOrder->isJoinable(),
-            'discountRate' => (int) $groupOrder->discountRate->toPercentage(),
-            'createdAt' => (string) $groupOrder->created_at,
-            'remainingCapacity' => (int) $groupOrder->computeRemainingCapacity(),
-            'endingAt' => (string) $groupOrder->ending_at,
-            'confirmed' => (bool) !is_null($groupOrder->confirmed_at),
+            'id' => $groupOrder->id,
+            'joinable' => $groupOrder->isJoinable(),
+            'discountRate' => $groupOrder->discountRate->toPercentage(),
+            'createdAt' => $groupOrder->created_at,
+            'remainingCapacity' => $groupOrder->computeRemainingCapacity(),
+            'endingAt' => $groupOrder->ending_at,
+            'confirmed' => !is_null($groupOrder->confirmed_at),
             'preparedAt' => $groupOrder->prepared_at,
         ];
     }

@@ -8,7 +8,7 @@ Route::api(['version' => 'v1'], function()
 
     Route::group(['protected' => true], function() use ($controller)
     {
-        Route::get('predefinedAddresses', "$controller@predefinedAddressesIndex");
+        Route::get('predefinedAddresses', 'Groupeat\Customers\Api\V1\AddressesController@predefinedIndex');
     });
 
     Route::group(['prefix' => 'customers'], function() use ($controller)
@@ -30,9 +30,9 @@ Route::api(['version' => 'v1'], function()
 
                 Route::group(['prefix' => 'address'], function() use ($controller)
                 {
-                    Route::get('/', "$controller@showAddress");
+                    Route::get('/', 'Groupeat\Customers\Api\V1\AddressesController@show');
 
-                    Route::put('/', "$controller@changeAddress");
+                    Route::put('/', 'Groupeat\Customers\Api\V1\AddressesController@change');
                 });
             });
         });

@@ -21,6 +21,8 @@
 
     {{ $order->presentProductsTableForMail(false) }}
 
+    @include('orders::mails.partials.comment-html')
+
     <p>
         @lang('customers::orders.confirmed.discountRateAndPrices', [
             'discountRate' => $groupOrder->discountRate,

@@ -11,11 +11,11 @@ abstract class AddressTransformer extends TransformerAbstract
             'street' => $address->street,
             'details' => $address->details,
             'city' => $address->city,
-            'postcode' => (int) $address->postcode,
+            'postcode' => $address->postcode,
             'state' => $address->state,
             'country' => $address->country,
-            'latitude' => (float) $address->latitude,
-            'longitude' => (float) $address->longitude,
+            'latitude' => $address->latitude,
+            'longitude' => $address->longitude,
         ];
     }
 

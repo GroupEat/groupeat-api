@@ -8,7 +8,7 @@ class CategoryTransformer extends TransformerAbstract
     public function transform(Category $foodType)
     {
         return [
-            'id' => (int) $foodType->id,
+            'id' => $foodType->id,
             'label' => $foodType->label,
         ];
     }

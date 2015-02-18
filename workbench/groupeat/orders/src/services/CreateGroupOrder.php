@@ -49,6 +49,7 @@ class CreateGroupOrder extends GroupOrderValidation {
      * @param ProductFormats $productFormats
      * @param int            $foodRushDurationInMinutes
      * @param array          $addressData
+     * @param string         $comment
      *
      * @return Order
      */
@@ -56,7 +57,8 @@ class CreateGroupOrder extends GroupOrderValidation {
         Customer $customer,
         ProductFormats $productFormats,
         $foodRushDurationInMinutes,
-        array $deliveryAddressData
+        array $deliveryAddressData,
+        $comment = null
     )
     {
         $foodRushDurationInMinutes = (int) $foodRushDurationInMinutes;
@@ -68,7 +70,13 @@ class CreateGroupOrder extends GroupOrderValidation {
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
         $this->assertCloseEnough($deliveryAddress, $restaurant->address);
 
-        $order = GroupOrder::createWith($customer, $deliveryAddress, $productFormats, $foodRushDurationInMinutes);
+        $order = GroupOrder::createWith(
+            $customer,
+            $deliveryAddress,
+            $productFormats,
+            $foodRushDurationInMinutes,
+            $comment
+        );
 
         $this->fireSuitableEventsFor($order, 'groupOrderHasBeenCreated');
 

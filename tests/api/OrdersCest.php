@@ -2,7 +2,7 @@
 
 class OrdersCest {
 
-    public function testThatAUserShouldBeActivatedToPlaceAnOrder(ApiTester $I)
+    public function testThatACustomerShouldBeActivatedToPlaceAnOrder(ApiTester $I)
     {
         list($token) = $I->sendRegistrationRequest();
         $orderDetails = $this->getOrderDetails($I, $token);
@@ -112,7 +112,7 @@ class OrdersCest {
         list($token) = $I->amAnActivatedCustomer();
         $I->sendApiGetWithToken($token, 'restaurants');
 
-        foreach ($I->grabDataFromResponse('') as $restaurant)
+        foreach ($I->grabDataFromResponse() as $restaurant)
         {
             if (!$restaurant['opened'])
             {
@@ -296,6 +296,18 @@ class OrdersCest {
         $I->seeErrorResponse(422, 'deliveryDistanceTooLong');
     }
 
+    public function testThatTheRestaurantCanSeeIfTheCustomerAttachedACommentToItsOrder(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
+        $comment = "Please add some meat to my vegan pizza...";
+        $orderDetails['comment'] = $comment;
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeResponseCodeIs(201);
+        $I->assertEquals($comment, $I->grabDataFromResponse('comment'));
+        $I->assertLastMailContains($comment);
+    }
+
     private function getProducts(
         ApiTester $I,
         $token,
@@ -313,10 +325,10 @@ class OrdersCest {
 
         $restaurantsUrl = 'restaurants?'.http_build_query($this->getQueryStringParamsFor($options));
         $I->sendApiGetWithToken($token, $restaurantsUrl);
-        $restaurantId = $getRestaurantIdCallback($I->grabDataFromResponse(''));
+        $restaurantId = $getRestaurantIdCallback($I->grabDataFromResponse());
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/products?include=formats");
 
-        return $I->grabDataFromResponse('');
+        return $I->grabDataFromResponse();
     }
 
     private function getOrderDetails(ApiTester $I, $token, array $details = [])

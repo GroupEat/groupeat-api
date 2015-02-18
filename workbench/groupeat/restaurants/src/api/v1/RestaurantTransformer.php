@@ -10,13 +10,13 @@ class RestaurantTransformer extends TransformerAbstract
     public function transform(Restaurant $restaurant)
     {
         return [
-            'id' => (int) $restaurant->id,
-            'opened' => (bool) $restaurant->isOpened(),
+            'id' => $restaurant->id,
+            'opened' => $restaurant->isOpened(),
             'name' => $restaurant->name,
             'phoneNumber' => $restaurant->phoneNumber,
-            'minimumOrderPrice' => (int) $restaurant->minimumOrderPrice->getAmount(),
-            'deliveryCapacity' => (int) $restaurant->deliveryCapacity,
-            'discountPolicy' => $restaurant->discountPolicy, // TODO: return discount policy instead
+            'minimumOrderPrice' => $restaurant->minimumOrderPrice->getAmount(),
+            'deliveryCapacity' => $restaurant->deliveryCapacity,
+            'discountPolicy' => $restaurant->discountPolicy,
         ];
     }
 

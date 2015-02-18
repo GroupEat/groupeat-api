@@ -8,7 +8,7 @@ class CustomerTransformer extends TransformerAbstract
     public function transform(Customer $customer)
     {
         return [
-            'id' => (int) $customer->id,
+            'id' => $customer->id,
             'email' => $customer->credentials->email,
             'firstName' => $customer->firstName,
             'lastName' => $customer->lastName,

@@ -8,9 +8,9 @@ class ProductFormatTransformer extends TransformerAbstract
     public function transform(ProductFormat $format)
     {
         return [
-            'id' => (int) $format->id,
+            'id' => $format->id,
             'name' => $format->name,
-            'price' => (int) $format->price->getAmount(),
+            'price' => $format->price->getAmount(),
         ];
     }
 

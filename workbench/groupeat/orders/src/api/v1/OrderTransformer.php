@@ -13,10 +13,11 @@ class OrderTransformer extends TransformerAbstract
     public function transform(Order $order)
     {
         return [
-            'id' => (int) $order->id,
-            'rawPrice' => (int) $order->rawPrice->getAmount(),
-            'discountedPrice' => (int) $order->discountedPrice->getAmount(),
-            'createdAt' => (string) $order->created_at,
+            'id' => $order->id,
+            'rawPrice' => $order->rawPrice->getAmount(),
+            'discountedPrice' => $order->discountedPrice->getAmount(),
+            'createdAt' => $order->created_at,
+            'comment' => $order->comment,
         ];
     }
 

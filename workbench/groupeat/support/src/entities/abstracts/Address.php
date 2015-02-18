@@ -42,4 +42,19 @@ abstract class Address extends Entity {
         return new AddressPresenter($this);
     }
 
+    protected function getPostcodeAttribute()
+    {
+        return (int) $this->attributes['postcode'];
+    }
+
+    protected function getLatitudeAttribute()
+    {
+        return (float) $this->attributes['latitude'];
+    }
+
+    protected function getLongitudeAttribute()
+    {
+        return (float) $this->attributes['longitude'];
+    }
+
 }

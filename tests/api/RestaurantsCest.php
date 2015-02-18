@@ -43,7 +43,7 @@ class RestaurantsCest {
 
         $I->sendApiGetWithToken($token, 'restaurants/1/products');
         $I->seeResponseCodeIs(200);
-        $product = $I->grabDataFromResponse('')[0];
+        $product = $I->grabDataFromResponse()[0];
 
         $I->sendApiGetWithToken($token, 'products/'.$product['id'].'/formats');
         $I->seeResponseCodeIs(200);

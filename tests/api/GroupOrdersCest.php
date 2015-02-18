@@ -7,12 +7,12 @@ class GroupOrdersCest {
         list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.7173&longitude=2.23935');
-        $restaurants = $I->grabDataFromResponse('');
+        $restaurants = $I->grabDataFromResponse();
         $restaurantId = $restaurants[0]['id'];
         $restaurantCapacity = $restaurants[0]['deliveryCapacity'];
         $I->assertGreaterThan(1, $restaurantCapacity);
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/products?include=formats");
-        $productFormatId = last(last($I->grabDataFromResponse(''))['formats']['data'])['id'];
+        $productFormatId = last(last($I->grabDataFromResponse())['formats']['data'])['id'];
         $productFormats = [$productFormatId => 1];
 
         $orderDetails = [

@@ -157,7 +157,7 @@ class ApiHelper extends \Codeception\Module {
         return $this->getModule('REST')->seeResponseContainsJson(compact('data'));
     }
 
-    public function grabDataFromResponse($path)
+    public function grabDataFromResponse($path = '')
     {
         if ($path)
         {

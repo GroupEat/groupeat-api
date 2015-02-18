@@ -4,13 +4,13 @@
 
 + Parameters
 
-    + id (required, integer, `123`) ... The group order ID.
+    + id (required, string, `123`) ... The group order ID.
     + include (optional, string, `restaurant`) ... [restaurant].
     
 + Model
 
         {
-            "id": 20,
+            "id": "20",
             "joinable": false,
             "discountRate": 28, // Percentage
             "createdAt": "2015-01-30 16:09:26",
@@ -44,11 +44,11 @@
 
         [
             {
-                "id": 10,
+                "id": "10",
                 ... // Same data as the GET /groupOrders/{id} response
             },
             {
-                "id": 12,
+                "id": "12",
                 ...
             }
         ]
@@ -57,16 +57,17 @@
 
 + Parameters
 
-    + id (required, integer, `123`) ... The order ID
+    + id (required, string, `123`) ... The order ID
     + include (optional, string, `customer`) ... [customer, groupOrder, restaurant, deliveryAddress]
     
 + Model
 
         {
-            "id": 8,
+            "id": "8",
             "rawPrice": 4660,
             "discountedPrice": 3970,
             "createdAt": "2015-01-30 16:09:26",
+            "comment": "Please add some meat to my vegan pizza..." // optional
         }
 
 ### Get order [GET]
@@ -93,7 +94,7 @@ Only the customer who created it or the corresponding restaurant can see the ord
 
 + Parameters
 
-    + id (required, integer, `123`) ... The order ID
+    + id (required, string, `123`) ... The order ID
     
 + Response 200
 
@@ -142,7 +143,8 @@ When creating a group order, the distance between the given address and the rest
             "street": "Allée des techniques avancées",
             "details": "Bâtiment A, chambre 200",
             "latitude": 48.711042,
-            "longitude": 2.219278
+            "longitude": 2.219278,
+            "comment": "Please add some meat to my vegan pizza..." // optional, limited to 1000 characters
         }
 
 + Response 201

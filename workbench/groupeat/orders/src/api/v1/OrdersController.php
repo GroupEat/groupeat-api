@@ -30,6 +30,7 @@ class OrdersController extends Controller {
         $customer = Auth::customer();
         $productFormats = new ProductFormats(Input::json('productFormats'));
         $deliveryAddressData = Input::json()->all();
+        $comment = Input::json('comment');
 
         if (Input::json('groupOrderId'))
         {
@@ -39,7 +40,8 @@ class OrdersController extends Controller {
                 $groupOrder,
                 $customer,
                 $productFormats,
-                $deliveryAddressData
+                $deliveryAddressData,
+                $comment
             );
         }
         else
@@ -48,7 +50,8 @@ class OrdersController extends Controller {
                 $customer,
                 $productFormats,
                 Input::json()->getInt('foodRushDurationInMinutes'),
-                $deliveryAddressData
+                $deliveryAddressData,
+                $comment
             );
         }
 

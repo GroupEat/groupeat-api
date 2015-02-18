@@ -17,7 +17,7 @@
 
     @foreach($orders as $order)
         {{ $order->summaryForMail }}
-        <br><br>
+        @include('orders::mails.partials.comment-html')
         <hr>
         <br>
     @endforeach

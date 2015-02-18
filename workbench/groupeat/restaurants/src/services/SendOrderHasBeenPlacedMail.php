@@ -47,7 +47,7 @@ class SendOrderHasBeenPlacedMail {
         $this->mailer->call(
             $groupOrder->restaurant->credentials,
             'restaurants::mails.orderHasBeenPlaced',
-            'restaurants::groupOrders.created.subject',
+            "restaurants::groupOrders.$action.subject",
             compact('order', 'customer', 'deliveryAddress', 'groupOrder', 'action')
         );
     }

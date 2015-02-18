@@ -10,6 +10,8 @@
 
 {{ $order->presentProductsListAsPlainText(false) }}.
 
+@include('orders::mails.partials.comment-text')
+
 @lang('customers::orders.confirmed.discountRateAndPrices', [
     'discountRate' => $groupOrder->discountRate,
     'orderDiscountedPrice' => '<b>'.$order->discountedPrice.'</b>',

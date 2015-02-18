@@ -7,6 +7,7 @@
 
 @foreach($orders as $order)
     {{ $order->summaryAsPlainText }}
+    @include('orders::mails.partials.comment-text')
 @endforeach
 
 @lang('orders::groupOrders.summary')

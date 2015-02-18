@@ -57,4 +57,16 @@ class Order extends Entity {
         $this->attributes['rawPrice'] = $rawPrice->getAmount();
     }
 
+    protected function setCommentAttribute($comment)
+    {
+        if (empty($comment))
+        {
+            $this->attributes['comment'] = null;
+        }
+        else
+        {
+            $this->attributes['comment'] = str_limit($comment, 1000);
+        }
+    }
+
 }

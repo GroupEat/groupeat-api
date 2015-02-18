@@ -41,6 +41,7 @@ class GroupOrder extends Entity {
      * @param DeliveryAddress $address
      * @param ProductFormats  $productFormats
      * @param int             $foodRushDurationInMinutes
+     * @param string          $comment
      *
      * @return Order
      */
@@ -48,7 +49,8 @@ class GroupOrder extends Entity {
         Customer $customer,
         DeliveryAddress $address,
         ProductFormats $productFormats,
-        $foodRushDurationInMinutes
+        $foodRushDurationInMinutes,
+        $comment = null
     )
     {
         $time = new Carbon;
@@ -58,7 +60,7 @@ class GroupOrder extends Entity {
         $groupOrder->restaurant()->associate($restaurant);
         $groupOrder->setFoodRushDurationInMinutes($foodRushDurationInMinutes);
 
-        return $groupOrder->addOrder($customer, $productFormats, $address);
+        return $groupOrder->addOrder($customer, $productFormats, $address, $comment);
     }
 
     /**
@@ -108,10 +110,16 @@ class GroupOrder extends Entity {
      * @param Customer        $customer
      * @param ProductFormats  $productFormats
      * @param DeliveryAddress $address
+     * @param string          $comment
      *
      * @return Order
      */
-    public function addOrder(Customer $customer, ProductFormats $productFormats, DeliveryAddress $address)
+    public function addOrder(
+        Customer $customer,
+        ProductFormats $productFormats,
+        DeliveryAddress $address,
+        $comment = null
+    )
     {
         $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
         $this->assertMinimumOrderPriceReached($productFormats);
@@ -120,6 +128,8 @@ class GroupOrder extends Entity {
         $this->discountRate = $productFormats->getRestaurant()->getDiscountRateFor($totalRawPrice);
 
         $order = new Order;
+
+        $order->comment = $comment;
         $order->rawPrice = $productFormats->totalPrice();
         $order->customer()->associate($customer);
         $order->setCreatedAt($order->freshTimestamp());

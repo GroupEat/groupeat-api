@@ -51,7 +51,7 @@ This zone is always available on local environment but on the production server 
 
 Some useful admin routes are defined to tinker with the application :
 
- - https://groupeat.dev/docs: Read the API documentation (on the local environment, use the `?generate=1` query string to regenerate it if you have edited some doc files)
+ - https://groupeat.dev/docs: Read the API documentation (on the local environment, use the `?regenerate=1` query string to regenerate it if you have edited some doc files)
  - https://groupeat.dev/db: PostgreSQL management (ignore the eventual error message and click on 'Login')
  - https://groupeat.dev/logs: View the application logs (from both Nginx and CLI)
  - https://groupeat.dev/phpinfo: Open the PHPinfo page

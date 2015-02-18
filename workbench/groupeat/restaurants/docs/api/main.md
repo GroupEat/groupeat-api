@@ -8,15 +8,15 @@
 
         [
             {
-                "id": 1,
+                "id": "1",
                 "label": "pizzeria"
             },
             {
-                "id": 2,
+                "id": "2",
                 "label": "japanese"
             },
             {
-                "id": 3,
+                "id": "3",
                 "label": "chinese"
             }
         ]
@@ -25,13 +25,13 @@
 
 + Parameters
 
-    + id (required, integer, `123`) ... The restaurant ID.
+    + id (required, string, `123`) ... The restaurant ID.
     + include (optional, string, `address`) ... [address, categories].
     
 + Model
 
         {
-            "id": 1,
+            "id": "1",
             "opened": false,
             "name": "Pizza di Genova",
             "phoneNumber": "0689731323",
@@ -73,11 +73,11 @@ Returns the list of restaurants sorted by name in alphabetical order.
 
         [
             {
-                "id": 6,
+                "id": "6",
                 ... // Same data as the GET /restaurants/{id} response
             },
             {
-                "id": 7,
+                "id": "7",
                 ...
             }
         ]
@@ -90,15 +90,15 @@ Returns the list of restaurants sorted by name in alphabetical order.
 
         [
             {
-                "id": 1,
+                "id": "1",
                 "label": "pizza"
             },
             {
-                "id": 2,
+                "id": "2",
                 "label": "kebab"
             },
             {
-                "id": 3,
+                "id": "3",
                 "label": "salad"
             }
         ]
@@ -109,7 +109,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
 
 + Parameters
 
-    + id (required, integer, `123`) ... The restaurant ID.
+    + id (required, string, `123`) ... The restaurant ID.
     
 + Response 200
 
@@ -132,33 +132,33 @@ Returns the list of restaurants sorted by name in alphabetical order.
 
 + Parameters
 
-    + id (required, integer, `123`) ... The restaurant ID.
+    + id (required, string, `123`) ... The restaurant ID.
     + include (optional, string, `formats`) ... [formats].
 
 + Response 200
 
         [
             {
-                "id": 4,
-                "typeId": 1,
+                "id": "4",
+                "typeId": "1",
                 "name": "napolitaine",
                 "description": "Tomate, mozzarella, anchois, câpres et olives."
             },
             {
-                "id": 3,
-                "typeId": 1,
+                "id": "3",
+                "typeId": "1",
                 "name": "classica",
                 "description": "Tomate, mozzarella et origan."
             },
             {
-                "id": 2,
-                "typeId": 1,
+                "id": "2",
+                "typeId": "1",
                 "name": "paysanne",
                 "description": "Tomate, mozzarella, poitrine fumée et œuf."
             },
             {
-                "id": 1,
-                "typeId": 1,
+                "id": "1",
+                "typeId": "1",
                 "name": "paysanne",
                 "description": "Mozzarella, basilic frais et tomates."
             }
@@ -172,23 +172,23 @@ Returns the list of restaurants sorted by name in alphabetical order.
 
 + Parameters
 
-    + id (required, integer, `123`) ... The product ID.
+    + id (required, string, `123`) ... The product ID.
 
 + Response 200
 
         [
             {
-                "id": 1,
+                "id": "1",
                 "name": "junior",
                 "price": 7200
             },
             {
-                "id": 2,
+                "id": "2",
                 "name": "sénior",
                 "price": 9700
             },
             {
-                "id": 3,
+                "id": "3",
                 "name": "méga",
                 "price": 1380
             }

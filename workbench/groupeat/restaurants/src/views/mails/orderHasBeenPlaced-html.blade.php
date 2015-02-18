@@ -16,6 +16,8 @@
 
     {{ $order->productsTableForMail }}
 
+    @include('orders::mails.partials.comment-html')
+
     <p>@lang('restaurants::groupOrders.orderRawPrice', ['rawPrice' => $order->rawPrice])</p>
 
     <p>

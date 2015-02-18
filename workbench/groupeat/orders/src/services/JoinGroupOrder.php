@@ -14,6 +14,7 @@ class JoinGroupOrder extends GroupOrderValidation {
      * @param Customer       $customer
      * @param ProductFormats $productFormats
      * @param array          $deliveryAddressData
+     * @param string         $comment
      *
      * @return Order
      */
@@ -21,14 +22,15 @@ class JoinGroupOrder extends GroupOrderValidation {
         GroupOrder $groupOrder,
         Customer $customer,
         ProductFormats $productFormats,
-        array $deliveryAddressData
+        array $deliveryAddressData,
+        $comment = null
     )
     {
         $this->assertJoinable($groupOrder);
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
         $this->assertCloseEnough($deliveryAddress, $groupOrder->getInitiatingOrder()->deliveryAddress);
 
-        $order = $groupOrder->addOrder($customer, $productFormats, $deliveryAddress);
+        $order = $groupOrder->addOrder($customer, $productFormats, $deliveryAddress, $comment);
 
         $this->fireSuitableEventsFor($order, 'groupOrderHasBeenJoined');
 

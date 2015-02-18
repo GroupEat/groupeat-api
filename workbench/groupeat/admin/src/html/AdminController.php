@@ -61,7 +61,7 @@ class AdminController extends Controller {
 
     public function docs()
     {
-        $forceRegenerate = App::isLocal() && Input::get('generate');
+        $forceRegenerate = App::isLocal() && ((bool) Input::get('regenerate'));
 
         return app('GenerateApiDocumentationService')->getHTML($forceRegenerate);
     }

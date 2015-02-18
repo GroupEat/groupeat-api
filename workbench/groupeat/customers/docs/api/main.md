@@ -53,12 +53,12 @@ An e-mail will be sent to the given address with an activation link that must be
 
 + Parameters
 
-    + id (required, integer, `123`) ... The customer ID
+    + id (required, string, `123`) ... The customer ID
 
 + Model
 
         {
-            "id": 1,
+            "id": "1",
             "email": "contact@mangeo.fr",
             "firstName": "Jean-Nathanaël",
             "lastName": "Hérault",
@@ -137,7 +137,7 @@ Replace the customer data with the one passed in the request. However, a custome
 
 + Parameters
 
-    + id (required, integer, `123`) ... The customer ID
+    + id (required, string, `123`) ... The customer ID
 
 + Model
 
@@ -149,8 +149,7 @@ Replace the customer data with the one passed in the request. However, a custome
             "state": "Essone",
             "country": "France",
             "latitude": 48.711042,
-            "longitude": 2.219278,
-            "customerId": 6
+            "longitude": 2.219278
         }
 
 ### Get address [GET]
