@@ -20,7 +20,7 @@ class OrdersCest {
         list($token) = $I->amAnActivatedCustomer();
         $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $productFormatId = array_keys(json_decode($orderDetails['productFormats'], true))[0];
+        $productFormatId = array_keys($orderDetails['productFormats'])[0];
         $restaurantEmail = $this->getRestaurantEmailFromProductFormat($productFormatId);
         $I->assertEquals('restaurants.orderHasBeenPlaced', $I->grabLastMailId());
         $I->assertEquals($restaurantEmail, $I->grabLastMailRecipient());
@@ -134,10 +134,7 @@ class OrdersCest {
 
         $orderDetails = $this->getOrderDetails($I, $token);
 
-        $productFormatsFromDifferentRestaurants = $wrongProductFormats
-            + json_decode($orderDetails['productFormats'], true);
-
-        $orderDetails['productFormats'] = json_encode($productFormatsFromDifferentRestaurants);
+        $orderDetails['productFormats'] = $wrongProductFormats + $orderDetails['productFormats'];
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeErrorResponse(422, 'productFormatsFromDifferentRestaurants');
@@ -339,8 +336,6 @@ class OrdersCest {
             'latitude' => $this->getDefaultLatitude(),
             'longitude' => $this->getDefaultLongitude(),
         ], $details);
-
-        $details['productFormats'] = json_encode($details['productFormats']);
 
         return $details;
     }

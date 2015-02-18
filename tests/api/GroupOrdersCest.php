@@ -13,7 +13,7 @@ class GroupOrdersCest {
         $I->assertGreaterThan(1, $restaurantCapacity);
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/products?include=formats");
         $productFormatId = last(last($I->grabDataFromResponse(''))['formats']['data'])['id'];
-        $productFormats = json_encode([$productFormatId => 1]);
+        $productFormats = [$productFormatId => 1];
 
         $orderDetails = [
             'foodRushDurationInMinutes' => 30,
