@@ -13,12 +13,12 @@ class RestaurantsController extends Controller {
     {
         $query = Restaurant::with('closingWindows', 'openingWindows')->orderBy('name', 'asc');
 
-        if (Input::has('opened'))
+        if ((bool) Input::get('opened'))
         {
             $query->opened();
         }
 
-        if (Input::has('around'))
+        if ((bool) Input::get('around'))
         {
             $query->around(Input::get('latitude'), Input::get('longitude'));
         }

@@ -34,8 +34,8 @@
 
 + Parameters
 
-    + joinable (optional, boolean, `true`) ... Retrieve group orders that can currently be joined only.
-    + around (optional, boolean, `true`) ... Retrieve group orders around only. Needs latitude and longitude parameters.
+    + joinable (optional, boolean, `1`) ... Retrieve group orders that can currently be joined only.
+    + around (optional, boolean, `1`) ... Retrieve group orders around only. Needs latitude and longitude parameters.
     + latitude (optional, float, `2.21928`) ... Client latitude.
     + longitude (optional, float, `48.711`) ... Client longitude.
     + include (optional, string, `restaurant`) ... [restaurant]

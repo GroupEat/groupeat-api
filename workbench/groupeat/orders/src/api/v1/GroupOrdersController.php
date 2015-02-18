@@ -15,12 +15,12 @@ class GroupOrdersController extends Controller {
     {
         $query = GroupOrder::with('restaurant');
 
-        if (Input::has('joinable'))
+        if ((bool) Input::get('joinable'))
         {
             $query->joinable();
         }
 
-        if (Input::has('around'))
+        if ((bool) Input::get('around'))
         {
             $query->around(Input::get('latitude'), Input::get('longitude'));
         }
