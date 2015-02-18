@@ -31,7 +31,7 @@ class OrdersController extends Controller {
         $productFormats = new ProductFormats(Input::json('productFormats'));
         $deliveryAddressData = Input::json()->all();
 
-        if (Input::json()->has('groupOrderId'))
+        if (Input::json('groupOrderId'))
         {
             $groupOrder = GroupOrder::findOrFail(Input::json('groupOrderId'));
 
