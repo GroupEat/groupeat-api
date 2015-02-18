@@ -350,14 +350,14 @@ class OrdersCest {
         if (!empty($options['around']))
         {
             $queryStringParams['include'][] = 'address';
-            $queryStringParams['around'] = 'true';
+            $queryStringParams['around'] = true;
             $queryStringParams['latitude'] = $latitude;
             $queryStringParams['longitude'] = $longitude;
         }
 
         if (!empty($options['opened']))
         {
-            $queryStringParams['opened'] = 'true';
+            $queryStringParams['opened'] = true;
         }
 
         $queryStringParams['include'] = implode(',', $queryStringParams['include']);

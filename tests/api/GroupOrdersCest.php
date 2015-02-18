@@ -6,7 +6,7 @@ class GroupOrdersCest {
     {
         list($token) = $I->amAnActivatedCustomer();
 
-        $I->sendApiGetWithToken($token, 'restaurants?opened=true&around=true&latitude=48.7173&longitude=2.23935');
+        $I->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.7173&longitude=2.23935');
         $restaurants = $I->grabDataFromResponse('');
         $restaurantId = $restaurants[0]['id'];
         $restaurantCapacity = $restaurants[0]['deliveryCapacity'];
