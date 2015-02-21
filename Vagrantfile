@@ -65,6 +65,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     s.path = "./scripts/setup.sh"
   end
 
+  # Install PHP5-Intl // TODO: Remove when new box uploaded
+  config.vm.provision "shell", inline: "sudo apt-get install -y php5-intl"
+
   # Install the project Composer dependencies
   config.vm.provision "shell", inline: "cd ~vagrant/groupeat/current; composer install", privileged: false
 

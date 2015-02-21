@@ -15,6 +15,9 @@ use Illuminate\Support\Collection;
 
 class GroupOrder extends Entity {
 
+    /**
+     * @var float
+     */
     private static $aroundDistanceInKms;
 
     protected $dates = ['completed_at', 'ending_at', 'confirmed_at', 'prepared_at'];
@@ -33,7 +36,7 @@ class GroupOrder extends Entity {
     {
         parent::boot();
 
-        static::$aroundDistanceInKms = Config::get('orders::around_distance_in_kilometers');
+        static::$aroundDistanceInKms = (float) Config::get('orders::around_distance_in_kilometers');
     }
 
     /**
@@ -208,6 +211,12 @@ class GroupOrder extends Entity {
             ->where($model->getTableField('ending_at'), '>', $time);
     }
 
+    /**
+     * @param Builder $query
+     * @param float   $latitude
+     * @param float   $longitude
+     * @param float   $distanceInKms
+     */
     public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
     {
         $distanceInKms = $distanceInKms ?: static::$aroundDistanceInKms;
@@ -219,12 +228,26 @@ class GroupOrder extends Entity {
             $subQuery->whereHas('deliveryAddress',
                 function(Builder $miniQuery) use ($latitude, $longitude, $distanceInKms)
                 {
-                    $table = $miniQuery->getModel()->getTable();
-
-                    whereAroundInKms($miniQuery, $table, $latitude, $longitude, $distanceInKms);
+                    $miniQuery->aroundInKilometers($latitude, $longitude, $distanceInKms);
                 }
             );
         });
+    }
+
+    /**
+     * @param Builder $query
+     * @param int     $sinceMinutes
+     */
+    public function scopeUnconfirmed(Builder $query, $sinceMinutes = null)
+    {
+        $query->whereNotNull($this->getTableField('completed_at'))
+            ->whereNull($this->getTableField('confirmed_at'));
+
+        if (is_int($sinceMinutes))
+        {
+            $query->where($this->getTableField('completed_at'), '<', Carbon::now()->subMinutes($sinceMinutes));
+        }
+
     }
 
     protected function getDiscountRateAttribute()

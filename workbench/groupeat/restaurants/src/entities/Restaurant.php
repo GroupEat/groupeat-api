@@ -73,7 +73,7 @@ class Restaurant extends Entity implements User {
 
         $query->whereHas('address', function(Builder $subQuery) use ($latitude, $longitude, $distanceInKms)
         {
-            whereAroundInKms($subQuery, $subQuery->getModel()->getTable(), $latitude, $longitude, $distanceInKms);
+            $subQuery->aroundInKilometers($latitude, $longitude, $distanceInKms);
         });
     }
 

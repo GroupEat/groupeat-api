@@ -71,50 +71,6 @@ if (!function_exists('dbTransaction'))
     }
 }
 
-if (!function_exists('whereAroundInKms'))
-{
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string                                $table
-     * @param float                                 $latitude
-     * @param float                                 $longitude
-     * @param float                                 $kilometers
-     */
-    function whereAroundInKms(\Illuminate\Database\Eloquent\Builder $query, $table, $latitude, $longitude, $kilometers)
-    {
-        if (!is_numeric($latitude) || !is_numeric($longitude))
-        {
-            throw new \Groupeat\Support\Exceptions\BadRequest(
-                'invalidCoordinates',
-                "The latitude and longitude must be numeric values."
-            );
-        }
-
-        if (!is_numeric($kilometers))
-        {
-            throw new \Groupeat\Support\Exceptions\BadRequest(
-                'invalidDistance',
-                "The kilometers must be a numeric value."
-            );
-        }
-
-        $query->whereRaw('(2 * (3959 * ATAN2(
-                SQRT(
-                    POWER(SIN(RADIANS('.$latitude.' - "'.$table.'"."latitude") / 2), 2) +
-                    COS(RADIANS("'.$table.'"."latitude")) *
-                    COS(RADIANS('.$latitude.')) *
-                    POWER(SIN(RADIANS('.$longitude.' - "'.$table.'"."longitude") / 2), 2)
-                ),
-                SQRT(1 - (
-                        POWER(SIN(RADIANS('.$latitude.' - "'.$table.'"."latitude") / 2), 2) +
-                        COS(RADIANS("'.$table.'"."latitude")) *
-                        COS(RADIANS('.$latitude.')) *
-                        POWER(SIN(RADIANS('.$longitude.' - "'.$table.'"."longitude") / 2), 2)
-                    ))
-            )) <= '.$kilometers.')');
-    }
-}
-
 if (!function_exists('assertSameDay'))
 {
     function assertSameDay(\Carbon\Carbon $one, \Carbon\Carbon $two)

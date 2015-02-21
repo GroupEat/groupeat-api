@@ -39,6 +39,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Time to Confirm in Minutes
+    |--------------------------------------------------------------------------
+    |
+    | When a group order is complete, the restaurant should quickly confirm it and
+    | indicate its preparation time.
+    |
+    */
+
+    'time_to_confirm_in_minutes' => 10,
+
+    /*
+    |--------------------------------------------------------------------------
     | Maximum Preparation time in Minutes
     |--------------------------------------------------------------------------
     |

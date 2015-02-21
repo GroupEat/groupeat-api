@@ -52,7 +52,7 @@ class ConfirmGroupOrder {
 
     private function guardAgainstInvalidPreparationTime(Carbon $completedAt, Carbon $preparedAt)
     {
-        if ($preparedAt <$completedAt)
+        if ($preparedAt < $completedAt)
         {
             throw new UnprocessableEntity(
                 'cannotBePreparedBeforeBeingCompleted',
