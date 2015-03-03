@@ -17,11 +17,12 @@ class GroupOrderTransformer extends TransformerAbstract
             'id' => $groupOrder->id,
             'joinable' => $groupOrder->isJoinable(),
             'discountRate' => $groupOrder->discountRate->toPercentage(),
-            'createdAt' => $groupOrder->created_at,
+            'createdAt' => (string) $groupOrder->created_at,
             'remainingCapacity' => $groupOrder->computeRemainingCapacity(),
-            'endingAt' => $groupOrder->ending_at,
+            'completedAt' => $groupOrder->completed_at ? (string) $groupOrder->completed_at : null,
+            'endingAt' => (string) $groupOrder->ending_at,
             'confirmed' => !is_null($groupOrder->confirmed_at),
-            'preparedAt' => $groupOrder->prepared_at,
+            'preparedAt' => $groupOrder->prepared_at ? (string) $groupOrder->prepared_at : null,
         ];
     }
 

@@ -128,8 +128,6 @@ return [
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
         'Dingo\Api\Provider\ApiServiceProvider',
-        'Former\FormerServiceProvider',
-        'Kmd\Logviewer\LogviewerServiceProvider',
 		'Robbo\Presenter\PresenterServiceProvider',
 		'Tymon\JWTAuth\JWTAuthServiceProvider',
 		'Schickling\Backup\BackupServiceProvider',
@@ -144,8 +142,6 @@ return [
 		'Groupeat\Notifications\PackageProvider',
 		'Groupeat\Orders\PackageProvider',
 		'Groupeat\Restaurants\PackageProvider',
-        'Groupeat\Showcase\PackageProvider',
-
     ],
 
 	/*

@@ -1,6 +1,6 @@
 @extends('layout.mails.main')
 
-@section('mailId'){{ 'auth.resesPassword' }}@stop
+@section('mailId'){{ 'auth.resetPassword' }}@stop
 
 @section('firstLineWrapper')
 @overwrite
@@ -9,10 +9,10 @@
     <p>@lang('auth::resetPassword.mail.text')</p>
 @stop
 
-@section('buttonId'){{ 'reset-password-link' }}@stop
+@section('buttonId'){{ 'password-reset-link' }}@stop
 
 @section('buttonUrl')
-    {{ route('auth.showResetPasswordForm', compact('token')) }}
+    {{ app('SendPasswordResetLinkService')->getUrl($token) }}
 @stop
 
 @section('button')

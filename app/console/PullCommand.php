@@ -18,9 +18,6 @@ class PullCommand extends Command {
 
         $this->line('Install the database');
         $this->call('db:install', ['--seed' => true]);
-
-        $this->line('Building assets');
-        $this->call('asset:build', ['--install' => true]);
 	}
 
 }

@@ -1,11 +1,9 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Response;
-
 // Forbid authentication token in query string for security reasons
 Route::before(function($request)
 {
-    if ($request->get('token'))
+    if (Route::isApiRequest($request) && $request->get('token'))
     {
         throw new \Groupeat\Support\Exceptions\BadRequest(
             'authenticationTokenInQueryStringForbidden',

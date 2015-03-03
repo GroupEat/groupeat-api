@@ -46,27 +46,32 @@ class GroupOrdersCest {
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
         $I->assertEquals('restaurants.groupOrderHasEnded', $I->grabLastMailId());
-        $confirmUrl = $I->grabHrefInLinkByIdInLastMail('confirm-group-order-link');
+
+        list($temp, $restaurantToken) = explode(
+            'token=',
+            $I->grabHrefInLinkByIdInLastMail('confirm-group-order-link')
+        );
+
+        $confirmUrl = "groupOrders/$groupOrderId/confirm";
 
         $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
         $I->assertEquals(0, $I->grabDataFromResponse('remainingCapacity'));
         $I->assertFalse($I->grabDataFromResponse('joinable'));
 
-        $I->sendGET($confirmUrl);
-        $I->seeResponseCodeIs(200);
-        $preparedAtField = $I->grabCrawlableResponse()->filter('#preparedAt')->html();
-        $I->assertNotEmpty($preparedAtField);
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->subMinute()
+        ]);
+        $I->seeErrorResponse(422, 'cannotBePreparedBeforeBeingCompleted');
 
-        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->subMinute()]);
-        $I->seeResponseCodeIs(200);
-        $I->dontSeeSuccessfulPanel();
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->addHours(2)
+        ]);
+        $I->seeErrorResponse(422, 'preparationTimeTooLong');
 
-        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->addHours(2)]);
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10)
+        ]);
         $I->seeResponseCodeIs(200);
-        $I->dontSeeSuccessfulPanel();
-
-        $I->sendPOST($confirmUrl, ['preparedAt' => \Carbon\Carbon::now()->addMinutes(10)]);
-        $I->seeSuccessfulPanel();
 
         $I->assertEquals('customers.orderHasBeenConfirmed', $I->grabLastMailId());
     }

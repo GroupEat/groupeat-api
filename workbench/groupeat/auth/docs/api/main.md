@@ -3,7 +3,7 @@
 To access protected routes, the authentication token should be passed on each request through the Authorization header like so:
 
 ```http
-Authorization: Bearer {token}
+Authorization: bearer {token}
 ```
 
 ## Token [/auth/token]
@@ -21,7 +21,7 @@ Authorization: Bearer {token}
 
 Retrieve the authentication token of an already registered user.
 
-According to the RESTful principles, this route should be a GET but, for security reasons it is a PUT.
+According to the RESTful principles, this route should be a GET since it does not change the server state. However, passing the plain password in the URL query string is unsafe so a body is required but it is unusual to send a body along a GET request.
 
 + Request
 

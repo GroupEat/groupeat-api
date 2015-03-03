@@ -47,12 +47,16 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->bind('SendPasswordResetLinkService', function($app)
         {
-            return new SendPasswordResetLink($app['auth.reminder'], $app['groupeat.locale']);
+            return new SendPasswordResetLink($app['auth.reminder'], $app['groupeat.locale'], $app['url']);
         });
 
         $this->app->bind('ResetPasswordService', function($app)
         {
-            return new ResetPassword($app['GenerateAuthTokenService'], $app['auth.reminder']);
+            return new ResetPassword(
+                $app['GenerateAuthTokenService'],
+                $app['auth.reminder'],
+                $app['translator']
+            );
         });
 
         $this->app->bindShared('groupeat.auth', function($app)

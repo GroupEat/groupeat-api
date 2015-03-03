@@ -19,6 +19,11 @@ class Auth extends JWTAuth {
      */
     private $userTypes = [];
 
+    /**
+     * @var bool
+     */
+    private $allowDifferentToken = false;
+
 
     /**
      * @param string|bool $token
@@ -44,7 +49,7 @@ class Auth extends JWTAuth {
 
         $this->assertCorrespondingUserExists($userCredentials);
 
-        if ($assertSameToken && ($userCredentials->token != $this->token))
+        if (($assertSameToken && !$this->allowDifferentToken) && ($userCredentials->token != $this->token))
         {
             throw new Forbidden(
                 "obsoleteAuthenticationToken",
@@ -86,6 +91,16 @@ class Auth extends JWTAuth {
         }
 
         UserCredentials::throwBadPasswordException();
+    }
+
+    public function allowDifferentToken()
+    {
+        $this->allowDifferentToken = true;
+    }
+
+    public function denyDifferentToken()
+    {
+        $this->allowDifferentToken = false;
     }
 
     /**

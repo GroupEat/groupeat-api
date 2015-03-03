@@ -7,7 +7,7 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider {
 
-    protected $require = [self::ROUTES];
+    protected $require = [self::FILTERS, self::ROUTES];
 
     public function register()
     {

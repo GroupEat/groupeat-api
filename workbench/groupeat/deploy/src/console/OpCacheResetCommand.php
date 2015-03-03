@@ -12,15 +12,13 @@ class OpCacheResetCommand extends Command {
 
     public function fire()
     {
-        $path = 'packages/groupeat/deploy/resources/reset_opcache.php';
-        $this->call('asset:publish', ['--bench' => 'groupeat/deploy']);
-        $this->resetServer($path);
-        $this->resetCLI($path);
+        $this->resetServer();
+        $this->resetCLI();
     }
 
-    private function resetServer($path)
+    private function resetServer()
     {
-        $url = url($path);
+        $url = url('api/deploy/opcache/reset');
         $request = (new cURL)->newRequest('GET', $url);
 
         if (App::isLocal())
@@ -36,12 +34,12 @@ class OpCacheResetCommand extends Command {
         $request->send();
     }
 
-    private function resetCLI($path)
+    private function resetCLI()
     {
-        $file = public_path($path);
-        $this->line("Requiring $file");
-
-        require $file;
+        if (function_exists('opcache_reset'))
+        {
+            opcache_reset();
+        }
     }
 
 }
