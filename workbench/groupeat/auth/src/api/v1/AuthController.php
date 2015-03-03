@@ -7,6 +7,11 @@ use Input;
 
 class AuthController extends Controller {
 
+    public function activate()
+    {
+        app('ActivateUserService')->call(Input::json('token'));
+    }
+
     public function getToken()
     {
         Auth::byCredentials(Input::json('email'), Input::json('password'));
@@ -22,9 +27,18 @@ class AuthController extends Controller {
         return $this->getTokenResponseFromUser($userCredentials->user);
     }
 
-    public function sendResetPasswordLink()
+    public function sendPasswordResetLink()
     {
         app('SendPasswordResetLinkService')->call(Input::json('email'));
+    }
+
+    public function resetPassword()
+    {
+        app('ResetPasswordService')->call(
+            Input::json('token'),
+            Input::json('email'),
+            Input::json('password')
+        );
     }
 
     /**

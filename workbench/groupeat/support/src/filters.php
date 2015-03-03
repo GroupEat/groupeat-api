@@ -47,6 +47,7 @@ Route::filter('csrf', function()
     }
 });
 
+// TODO: fix error responses
 // Register error handler
 App::down(function()
 {
@@ -70,4 +71,3 @@ App::error(function($exception, $code)
         return Redirect::to('500');
     }
 });
-

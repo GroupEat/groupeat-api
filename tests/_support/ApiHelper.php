@@ -167,26 +167,6 @@ class ApiHelper extends \Codeception\Module {
         return $this->getModule('REST')->grabDataFromJsonResponse('data'.$path);
     }
 
-    public function grabCrawlableResponse()
-    {
-        return new Crawler($this->getModule('REST')->grabResponse());
-    }
-
-    public function dontSeeSuccessfulPanel()
-    {
-        $this->assertNotContains('panel-success', $this->grabPanelClasses());
-    }
-
-    public function seeSuccessfulPanel()
-    {
-        $this->assertContains('panel-success', $this->grabPanelClasses());
-    }
-
-    public function grabPanelClasses()
-    {
-        return explode(' ', $this->grabCrawlableResponse()->filter('#groupeat-panel')->first()->attr('class'));
-    }
-
     public function haveAcceptHeader()
     {
         $config = $this->getModule('Laravel4')->kernel['config']->get('api::config');

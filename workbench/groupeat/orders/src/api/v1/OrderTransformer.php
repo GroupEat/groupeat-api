@@ -16,7 +16,7 @@ class OrderTransformer extends TransformerAbstract
             'id' => $order->id,
             'rawPrice' => $order->rawPrice->getAmount(),
             'discountedPrice' => $order->discountedPrice->getAmount(),
-            'createdAt' => $order->created_at,
+            'createdAt' => (string) $order->created_at,
             'comment' => $order->comment,
         ];
     }

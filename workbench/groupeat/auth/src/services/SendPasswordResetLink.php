@@ -3,6 +3,7 @@
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Services\Locale;
 use Illuminate\Auth\Reminders\PasswordBroker;
+use Illuminate\Routing\UrlGenerator;
 
 class SendPasswordResetLink {
 
@@ -16,11 +17,21 @@ class SendPasswordResetLink {
      */
     private $localeService;
 
+    /**
+     * @var UrlGenerator
+     */
+    private $urlGenerator;
 
-    public function __construct(PasswordBroker $passwordBroker, Locale $localeService)
+
+    public function __construct(
+        PasswordBroker $passwordBroker,
+        Locale $localeService,
+        UrlGenerator $urlGenerator
+    )
     {
         $this->passwordBroker = $passwordBroker;
         $this->localeService = $localeService;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -51,6 +62,16 @@ class SendPasswordResetLink {
         $userCredentials->password = 'WAITING FOR PASSWORD RESET';
         $userCredentials->token = null;
         $userCredentials->save();
+    }
+
+    /**
+     * @param $token
+     *
+     * @return string
+     */
+    public function getUrl($token)
+    {
+        return $this->urlGenerator->to("auth/password/reset?token=$token");
     }
 
 }

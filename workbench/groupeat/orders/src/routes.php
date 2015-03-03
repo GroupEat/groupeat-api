@@ -3,26 +3,20 @@
 Route::model('order', 'Groupeat\Orders\Entities\Order');
 Route::model('groupOrder', 'Groupeat\Orders\Entities\GroupOrder');
 
-Route::group(['prefix' => 'groupOrders/{groupOrder}'], function()
-{
-    $controller = 'Groupeat\Orders\Html\GroupOrdersController';
-
-    Route::group(['prefix' => 'confirm/{token}'], function() use ($controller)
-    {
-        Route::get('/', ['as' => 'orders.confirmGroupOrder', 'uses' => "$controller@showConfirmForm"]);
-        Route::post('/', "$controller@confirm");
-    });
-});
-
 Route::api(['version' => 'v1', 'protected' => true], function()
 {
     Route::group(['prefix' => 'groupOrders'], function()
     {
         $controller = 'Groupeat\Orders\Api\V1\GroupOrdersController';
 
-        Route::get('{groupOrder}', "$controller@show");
-
         Route::get('/', "$controller@index");
+
+        Route::group(['prefix' => '{groupOrder}', 'before' => 'allowDifferentToken'], function() use ($controller)
+        {
+            Route::get('/', "$controller@show");
+
+            Route::post('confirm', "$controller@confirm");
+        });
     });
 
     Route::group(['prefix' => 'orders'], function()

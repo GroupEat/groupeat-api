@@ -61,13 +61,14 @@ class SendGroupOrderHasEndedMail {
 
     private function makeConfirmationUrl(GroupOrder $groupOrder)
     {
-        return $this->urlGenerator->route('orders.confirmGroupOrder', [
-            'groupOrder' => $groupOrder->id,
-            'token' => $this->tokenGenerator->forUser(
-                $groupOrder->restaurant->credentials,
-                $this->tokenTtlInMinutes
-            ),
-        ]);
+        $token = $this->tokenGenerator->forUser(
+            $groupOrder->restaurant->credentials,
+            $this->tokenTtlInMinutes
+        );
+
+        $id = $groupOrder->id;
+
+        return $this->urlGenerator->to("groupOrders/$id/confirm?token=$token");
     }
 
 }

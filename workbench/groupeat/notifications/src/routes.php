@@ -21,6 +21,7 @@ Route::get('send-push-notification/{deviceId}', function($deviceId)
 
     $push = new Push($gcmAdapter, $devices, $message);
     $pushManager->add($push);
+    $pushManager->push();
 
     echo 'Sent to device ID: '.$deviceId;
 });

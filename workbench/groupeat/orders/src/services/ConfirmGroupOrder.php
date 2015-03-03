@@ -26,13 +26,13 @@ class ConfirmGroupOrder {
 
     /**
      * @param GroupOrder $groupOrder
-     * @param string     $preparedAt
+     * @param Carbon     $preparedAt
      *
      * @return static
      */
-    public function call(GroupOrder $groupOrder, $preparedAt)
+    public function call(GroupOrder $groupOrder, Carbon $preparedAt)
     {
-        $preparedAt = Carbon::createFromFormat(Carbon::DEFAULT_TO_STRING_FORMAT, $preparedAt)->second(0);
+        // TODO: check that the groupOrder has not already been confirmed
         $this->guardAgainstInvalidPreparationTime($groupOrder->completed_at, $preparedAt);
 
         $groupOrder->confirm($preparedAt);
@@ -69,11 +69,6 @@ class ConfirmGroupOrder {
                 "The preration time should not exceed {$this->maximumPreparationTimeInMinutes} minutes, $preparationTimeInMinutes given."
             );
         }
-    }
-
-    private function getPreparedAt(GroupOrder $groupOrder, $preparationTimeInMinutes)
-    {
-        return $groupOrder->completed_at->copy()->addMinutes($preparationTimeInMinutes);
     }
 
 }

@@ -33,7 +33,7 @@ class SendActivationLink {
     public function call(UserCredentials $userCredentials)
     {
         $token = $this->generateActivationToken($userCredentials);
-        $url = $this->urlGenerator->route('auth.activate', compact('token'));
+        $url = $this->urlGenerator->to("auth/activate?token=$token");
 
         $this->mailer->call(
             $userCredentials,
