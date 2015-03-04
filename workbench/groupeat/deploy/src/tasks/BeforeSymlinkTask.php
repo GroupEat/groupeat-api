@@ -11,7 +11,7 @@ class BeforeSymlinkTask extends AbstractTask {
     {
         $path = $this->releasesManager->getCurrentReleasePath();
 
-        foreach (['optimize', 'opcache', 'asset:build'] as $command)
+        foreach (['optimize', 'opcache'] as $command)
         {
             $this->run("cd $path; php artisan $command");
         }
