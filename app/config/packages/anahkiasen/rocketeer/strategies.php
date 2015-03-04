@@ -24,7 +24,7 @@ return [
 	'migrate'      => 'Artisan',
 
 	// Which strategy to use to install your application's dependencies
-	'dependencies' => 'Groupeat\Deploy\Strategies\DependenciesStrategy',
+	'dependencies' => 'Composer',
 
 	// Execution hooks
 	//////////////////////////////////////////////////////////////////////
