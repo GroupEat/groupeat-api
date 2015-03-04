@@ -23,15 +23,24 @@ class GenerateApiDocumentation {
      */
     private $orderedPackages;
 
+    /**
+     * @var bool
+     */
+    private $isLocal;
+
 
     /**
      * @param Filesystem $filesystem
+     * @param Repository $config
+     * @param array      $orderedPackages
+     * @param bool       $isLocal
      */
-    public function __construct(Filesystem $filesystem, Repository $config, array $orderedPackages)
+    public function __construct(Filesystem $filesystem, Repository $config, array $orderedPackages, $isLocal)
     {
         $this->filesystem = $filesystem;
         $this->config = $config;
         $this->orderedPackages = $orderedPackages;
+        $this->isLocal = $isLocal;
     }
 
     /**
@@ -74,11 +83,11 @@ class GenerateApiDocumentation {
      *
      * @return string
      */
-    public function getHTML($forceGeneration = false)
+    public function getHTML()
     {
         $path = $this->getOutputPath();
 
-        if ($forceGeneration || !$this->filesystem->exists($path))
+        if ($this->isLocal || !$this->filesystem->exists($path))
         {
             $errorOutput = $this->call();
 

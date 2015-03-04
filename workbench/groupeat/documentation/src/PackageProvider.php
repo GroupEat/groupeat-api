@@ -17,7 +17,8 @@ class PackageProvider extends WorkbenchPackageProvider {
             return new GenerateApiDocumentation(
                 $app['files'],
                 $app['config'],
-                $app['config']->get('documentation::order')
+                $app['config']->get('documentation::order'),
+                $app->isLocal()
             );
         });
     }
