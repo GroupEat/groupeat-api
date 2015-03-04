@@ -9,7 +9,7 @@ return [
 	// The name of the application to deploy
 	// This will create a folder of the same name in the root directory
 	// configured in remote.php, so be careful about the characters used
-	'application_name' => 'groupeat',
+	'application_name' => 'api',
 
 	// Plugins
 	////////////////////////////////////////////////////////////////////
