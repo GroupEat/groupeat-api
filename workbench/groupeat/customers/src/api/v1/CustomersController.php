@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Customers\Api\V1;
+<?php
+namespace Groupeat\Customers\Api\V1;
 
 use Auth;
 use Groupeat\Customers\Entities\Customer;
@@ -6,8 +7,8 @@ use Groupeat\Support\Api\V1\Controller;
 use Input;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomersController extends Controller {
-
+class CustomersController extends Controller
+{
     public function show(Customer $customer)
     {
         Auth::assertSame($customer);
@@ -42,5 +43,4 @@ class CustomersController extends Controller {
 
         $customer->delete();
     }
-
 }

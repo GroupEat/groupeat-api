@@ -1,18 +1,16 @@
-<?php namespace Groupeat\Auth\Entities\Traits;
+<?php
+namespace Groupeat\Auth\Entities\Traits;
 
-use App;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Forbidden;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-trait HasCredentials {
-
+trait HasCredentials
+{
     /**
      * @var bool
      */
     protected $isActivated = null;
-
 
     /**
      * @param $email
@@ -23,8 +21,7 @@ trait HasCredentials {
     {
         $user = static::findByEmail($email);
 
-        if (!$user)
-        {
+        if (!$user) {
             UserCredentials::throwNotFoundByEmailException($email);
         }
 
@@ -40,13 +37,11 @@ trait HasCredentials {
     {
         $credentials = UserCredentials::findByEmail($email);
 
-        if (!$credentials)
-        {
-            return null;
+        if (!$credentials) {
+            return;
         }
 
-        if (!$credentials->user)
-        {
+        if (!$credentials->user) {
             UserCredentials::throwNotFoundException();
         }
 
@@ -65,8 +60,7 @@ trait HasCredentials {
 
     public function isActivated()
     {
-        if (!is_null($this->isActivated))
-        {
+        if (!is_null($this->isActivated)) {
             return $this->isActivated;
         }
 
@@ -78,10 +72,8 @@ trait HasCredentials {
      */
     public function assertActivated($exceptionMessage = null)
     {
-        if (!$this->isActivated())
-        {
-            if (empty($exceptionMessage))
-            {
+        if (!$this->isActivated()) {
+            if (empty($exceptionMessage)) {
                 $exceptionMessage = "The {$this->toShortString} should be activated.";
             }
 
@@ -101,5 +93,4 @@ trait HasCredentials {
     {
         $this->isActivated = (bool) $isActivated;
     }
-
 }

@@ -1,8 +1,8 @@
-<?php namespace Groupeat\Orders\Support;
+<?php
+namespace Groupeat\Orders\Support;
 
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Orders\Presenters\ProductFormats as ProductFormatsPresenter;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Exceptions\Exception;
@@ -10,8 +10,8 @@ use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Collection;
 
-class ProductFormats {
-
+class ProductFormats
+{
     /**
      * @var array
      */
@@ -37,7 +37,6 @@ class ProductFormats {
      */
     private $totalPrice;
 
-
     /**
      * @param array      $amounts
      * @param Collection $models
@@ -45,8 +44,7 @@ class ProductFormats {
      */
     public function __construct(array $amounts, Collection $models = null, Restaurant $restaurant = null)
     {
-        if (empty($amounts) || (array_sum($amounts) == 0))
-        {
+        if (empty($amounts) || (array_sum($amounts) == 0)) {
             throw new UnprocessableEntity(
                 'noProductFormats',
                 "There must be at least one product format."
@@ -57,49 +55,39 @@ class ProductFormats {
 
         $askedIds = $this->getIds();
 
-        if (is_null($models))
-        {
+        if (is_null($models)) {
             $this->models = ProductFormat::with('product.restaurant')->findMany($askedIds);
-        }
-        else
-        {
+        } else {
             $this->models = $models;
         }
 
         $foundIds = $this->models->lists('id');
         $missingIds = array_diff($askedIds, $foundIds);
 
-        if (!empty($missingIds))
-        {
+        if (!empty($missingIds)) {
             throw new NotFound(
                 'unexistingProductFormats',
-                "The product formats #" . implode(',', $missingIds) . " do not exist."
+                "The product formats #".implode(',', $missingIds)." do not exist."
             );
         }
 
-        if (is_null($restaurant))
-        {
-            $restaurants = $this->models->map(function($productFormat)
-            {
+        if (is_null($restaurant)) {
+            $restaurants = $this->models->map(function ($productFormat) {
                 return $productFormat->product->restaurant;
             });
 
-            if ($restaurants->unique()->count() > 1)
-            {
+            if ($restaurants->unique()->count() > 1) {
                 $this->throwNotSameRestaurantException();
             }
 
             $this->restaurant = $restaurants->first();
-        }
-        else
-        {
+        } else {
             $this->restaurant = $restaurant;
         }
 
         $this->totalNumberOfProductFormats = array_sum($this->amounts);
 
-        $this->totalPrice = sumPrices($this->models->map(function(ProductFormat $productFormat)
-        {
+        $this->totalPrice = sumPrices($this->models->map(function (ProductFormat $productFormat) {
             return $productFormat->price->multiply($this->amounts[$productFormat->id]);
         }));
     }
@@ -139,8 +127,7 @@ class ProductFormats {
 
     public function attachTo(Order $order)
     {
-        if (!$order->exists)
-        {
+        if (!$order->exists) {
             throw new Exception(
                 'orderIdNeededToAttachProductFormats',
                 "The order ID is needed to attach the product formats."
@@ -149,8 +136,7 @@ class ProductFormats {
 
         $syncData = [];
 
-        foreach ($this->amounts as $id => $amount)
-        {
+        foreach ($this->amounts as $id => $amount) {
             $syncData[(int) $id] = ['amount' => (int) $amount];
         }
 
@@ -159,8 +145,7 @@ class ProductFormats {
 
     public function mergeWith(GroupOrder $groupOrder)
     {
-        if ($groupOrder->restaurant->id != $this->restaurant->id)
-        {
+        if ($groupOrder->restaurant->id != $this->restaurant->id) {
             $this->throwNotSameRestaurantException();
         }
 
@@ -168,19 +153,14 @@ class ProductFormats {
         $models = $this->getModels();
         $groupOrder->load('orders.productFormats');
 
-        foreach ($groupOrder->orders as $order)
-        {
-            foreach ($order->productFormats as $productFormat)
-            {
+        foreach ($groupOrder->orders as $order) {
+            foreach ($order->productFormats as $productFormat) {
                 $formatId = $productFormat->id;
                 $amount = $productFormat->pivot->amount;
 
-                if ($models->contains($formatId))
-                {
+                if ($models->contains($formatId)) {
                     $amounts[$formatId] += $amount;
-                }
-                else
-                {
+                } else {
                     $models->add($productFormat);
                     $amounts[$formatId] = $amount;
                 }
@@ -197,5 +177,4 @@ class ProductFormats {
             "The product formats must belong to the same restaurant."
         );
     }
-
 }

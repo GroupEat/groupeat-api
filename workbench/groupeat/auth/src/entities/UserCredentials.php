@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Auth\Entities;
+<?php
+namespace Groupeat\Auth\Entities;
 
 use Carbon\Carbon;
 use Groupeat\Auth\Entities\Interfaces\User;
@@ -10,14 +11,13 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\UserInterface;
 
-class UserCredentials extends Entity implements UserInterface, RemindableInterface {
-
+class UserCredentials extends Entity implements UserInterface, RemindableInterface
+{
     use RemindableTrait;
 
     public $timestamps = false;
 
     protected $hidden = ['password', 'token', 'activationToken'];
-
 
     public function getRules()
     {
@@ -32,10 +32,8 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
 
     public static function boot()
     {
-        static::saved(function(UserCredentials $credentials)
-        {
-            if ($credentials->user)
-            {
+        static::saved(function (UserCredentials $credentials) {
+            if ($credentials->user) {
                 $credentials->user->touch();
             }
         });
@@ -52,8 +50,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
     {
         $userCredentials = static::findByEmail($email);
 
-        if (!$userCredentials)
-        {
+        if (!$userCredentials) {
             static::throwNotFoundByEmailException($email);
         }
 
@@ -104,8 +101,7 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
         $userCredentials->password = $password;
         $userCredentials->locale = $locale;
 
-        dbTransaction(function() use ($userCredentials, $user)
-        {
+        dbTransaction(function () use ($userCredentials, $user) {
             // The user should be save in order to have its id
             $user->save();
             $userCredentials->user = $user;
@@ -217,10 +213,8 @@ class UserCredentials extends Entity implements UserInterface, RemindableInterfa
 
     private function hashPasswordBeforeInsertion($plainPassword)
     {
-        if (!$this->exists)
-        {
+        if (!$this->exists) {
             $this->setPassword($plainPassword);
         }
     }
-
 }

@@ -1,14 +1,14 @@
-<?php namespace Groupeat\Restaurants\Entities;
+<?php
+namespace Groupeat\Restaurants\Entities;
 
 use Groupeat\Support\Entities\Entity;
 use SebastianBergmann\Money\EUR;
 
-class ProductFormat extends Entity {
-
+class ProductFormat extends Entity
+{
     public $timestamps = false;
 
     protected $fillable = ['product_id', 'name', 'price'];
-
 
     public function getRules()
     {
@@ -28,5 +28,4 @@ class ProductFormat extends Entity {
     {
         return new EUR($this->attributes['price']); // TODO: Don't enforce a default currency
     }
-
 }

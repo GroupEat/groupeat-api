@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Restaurants\Api\V1;
+<?php
+namespace Groupeat\Restaurants\Api\V1;
 
 use Groupeat\Restaurants\Entities\Product;
 use League\Fractal\TransformerAbstract;
@@ -6,7 +7,6 @@ use League\Fractal\TransformerAbstract;
 class ProductTransformer extends TransformerAbstract
 {
     protected $availableIncludes = ['formats'];
-
 
     public function transform(Product $product)
     {
@@ -20,7 +20,6 @@ class ProductTransformer extends TransformerAbstract
 
     public function includeFormats(Product $product)
     {
-        return $this->collection($product->formats, new ProductFormatTransformer);
+        return $this->collection($product->formats, new ProductFormatTransformer());
     }
-
 }

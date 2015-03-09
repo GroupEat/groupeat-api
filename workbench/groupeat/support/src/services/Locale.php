@@ -1,14 +1,14 @@
-<?php namespace Groupeat\Support\Services;
+<?php
+namespace Groupeat\Support\Services;
 
 use Closure;
 use Dingo\Api\Routing\Router;
 use Groupeat\Support\Exceptions\BadRequest;
-use Illuminate\Config\Repository;
 use Illuminate\Http\Request;
 use Illuminate\Translation\Translator;
 
-class Locale {
-
+class Locale
+{
     /**
      * @var Router
      */
@@ -29,10 +29,9 @@ class Locale {
      */
     private $locale;
 
-
     /**
      * @param Router $router
-     * @param array $availableLocales
+     * @param array  $availableLocales
      */
     public function __construct(Router $router, Translator $translator, array $availableLocales)
     {
@@ -87,8 +86,8 @@ class Locale {
     }
 
     /**
-     * @param callable      $callback
-     * @param string|null   $locale If null, the detected locale will be used
+     * @param callable    $callback
+     * @param string|null $locale   If null, the detected locale will be used
      *
      * @return mixed
      */
@@ -115,8 +114,7 @@ class Locale {
     {
         $this->assertNotNull($locale);
 
-        if (!in_array($locale, $this->availableLocales))
-        {
+        if (!in_array($locale, $this->availableLocales)) {
             $availableLocalesTest = implode(', ', $this->availableLocales);
 
             throw new BadRequest(
@@ -133,8 +131,7 @@ class Locale {
     {
         $this->detect($request);
 
-        if (!$this->router->isApiRequest($request))
-        {
+        if (!$this->router->isApiRequest($request)) {
             $this->setForWholeRequest($this->get());
         }
     }
@@ -160,16 +157,12 @@ class Locale {
     {
         $languageHeader = $request->headers->get('accept-language');
 
-        if ($languageHeader)
-        {
+        if ($languageHeader) {
             $languages = explode(';', $languageHeader);
 
-            foreach ($languages as $language)
-            {
-                foreach ($this->availableLocales as $locale)
-                {
-                    if (str_contains($language, $locale))
-                    {
+            foreach ($languages as $language) {
+                foreach ($this->availableLocales as $locale) {
+                    if (str_contains($language, $locale)) {
                         $this->set($locale);
 
                         return true;
@@ -183,13 +176,11 @@ class Locale {
 
     private function assertNotNull($locale)
     {
-        if (empty($locale))
-        {
+        if (empty($locale)) {
             throw new BadRequest(
                 'noValidLocaleGiven',
                 "A valid locale must be given."
             );
         }
     }
-
 }

@@ -1,11 +1,12 @@
-<?php namespace Groupeat\Support\Presenters;
+<?php
+namespace Groupeat\Support\Presenters;
 
 use Carbon\Carbon;
 use Robbo\Presenter\Presenter as BasePresenter;
 use SebastianBergmann\Money\Money;
 
-class Presenter extends BasePresenter {
-
+class Presenter extends BasePresenter
+{
     public function __toString()
     {
         return (string) $this->object->__toString();
@@ -40,8 +41,7 @@ class Presenter extends BasePresenter {
             'td' => $cellStyle,
         ];
 
-        foreach ($styles as $tag => $style)
-        {
+        foreach ($styles as $tag => $style) {
             $table = str_replace("<$tag>", '<'.$tag.' style="'.$style.'">', $table);
         }
 
@@ -50,11 +50,8 @@ class Presenter extends BasePresenter {
 
     protected function translate(array $keys, $translations, $ucfirst = false)
     {
-        return array_map(function ($key) use ($translations, $ucfirst)
-        {
+        return array_map(function ($key) use ($translations, $ucfirst) {
             return $ucfirst ? mb_ucfirst($translations[$key]) : $translations[$key];
-        },
-        $keys);
+        }, $keys);
     }
-
 }

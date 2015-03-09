@@ -1,15 +1,15 @@
-<?php namespace Groupeat\Support\Presenters;
+<?php
+namespace Groupeat\Support\Presenters;
 
-class Address extends Presenter {
-
+class Address extends Presenter
+{
     public function __toString()
     {
         $object = $this->object;
 
         $str = $object->street;
 
-        if (!empty($object->details))
-        {
+        if (!empty($object->details)) {
             $str .= " ($object->details)";
         }
 
@@ -17,5 +17,4 @@ class Address extends Presenter {
 
         return $str;
     }
-
 }

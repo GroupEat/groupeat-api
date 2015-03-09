@@ -1,18 +1,17 @@
-<?php namespace Groupeat\Auth\Migrations;
+<?php
+namespace Groupeat\Auth\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserCredentialsMigration extends Migration {
-
+class UserCredentialsMigration extends Migration
+{
     const TABLE = 'user_credentials';
-
 
     public function up()
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
+        Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->string('email')->unique();
             $table->morphs('user');
@@ -23,5 +22,4 @@ class UserCredentialsMigration extends Migration {
             $table->string('locale', 6);
         });
     }
-
 }

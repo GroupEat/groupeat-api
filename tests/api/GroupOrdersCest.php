@@ -1,7 +1,7 @@
 <?php
 
-class GroupOrdersCest {
-
+class GroupOrdersCest
+{
     public function testThatACustomerReceiveAMailWhenAGroupOrderIsConfirmed(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
@@ -32,8 +32,7 @@ class GroupOrdersCest {
         $remainingCapacity = $restaurantCapacity - 1;
         $I->assertEquals($remainingCapacity, $I->grabDataFromResponse('groupOrder.data.remainingCapacity'));
 
-        for ($i = $remainingCapacity; $i > 1; $i--)
-        {
+        for ($i = $remainingCapacity; $i > 1; $i--) {
             $orderDetails['groupOrderId'] = $groupOrderId;
             $I->sendApiPostWithToken($token, 'orders', $orderDetails);
             $I->seeResponseCodeIs(201);
@@ -59,21 +58,20 @@ class GroupOrdersCest {
         $I->assertFalse($I->grabDataFromResponse('joinable'));
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->subMinute()
+            'preparedAt' => (string) \Carbon\Carbon::now()->subMinute(),
         ]);
         $I->seeErrorResponse(422, 'cannotBePreparedBeforeBeingCompleted');
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addHours(2)
+            'preparedAt' => (string) \Carbon\Carbon::now()->addHours(2),
         ]);
         $I->seeErrorResponse(422, 'preparationTimeTooLong');
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10)
+            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
         ]);
         $I->seeResponseCodeIs(200);
 
         $I->assertEquals('customers.orderHasBeenConfirmed', $I->grabLastMailId());
     }
-
 }

@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Auth;
+<?php
+namespace Groupeat\Auth;
 
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
@@ -7,8 +8,8 @@ use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Tymon\JWTAuth\JWTAuth;
 
-class Auth extends JWTAuth {
-
+class Auth extends JWTAuth
+{
     /**
      * @var UserCredentials
      */
@@ -24,9 +25,9 @@ class Auth extends JWTAuth {
      */
     private $allowDifferentToken = false;
 
-
     /**
      * @param string|bool $token
+     * @param bool        $assertSameToken
      *
      * @return UserCredentials
      */
@@ -39,8 +40,7 @@ class Auth extends JWTAuth {
 
         $userCredentials = $this->auth->getProvider()->retrieveById($id);
 
-        if (! $userCredentials instanceof UserCredentials)
-        {
+        if (! $userCredentials instanceof UserCredentials) {
             throw new Unauthorized(
                 "noUserForAuthenticationToken",
                 "The user corresponding to the authentication token does not exist."
@@ -49,8 +49,7 @@ class Auth extends JWTAuth {
 
         $this->assertCorrespondingUserExists($userCredentials);
 
-        if (($assertSameToken && !$this->allowDifferentToken) && ($userCredentials->token != $this->token))
-        {
+        if (($assertSameToken && !$this->allowDifferentToken) && ($userCredentials->token != $this->token)) {
             throw new Forbidden(
                 "obsoleteAuthenticationToken",
                 "Obsolete authentication token."
@@ -76,8 +75,7 @@ class Auth extends JWTAuth {
     {
         $this->logout();
 
-        if ($this->auth->once(compact('email', 'password')))
-        {
+        if ($this->auth->once(compact('email', 'password'))) {
             $user = $this->auth->user();
 
             $this->setUserCredentials($user);
@@ -85,8 +83,7 @@ class Auth extends JWTAuth {
             return;
         }
 
-        if (!$this->auth->getLastAttempted())
-        {
+        if (!$this->auth->getLastAttempted()) {
             UserCredentials::throwNotFoundByEmailException($email);
         }
 
@@ -113,8 +110,7 @@ class Auth extends JWTAuth {
 
     public function checkOrFail()
     {
-        if (!$this->check())
-        {
+        if (!$this->check()) {
             throw new Unauthorized(
                 "userMustAuthenticate",
                 "No authenticated user."
@@ -149,8 +145,7 @@ class Auth extends JWTAuth {
     {
         $this->assertSameType($user);
 
-        if ($this->user()->id != $user->id)
-        {
+        if ($this->user()->id != $user->id) {
             $type = $this->currentType();
             $givenId = $user->id;
             $currentId = $this->user()->id;
@@ -169,8 +164,7 @@ class Auth extends JWTAuth {
      */
     public function isSame(User $user)
     {
-        if (!$this->check())
-        {
+        if (!$this->check()) {
             return false;
         }
 
@@ -185,11 +179,11 @@ class Auth extends JWTAuth {
         $currentType = $this->currentType();
         $givenType = $this->typeOf($user);
 
-        if ($currentType != $givenType)
-        {
+        if ($currentType != $givenType) {
             throw new Forbidden(
                 "wrongAuthenticatedUser",
-                "Should be authenticated as {$this->toShortType($givenType)} instead of {$this->toShortType($currentType)}."
+                "Should be authenticated as {$this->toShortType($givenType)} "
+                . "instead of {$this->toShortType($currentType)}."
             );
         }
     }
@@ -201,8 +195,7 @@ class Auth extends JWTAuth {
      */
     public function isSameType(User $user)
     {
-        if (!$this->check())
-        {
+        if (!$this->check()) {
             return false;
         }
 
@@ -210,7 +203,7 @@ class Auth extends JWTAuth {
     }
 
     /**
-     * @param string $className
+     * @param User $user
      *
      * @return bool
      */
@@ -219,8 +212,7 @@ class Auth extends JWTAuth {
         $userType = $this->typeOf($user);
         $shortType = $this->toShortType($userType);
 
-        if (empty($this->userTypes[$shortType]))
-        {
+        if (empty($this->userTypes[$shortType])) {
             $this->userTypes[$shortType] = $userType;
 
             return true;
@@ -237,13 +229,17 @@ class Auth extends JWTAuth {
         return $this->typeOf($this->user());
     }
 
+    /**
+     * @param User $user
+     *
+     * @return string
+     */
     public function shortTypeOf(User $user)
     {
         $type = $this->typeOf($user);
         $shortType = array_search($type, $this->userTypes);
 
-        if ($shortType === false)
-        {
+        if ($shortType === false) {
             throw new Exception(
                 "userTypeNotAvailableForAuthentication",
                 "Type $type has not been added to the available user types."
@@ -291,17 +287,14 @@ class Auth extends JWTAuth {
      */
     public function __call($method, $parameters)
     {
-        foreach ($this->userTypes as $shortType => $userType)
-        {
+        foreach ($this->userTypes as $shortType => $userType) {
             $user = new $userType;
 
-            if ($method == 'is'.ucfirst($shortType))
-            {
+            if ($method == 'is'.ucfirst($shortType)) {
                 return $this->isofType($user);
             }
 
-            if ($method == $shortType)
-            {
+            if ($method == $shortType) {
                 $this->assertSameType($user);
 
                 return $this->user();
@@ -317,23 +310,20 @@ class Auth extends JWTAuth {
         $userType = $userQuery->getModel();
         $usesSoftDelete = method_exists($userType, 'withTrashed');
 
-        if ($usesSoftDelete)
-        {
+        if ($usesSoftDelete) {
             $userQuery->withTrashed();
         }
 
         $user = $userQuery->getResults();
 
-        if (! $user instanceof User)
-        {
+        if (! $user instanceof User) {
             throw new Unauthorized(
                 "noUserWithSameCredentials",
                 "The user corresponding to these credentials does not exist."
             );
         }
 
-        if ($usesSoftDelete && $user->trashed())
-        {
+        if ($usesSoftDelete && $user->trashed()) {
             throw new Unauthorized(
                 "userHasBeenDeleted",
                 "The user corresponding to these credentials has been deleted."
@@ -367,5 +357,4 @@ class Auth extends JWTAuth {
     {
         return strtolower(removeNamespaceFromClassName($userType));
     }
-
 }

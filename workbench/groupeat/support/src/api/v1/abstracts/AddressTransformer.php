@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Support\Api\V1\Abstracts;
+<?php
+namespace Groupeat\Support\Api\V1\Abstracts;
 
 use Groupeat\Support\Entities\Abstracts\Address;
 use League\Fractal\TransformerAbstract;
@@ -18,5 +19,4 @@ abstract class AddressTransformer extends TransformerAbstract
             'longitude' => $address->longitude,
         ];
     }
-
 }

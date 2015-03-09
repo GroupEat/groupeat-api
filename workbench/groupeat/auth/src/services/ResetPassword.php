@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Auth\Services;
+<?php
+namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Forbidden;
@@ -7,8 +8,8 @@ use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Auth\Reminders\PasswordBroker;
 use Illuminate\Translation\Translator;
 
-class ResetPassword {
-
+class ResetPassword
+{
     /**
      * @var GenerateTokenForUser
      */
@@ -24,13 +25,11 @@ class ResetPassword {
      */
     private $translator;
 
-
     public function __construct(
         GenerateAuthToken $authTokenGenerator,
         PasswordBroker $passwordBroker,
         Translator $translator
-    )
-    {
+    ) {
         $this->authTokenGenerator = $authTokenGenerator;
         $this->passwordBroker = $passwordBroker;
         $this->translator = $translator;
@@ -47,15 +46,13 @@ class ResetPassword {
         $password_confirmation = $password;
         $credentials = compact('token', 'email', 'password', 'password_confirmation');
 
-        $status = $broker->reset($credentials, function(UserCredentials $userCredentials, $plainPassword)
-        {
+        $status = $broker->reset($credentials, function (UserCredentials $userCredentials, $plainPassword) {
             $userCredentials->resetPassword($plainPassword, $this->authTokenGenerator->forUser($userCredentials));
         });
 
         $message = $this->translator->get("auth::resetPassword.$status");
 
-        switch ($status)
-        {
+        switch ($status) {
             case $broker::INVALID_USER:
                 throw new NotFound(
                     'noUserForPasswordResetToken',
@@ -75,5 +72,4 @@ class ResetPassword {
                 );
         }
     }
-
 }

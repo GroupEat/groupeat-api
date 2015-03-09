@@ -1,12 +1,12 @@
-<?php namespace Groupeat\Restaurants\Presenters;
+<?php
+namespace Groupeat\Restaurants\Presenters;
 
 use Groupeat\Support\Presenters\Presenter;
 
-class ProductFormat extends Presenter {
-
+class ProductFormat extends Presenter
+{
     public function presentPrice()
     {
         return $this->formatPrice($this->object->price);
     }
-
 }

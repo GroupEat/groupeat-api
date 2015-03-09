@@ -1,11 +1,11 @@
-<?php namespace Groupeat\Restaurants\Entities;
+<?php
+namespace Groupeat\Restaurants\Entities;
 
 use Groupeat\Support\Entities\Entity;
 
-class Category extends Entity {
-
+class Category extends Entity
+{
     public $timestamps = false;
-
 
     public function getRules()
     {
@@ -23,5 +23,4 @@ class Category extends Entity {
     {
         return static::where('label', $label)->first();
     }
-
 }

@@ -1,11 +1,10 @@
 <?php
 
-if (!function_exists('artisan'))
-{
+if (!function_exists('artisan')) {
     /**
      * Call an Artisan command and return its output.
      *
-     * @param string $command Command name (like groupeat:push)
+     * @param string $command    Command name (like groupeat:push)
      * @param array  $parameters Command options
      * @param int    $verbosity
      *
@@ -20,8 +19,7 @@ if (!function_exists('artisan'))
     }
 }
 
-if (!function_exists('ddd') && function_exists('dump'))
-{
+if (!function_exists('ddd') && function_exists('dump')) {
     /**
      * Dump a variable and exit the script.
      *
@@ -34,12 +32,11 @@ if (!function_exists('ddd') && function_exists('dump'))
     }
 }
 
-if (!function_exists('formatTime'))
-{
+if (!function_exists('formatTime')) {
     /**
      * @param \Carbon\Carbon $time
-     * @param string $hoursSuffix
-     * @param bool   $withSeconds
+     * @param string         $hoursSuffix
+     * @param bool           $withSeconds
      *
      * @return string
      */
@@ -47,8 +44,7 @@ if (!function_exists('formatTime'))
     {
         $format = 'H'.$hoursSuffix.'i';
 
-        if ($withSeconds)
-        {
+        if ($withSeconds) {
             $format .= ':s';
         }
 
@@ -56,10 +52,9 @@ if (!function_exists('formatTime'))
     }
 }
 
-if (!function_exists('dbTransaction'))
-{
+if (!function_exists('dbTransaction')) {
     /**
-     * Execute callback in a database transaction
+     * Execute callback in a database transaction.
      *
      * @param Closure $callback
      *
@@ -71,12 +66,10 @@ if (!function_exists('dbTransaction'))
     }
 }
 
-if (!function_exists('assertSameDay'))
-{
+if (!function_exists('assertSameDay')) {
     function assertSameDay(\Carbon\Carbon $one, \Carbon\Carbon $two)
     {
-        if ($one->toDateString() != $two->toDateString())
-        {
+        if ($one->toDateString() != $two->toDateString()) {
             throw new \Groupeat\Support\Exceptions\BadRequest(
                 'dateTimesMustBeFromSameDay',
                 "The DateTime $one must be from the same day thant $two."
@@ -85,8 +78,7 @@ if (!function_exists('assertSameDay'))
     }
 }
 
-if (!function_exists('getNamespaceOf'))
-{
+if (!function_exists('getNamespaceOf')) {
     /**
      * Get the namespace of the given class.
      *
@@ -102,8 +94,7 @@ if (!function_exists('getNamespaceOf'))
     }
 }
 
-if (!function_exists('getClassNameWithoutNamespace'))
-{
+if (!function_exists('getClassNameWithoutNamespace')) {
     /**
      * Get the name of a class without its namespace.
      *
@@ -117,8 +108,7 @@ if (!function_exists('getClassNameWithoutNamespace'))
     }
 }
 
-if (!function_exists('removeNamespaceFromClassName'))
-{
+if (!function_exists('removeNamespaceFromClassName')) {
     /**
      * Remove the namespace from a class name.
      *
@@ -134,11 +124,10 @@ if (!function_exists('removeNamespaceFromClassName'))
     }
 }
 
-if (!function_exists('translateIfNeeded'))
-{
+if (!function_exists('translateIfNeeded')) {
     /**
      * If the text contains corresponds to a lang key its translation will be returned
-     * Else the untounched text is returned
+     * Else the untounched text is returned.
      *
      * @param string $text
      *
@@ -146,8 +135,7 @@ if (!function_exists('translateIfNeeded'))
      */
     function translateIfNeeded($text)
     {
-        if (preg_match('/^\w+((\.|::)\w+)+\w+$/', $text))
-        {
+        if (preg_match('/^\w+((\.|::)\w+)+\w+$/', $text)) {
             return trans($text);
         }
 
@@ -155,14 +143,13 @@ if (!function_exists('translateIfNeeded'))
     }
 }
 
-if (!function_exists('mb_ucfirst'))
-{
+if (!function_exists('mb_ucfirst')) {
     /**
-     * Return the given string with the first letter uppercased
+     * Return the given string with the first letter uppercased.
      *
-     * @param  string  $str The string to use
-     * @param  boolean $lowerEnd Indicates if the rest of the string should be lowercased
-     * @param  string  $encoding Encoding type
+     * @param string  $str      The string to use
+     * @param boolean $lowerEnd Indicates if the rest of the string should be lowercased
+     * @param string  $encoding Encoding type
      *
      * @return string
      */
@@ -170,8 +157,7 @@ if (!function_exists('mb_ucfirst'))
     {
         $firstLetter = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding);
 
-        if ($lowerEnd)
-        {
+        if ($lowerEnd) {
             return $firstLetter.mb_strtolower(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding), $encoding);
         }
 
@@ -179,14 +165,13 @@ if (!function_exists('mb_ucfirst'))
     }
 }
 
-if (!function_exists('mb_lcfirst'))
-{
+if (!function_exists('mb_lcfirst')) {
     /**
-     * Return the given string with the first letter lowercased
+     * Return the given string with the first letter lowercased.
      *
-     * @param  string  $str The string to use
-     * @param  boolean $lowerEnd Indicates if the rest of the string should be uppercased
-     * @param  string  $encoding Encoding type
+     * @param string  $str      The string to use
+     * @param boolean $upperEnd Indicates if the rest of the string should be uppercased
+     * @param string  $encoding Encoding type
      *
      * @return string
      */
@@ -194,8 +179,7 @@ if (!function_exists('mb_lcfirst'))
     {
         $firstLetter = mb_strtolower(mb_substr($str, 0, 1, $encoding), $encoding);
 
-        if ($upperEnd)
-        {
+        if ($upperEnd) {
             return $firstLetter.mb_strtoupper(mb_substr($str, 1, mb_strlen($str, $encoding), $encoding), $encoding);
         }
 
@@ -203,8 +187,7 @@ if (!function_exists('mb_lcfirst'))
     }
 }
 
-if (!function_exists('formatPrice'))
-{
+if (!function_exists('formatPrice')) {
     function formatPrice(\SebastianBergmann\Money\Money $price)
     {
         // TODO: Add support for other locales
@@ -212,8 +195,7 @@ if (!function_exists('formatPrice'))
     }
 }
 
-if (!function_exists('sumPrices'))
-{
+if (!function_exists('sumPrices')) {
     /**
      * @param \Illuminate\Support\Collection $prices
      *
@@ -221,15 +203,13 @@ if (!function_exists('sumPrices'))
      */
     function sumPrices(\Illuminate\Support\Collection $prices)
     {
-        if ($prices->isEmpty())
-        {
+        if ($prices->isEmpty()) {
             return new \SebastianBergmann\Money\EUR(0); // TODO: Find out how to choose default currency
         }
 
         $total = new \SebastianBergmann\Money\Money(0, $prices->first()->getCurrency());
 
-        foreach ($prices as $price)
-        {
+        foreach ($prices as $price) {
             $total = $total->add($price);
         }
 
@@ -237,8 +217,7 @@ if (!function_exists('sumPrices'))
     }
 }
 
-if (!function_exists('process'))
-{
+if (!function_exists('process')) {
     /**
      * Run a shell command with the Symfony Process class.
      * Give a valid output parameter if you want realtime feedback.
@@ -246,7 +225,7 @@ if (!function_exists('process'))
      * @param string                                            $command
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param string or null for project root                   $workingDirectory
-     * @param int or null for no-timeout                        $timeoutInSeconds
+     * @param int|null for no timeout                           $timeoutInSeconds
      *
      * @return \Symfony\Component\Process\Process
      */
@@ -255,10 +234,8 @@ if (!function_exists('process'))
         \Symfony\Component\Console\Output\OutputInterface $output = null,
         $workingDirectory = null,
         $timeoutInSeconds = 60
-    )
-    {
-        if (is_null($workingDirectory))
-        {
+    ) {
+        if (is_null($workingDirectory)) {
             $workingDirectory = base_path();
         }
 
@@ -270,20 +247,13 @@ if (!function_exists('process'))
             $timeoutInSeconds
         );
 
-        if (empty($output))
-        {
+        if (empty($output)) {
             $process->run();
-        }
-        else
-        {
-            $process->run(function ($type, $buffer) use ($output)
-            {
-                if ('err' === $type)
-                {
+        } else {
+            $process->run(function ($type, $buffer) use ($output) {
+                if ('err' === $type) {
                     $output->writeln('<error>'.trim($buffer).'</error>');
-                }
-                else
-                {
+                } else {
                     $output->writeln(trim($buffer));
                 }
             });
@@ -293,8 +263,7 @@ if (!function_exists('process'))
     }
 }
 
-if (!function_exists('workbench_path'))
-{
+if (!function_exists('workbench_path')) {
     /**
      * Get an absolute path from a GroupEat package path relative to its src folder.
      * Behave like the others Laravel *_path functions.
@@ -309,19 +278,15 @@ if (!function_exists('workbench_path'))
         $package = strtolower($package);
         $workbench_root = base_path("workbench/groupeat/$package/src");
 
-        if (empty($file))
-        {
+        if (empty($file)) {
             return $workbench_root;
-        }
-        else
-        {
+        } else {
             return "$workbench_root/$file";
         }
     }
 }
 
-if (!function_exists('listGroupeatPackages'))
-{
+if (!function_exists('listGroupeatPackages')) {
     /**
      * Get the list of the GroupEat packages with the same case than the corresponding folders.
      *
@@ -333,19 +298,17 @@ if (!function_exists('listGroupeatPackages'))
     {
         $directories = \Illuminate\Support\Facades\File::directories(base_path('workbench/groupeat'));
 
-        $packages = array_map(function($directory)
-        {
+        $packages = array_map(function ($directory) {
             $parts = explode('/', $directory);
 
             return array_pop($parts);
         }, $directories);
 
-        if ($withoutSupport)
-        {
-            return array_filter($packages, function($package) { return $package != 'Support'; });
-        }
-        else
-        {
+        if ($withoutSupport) {
+            return array_filter($packages, function ($package) {
+                return $package != 'Support';
+            });
+        } else {
             return $packages;
         }
     }

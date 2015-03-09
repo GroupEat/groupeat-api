@@ -1,14 +1,11 @@
 <?php
 
-use Groupeat\Admin\Forms\ResetPasswordForm;
 use Groupeat\Auth\Entities\UserCredentials;
 
 Route::model('user', 'Groupeat\Auth\Entities\UserCredentials');
 
-Route::api(['version' => 'v1'], function()
-{
-    Route::group(['prefix' => 'auth'], function()
-    {
+Route::api(['version' => 'v1'], function () {
+    Route::group(['prefix' => 'auth'], function () {
         $controller = 'Groupeat\Auth\Api\V1\AuthController';
 
         Route::post('activationTokens', "$controller@activate");

@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Restaurants\Api\V1;
+<?php
+namespace Groupeat\Restaurants\Api\V1;
 
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\FoodType;
@@ -7,23 +8,21 @@ use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
 
-class RestaurantsController extends Controller {
-
+class RestaurantsController extends Controller
+{
     public function index()
     {
         $query = Restaurant::with('closingWindows', 'openingWindows')->orderBy('name', 'asc');
 
-        if ((bool) Input::get('opened'))
-        {
+        if ((bool) Input::get('opened')) {
             $query->opened();
         }
 
-        if ((bool) Input::get('around'))
-        {
+        if ((bool) Input::get('around')) {
             $query->around(Input::get('latitude'), Input::get('longitude'));
         }
 
-        return $this->collectionResponse($query->get(), new RestaurantTransformer);
+        return $this->collectionResponse($query->get(), new RestaurantTransformer());
     }
 
     public function categoriesIndex()
@@ -46,7 +45,7 @@ class RestaurantsController extends Controller {
     {
         return $this->collectionResponse(
             $restaurant->products,
-            new ProductTransformer
+            new ProductTransformer()
         );
     }
 
@@ -54,7 +53,7 @@ class RestaurantsController extends Controller {
     {
         return $this->collectionResponse(
             $product->formats,
-            new ProductFormatTransformer
+            new ProductFormatTransformer()
         );
     }
 
@@ -67,5 +66,4 @@ class RestaurantsController extends Controller {
     {
         return $this->itemResponse($restaurant->address);
     }
-
 }

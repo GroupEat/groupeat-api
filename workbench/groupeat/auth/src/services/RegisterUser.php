@@ -1,19 +1,16 @@
-<?php namespace Groupeat\Auth\Services;
+<?php
+namespace Groupeat\Auth\Services;
 
 use Closure;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Mail\Mailer;
-use Illuminate\Routing\UrlGenerator;
-use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory as Validation;
 
-class RegisterUser {
-
+class RegisterUser
+{
     /**
      * @var Validation
      */
@@ -34,14 +31,12 @@ class RegisterUser {
      */
     private $localeService;
 
-
     public function __construct(
         Validation $validation,
         Dispatcher $events,
         GenerateAuthToken $authTokenGenerator,
         Locale $localeService
-    )
-    {
+    ) {
         $this->validation = $validation;
         $this->events = $events;
         $this->authTokenGenerator = $authTokenGenerator;
@@ -80,18 +75,15 @@ class RegisterUser {
 
         $validator = $this->validation->make($credentials, $rules);
 
-        if (!$validator->passes())
-        {
+        if (!$validator->passes()) {
             throw new UnprocessableEntity(
                 $validator->failed(),
                 "Cannot register user with invalid credentials."
             );
         }
 
-        if (!is_null($additionalCallback))
-        {
+        if (!is_null($additionalCallback)) {
             $additionalCallback($credentials);
         }
     }
-
 }

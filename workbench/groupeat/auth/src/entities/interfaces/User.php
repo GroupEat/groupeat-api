@@ -1,7 +1,8 @@
-<?php namespace Groupeat\Auth\Entities\Interfaces;
+<?php
+namespace Groupeat\Auth\Entities\Interfaces;
 
-interface User {
-
+interface User
+{
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne Relationship giving access to the credentials
      */
@@ -10,8 +11,8 @@ interface User {
     /**
      * Create a new instance of the current user.
      *
-     * @param  array $attributes
-     * @param  bool  $exists
+     * @param array $attributes
+     * @param bool  $exists
      *
      * @return User
      */
@@ -21,5 +22,4 @@ interface User {
      * @param bool $isActivated
      */
     public function setIsActivated($isActivated);
-
 }

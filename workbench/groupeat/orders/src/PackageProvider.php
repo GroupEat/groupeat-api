@@ -5,16 +5,15 @@ use Groupeat\Orders\Services\CreateGroupOrder;
 use Groupeat\Orders\Services\JoinGroupOrder;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
-class PackageProvider extends WorkbenchPackageProvider {
-
+class PackageProvider extends WorkbenchPackageProvider
+{
     protected $require = [self::FILTERS, self::ROUTES];
 
     public function register()
     {
         parent::register();
 
-        $this->app->bind('CreateGroupOrderService', function($app)
-        {
+        $this->app->bind('CreateGroupOrderService', function ($app) {
             return new CreateGroupOrder(
                 $app['events'],
                 $app['config']->get('restaurants::around_distance_in_kilometers'),
@@ -25,8 +24,7 @@ class PackageProvider extends WorkbenchPackageProvider {
             );
         });
 
-        $this->app->bind('JoinGroupOrderService', function($app)
-        {
+        $this->app->bind('JoinGroupOrderService', function ($app) {
             return new JoinGroupOrder(
                 $app['events'],
                 $app['config']->get('orders::around_distance_in_kilometers'),
@@ -34,13 +32,11 @@ class PackageProvider extends WorkbenchPackageProvider {
             );
         });
 
-        $this->app->bind('ConfirmGroupOrderService', function($app)
-        {
+        $this->app->bind('ConfirmGroupOrderService', function ($app) {
             return new ConfirmGroupOrder(
                 $app['events'],
                 $app['config']->get('orders::maximum_preparation_time_in_minutes')
             );
         });
     }
-
 }

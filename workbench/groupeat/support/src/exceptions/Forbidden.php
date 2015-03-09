@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Support\Exceptions;
+<?php
+namespace Groupeat\Support\Exceptions;
 
 use Exception as BaseException;
 use Symfony\Component\HttpFoundation\Response;
 
-class Forbidden extends Exception {
-
+class Forbidden extends Exception
+{
     public function __construct(
         $errorKey,
         $message = null,
@@ -12,9 +13,7 @@ class Forbidden extends Exception {
         array $headers = [],
         BaseException $previous = null,
         $code = 0
-    )
-    {
+    ) {
         Exception::__construct($errorKey, $message, Response::HTTP_FORBIDDEN, $errors, $headers, $previous, $code);
     }
-
 }

@@ -2,14 +2,13 @@
 
 use Groupeat\Support\Console\Command;
 
-class PullCommand extends Command {
+class PullCommand extends Command
+{
+    protected $name = 'pull';
+    protected $description = "Pull the code from the Git repository and prepare the application";
 
-	protected $name = 'pull';
-	protected $description = "Pull the code from the Git repository and prepare the application";
-
-
-	public function fire()
-	{
+    public function fire()
+    {
         $this->line('Pulling from Git repository');
         $this->process('git pull');
 
@@ -18,6 +17,5 @@ class PullCommand extends Command {
 
         $this->line('Install the database');
         $this->call('db:install', ['--seed' => true]);
-	}
-
+    }
 }

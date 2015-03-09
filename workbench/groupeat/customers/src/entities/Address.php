@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Customers\Entities;
+<?php
+namespace Groupeat\Customers\Entities;
 
 use Groupeat\Customers\Migrations\CustomerAddressesMigration;
 use Groupeat\Support\Entities\Abstracts\Address as AbstractAddress;
 
-class Address extends AbstractAddress {
-
+class Address extends AbstractAddress
+{
     public function getRules()
     {
         $rules = parent::getRules();
@@ -23,5 +24,4 @@ class Address extends AbstractAddress {
     {
         return new CustomerAddressesMigration;
     }
-
 }

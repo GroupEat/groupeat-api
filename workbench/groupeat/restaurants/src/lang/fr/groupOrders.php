@@ -36,6 +36,6 @@ return [
 
         'composedOf' => "Elle comporte une unique commande :|Elle comporte les :count commandes suivantes :",
 
-    ]
+    ],
 
 ];

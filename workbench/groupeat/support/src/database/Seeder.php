@@ -1,12 +1,13 @@
-<?php namespace Groupeat\Support\Database;
+<?php
+namespace Groupeat\Support\Database;
 
 use Config;
 use DB;
 use Faker\Factory;
 use Illuminate\Database\Seeder as LaravelSeeder;
 
-abstract class Seeder extends LaravelSeeder {
-
+abstract class Seeder extends LaravelSeeder
+{
     /**
      * @var \Faker\Generator
      */
@@ -16,7 +17,6 @@ abstract class Seeder extends LaravelSeeder {
      * @var int Number of fake entities to create
      */
     protected $entries;
-
 
     public function __construct()
     {
@@ -30,17 +30,13 @@ abstract class Seeder extends LaravelSeeder {
         $id = 1;
         $this->cleanTable();
 
-
-        if (method_exists($this, 'makeEntry'))
-        {
-            for ($id = 1; $id <= $this->entries; $id++)
-            {
+        if (method_exists($this, 'makeEntry')) {
+            for ($id = 1; $id <= $this->entries; $id++) {
                 $this->makeEntry($id, $this->entries);
             }
         }
 
-        if (method_exists($this, 'insertAdditionalEntries'))
-        {
+        if (method_exists($this, 'insertAdditionalEntries')) {
             $this->insertAdditionalEntries($id);
         }
     }
@@ -59,12 +55,11 @@ abstract class Seeder extends LaravelSeeder {
     {
         $migrationClass = str_replace('Seeder', 'Migration', static::class);
 
-        return new $migrationClass;
+        return new $migrationClass();
     }
 
     protected function cleanTable()
     {
         DB::table($this->getTable())->delete();
     }
-
 }

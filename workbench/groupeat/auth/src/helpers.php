@@ -1,7 +1,6 @@
 <?php
 
-if (!function_exists('generateAuthTokenFor'))
-{
+if (!function_exists('generateAuthTokenFor')) {
     /**
      * @param \Groupeat\Auth\Entities\UserCredentials $userCredentials
      * @param int|null                                $durationInMinutes

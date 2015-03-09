@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Orders\Api\V1;
+<?php
+namespace Groupeat\Orders\Api\V1;
 
 use Auth;
 use Groupeat\Orders\Entities\DeliveryAddress;
@@ -9,8 +10,8 @@ use Groupeat\Support\Api\V1\Controller;
 use Input;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrdersController extends Controller {
-
+class OrdersController extends Controller
+{
     public function show(Order $order)
     {
         $this->assertCanBeSeen($order);
@@ -32,8 +33,7 @@ class OrdersController extends Controller {
         $deliveryAddressData = Input::json()->all();
         $comment = Input::json('comment');
 
-        if (Input::json('groupOrderId'))
-        {
+        if (Input::json('groupOrderId')) {
             $groupOrder = GroupOrder::findOrFail(Input::json('groupOrderId'));
 
             $order = app('JoinGroupOrderService')->call(
@@ -43,9 +43,7 @@ class OrdersController extends Controller {
                 $deliveryAddressData,
                 $comment
             );
-        }
-        else
-        {
+        } else {
             $order = app('CreateGroupOrderService')->call(
                 $customer,
                 $productFormats,
@@ -60,10 +58,8 @@ class OrdersController extends Controller {
 
     private function assertCanBeSeen(Order $order)
     {
-        if (!Auth::isSame($order->groupOrder->restaurant))
-        {
+        if (!Auth::isSame($order->groupOrder->restaurant)) {
             Auth::assertSame($order->customer);
         }
     }
-
 }

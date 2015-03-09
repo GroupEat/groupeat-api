@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Orders\Services\Abstracts;
+<?php
+namespace Groupeat\Orders\Services\Abstracts;
 
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\Order;
@@ -6,8 +7,8 @@ use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Events\Dispatcher;
 
-abstract class GroupOrderValidation {
-
+abstract class GroupOrderValidation
+{
     /**
      * @var Dispatcher
      */
@@ -23,13 +24,11 @@ abstract class GroupOrderValidation {
      */
     protected $deliveryAddressConstraints;
 
-
     public function __construct(
         Dispatcher $events,
         $maximumDeliveryDistanceInKms,
         array $deliveryAddressConstraints
-    )
-    {
+    ) {
         $this->events = $events;
         $this->maximumDeliveryDistanceInKms = (float) $maximumDeliveryDistanceInKms;
         $this->deliveryAddressConstraints = $deliveryAddressConstraints;
@@ -56,12 +55,11 @@ abstract class GroupOrderValidation {
     {
         $distanceInKms = $deliveryAddress->distanceInKmsWith($other);
 
-        if ($distanceInKms > $this->maximumDeliveryDistanceInKms)
-        {
+        if ($distanceInKms > $this->maximumDeliveryDistanceInKms) {
             throw new UnprocessableEntity(
                 'deliveryDistanceTooLong',
                 'The delivery distance should be less than '
-                . $this->maximumDeliveryDistanceInKms . " kms, $distanceInKms given."
+                .$this->maximumDeliveryDistanceInKms." kms, $distanceInKms given."
             );
         }
     }
@@ -72,10 +70,8 @@ abstract class GroupOrderValidation {
 
         $this->events->fire($default, [$order]);
 
-        if (!$groupOrder->isJoinable())
-        {
+        if (!$groupOrder->isJoinable()) {
             $this->events->fire('groupOrderHasEnded', [$groupOrder]);
         }
     }
-
 }

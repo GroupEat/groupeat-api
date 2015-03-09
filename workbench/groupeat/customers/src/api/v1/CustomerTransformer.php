@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Customers\Api\V1;
+<?php
+namespace Groupeat\Customers\Api\V1;
 
 use Groupeat\Customers\Entities\Customer;
 use League\Fractal\TransformerAbstract;
@@ -17,5 +18,4 @@ class CustomerTransformer extends TransformerAbstract
             'activated' => $customer->isActivated(),
         ];
     }
-
 }

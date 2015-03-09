@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Support\Entities;
+<?php
+namespace Groupeat\Support\Entities;
 
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
@@ -9,8 +10,8 @@ use Illuminate\Support\MessageBag;
 use Robbo\Presenter\PresentableInterface;
 use Validator;
 
-abstract class Entity extends Model implements PresentableInterface {
-
+abstract class Entity extends Model implements PresentableInterface
+{
     /**
      * Can be set to true for easier seeding.
      *
@@ -28,14 +29,12 @@ abstract class Entity extends Model implements PresentableInterface {
      */
     protected $failedRules;
 
-
     public static function findOrFail($id, $columns = ['*'])
     {
         $model = static::find($id, $columns);
         $shortClassName = removeNamespaceFromClassName(static::CLASS);
 
-        if (is_null($model))
-        {
+        if (is_null($model)) {
             throw new NotFound(
                 lcfirst($shortClassName).'NotFound',
                 $shortClassName." #$id does not exist."
@@ -47,12 +46,9 @@ abstract class Entity extends Model implements PresentableInterface {
 
     protected static function boot()
     {
-        static::saving(function(Entity $entity)
-        {
-            if (!static::$skipValidation)
-            {
-                if (!$entity->validate())
-                {
+        static::saving(function (Entity $entity) {
+            if (!static::$skipValidation) {
+                if (!$entity->validate()) {
                     throw new UnprocessableEntity(
                         $entity->getFailedRules(),
                         "Cannot save {$entity->toShortString()}."
@@ -81,7 +77,7 @@ abstract class Entity extends Model implements PresentableInterface {
     {
         parent::__construct($attributes);
 
-        $this->validationErrors = new MessageBag;
+        $this->validationErrors = new MessageBag();
     }
 
     /**
@@ -139,7 +135,7 @@ abstract class Entity extends Model implements PresentableInterface {
      */
     public static function table()
     {
-        return (new static)->getTable();
+        return (new static())->getTable();
     }
 
     /**
@@ -169,12 +165,9 @@ abstract class Entity extends Model implements PresentableInterface {
     {
         $str = lcfirst(getClassNameWithoutNamespace($this));
 
-        if ($id = $this->getKey())
-        {
+        if ($id = $this->getKey()) {
             $str .= ' #'.$id;
-        }
-        else
-        {
+        } else {
             $str = 'new '.$str;
         }
 
@@ -188,8 +181,7 @@ abstract class Entity extends Model implements PresentableInterface {
     {
         $class = str_replace('Entities', 'Presenters', static::class);
 
-        if (class_exists($class))
-        {
+        if (class_exists($class)) {
             return new $class($this);
         }
 
@@ -204,7 +196,7 @@ abstract class Entity extends Model implements PresentableInterface {
         $temp = str_replace('\\Entities\\', '\\Migrations\\', static::class);
         $migrationClass = str_plural($temp).'Migration';
 
-        return new $migrationClass;
+        return new $migrationClass();
     }
 
     protected function getIdAttribute()
@@ -213,7 +205,7 @@ abstract class Entity extends Model implements PresentableInterface {
     }
 
     /**
-     * @param string $name Name of the relation
+     * @param string $name          Name of the relation
      * @param Entity $relatedEntity
      *
      * @return $this
@@ -222,8 +214,7 @@ abstract class Entity extends Model implements PresentableInterface {
     {
         $id = $relatedEntity->getKey();
 
-        if (empty($id))
-        {
+        if (empty($id)) {
             $message = 'Cannot set polymorphic relation '
                 . $relatedEntity->toShortString().' on '
                 . $this->toShortString().'.';
@@ -238,5 +229,4 @@ abstract class Entity extends Model implements PresentableInterface {
 
         return $this;
     }
-
 }

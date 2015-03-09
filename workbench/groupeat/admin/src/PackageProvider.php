@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Admin;
+<?php
+namespace Groupeat\Admin;
 
 use Groupeat\Admin\Entities\Admin;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
-class PackageProvider extends WorkbenchPackageProvider {
-
+class PackageProvider extends WorkbenchPackageProvider
+{
     protected $require = [self::ROUTES];
 
     public function boot()
@@ -13,5 +14,4 @@ class PackageProvider extends WorkbenchPackageProvider {
 
         $this->app->make('groupeat.auth')->addUserType(new Admin);
     }
-
 }

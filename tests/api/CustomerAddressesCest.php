@@ -1,7 +1,7 @@
 <?php
 
-class CustomerAddressesCest {
-
+class CustomerAddressesCest
+{
     public function testThatACustomerCanUpdateAndGetItsAddress(ApiTester $I)
     {
         list($token, $id) = $I->amAnActivatedCustomer();
@@ -21,7 +21,7 @@ class CustomerAddressesCest {
         $I->seeResponseCodeIs(200);
 
         // We cannot check the latitude or longitude for strict equality
-        // because of troncation errors.
+        // because of truncation errors.
         $I->seeResponseContainsData(['street' => "Allée des techniques avancées"]);
     }
 
@@ -32,5 +32,4 @@ class CustomerAddressesCest {
         $I->sendApiGetWithToken($token, "predefinedAddresses");
         $I->seeResponseCodeIs(200);
     }
-
 }

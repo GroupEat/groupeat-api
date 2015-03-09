@@ -1,11 +1,12 @@
-<?php namespace Groupeat\Documentation\Services;
+<?php
+namespace Groupeat\Documentation\Services;
 
 use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateApiDocumentation {
-
+class GenerateApiDocumentation
+{
     const PATH = '_generated-docs.html';
 
     /**
@@ -27,7 +28,6 @@ class GenerateApiDocumentation {
      * @var bool
      */
     private $isLocal;
-
 
     /**
      * @param Filesystem $filesystem
@@ -52,12 +52,10 @@ class GenerateApiDocumentation {
     {
         $docContent = $this->filesystem->get(__DIR__.'/../resources/api-docs-introduction.md');
 
-        foreach ($this->orderedPackages as $package)
-        {
+        foreach ($this->orderedPackages as $package) {
             $paths = $this->getPathsForPackage($package);
 
-            if ($this->filesystem->exists($paths['disk']))
-            {
+            if ($this->filesystem->exists($paths['disk'])) {
                 $packageDocContent = "\n<!-- include({$paths['include']}) -->\n";
 
                 $docContent .= $packageDocContent;
@@ -79,20 +77,16 @@ class GenerateApiDocumentation {
     }
 
     /**
-     * @param bool $forceGeneration
-     *
      * @return string
      */
     public function getHTML()
     {
         $path = $this->getOutputPath();
 
-        if ($this->isLocal || !$this->filesystem->exists($path))
-        {
+        if ($this->isLocal || !$this->filesystem->exists($path)) {
             $errorOutput = $this->call();
 
-            if ($errorOutput)
-            {
+            if ($errorOutput) {
                 return $errorOutput;
             }
         }
@@ -102,8 +96,7 @@ class GenerateApiDocumentation {
 
     private function parseConfig($doc)
     {
-        return preg_replace_callback("/\{\{([^\}]*)\}\}/", function($match)
-        {
+        return preg_replace_callback("/\{\{([^\}]*)\}\}/", function ($match) {
             return $this->config->get(trim($match[1]));
         }, $doc);
     }
@@ -130,5 +123,4 @@ class GenerateApiDocumentation {
     {
         return workbench_path('documentation', "generated/documentation.$extension");
     }
-
 }

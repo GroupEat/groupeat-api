@@ -1,15 +1,15 @@
-<?php namespace Groupeat\Restaurants\Seeders;
+<?php
+namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Support\Database\Seeder;
 
-class ProductFormatsSeeder extends Seeder {
-
+class ProductFormatsSeeder extends Seeder
+{
     protected function insertAdditionalEntries($id)
     {
-        foreach (Product::all() as $product)
-        {
+        foreach (Product::all() as $product) {
             ProductFormat::create([
                 'product_id' => $product->id,
                 'name' => 'junior',
@@ -29,5 +29,4 @@ class ProductFormatsSeeder extends Seeder {
             ]);
         }
     }
-
 }

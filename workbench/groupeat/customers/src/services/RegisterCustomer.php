@@ -1,16 +1,16 @@
-<?php namespace Groupeat\Customers\Services;
+<?php
+namespace Groupeat\Customers\Services;
 
 use Groupeat\Auth\Services\RegisterUser;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 
-class RegisterCustomer {
-
+class RegisterCustomer
+{
     /**
      * @var RegisterUser
      */
     private $registerUser;
-
 
     public function __construct(RegisterUser $registerUser)
     {
@@ -26,8 +26,7 @@ class RegisterCustomer {
      */
     public function call($email, $plainPassword, $locale)
     {
-        return $this->registerUser->call($email, $plainPassword, $locale, new Customer, function($credentials)
-        {
+        return $this->registerUser->call($email, $plainPassword, $locale, new Customer, function ($credentials) {
             $this->assertEmailFromCampus($credentials['email']);
         });
     }
@@ -36,13 +35,11 @@ class RegisterCustomer {
     {
         $domains = 'ensta-paristech\.fr|ensta\.fr|polytechnique\.edu|institutoptique\.fr';
 
-        if (!preg_match("/@($domains)$/", $email))
-        {
+        if (!preg_match("/@($domains)$/", $email)) {
             throw new UnprocessableEntity(
                 ['email' => ['notFromCampus' => []]],
                 "E-mail should correspond to a Saclay campus account."
             );
         }
     }
-
 }

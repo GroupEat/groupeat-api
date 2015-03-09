@@ -1,7 +1,7 @@
 <?php
 
-class RestaurantsCest {
-
+class RestaurantsCest
+{
     public function testThatAUserShouldAuthenticateToSeeTheRestaurantList(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
@@ -48,5 +48,4 @@ class RestaurantsCest {
         $I->sendApiGetWithToken($token, 'products/'.$product['id'].'/formats');
         $I->seeResponseCodeIs(200);
     }
-
 }

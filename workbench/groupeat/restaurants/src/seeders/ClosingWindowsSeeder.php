@@ -1,11 +1,12 @@
-<?php namespace Groupeat\Restaurants\Seeders;
+<?php
+namespace Groupeat\Restaurants\Seeders;
 
 use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\ClosingWindow;
 use Groupeat\Support\Database\Seeder;
 
-class ClosingWindowsSeeder extends Seeder {
-
+class ClosingWindowsSeeder extends Seeder
+{
     protected function insertAdditionalEntries($id)
     {
         $now = Carbon::now();
@@ -16,5 +17,4 @@ class ClosingWindowsSeeder extends Seeder {
             'to' => $now->copy()->addHour()->toDateTimeString(),
         ]);
     }
-
 }

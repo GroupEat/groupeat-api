@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Restaurants\Entities;
+<?php
+namespace Groupeat\Restaurants\Entities;
 
 use Groupeat\Restaurants\Migrations\RestaurantAddressesMigration;
 use Groupeat\Support\Entities\Abstracts\Address as AbstractAddress;
 
-class Address extends AbstractAddress {
-
+class Address extends AbstractAddress
+{
     public function getRules()
     {
         $rules = parent::getRules();
@@ -21,7 +22,6 @@ class Address extends AbstractAddress {
 
     protected function getRelatedMigration()
     {
-        return new RestaurantAddressesMigration;
+        return new RestaurantAddressesMigration();
     }
-
 }

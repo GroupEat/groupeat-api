@@ -1,7 +1,7 @@
 <?php
 
-class OrdersCest {
-
+class OrdersCest
+{
     public function testThatACustomerShouldBeActivatedToPlaceAnOrder(ApiTester $I)
     {
         list($token) = $I->sendRegistrationRequest();
@@ -60,12 +60,9 @@ class OrdersCest {
     public function testThatTheAnOrderCannotBePlacedOnAClosedRestaurant(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
-        $products = $this->getProducts($I, $token, ['around' => true, 'opened' => false], function($restaurants)
-        {
-            foreach ($restaurants as $restaurant)
-            {
-                if (!$restaurant['opened'])
-                {
+        $products = $this->getProducts($I, $token, ['around' => true, 'opened' => false], function ($restaurants) {
+            foreach ($restaurants as $restaurant) {
+                if (!$restaurant['opened']) {
                     return $restaurant['id'];
                 }
             }
@@ -87,14 +84,14 @@ class OrdersCest {
             $I,
             $token,
             ['around' => true, 'opened' => true],
-            function($restaurants) use ($latitude, $longitude)
-        {
-            $restaurant = $restaurants[0];
-            $latitude = $restaurant['address']['data']['latitude'];
-            $longitude = $restaurant['address']['data']['longitude'];
+            function ($restaurants) use ($latitude, $longitude) {
+                $restaurant = $restaurants[0];
+                $latitude = $restaurant['address']['data']['latitude'];
+                $longitude = $restaurant['address']['data']['longitude'];
 
-            return $restaurant['id'];
-        });
+                return $restaurant['id'];
+            }
+        );
 
         $productFormats = $this->getProductFormatsFrom($products);
         $orderDetails = $this->getOrderDetails($I, $token, [
@@ -112,10 +109,8 @@ class OrdersCest {
         list($token) = $I->amAnActivatedCustomer();
         $I->sendApiGetWithToken($token, 'restaurants');
 
-        foreach ($I->grabDataFromResponse() as $restaurant)
-        {
-            if (!$restaurant['opened'])
-            {
+        foreach ($I->grabDataFromResponse() as $restaurant) {
+            if (!$restaurant['opened']) {
                 $wrongRestaurantId = $restaurant['id'];
                 break;
             }
@@ -125,10 +120,10 @@ class OrdersCest {
             $I,
             $token,
             ['around' => true, 'opened' => true],
-            function() use ($wrongRestaurantId)
-        {
-            return $wrongRestaurantId;
-        });
+            function () use ($wrongRestaurantId) {
+                return $wrongRestaurantId;
+            }
+        );
 
         $wrongProductFormats = $this->getProductFormatsFrom($wrongProducts);
 
@@ -146,8 +141,7 @@ class OrdersCest {
         $options = ['around' => true, 'opened' => true];
         $minimumPrice = 0;
 
-        $products = $this->getProducts($I, $token, $options, function($restaurants) use (&$minimumPrice)
-        {
+        $products = $this->getProducts($I, $token, $options, function ($restaurants) use (&$minimumPrice) {
             $minimumPrice = $restaurants[0]['minimumOrderPrice'];
 
             return $restaurants[0]['id'];
@@ -156,12 +150,9 @@ class OrdersCest {
         $price = 0;
         $productFormats = [];
 
-        foreach ($products as $product)
-        {
-            foreach ($product['formats']['data'] as $format)
-            {
-                if (($price + $format['price']) < $minimumPrice)
-                {
+        foreach ($products as $product) {
+            foreach ($product['formats']['data'] as $format) {
+                if (($price + $format['price']) < $minimumPrice) {
                     $price += $format['price'];
                     $productFormats[$format['id']] = 1;
                 }
@@ -179,8 +170,7 @@ class OrdersCest {
         $options = ['around' => true, 'opened' => true];
         $deliveryCapacity = 0;
 
-        $products = $this->getProducts($I, $token, $options, function($restaurants) use (&$deliveryCapacity)
-        {
+        $products = $this->getProducts($I, $token, $options, function ($restaurants) use (&$deliveryCapacity) {
             $deliveryCapacity = $restaurants[0]['deliveryCapacity'];
 
             return $restaurants[0]['id'];
@@ -189,12 +179,9 @@ class OrdersCest {
         $amount = 0;
         $productFormats = [];
 
-        foreach ($products as $product)
-        {
-            foreach ($product['formats']['data'] as $format)
-            {
-                if ($amount <= $deliveryCapacity)
-                {
+        foreach ($products as $product) {
+            foreach ($product['formats']['data'] as $format) {
+                if ($amount <= $deliveryCapacity) {
                     $amount++;
                     $productFormats[$format['id']] = 1;
                 }
@@ -260,10 +247,10 @@ class OrdersCest {
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
         $newDiscountRate = $this->computeDiscountRate(
-                $I->grabDataFromResponse('discountedPrice'),
-                $I->grabDataFromResponse('rawPrice')
+            $I->grabDataFromResponse('discountedPrice'),
+            $I->grabDataFromResponse('rawPrice')
         );
-        $I->sendApiGetWithToken($token , "groupOrders/$groupOrderId");
+        $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
         $newDiscountRateFormGroupOrder = $I->grabDataFromResponse('discountRate');
 
         $I->assertGreaterThan($oldDiscountRate, $newDiscountRate);
@@ -313,12 +300,9 @@ class OrdersCest {
         $token,
         array $options = ['around' => true, 'opened' => true],
         Closure $getRestaurantIdCallback = null
-    )
-    {
-        if (is_null($getRestaurantIdCallback))
-        {
-            $getRestaurantIdCallback = function($restaurants)
-            {
+    ) {
+        if (is_null($getRestaurantIdCallback)) {
+            $getRestaurantIdCallback = function ($restaurants) {
                 return $restaurants[0]['id'];
             };
         }
@@ -335,8 +319,7 @@ class OrdersCest {
     {
         $defaultProductFormats = '{}';
 
-        if (empty($details['productFormats']))
-        {
+        if (empty($details['productFormats'])) {
             $defaultProductFormats = $this->getProductFormatsFrom($this->getProducts($I, $token));
         }
 
@@ -359,16 +342,14 @@ class OrdersCest {
 
         $queryStringParams = [];
 
-        if (!empty($options['around']))
-        {
+        if (!empty($options['around'])) {
             $queryStringParams['include'][] = 'address';
             $queryStringParams['around'] = true;
             $queryStringParams['latitude'] = $latitude;
             $queryStringParams['longitude'] = $longitude;
         }
 
-        if (!empty($options['opened']))
-        {
+        if (!empty($options['opened'])) {
             $queryStringParams['opened'] = true;
         }
 
@@ -377,12 +358,11 @@ class OrdersCest {
         return $queryStringParams;
     }
 
-    private function getProductFormatsFrom(array $products, array $selectedProducts = [[0,0,2], [1,2,1]])
+    private function getProductFormatsFrom(array $products, array $selectedProducts = [[0, 0, 2], [1, 2, 1]])
     {
         $productFormats = [];
 
-        foreach ($selectedProducts as $selectedProduct)
-        {
+        foreach ($selectedProducts as $selectedProduct) {
             $productFormats[$products[$selectedProduct[0]]['formats']['data'][$selectedProduct[1]]['id']]
                 = $selectedProduct[2];
         }
@@ -409,5 +389,4 @@ class OrdersCest {
     {
         return (int) round(100 * (1 - $discountedPrice / $rawPrice));
     }
-
 }

@@ -1,13 +1,13 @@
-<?php namespace Groupeat\Restaurants\Entities;
+<?php
+namespace Groupeat\Restaurants\Entities;
 
 use Groupeat\Support\Entities\Entity;
 
-class Product extends Entity {
-
+class Product extends Entity
+{
     public $timestamps = false;
 
     protected $fillable = ['type_id', 'name', 'description'];
-
 
     public function getRules()
     {
@@ -33,5 +33,4 @@ class Product extends Entity {
     {
         return $this->belongsTo('Groupeat\Restaurants\Entities\Restaurant');
     }
-
 }

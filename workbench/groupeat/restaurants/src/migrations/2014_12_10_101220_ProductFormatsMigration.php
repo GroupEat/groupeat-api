@@ -1,18 +1,17 @@
-<?php namespace Groupeat\Restaurants\Migrations;
+<?php
+namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ProductFormatsMigration extends Migration {
-
+class ProductFormatsMigration extends Migration
+{
     const TABLE = 'product_formats';
-
 
     public function up()
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
+        Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id')->index();
             $table->string('name');
@@ -21,5 +20,4 @@ class ProductFormatsMigration extends Migration {
             $table->foreign('product_id')->references('id')->on(ProductsMigration::TABLE);
         });
     }
-
 }

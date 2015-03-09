@@ -1,17 +1,17 @@
-<?php namespace Groupeat\Support\Exceptions;
+<?php
+namespace Groupeat\Support\Exceptions;
 
 use Dingo\Api\Exception\ResourceException;
 use Exception as BaseException;
 use Illuminate\Support\MessageBag as Bag;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class Exception extends ResourceException {
-
+class Exception extends ResourceException
+{
     /**
      * @var string
      */
     protected $errorKey;
-
 
     public function __construct(
         $errorKey,
@@ -21,22 +21,17 @@ class Exception extends ResourceException {
         array $headers = [],
         BaseException $previous = null,
         $code = 0
-    )
-    {
-        if (is_array($errorKey))
-        {
+    ) {
+        if (is_array($errorKey)) {
             $errors = $this->formatErrors($errorKey);
             $errorKey = 'validationErrors';
         }
 
         $this->errorKey = $errorKey;
 
-        if (is_null($errors))
-        {
-            $this->errors = new Bag;
-        }
-        else
-        {
+        if (is_null($errors)) {
+            $this->errors = new Bag();
+        } else {
             $this->errors = is_array($errors) ? new Bag($errors) : $errors;
         }
 
@@ -60,14 +55,11 @@ class Exception extends ResourceException {
     {
         $formattedErrors = [];
 
-        foreach ($errors as $attribute => $rules)
-        {
-            foreach ($rules as $rule => $details)
-            {
+        foreach ($errors as $attribute => $rules) {
+            foreach ($rules as $rule => $details) {
                 $rule = lcfirst($rule);
 
-                switch ($rule)
-                {
+                switch ($rule) {
                     case 'unique':
                         $rule = 'alreadyTaken';
                         break;
@@ -79,5 +71,4 @@ class Exception extends ResourceException {
 
         return $formattedErrors;
     }
-
 }

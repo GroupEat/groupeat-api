@@ -1,9 +1,9 @@
-<?php namespace Groupeat\Restaurants\Entities;
+<?php
+namespace Groupeat\Restaurants\Entities;
 
 use Groupeat\Restaurants\Entities\Abstracts\Window;
 
-class ClosingWindow extends Window {
-
+class ClosingWindow extends Window
+{
     protected $dates = ['from', 'to'];
-
 }

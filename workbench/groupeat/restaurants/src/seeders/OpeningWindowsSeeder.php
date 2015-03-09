@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Restaurants\Seeders;
+<?php
+namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Restaurants\Entities\OpeningWindow;
 use Groupeat\Support\Database\Seeder;
 
-class OpeningWindowsSeeder extends Seeder {
-
+class OpeningWindowsSeeder extends Seeder
+{
     protected function makeEntry($id, $max)
     {
         $this->addWindows($id);
@@ -22,8 +23,7 @@ class OpeningWindowsSeeder extends Seeder {
         ]);
 
         // Always opened
-        foreach ([0, 1, 2, 3, 4, 5, 6] as $dayOfWeek)
-        {
+        foreach ([0, 1, 2, 3, 4, 5, 6] as $dayOfWeek) {
             OpeningWindow::create([
                 'restaurant_id' => $id + 1,
                 'dayOfWeek' => $dayOfWeek,
@@ -35,8 +35,7 @@ class OpeningWindowsSeeder extends Seeder {
 
     private function addWindows($id)
     {
-        foreach ([1, 2, 3, 4, 5, 6] as $dayOfWeek)
-        {
+        foreach ([1, 2, 3, 4, 5, 6] as $dayOfWeek) {
             OpeningWindow::create([
                 'restaurant_id' => $id,
                 'dayOfWeek' => $dayOfWeek,
@@ -45,5 +44,4 @@ class OpeningWindowsSeeder extends Seeder {
             ]);
         }
     }
-
 }

@@ -1,12 +1,13 @@
-<?php namespace Groupeat\Customers\Seeders;
+<?php
+namespace Groupeat\Customers\Seeders;
 
 use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Database\Seeder;
 
-class CustomersSeeder extends Seeder {
-
+class CustomersSeeder extends Seeder
+{
     protected function makeEntry($id, $max)
     {
         $customer = Customer::create([
@@ -37,9 +38,9 @@ class CustomersSeeder extends Seeder {
             'password' => 'groupeat',
             'activated_at' => Carbon::now(),
             'locale' => 'fr',
+            // @codingStandardsIgnoreStart
             'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjo2LCJpYXQiOjE0MjI0NjcwMDUsImV4cCI6MjA1MzE4NzAwNX0.eu26it7Rxlm8hNxJsmeeyquhWqO9R9PV4c_u4pFI5pw',
+            // @codingStandardsIgnoreEnd
         ]);
-
     }
-
 }

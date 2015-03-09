@@ -1,11 +1,11 @@
-<?php namespace Groupeat\Support\Services;
+<?php
+namespace Groupeat\Support\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Services\Locale;
 use Illuminate\Mail\Mailer;
 
-class SendMail {
-
+class SendMail
+{
     /**
      * @var Mailer
      */
@@ -15,7 +15,6 @@ class SendMail {
      * @var Locale
      */
     private $localeService;
-
 
     public function __construct(Mailer $mailer, Locale $localeService)
     {
@@ -39,17 +38,18 @@ class SendMail {
      */
     public function call(UserCredentials $user, $view, $subjectLangKey, array $data = [])
     {
-        $this->localeService->executeWithUserLocale(function() use ($user, $view, $subjectLangKey, $data)
-        {
+        $this->localeService->executeWithUserLocale(function () use ($user, $view, $subjectLangKey, $data) {
             $views = ["$view-html", "$view-text"];
 
-            $this->mailer->send($views, $data, function($message) use ($user, $subjectLangKey)
-            {
-                $subject = $this->localeService->getTranslator()->get($subjectLangKey);
+            $this->mailer->send(
+                $views,
+                $data,
+                function ($message) use ($user, $subjectLangKey) {
+                    $subject = $this->localeService->getTranslator()->get($subjectLangKey);
 
-                $message->to($user->email)->subject($subject);
-            });
+                    $message->to($user->email)->subject($subject);
+                }
+            );
         }, $user->locale);
     }
-
 }

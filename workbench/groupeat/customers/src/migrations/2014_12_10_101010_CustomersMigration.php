@@ -1,18 +1,17 @@
-<?php namespace Groupeat\Customers\Migrations;
+<?php
+namespace Groupeat\Customers\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CustomersMigration extends Migration {
-
+class CustomersMigration extends Migration
+{
     const TABLE = 'customers';
-
 
     public function up()
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
+        Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
@@ -21,5 +20,4 @@ class CustomersMigration extends Migration {
             $table->softDeletes()->index();
         });
     }
-
 }

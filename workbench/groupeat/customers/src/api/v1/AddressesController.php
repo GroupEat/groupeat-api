@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Customers\Api\V1;
+<?php
+namespace Groupeat\Customers\Api\V1;
 
 use Auth;
 use Groupeat\Customers\Entities\Customer;
@@ -6,14 +7,13 @@ use Groupeat\Customers\Entities\PredefinedAddress;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
 
-class AddressesController extends Controller {
-
+class AddressesController extends Controller
+{
     public function show(Customer $customer)
     {
         Auth::assertSame($customer);
 
-        if (!$customer->address)
-        {
+        if (!$customer->address) {
             return $this->response->errorNotFound("No address has been set for this customer.");
         }
 
@@ -39,5 +39,4 @@ class AddressesController extends Controller {
             new AddressTransformer
         );
     }
-
 }

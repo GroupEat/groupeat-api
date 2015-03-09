@@ -1,16 +1,16 @@
-<?php namespace Groupeat\Restaurants\Migrations\Abstracts;
+<?php
+namespace Groupeat\Restaurants\Migrations\Abstracts;
 
 use Groupeat\Restaurants\Migrations\RestaurantsMigration;
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-abstract class WindowsMigration extends Migration {
-
+abstract class WindowsMigration extends Migration
+{
     public function up()
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
+        Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->integer('restaurant_id')->unsigned()->index();
             $this->addFieldsTo($table);
@@ -20,5 +20,4 @@ abstract class WindowsMigration extends Migration {
     }
 
     abstract protected function addFieldsTo(Blueprint $table);
-
 }

@@ -1,12 +1,13 @@
-<?php namespace Groupeat\Restaurants\Services;
+<?php
+namespace Groupeat\Restaurants\Services;
 
 use Groupeat\Auth\Services\GenerateAuthToken;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Services\SendMail;
 use Illuminate\Routing\UrlGenerator;
 
-class SendGroupOrderHasEndedMail {
-
+class SendGroupOrderHasEndedMail
+{
     /**
      * @var SendMail
      */
@@ -27,14 +28,12 @@ class SendGroupOrderHasEndedMail {
      */
     private $tokenTtlInMinutes;
 
-
     public function __construct(
         SendMail $mailer,
         UrlGenerator $urlGenerator,
         GenerateAuthToken $tokenGenerator,
         $tokenTtlInMinutes
-    )
-    {
+    ) {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
         $this->tokenGenerator = $tokenGenerator;
@@ -70,5 +69,4 @@ class SendGroupOrderHasEndedMail {
 
         return $this->urlGenerator->to("groupOrders/$id/confirm?token=$token");
     }
-
 }

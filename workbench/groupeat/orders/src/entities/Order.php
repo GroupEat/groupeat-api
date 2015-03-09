@@ -1,17 +1,16 @@
-<?php namespace Groupeat\Orders\Entities;
+<?php
+namespace Groupeat\Orders\Entities;
 
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Entities\Entity;
-use Groupeat\Support\Exceptions\Exception;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
 
-class Order extends Entity {
-
+class Order extends Entity
+{
     public $timestamps = false;
 
     protected $dates = ['created_at'];
-
 
     public function getRules()
     {
@@ -59,14 +58,10 @@ class Order extends Entity {
 
     protected function setCommentAttribute($comment)
     {
-        if (empty($comment))
-        {
+        if (empty($comment)) {
             $this->attributes['comment'] = null;
-        }
-        else
-        {
+        } else {
             $this->attributes['comment'] = str_limit($comment, 1000);
         }
     }
-
 }

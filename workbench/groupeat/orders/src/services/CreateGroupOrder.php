@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Orders\Services;
+<?php
+namespace Groupeat\Orders\Services;
 
 use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
@@ -10,8 +11,8 @@ use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Events\Dispatcher;
 
-class CreateGroupOrder extends GroupOrderValidation {
-
+class CreateGroupOrder extends GroupOrderValidation
+{
     /**
      * @var int
      */
@@ -27,7 +28,6 @@ class CreateGroupOrder extends GroupOrderValidation {
      */
     private $minimumRemainingOpeningMinutes;
 
-
     public function __construct(
         Dispatcher $events,
         $maximumDeliveryDistanceInKms,
@@ -35,8 +35,7 @@ class CreateGroupOrder extends GroupOrderValidation {
         $minimumFoodRushDurationInMinutes,
         $maximumFoodRushDurationInMinutes,
         $minimumRemainingOpeningMinutes
-    )
-    {
+    ) {
         parent::__construct($events, $maximumDeliveryDistanceInKms, $deliveryAddressConstraints);
 
         $this->minimumFoodRushDurationInMinutes = (int) $minimumFoodRushDurationInMinutes;
@@ -48,7 +47,7 @@ class CreateGroupOrder extends GroupOrderValidation {
      * @param Customer       $customer
      * @param ProductFormats $productFormats
      * @param int            $foodRushDurationInMinutes
-     * @param array          $addressData
+     * @param array          $deliveryAddressData
      * @param string         $comment
      *
      * @return Order
@@ -59,8 +58,7 @@ class CreateGroupOrder extends GroupOrderValidation {
         $foodRushDurationInMinutes,
         array $deliveryAddressData,
         $comment = null
-    )
-    {
+    ) {
         $foodRushDurationInMinutes = (int) $foodRushDurationInMinutes;
         $this->guardAgainstInvalidFoodRushDuration($foodRushDurationInMinutes);
 
@@ -85,28 +83,25 @@ class CreateGroupOrder extends GroupOrderValidation {
 
     private function guardAgainstInvalidFoodRushDuration($foodRushDurationInMinutes)
     {
-        if (
-            $foodRushDurationInMinutes < $this->minimumFoodRushDurationInMinutes
+        if ($foodRushDurationInMinutes < $this->minimumFoodRushDurationInMinutes
             || $foodRushDurationInMinutes > $this->maximumFoodRushDurationInMinutes
-        )
-        {
+        ) {
             throw new UnprocessableEntity(
                 "invalidFoodRushDuration",
                 "The FoodRush duration must be between "
-                . $this->minimumFoodRushDurationInMinutes . ' and '
-                . $this->maximumFoodRushDurationInMinutes . ' minutes, '
-                . $foodRushDurationInMinutes . ' given.'
+                .$this->minimumFoodRushDurationInMinutes.' and '
+                .$this->maximumFoodRushDurationInMinutes.' minutes, '
+                .$foodRushDurationInMinutes.' given.'
             );
         }
     }
 
     private function assertThatTheRestaurantWontCloseTooSoon(Restaurant $restaurant, $foodRushDurationInMinutes)
     {
-        $now = new Carbon;
+        $now = new Carbon();
         $minimumMinutes = max($this->minimumRemainingOpeningMinutes, $foodRushDurationInMinutes);
         $to = $now->copy()->addMinutes($minimumMinutes);
 
         $restaurant->assertOpened($now, $to);
     }
-
 }

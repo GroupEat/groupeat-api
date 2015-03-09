@@ -1,7 +1,7 @@
 <?php
 
-class AuthCest {
-
+class AuthCest
+{
     public function testThatPassingATokenInTheQueryStringIsForbidden(ApiTester $I)
     {
         $I->sendApiGet('auth/token?token=shouldBePassedInHeader');
@@ -72,8 +72,7 @@ class AuthCest {
 
     public function testThatAUserMustGiveAWellFormattedEmailToRegister(ApiTester $I)
     {
-        foreach (['user)gmail@ensta.fr', 'user§user@polytechnique.edu'] as $invalidEmail)
-        {
+        foreach (['user)gmail@ensta.fr', 'user§user@polytechnique.edu'] as $invalidEmail) {
             $I->sendApiPost($this->getUserResource(), [
                 'email' => $invalidEmail,
                 'password' => 'password',
@@ -160,8 +159,7 @@ class AuthCest {
         $email = 'user@ensta.fr',
         $password = 'password',
         $locale = 'fr'
-    )
-    {
+    ) {
         return $I->sendRegistrationRequest($email, $password, $this->getUserResource(), $locale);
     }
 
@@ -169,5 +167,4 @@ class AuthCest {
     {
         return 'customers'; // Could have been admin or any other user type.
     }
-
 }

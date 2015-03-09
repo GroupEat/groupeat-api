@@ -1,17 +1,17 @@
-<?php namespace Groupeat\Customers\Services;
+<?php
+namespace Groupeat\Customers\Services;
 
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Services\SendMail;
 
-class SendGroupOrderHasBeenConfirmedMails {
-
+class SendGroupOrderHasBeenConfirmedMails
+{
     /**
      * @var SendMail
      */
     private $mailer;
-
 
     public function __construct(SendMail $mailer)
     {
@@ -23,14 +23,15 @@ class SendGroupOrderHasBeenConfirmedMails {
      */
     public function call(GroupOrder $groupOrder)
     {
-        $groupOrder->load([
+        $groupOrder->load(
+            [
             'orders.productFormats.product.type',
             'orders.customer.credentials',
-            'orders.deliveryAddress'
-        ]);
+            'orders.deliveryAddress',
+            ]
+        );
 
-        foreach ($groupOrder->orders as $order)
-        {
+        foreach ($groupOrder->orders as $order) {
             return $this->sendFor($groupOrder, $order);
         }
     }
@@ -47,5 +48,4 @@ class SendGroupOrderHasBeenConfirmedMails {
             compact('groupOrder', 'order', 'restaurant', 'deliveryAddress')
         );
     }
-
 }

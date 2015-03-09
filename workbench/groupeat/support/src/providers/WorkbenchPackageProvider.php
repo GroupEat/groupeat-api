@@ -1,9 +1,10 @@
-<?php namespace Groupeat\Support\Providers;
+<?php
+namespace Groupeat\Support\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class WorkbenchPackageProvider extends ServiceProvider {
-
+class WorkbenchPackageProvider extends ServiceProvider
+{
     const FILTERS = 'filters';
     const HELPERS = 'helpers';
     const ROUTES = 'routes';
@@ -12,7 +13,6 @@ class WorkbenchPackageProvider extends ServiceProvider {
 
     protected $require = [];
     protected $console = [];
-
 
     public function register()
     {
@@ -28,13 +28,12 @@ class WorkbenchPackageProvider extends ServiceProvider {
         $this->registerConsoleCommands(...$this->console);
     }
 
-	protected function requireFiles(...$files)
+    protected function requireFiles(...$files)
     {
-        foreach ($files as $file)
-        {
+        foreach ($files as $file) {
             $path = $this->getPackagePath("$file.php");
 
-            require $path;
+            include $path;
         }
 
         return $this;
@@ -44,14 +43,12 @@ class WorkbenchPackageProvider extends ServiceProvider {
     {
         $names = [];
 
-        foreach ($commandShortNames as $commandShortName)
-        {
+        foreach ($commandShortNames as $commandShortName) {
             $className = 'Groupeat\\'.ucfirst($this->getPackageName()).'\\Console\\'.$commandShortName.'Command';
             $name = 'groupeat.console.'.strtolower($commandShortName);
 
-            $this->app[$name] = $this->app->share(function($app) use ($className)
-            {
-                return new $className;
+            $this->app[$name] = $this->app->share(function ($app) use ($className) {
+                return new $className();
             });
 
             $names[] = $name;
@@ -66,12 +63,9 @@ class WorkbenchPackageProvider extends ServiceProvider {
     {
         $workbench_root = base_path("workbench/groupeat/{$this->getPackageName()}/src");
 
-        if (empty($file))
-        {
+        if (empty($file)) {
             return $workbench_root;
-        }
-        else
-        {
+        } else {
             return $workbench_root.'/'.$file;
         }
     }
@@ -82,5 +76,4 @@ class WorkbenchPackageProvider extends ServiceProvider {
 
         return lcfirst($parts[1]);
     }
-
 }

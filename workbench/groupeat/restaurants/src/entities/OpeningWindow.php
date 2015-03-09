@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Restaurants\Entities;
+<?php
+namespace Groupeat\Restaurants\Entities;
 
 use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\Abstracts\Window;
 
-class OpeningWindow extends Window {
-
+class OpeningWindow extends Window
+{
     public function getRules()
     {
         $rules = parent::getRules();
@@ -28,5 +29,4 @@ class OpeningWindow extends Window {
     {
         return Carbon::createFromFormat('H:i:s', $this->attributes[$attribute]);
     }
-
 }

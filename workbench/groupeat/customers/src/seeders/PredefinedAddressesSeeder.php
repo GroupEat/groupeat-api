@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Customers\Seeders;
+<?php
+namespace Groupeat\Customers\Seeders;
 
 use Groupeat\Customers\Entities\PredefinedAddress;
 use Groupeat\Support\Database\Seeder;
 
-class PredefinedAddressesSeeder extends Seeder {
-
+class PredefinedAddressesSeeder extends Seeder
+{
     protected function insertAdditionalEntries($id)
     {
         PredefinedAddress::create([
@@ -40,5 +41,4 @@ class PredefinedAddressesSeeder extends Seeder {
             'longitude' => 2.2034917,
         ]);
     }
-
 }

@@ -1,12 +1,12 @@
-<?php namespace Groupeat\Restaurants\Migrations;
+<?php
+namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Support\Migrations\Abstracts\AddressesMigration;
 use Illuminate\Database\Schema\Blueprint;
 
-class RestaurantAddressesMigration extends AddressesMigration {
-
+class RestaurantAddressesMigration extends AddressesMigration
+{
     const TABLE = 'restaurant_addresses';
-
 
     protected function addFields(Blueprint $table)
     {
@@ -15,5 +15,4 @@ class RestaurantAddressesMigration extends AddressesMigration {
 
         $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
     }
-
 }

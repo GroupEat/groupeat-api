@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Orders\Api\V1;
+<?php
+namespace Groupeat\Orders\Api\V1;
 
 use Groupeat\Customers\Api\V1\CustomerTransformer;
 use Groupeat\Orders\Entities\Order;
@@ -8,7 +9,6 @@ use League\Fractal\TransformerAbstract;
 class OrderTransformer extends TransformerAbstract
 {
     protected $availableIncludes = ['customer', 'groupOrder', 'restaurant', 'deliveryAddress'];
-
 
     public function transform(Order $order)
     {
@@ -40,5 +40,4 @@ class OrderTransformer extends TransformerAbstract
     {
         return $this->item($order->deliveryAddress, new DeliveryAddressTransformer);
     }
-
 }

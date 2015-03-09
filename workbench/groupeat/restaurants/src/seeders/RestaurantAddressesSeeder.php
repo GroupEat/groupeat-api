@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Restaurants\Seeders;
+<?php
+namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Restaurants\Entities\Address;
 use Groupeat\Support\Database\Seeder;
 
-class RestaurantAddressesSeeder extends Seeder {
-
+class RestaurantAddressesSeeder extends Seeder
+{
     protected function makeEntry($id, $max)
     {
         Address::create([
@@ -21,8 +22,7 @@ class RestaurantAddressesSeeder extends Seeder {
 
     protected function insertAdditionalEntries($id)
     {
-        foreach ([$id, $id + 1, $id + 2] as $currentId)
-        {
+        foreach ([$id, $id + 1, $id + 2] as $currentId) {
             Address::create([
                 'restaurant_id' => $currentId,
                 'street' => "8{$currentId} Rue Maurice Berteaux",
@@ -35,5 +35,4 @@ class RestaurantAddressesSeeder extends Seeder {
             ]);
         }
     }
-
 }

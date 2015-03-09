@@ -1,22 +1,21 @@
-<?php namespace Codeception\Module;
+<?php
+namespace Codeception\Module;
 
 use Symfony\Component\DomCrawler\Crawler;
 
-class MailWatcher extends \Codeception\Module {
-
+class MailWatcher extends \Codeception\Module
+{
     /**
      * @var \Swift_Message
      */
     private $lastMail;
-
 
     public function _before()
     {
         $this->lastMail = null;
         $this->plainTextPart = null;
 
-        $this->getModule('Laravel4')->kernel['events']->listen('mailer.sending', function($mail)
-        {
+        $this->getModule('Laravel4')->kernel['events']->listen('mailer.sending', function ($mail) {
             $this->lastMail = $mail;
             $this->debugSection('Mail', $this->getPlainText($mail));
         });
@@ -62,8 +61,7 @@ class MailWatcher extends \Codeception\Module {
      */
     public function grabLastMail()
     {
-        if (empty($this->lastMail))
-        {
+        if (empty($this->lastMail)) {
             \PHPUnit_Framework_Assert::fail("No mail was sent.");
         }
 
@@ -71,7 +69,7 @@ class MailWatcher extends \Codeception\Module {
     }
 
     /**
-     * @param Swift_Message $mail
+     * @param \Swift_Message $mail
      *
      * @return string
      */
@@ -79,5 +77,4 @@ class MailWatcher extends \Codeception\Module {
     {
         return explode('Content-Type: text/html;', (string) $mail)[0];
     }
-
 }

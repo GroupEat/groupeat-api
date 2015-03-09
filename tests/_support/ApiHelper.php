@@ -1,9 +1,8 @@
-<?php namespace Codeception\Module;
+<?php
+namespace Codeception\Module;
 
-use Symfony\Component\DomCrawler\Crawler;
-
-class ApiHelper extends \Codeception\Module {
-
+class ApiHelper extends \Codeception\Module
+{
     public function amAnActivatedCustomer()
     {
         $this->sendApiPost('auth/token', [
@@ -22,8 +21,7 @@ class ApiHelper extends \Codeception\Module {
         $password = 'password',
         $resource = 'customers',
         $locale = 'fr'
-    )
-    {
+    ) {
         $this->sendApiPost($resource, compact('email', 'password', 'locale'));
         $id = $this->grabDataFromResponse('id');
         $token = $this->grabDataFromResponse('token');
@@ -100,30 +98,26 @@ class ApiHelper extends \Codeception\Module {
         $RESTmodule = $this->getModule('REST');
         $client = $RESTmodule->client;
 
-        foreach ($RESTmodule->headers as $header => $val)
-        {
-            $header = str_replace('-','_',strtoupper($header));
+        foreach ($RESTmodule->headers as $header => $val) {
+            $header = str_replace('-', '_', strtoupper($header));
             $client->setServerParameter("HTTP_$header", $val);
 
-            if (strtolower($header) == 'host')
-            {
+            if (strtolower($header) == 'host') {
                 $client->setServerParameter("HTTP_ HOST", $val);
             }
 
-            if ($RESTmodule->isFunctional and $header == 'CONTENT_TYPE')
-            {
+            if ($RESTmodule->isFunctional and $header == 'CONTENT_TYPE') {
                 $client->setServerParameter($header, $val);
             }
         }
 
-        $this->debugSection("Request", "$verb $url " . $body);
+        $this->debugSection("Request", "$verb $url ".$body);
         $this->debugSection("Headers", json_encode($RESTmodule->headers));
         $client->request($verb, $url, [], [], [], $body);
         $RESTmodule->response = (string) $client->getInternalResponse()->getContent();
         $this->debugSection("Response", $RESTmodule->response);
 
-        if (count($client->getInternalRequest()->getCookies()))
-        {
+        if (count($client->getInternalRequest()->getCookies())) {
             $this->debugSection('Cookies', $client->getInternalRequest()->getCookies());
         }
 
@@ -159,8 +153,7 @@ class ApiHelper extends \Codeception\Module {
 
     public function grabDataFromResponse($path = '')
     {
-        if ($path)
-        {
+        if ($path) {
             $path = ".$path";
         }
 
@@ -174,5 +167,4 @@ class ApiHelper extends \Codeception\Module {
 
         $this->getModule('REST')->haveHttpHeader('Accept', $accept);
     }
-
 }

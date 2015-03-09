@@ -1,11 +1,11 @@
-<?php namespace Groupeat\Restaurants\Entities\Abstracts;
+<?php
+namespace Groupeat\Restaurants\Entities\Abstracts;
 
 use Groupeat\Support\Entities\Entity;
 
-abstract class Window extends Entity {
-
+abstract class Window extends Entity
+{
     public $timestamps = false;
-
 
     public function getRules()
     {
@@ -15,5 +15,4 @@ abstract class Window extends Entity {
             'to' => 'required',
         ];
     }
-
 }

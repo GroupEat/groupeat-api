@@ -2,8 +2,7 @@
 
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
-class PackageProvider extends WorkbenchPackageProvider {
-
-    protected $console = ['OpCacheReset', 'Push'];
-
+class PackageProvider extends WorkbenchPackageProvider
+{
+    protected $console = ['OpCacheReset'];
 }

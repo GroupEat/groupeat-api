@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Orders\Services;
+<?php
+namespace Groupeat\Orders\Services;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Entities\GroupOrder;
@@ -7,8 +8,8 @@ use Groupeat\Orders\Services\Abstracts\GroupOrderValidation;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 
-class JoinGroupOrder extends GroupOrderValidation {
-
+class JoinGroupOrder extends GroupOrderValidation
+{
     /**
      * @param GroupOrder     $groupOrder
      * @param Customer       $customer
@@ -24,8 +25,7 @@ class JoinGroupOrder extends GroupOrderValidation {
         ProductFormats $productFormats,
         array $deliveryAddressData,
         $comment = null
-    )
-    {
+    ) {
         $this->assertJoinable($groupOrder);
         $deliveryAddress = $this->getDeliveryAddress($deliveryAddressData);
         $this->assertCloseEnough($deliveryAddress, $groupOrder->getInitiatingOrder()->deliveryAddress);
@@ -39,13 +39,11 @@ class JoinGroupOrder extends GroupOrderValidation {
 
     private function assertJoinable(GroupOrder $groupOrder)
     {
-        if (!$groupOrder->isJoinable())
-        {
+        if (!$groupOrder->isJoinable()) {
             throw new UnprocessableEntity(
                 'groupOrderCannotBeJoined',
                 "The {$groupOrder->toShortString()} cannot be joined anymore."
             );
         }
     }
-
 }

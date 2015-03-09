@@ -1,15 +1,15 @@
-<?php namespace Groupeat\Restaurants\Services;
+<?php
+namespace Groupeat\Restaurants\Services;
 
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Services\SendMail;
 
-class SendOrderHasBeenPlacedMail {
-
+class SendOrderHasBeenPlacedMail
+{
     /**
      * @var SendMail
      */
     private $mailer;
-
 
     public function __construct(SendMail $mailer)
     {
@@ -51,5 +51,4 @@ class SendOrderHasBeenPlacedMail {
             compact('order', 'customer', 'deliveryAddress', 'groupOrder', 'action')
         );
     }
-
 }

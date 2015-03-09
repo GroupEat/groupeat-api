@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Support\Console;
+<?php
+namespace Groupeat\Support\Console;
 
 use App;
 use Config;
@@ -7,16 +8,14 @@ use File;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Console\Input\InputOption;
 
-class DbInstallCommand extends Command {
-
-	protected $name = 'db:install';
-	protected $description = "Install the DB by running all the migrations and seed if needed";
-
+class DbInstallCommand extends Command
+{
+    protected $name = 'db:install';
+    protected $description = "Install the DB by running all the migrations and seed if needed";
 
     public function fire()
-	{
-        if (App::environment('production'))
-        {
+    {
+        if (App::environment('production')) {
             $this->call('db:backup');
         }
 
@@ -24,8 +23,7 @@ class DbInstallCommand extends Command {
         $this->createMigrationsTable();
         $this->migrate();
 
-        if ($this->option('seed'))
-        {
+        if ($this->option('seed')) {
             $this->setEntries();
             $this->call('db:seed', ['--force' => $this->option('force')]);
         }
@@ -33,18 +31,15 @@ class DbInstallCommand extends Command {
 
     private function deleteAllTables()
     {
-        $tables = array_map(function($info)
-        {
+        $tables = array_map(function ($info) {
             $this->comment('Droping table '.$info->table_name);
             DB::statement('DROP TABLE IF EXISTS '.$info->table_name.' CASCADE');
-        },
-        DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"));
+        }, DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"));
     }
 
     private function createMigrationsTable()
     {
-        if (!Schema::hasTable('migrations'))
-        {
+        if (!Schema::hasTable('migrations')) {
             $this->call('migrate:install');
         }
     }
@@ -53,14 +48,11 @@ class DbInstallCommand extends Command {
     {
         $this->deleteOldMigrationFiles();
 
-        foreach (listGroupeatPackagesWithoutSupport() as $package)
-        {
+        foreach (listGroupeatPackagesWithoutSupport() as $package) {
             $migrationsDirectory = workbench_path($package, 'migrations');
 
-            if (File::isDirectory($migrationsDirectory))
-            {
-                array_map(function($migrationPath)
-                {
+            if (File::isDirectory($migrationsDirectory)) {
+                array_map(function ($migrationPath) {
                     $this->publishCopy($migrationPath);
                 }, File::files($migrationsDirectory));
             }
@@ -82,8 +74,7 @@ class DbInstallCommand extends Command {
         $entriesKey = 'database.entries';
         $entries = Config::get($entriesKey);
 
-        if ($this->option('entries'))
-        {
+        if ($this->option('entries')) {
             $entries = (int) $this->option('entries');
             Config::set($entriesKey, $entries);
         }
@@ -110,5 +101,4 @@ class DbInstallCommand extends Command {
             ['entries', 'e', InputOption::VALUE_REQUIRED, 'Number of fake entries to seed the DB with.', null],
         ];
     }
-
 }

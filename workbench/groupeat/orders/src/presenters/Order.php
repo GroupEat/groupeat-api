@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Orders\Presenters;
+<?php
+namespace Groupeat\Orders\Presenters;
 
 use Groupeat\Support\Presenters\Presenter;
 use HtmlObject\Table;
 
-class Order extends Presenter {
-
+class Order extends Presenter
+{
     public function presentProductsTable($withRawPrice = true)
     {
         return (string) $this->getProductsTable($withRawPrice);
@@ -19,13 +20,11 @@ class Order extends Presenter {
     {
         $str = '';
 
-        foreach ($this->productFormats as $productFormat)
-        {
+        foreach ($this->productFormats as $productFormat) {
             $str .= $productFormat->product->type->label
-                . ' '.$productFormat->product->name.' ';
+                .' '.$productFormat->product->name.' ';
 
-            if ($withRawPrice)
-            {
+            if ($withRawPrice) {
                 $str .= '('.$productFormat->price.') ';
             }
 
@@ -38,15 +37,15 @@ class Order extends Presenter {
     public function presentSummaryForMail()
     {
         return $this->presentDetailsTableForMail()
-            . '<br>'
-            . $this->presentProductsTableForMail(false);
+            .'<br>'
+            .$this->presentProductsTableForMail(false);
     }
 
     public function presentSummaryAsPlainText()
     {
         return $this->presentDetailsAsPlainText()
-            . '; '
-            . $this->presentProductsListAsPlainText(false);
+            .'; '
+            .$this->presentProductsListAsPlainText(false);
     }
 
     public function presentDetailsTable()
@@ -65,12 +64,12 @@ class Order extends Presenter {
 
         $str = $this->presentReference();
 
-        if ($withCustomer)
-        {
+        if ($withCustomer) {
             $str .= ', '.mb_ucfirst($attributes['customer']).': '.$this->customer->fullNameWithPhoneNumber;
         }
-            $str .= ', '.mb_ucfirst($attributes['deliveryAddress']).': '.$this->deliveryAddress
-            . ', '.mb_ucfirst($attributes['priceToPay']).': '.$this->presentDiscountedPrice();
+
+        $str .= ', '.mb_ucfirst($attributes['deliveryAddress']).': '.$this->deliveryAddress
+            .', '.mb_ucfirst($attributes['priceToPay']).': '.$this->presentDiscountedPrice();
 
         return $str;
     }
@@ -104,24 +103,21 @@ class Order extends Presenter {
     {
         $keys = ['amount', 'foodType', 'product', 'format'];
 
-        if ($withRawPrice)
-        {
+        if ($withRawPrice) {
             $keys[] = 'rawPrice';
         }
 
         $headers = $this->translate($keys, trans('restaurants::products.attributes'), true);
 
-        foreach ($this->productFormats as $productFormat)
-        {
+        foreach ($this->productFormats as $productFormat) {
             $details = [
                 $productFormat->pivot->amount,
                 $productFormat->product->type->label,
                 $productFormat->product->name,
-                $productFormat->name
+                $productFormat->name,
             ];
 
-            if ($withRawPrice)
-            {
+            if ($withRawPrice) {
                 $details[] = $productFormat->price;
             }
 
@@ -135,8 +131,7 @@ class Order extends Presenter {
     {
         $keys[] = 'reference';
 
-        if ($withCustomer)
-        {
+        if ($withCustomer) {
             $keys[] = 'customer';
         }
 
@@ -147,8 +142,7 @@ class Order extends Presenter {
 
         $row[] = $this->id;
 
-        if ($withCustomer)
-        {
+        if ($withCustomer) {
             $row[] = $this->customer->fullNameWithPhoneNumber;
         }
 
@@ -157,5 +151,4 @@ class Order extends Presenter {
 
         return Table::create($headers, [$row]);
     }
-
 }

@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Restaurants\Seeders;
+<?php
+namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\GenerateAuthToken;
@@ -6,8 +7,8 @@ use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Database\Seeder;
 
-class RestaurantsSeeder extends Seeder {
-
+class RestaurantsSeeder extends Seeder
+{
     /**
      * @var GenerateAuthToken
      */
@@ -17,7 +18,6 @@ class RestaurantsSeeder extends Seeder {
      * @var Category
      */
     private $pizzeriaCategory;
-
 
     public function __construct()
     {
@@ -65,8 +65,7 @@ class RestaurantsSeeder extends Seeder {
             ],
         ];
 
-        foreach ($restaurantsData as $restaurantData)
-        {
+        foreach ($restaurantsData as $restaurantData) {
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
             $restaurantData['minimumOrderPrice'] = 900;
             $restaurantData['discountPrices'] = json_encode([900, 1000, 2000, 2500, 3500, 6000]);
@@ -94,5 +93,4 @@ class RestaurantsSeeder extends Seeder {
     {
         $userCredentials->replaceAuthenticationToken($this->tokenGenerator->forUser($userCredentials));
     }
-
 }

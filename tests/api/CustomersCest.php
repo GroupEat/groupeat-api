@@ -1,16 +1,14 @@
 <?php
 
-class CustomersCest {
-
+class CustomersCest
+{
     public function testThatACustomerNeedsACampusEmailToRegister(ApiTester $I)
     {
-        foreach (['ensta.fr', 'ensta-paristech.fr', 'institutoptique.fr', 'polytechnique.edu'] as $domain)
-        {
-            $this->sendRegistrationRequest($I,"user@$domain");
+        foreach (['ensta.fr', 'ensta-paristech.fr', 'institutoptique.fr', 'polytechnique.edu'] as $domain) {
+            $this->sendRegistrationRequest($I, "user@$domain");
         }
 
-        foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain)
-        {
+        foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain) {
             $I->sendApiPost('customers', ['email' => "user@$domain", 'password' => 'password', 'locale' => 'fr']);
             $I->seeResponseCodeIs(422);
             $I->seeErrorsContain(['email' => ['notFromCampus' => []]]);
@@ -53,8 +51,7 @@ class CustomersCest {
         $I->sendApiPutWithToken($token, "customers/$id", $data);
         $I->seeResponseCodeIs(200);
 
-        foreach ($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             $I->assertEquals($value, $I->grabDataFromResponse($key));
         }
     }
@@ -64,9 +61,7 @@ class CustomersCest {
         $email = 'user@ensta.fr',
         $password = 'password',
         $locale = 'fr'
-    )
-    {
+    ) {
         return $I->sendRegistrationRequest($email, $password, 'customers', $locale);
     }
-
 }

@@ -2,8 +2,7 @@
 
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
-class PackageProvider extends WorkbenchPackageProvider {
-
+class PackageProvider extends WorkbenchPackageProvider
+{
     protected $require = [self::ROUTES];
-
 }

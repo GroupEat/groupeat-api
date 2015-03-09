@@ -5,8 +5,8 @@ use Groupeat\Restaurants\Services\SendGroupOrderHasEndedMail;
 use Groupeat\Restaurants\Services\SendOrderHasBeenPlacedMail;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
-class PackageProvider extends WorkbenchPackageProvider {
-
+class PackageProvider extends WorkbenchPackageProvider
+{
     protected $require = [self::ROUTES];
 
 
@@ -14,13 +14,11 @@ class PackageProvider extends WorkbenchPackageProvider {
     {
         parent::register();
 
-        $this->app->bind('SendOrderHasBeenPlacedMailService', function($app)
-        {
+        $this->app->bind('SendOrderHasBeenPlacedMailService', function ($app) {
             return new SendOrderHasBeenPlacedMail($app['SendMailService']);
         });
 
-        $this->app->bind('SendGroupOrderHasEndedMailService', function($app)
-        {
+        $this->app->bind('SendGroupOrderHasEndedMailService', function ($app) {
             $tokenTtlInMinutes = 2 * $app['config']->get('orders::maximum_preparation_time_in_minutes');
 
             return new SendGroupOrderHasEndedMail(
@@ -42,5 +40,4 @@ class PackageProvider extends WorkbenchPackageProvider {
         $this->app['events']->listen('groupOrderHasBeenJoined', 'SendOrderHasBeenPlacedMailService@joined');
         $this->app['events']->listen('groupOrderHasEnded', 'SendGroupOrderHasEndedMailService@call');
     }
-
 }

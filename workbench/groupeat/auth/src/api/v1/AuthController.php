@@ -1,12 +1,13 @@
-<?php namespace Groupeat\Auth\Api\V1;
+<?php
+namespace Groupeat\Auth\Api\V1;
 
 use Auth;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Api\V1\Controller;
 use Input;
 
-class AuthController extends Controller {
-
+class AuthController extends Controller
+{
     public function activate()
     {
         app('ActivateUserService')->call(Input::json('token'));
@@ -55,5 +56,4 @@ class AuthController extends Controller {
 
         return $this->arrayResponse(compact('id', 'type', 'token', 'activated'));
     }
-
 }

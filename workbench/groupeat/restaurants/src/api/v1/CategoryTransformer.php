@@ -1,4 +1,5 @@
-<?php namespace Groupeat\Restaurants\Api\V1;
+<?php
+namespace Groupeat\Restaurants\Api\V1;
 
 use Groupeat\Restaurants\Entities\Category;
 use League\Fractal\TransformerAbstract;
@@ -12,5 +13,4 @@ class CategoryTransformer extends TransformerAbstract
             'label' => $foodType->label,
         ];
     }
-
 }

@@ -1,12 +1,13 @@
-<?php namespace Groupeat\Auth\Services;
+<?php
+namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Services\Locale;
 use Illuminate\Auth\Reminders\PasswordBroker;
 use Illuminate\Routing\UrlGenerator;
 
-class SendPasswordResetLink {
-
+class SendPasswordResetLink
+{
     /**
      * @var PasswordBroker
      */
@@ -22,13 +23,11 @@ class SendPasswordResetLink {
      */
     private $urlGenerator;
 
-
     public function __construct(
         PasswordBroker $passwordBroker,
         Locale $localeService,
         UrlGenerator $urlGenerator
-    )
-    {
+    ) {
         $this->passwordBroker = $passwordBroker;
         $this->localeService = $localeService;
         $this->urlGenerator = $urlGenerator;
@@ -42,18 +41,14 @@ class SendPasswordResetLink {
         $broker = $this->passwordBroker;
         $credentials = compact('email');
 
-        $status = $this->localeService->executeWithUserLocale(function() use ($broker, $credentials)
-        {
-            return $broker->remind($credentials, function($message, $user, $token)
-            {
+        $status = $this->localeService->executeWithUserLocale(function () use ($broker, $credentials) {
+            return $broker->remind($credentials, function ($message, $user, $token) {
                 $subject = $this->localeService->getTranslator()->get('auth::resetPassword.mail.subject');
-
                 $message->subject($subject);
             });
         });
 
-        if ($status == $broker::INVALID_USER)
-        {
+        if ($status == $broker::INVALID_USER) {
             UserCredentials::throwNotFoundByEmailException($email);
         }
 
@@ -73,5 +68,4 @@ class SendPasswordResetLink {
     {
         return $this->urlGenerator->to("auth/password/reset?token=$token");
     }
-
 }

@@ -1,15 +1,15 @@
-<?php namespace Groupeat\Support\Migrations\Abstracts;
+<?php
+namespace Groupeat\Support\Migrations\Abstracts;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-abstract class AddressesMigration extends Migration {
-
+abstract class AddressesMigration extends Migration
+{
     public function up()
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
+        Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $this->addFields($table);
             $table->string('street');
@@ -27,5 +27,4 @@ abstract class AddressesMigration extends Migration {
     {
         // Implement by inheritance if needed
     }
-
 }

@@ -1,10 +1,10 @@
-<?php namespace Groupeat\Support\Console;
+<?php
+namespace Groupeat\Support\Console;
 
-use File;
 use Illuminate\Console\Command as IlluminateCommand;
 
-abstract class Command extends IlluminateCommand {
-
+abstract class Command extends IlluminateCommand
+{
     /**
      * @param $command
      *
@@ -14,5 +14,4 @@ abstract class Command extends IlluminateCommand {
     {
         return process($command, $this->output, null, $timeout);
     }
-
 }

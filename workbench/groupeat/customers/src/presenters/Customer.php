@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Customers\Presenters;
+<?php
+namespace Groupeat\Customers\Presenters;
 
 use Groupeat\Auth\Presenters\Traits\HasCredentials;
 use Groupeat\Support\Presenters\Presenter;
 
-class Customer extends Presenter {
-
+class Customer extends Presenter
+{
     use HasCredentials;
 
     public function presentFullName()
@@ -16,5 +17,4 @@ class Customer extends Presenter {
     {
         return $this->presentFullName().' ('.$this->phoneNumber.')';
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-Route::filter('allowDifferentToken', function()
-{
+Route::filter('allowDifferentToken', function () {
     Auth::allowDifferentToken(true);
 });

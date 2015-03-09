@@ -1,15 +1,15 @@
-<?php namespace Groupeat\Customers\Services;
+<?php
+namespace Groupeat\Customers\Services;
 
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
 
-class ChangeCustomerAddress {
-
+class ChangeCustomerAddress
+{
     /**
      * @var array
      */
     private $addressConstraints;
-
 
     public function __construct(array $addressConstraints)
     {
@@ -18,19 +18,16 @@ class ChangeCustomerAddress {
 
     /**
      * @param Customer $customer
-     * @param array $attributes
+     * @param array    $attributes
      *
      * @return Address
      */
     public function call(Customer $customer, $attributes)
     {
-        if ($customer->address)
-        {
+        if ($customer->address) {
             $address = $customer->address;
             $address->fill($attributes);
-        }
-        else
-        {
+        } else {
             $address = new Address($attributes);
             $address->customer_id = $customer->id;
         }
@@ -41,5 +38,4 @@ class ChangeCustomerAddress {
 
         return $address;
     }
-
 }

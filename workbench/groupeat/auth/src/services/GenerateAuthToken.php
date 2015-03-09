@@ -1,10 +1,11 @@
-<?php namespace Groupeat\Auth\Services;
+<?php
+namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Tymon\JWTAuth\JWTAuth;
 
-class GenerateAuthToken {
-
+class GenerateAuthToken
+{
     /**
      * @var JWTAuth
      */
@@ -14,7 +15,6 @@ class GenerateAuthToken {
      * @var int
      */
     private $defaultDurationInMinutes;
-
 
     public function __construct(JWTAuth $JWTauth, $defaultDurationInMinutes)
     {
@@ -33,8 +33,7 @@ class GenerateAuthToken {
         $userCredentials = UserCredentials::findByEmailOrFail($email);
         $token = $this->JWTauth->attempt(compact('email', 'password'));
 
-        if ($token === false)
-        {
+        if ($token === false) {
             UserCredentials::throwBadPasswordException();
         }
 
@@ -52,25 +51,21 @@ class GenerateAuthToken {
      */
     public function forUser(UserCredentials $userCredentials, $durationInMinutes = null)
     {
-        if (!$userCredentials->exists)
-        {
+        if (!$userCredentials->exists) {
             // We need to save the credentials to have the id
             $userCredentials->save();
         }
 
-        if (!is_null($durationInMinutes))
-        {
+        if (!is_null($durationInMinutes)) {
             $this->JWTauth->getProvider()->setTTL($durationInMinutes);
         }
 
         $token = $this->JWTauth->fromUser($userCredentials);
 
-        if (!is_null($durationInMinutes))
-        {
+        if (!is_null($durationInMinutes)) {
             $this->JWTauth->getProvider()->setTTL($this->defaultDurationInMinutes);
         }
 
         return $token;
     }
-
 }

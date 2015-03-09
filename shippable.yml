@@ -26,6 +26,7 @@ before_script:
   - ./vendor/bin/codecept build
 
 script:
+  - ./vendor/bin/phpcs
   - ./vendor/bin/codecept run --fail-fast --steps --xml ../../shippable/testresults/results.xml
 
 after_success:

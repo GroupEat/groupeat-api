@@ -1,18 +1,17 @@
-<?php namespace Groupeat\Restaurants\Migrations;
+<?php
+namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RestaurantsMigration extends Migration {
-
+class RestaurantsMigration extends Migration
+{
     const TABLE = 'restaurants';
-
 
     public function up()
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
+        Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('phoneNumber', 25);
@@ -23,5 +22,4 @@ class RestaurantsMigration extends Migration {
             $table->softDeletes()->index();
         });
     }
-
 }

@@ -1,12 +1,13 @@
-<?php namespace Groupeat\Auth\Services;
+<?php
+namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Services\SendMail;
 use Illuminate\Routing\UrlGenerator;
 
-class SendActivationLink {
-
+class SendActivationLink
+{
     /**
      * @var Mailer
      */
@@ -17,7 +18,6 @@ class SendActivationLink {
      */
     private $urlGenerator;
 
-
     public function __construct(SendMail $mailer, UrlGenerator $urlGenerator)
     {
         $this->mailer = $mailer;
@@ -26,7 +26,6 @@ class SendActivationLink {
 
     /**
      * @param UserCredentials $userCredentials
-     * @param string          $locale
      *
      * @return User
      */
@@ -50,8 +49,7 @@ class SendActivationLink {
         // take out the "/", "+", and "=" characters.
         $bytes = openssl_random_pseudo_bytes($length * 2);
 
-        if ($bytes === false)
-        {
+        if ($bytes === false) {
             throw new Exception(
                 'cannotGenerateActivationToken',
                 "Unable to generate a random string for the activation token."
@@ -64,5 +62,4 @@ class SendActivationLink {
 
         return $token;
     }
-
 }

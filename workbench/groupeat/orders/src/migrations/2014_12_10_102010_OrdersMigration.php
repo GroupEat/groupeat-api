@@ -1,19 +1,18 @@
-<?php namespace Groupeat\Orders\Migrations;
+<?php
+namespace Groupeat\Orders\Migrations;
 
 use Groupeat\Customers\Migrations\CustomersMigration;
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class OrdersMigration extends Migration {
-
+class OrdersMigration extends Migration
+{
     const TABLE = 'orders';
-
 
     public function up()
     {
-        Schema::create(static::TABLE, function(Blueprint $table)
-        {
+        Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customer_id')->index();
             $table->unsignedInteger('group_order_id')->index();
@@ -26,5 +25,4 @@ class OrdersMigration extends Migration {
             $table->foreign('group_order_id')->references('id')->on(GroupOrdersMigration::TABLE);
         });
     }
-
 }

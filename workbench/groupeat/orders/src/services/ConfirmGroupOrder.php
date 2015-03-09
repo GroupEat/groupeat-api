@@ -1,12 +1,13 @@
-<?php namespace Groupeat\Orders\Services;
+<?php
+namespace Groupeat\Orders\Services;
 
 use Carbon\Carbon;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Events\Dispatcher;
 
-class ConfirmGroupOrder {
-
+class ConfirmGroupOrder
+{
     /**
      * @var Dispatcher
      */
@@ -16,7 +17,6 @@ class ConfirmGroupOrder {
      * @var int
      */
     private $maximumPreparationTimeInMinutes;
-
 
     public function __construct(Dispatcher $events, $maximumPreparationTimeInMinutes)
     {
@@ -52,8 +52,7 @@ class ConfirmGroupOrder {
 
     private function guardAgainstInvalidPreparationTime(Carbon $completedAt, Carbon $preparedAt)
     {
-        if ($preparedAt < $completedAt)
-        {
+        if ($preparedAt < $completedAt) {
             throw new UnprocessableEntity(
                 'cannotBePreparedBeforeBeingCompleted',
                 "A group order cannot be completely prepared before being completed."
@@ -62,13 +61,12 @@ class ConfirmGroupOrder {
 
         $preparationTimeInMinutes = $completedAt->diffInMinutes($preparedAt, false);
 
-        if ($preparationTimeInMinutes > $this->maximumPreparationTimeInMinutes)
-        {
+        if ($preparationTimeInMinutes > $this->maximumPreparationTimeInMinutes) {
             throw new UnprocessableEntity(
                 'preparationTimeTooLong',
-                "The preration time should not exceed {$this->maximumPreparationTimeInMinutes} minutes, $preparationTimeInMinutes given."
+                "The preration time should not exceed {$this->maximumPreparationTimeInMinutes} "
+                . "minutes, $preparationTimeInMinutes given."
             );
         }
     }
-
 }
