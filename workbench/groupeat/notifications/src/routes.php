@@ -7,7 +7,7 @@ use Sly\NotificationPusher\Model\Message;
 use Sly\NotificationPusher\Model\Push;
 use Sly\NotificationPusher\PushManager;
 
-Route::get('send-push-notification/{deviceId}', function ($deviceId) {
+Route::get('api/send-push-notification/{deviceId}', function ($deviceId) {
     $pushManager = new PushManager(PushManager::ENVIRONMENT_DEV);
 
     $gcmAdapter = new \Sly\NotificationPusher\Adapter\Gcm([
