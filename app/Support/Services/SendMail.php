@@ -47,7 +47,7 @@ class SendMail
                 function ($message) use ($user, $subjectLangKey) {
                     $subject = $this->localeService->getTranslator()->get($subjectLangKey);
 
-                    $message->to('tib.dex@gmail.com')->subject($subject);
+                    $message->to($user->email)->subject($subject);
                 }
             );
         }, $user->locale);
