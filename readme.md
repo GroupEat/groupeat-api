@@ -1,4 +1,4 @@
-[![Build Status](https://api.shippable.com/projects/54a71363d46935d5fbc15ac1/badge?branchName=master)](https://app.shippable.com/projects/54a71363d46935d5fbc15ac1/builds/latest)
+[![Build Status](https://api.shippable.com/projects/54a71363d46935d5fbc15ac1/badge?branchName=laravel5)](https://app.shippable.com/projects/54a71363d46935d5fbc15ac1/builds/latest)
 
 # Installing
 
