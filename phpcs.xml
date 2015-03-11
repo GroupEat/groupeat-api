@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <ruleset name="PHP_CodeSniffer">
-    <file>app/console</file>
-    <file>app/database/seeds/DatabaseSeeder.php</file>
+    <file>app</file>
+    <file>bootstrap</file>
+    <file>config</file>
+    <file>database</file>
     <file>tests</file>
-    <file>workbench</file>
 
     <exclude-pattern>*/views/*</exclude-pattern>
     <exclude-pattern>*/lang/*</exclude-pattern>
@@ -11,12 +12,16 @@
 
     <rule ref="PSR2"/>
 
+    <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+        <exclude-pattern>bootstrap/autoload.php</exclude-pattern>
+    </rule>
+
     <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
         <exclude-pattern>tests/_support/*</exclude-pattern>
     </rule>
 
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <exclude-pattern>app/*</exclude-pattern>
+        <exclude-pattern>database/*</exclude-pattern>
         <exclude-pattern>tests/api/*</exclude-pattern>
     </rule>
 </ruleset>

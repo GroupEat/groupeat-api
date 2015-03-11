@@ -2,14 +2,18 @@
 
 # Installing
 
-`git pull; cri; art pull`
+`git pull; composer install; php artisan pull`
 
 # Updating
 
-`art pull`
+`php artisan pull`
 
-# Testing the code
+# Linting
 
-`codecept run`
+`./vendor/bin/phpcs --colors -p`
 
-Before running this command, if you have not already done if since the last update, run `codecept build`.
+# Testing
+
+`./vendor/bin/codecept run`
+
+Before running this command, if you have not already done if since the last update, run `./vendor/bin/codecept build`.
