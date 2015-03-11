@@ -17,6 +17,7 @@ before_script:
   - echo "PGSQL_USER=postgres" >> .env
   - mkdir -p shippable/testresults
   - psql -c 'CREATE DATABASE groupeat;' -U postgres
+  - echo "xdebug.max_nesting_level = 250" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer config -g github-oauth.github.com $GITHUB_TOKEN
   - composer self-update
   - composer install --no-interaction --no-progress
