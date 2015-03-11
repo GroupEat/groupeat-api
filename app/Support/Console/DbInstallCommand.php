@@ -15,39 +15,18 @@ class DbInstallCommand extends Command
 
     public function fire()
     {
-        var_dump(1);
-
         if (App::environment('production')) {
-            var_dump(0);
             // $this->call('db:backup'); // TODO: Use a similar package for L5
         }
 
-        var_dump(2);
-
         $this->deleteAllTables();
-
-        var_dump(3);
-
         $this->createMigrationsTable();
-
-        var_dump(4);
-
         $this->migrate();
 
-        var_dump(5);
-
         if ($this->option('seed')) {
-
-            var_dump(6);
-
             $this->setEntries();
-
-            var_dump(7);
-
             $this->call('db:seed', ['--force' => $this->option('force')]);
         }
-
-        var_dump(8);
     }
 
     private function deleteAllTables()
