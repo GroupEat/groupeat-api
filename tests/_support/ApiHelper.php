@@ -103,7 +103,7 @@ class ApiHelper extends \Codeception\Module
             $client->setServerParameter("HTTP_$header", $val);
 
             if (strtolower($header) == 'host') {
-                $client->setServerParameter("HTTP_ HOST", $val);
+                $client->setServerParameter("HTTP_HOST", $val);
             }
 
             if ($RESTmodule->isFunctional and $header == 'CONTENT_TYPE') {

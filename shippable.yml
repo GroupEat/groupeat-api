@@ -23,6 +23,7 @@ before_script:
   - php artisan env
   - php artisan db:install --seed --entries 2
   - ./vendor/bin/codecept build
+  - php -i
 
 script:
   - ./vendor/bin/phpcs
