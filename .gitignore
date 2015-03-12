@@ -3,5 +3,6 @@
 Thumbs.db
 .env*
 _ide_helper.php
+.rocketeer/logs
 /vendor
 /bootstrap/compiled.php

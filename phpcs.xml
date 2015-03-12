@@ -5,6 +5,7 @@
     <file>config</file>
     <file>database</file>
     <file>tests</file>
+    <file>.rocketeer</file>
 
     <exclude-pattern>*/views/*</exclude-pattern>
     <exclude-pattern>*/lang/*</exclude-pattern>

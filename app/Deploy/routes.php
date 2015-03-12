@@ -1,9 +1,5 @@
 <?php
 
 Route::group(['prefix' => 'api'], function () {
-    Route::get('deploy/opcache/reset', function () {
-        if (function_exists('opcache_reset')) {
-            opcache_reset();
-        }
-    });
+    Route::get('deploy/opcache/reset', 'Groupeat\Deploy\Http\V1\OpCacheController@reset');
 });
