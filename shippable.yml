@@ -23,11 +23,13 @@ before_script:
   - composer install --no-interaction --no-progress
   - php artisan db:install --seed --entries 2
   - ./vendor/bin/codecept build
-  - if [[ $(git log -1 HEAD --pretty=format:%s) != *skip\ deploy* ]]; then echo "Starting deployment"; ./rocketeer.phar deploy; else echo "Deployment cancelled"; fi
 
 script:
   - ./vendor/bin/phpcs
   - ./vendor/bin/codecept run --fail-fast --steps --xml ../../shippable/testresults/results.xml
+
+after_success:
+  - if [[ $(git log -1 HEAD --pretty=format:%s) != *skip\ deploy* ]]; then echo "Starting deployment"; ./rocketeer.phar deploy; else echo "Deployment cancelled"; fi
 
 notifications:
      email:
