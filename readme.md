@@ -1,12 +1,14 @@
-[![Build Status](https://api.shippable.com/projects/54a71363d46935d5fbc15ac1/badge?branchName=laravel5)](https://app.shippable.com/projects/54a71363d46935d5fbc15ac1/builds/latest)
+[![Build Status](https://api.shippable.com/projects/54a71363d46935d5fbc15ac1/badge?branchName=master)](https://app.shippable.com/projects/54a71363d46935d5fbc15ac1/builds/latest)
 
 # Installing
 
-`git pull; composer install; php artisan pull`
+ - `cp example.env env`
+ - Fill the missing data if any in `.env`
+ - `composer install; php artisan db:install -s`
 
 # Updating
 
-`php artisan pull`
+`git pull; `composer install; php artisan db:install -s`
 
 # Linting
 
