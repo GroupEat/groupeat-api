@@ -1,15 +1,8 @@
 <?php
 
 // TODO: Remove this block before app launch
-Route::group(['prefix' => 'api', 'middleware' => 'auth'], function () {
-    Route::get('log', function () {
-        $data['data'] = [
-            'url' => \Request::fullUrl(),
-            'headers' => \Request::header(),
-        ];
+Route::group(['prefix' => 'api'], function () {
+    Route::get('debug', function () {
 
-        \Log::debug($data['data']);
-
-        return $data;
     });
 });

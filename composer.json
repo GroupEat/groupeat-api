@@ -9,20 +9,20 @@
   ],
   "require": {
     "anlutro/curl": "0.6.*",
+    "tymon/jwt-auth": "0.5.*",
     "pda/pheanstalk": "2.1.*",
     "sebastian/money": "1.5.*",
     "fzaninotto/faker": "1.4.*",
-    "tymon/jwt-auth": "0.5.*@dev",
+    "laravel/framework": "5.0.*",
     "league/fractal": "0.11.*@dev",
-    "robclancy/presenter": "dev-develop",
     "Treffynnon/Navigator": "1.0.*",
-    "laravel/framework": "5.0.*@dev",
-    "anahkiasen/html-object": "1.4.*"
+    "anahkiasen/html-object": "1.4.*",
+    "robclancy/presenter": "dev-develop"
   },
   "require-dev": {
+    "codeception/codeception": "2.0.*",
     "squizlabs/php_codesniffer": "2.3.*",
-    "barryvdh/laravel-ide-helper": "2.0.*",
-    "codeception/codeception": "2.0.*@dev"
+    "barryvdh/laravel-ide-helper": "2.0.*"
   },
   "autoload": {
     "classmap": [

@@ -104,7 +104,7 @@ class GenerateApiDocumentation
     private function getPathsForPackage($package)
     {
         return [
-            'disk' => realpath(app_path($package . '/docs/main.md')),
+            'disk' => realpath(app_path($package.'/docs/main.md')),
             'include' => "../../$package/docs/main.md",
         ];
     }
