@@ -6,7 +6,7 @@ use Groupeat\Support\Services\SendMail;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::HELPERS, self::FILTERS, self::ROUTES];
+    protected $require = [self::HELPERS, self::FILTERS];
     protected $console = ['DbInstall'];
 
     public function register()
