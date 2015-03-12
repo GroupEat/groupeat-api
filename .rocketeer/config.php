@@ -40,7 +40,9 @@ return [
             'host'      => 'groupeat.fr',
             'username'  => 'vagrant',
             'password'  => '',
-            'key'       => '/home/vagrant/.ssh/id_rsa',
+            'key'       => gethostname() == 'PizzeriaDev' ?
+                '/home/vagrant/.ssh/id_rsa'
+                : '/home/shippable/.ssh/id_rsa',
             'keyphrase' => '',
             'agent'     => '',
             'db_role'   => true,
