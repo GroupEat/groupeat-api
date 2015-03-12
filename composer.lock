@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "33f056f8e8142aab8f68e123886de8dc",
+    "hash": "a5c3fe22e3823a2a5084121b50ccd6d4",
     "packages": [
         {
             "name": "anahkiasen/html-object",
@@ -2381,16 +2381,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "2.0.11",
+            "version": "2.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "9c7f23eff3e607225e9f43277c6d9cdb03d30b84"
+                "reference": "b5afd37fd04d9b22e2e2a8db79da34dcc900b649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/9c7f23eff3e607225e9f43277c6d9cdb03d30b84",
-                "reference": "9c7f23eff3e607225e9f43277c6d9cdb03d30b84",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/b5afd37fd04d9b22e2e2a8db79da34dcc900b649",
+                "reference": "b5afd37fd04d9b22e2e2a8db79da34dcc900b649",
                 "shasum": ""
             },
             "require": {
@@ -2457,7 +2457,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2015-02-23 23:10:03"
+            "time": "2015-03-10 23:54:55"
         },
         {
             "name": "doctrine/instantiator",
@@ -3942,7 +3942,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "league/fractal": 20,
-        "robclancy/presenter": 20
+        "robclancy/presenter": 20,
+        "codeception/codeception": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
