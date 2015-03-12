@@ -1,6 +1,3 @@
 class_name: ApiTester
 modules:
-    enabled: [ApiHelper, REST, Laravel4, MailWatcher, Asserts]
-    config:
-      Laravel4:
-        filters: true
+    enabled: [ApiHelper, REST, Laravel5, MailWatcher, Asserts]

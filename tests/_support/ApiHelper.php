@@ -91,7 +91,7 @@ class ApiHelper extends \Codeception\Module
         $verb = strtoupper($verb);
         $url = $this->getApiUrl($path);
 
-        $this->getModule('Laravel4')->kernel['groupeat.auth']->logout();
+        $this->getModule('Laravel5')->app['groupeat.auth']->logout();
 
         $this->haveAcceptHeader();
         $body = $verb != 'GET' ? json_encode($params) : null;
@@ -103,7 +103,7 @@ class ApiHelper extends \Codeception\Module
             $client->setServerParameter("HTTP_$header", $val);
 
             if (strtolower($header) == 'host') {
-                $client->setServerParameter("HTTP_ HOST", $val);
+                $client->setServerParameter("HTTP_HOST", $val);
             }
 
             if ($RESTmodule->isFunctional and $header == 'CONTENT_TYPE') {
@@ -127,12 +127,12 @@ class ApiHelper extends \Codeception\Module
 
     public function getApiUrl($path)
     {
-        return '/'.$this->getModule('Laravel4')->kernel['config']->get('api::prefix').'/'.$path;
+        return "/api/$path";
     }
 
     public function seeResponseErrorKeyIs($errorKey)
     {
-        $this->getModule('REST')->seeResponseContainsJson(['error_key' => $errorKey]);
+        $this->getModule('REST')->seeResponseContainsJson(['data' => ['errorKey' => $errorKey]]);
     }
 
     public function seeErrorResponse($code, $errorKey)
@@ -162,9 +162,6 @@ class ApiHelper extends \Codeception\Module
 
     public function haveAcceptHeader()
     {
-        $config = $this->getModule('Laravel4')->kernel['config']->get('api::config');
-        $accept = "application/vnd.{$config['vendor']}.{$config['version']}+{$config['default_format']}";
-
-        $this->getModule('REST')->haveHttpHeader('Accept', $accept);
+        $this->getModule('REST')->haveHttpHeader('Accept', 'application/vnd.groupeat.v1+json');
     }
 }

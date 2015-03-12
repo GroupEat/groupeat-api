@@ -15,7 +15,7 @@ class MailWatcher extends \Codeception\Module
         $this->lastMail = null;
         $this->plainTextPart = null;
 
-        $this->getModule('Laravel4')->kernel['events']->listen('mailer.sending', function ($mail) {
+        $this->getModule('Laravel5')->app['events']->listen('mailer.sending', function ($mail) {
             $this->lastMail = $mail;
             $this->debugSection('Mail', $this->getPlainText($mail));
         });

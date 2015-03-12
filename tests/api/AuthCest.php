@@ -47,7 +47,7 @@ class AuthCest
         $password = 'password';
         list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $password);
 
-        sleep(1.5);
+        sleep(1.5); // Try to use the JTI
         $I->sendApiPost('auth/token', compact('email', 'password'));
         $I->seeResponseCodeIs(200);
         $newToken = $I->grabDataFromResponse('token');
