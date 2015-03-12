@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'debug' => env('DEBUG', true),
+    'debug' => env('DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'url' => env('BASE_URL', 'https://groupeat.dev/api'),
+    'url' => env('BASE_URL', 'http://groupeat.dev/api'),
 
     /*
     |--------------------------------------------------------------------------
