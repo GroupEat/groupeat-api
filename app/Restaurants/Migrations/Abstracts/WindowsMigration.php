@@ -1,9 +1,12 @@
 <?php
+namespace Groupeat\Restaurants\Migrations\Abstracts;
 
+use Groupeat\Restaurants\Migrations\RestaurantsMigration;
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-abstract class RestaurantWindowsMigration extends Migration
+abstract class WindowsMigration extends Migration
 {
     public function up()
     {

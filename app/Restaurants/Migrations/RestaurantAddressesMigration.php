@@ -1,5 +1,7 @@
 <?php
+namespace Groupeat\Restaurants\Migrations;
 
+use Groupeat\Support\Migrations\Abstracts\AddressesMigration;
 use Illuminate\Database\Schema\Blueprint;
 
 class RestaurantAddressesMigration extends AddressesMigration

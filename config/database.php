@@ -86,6 +86,38 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Migration Order
+    |--------------------------------------------------------------------------
+    |
+    | The order in which the migrations have to be run to create the database.
+    |
+    */
+
+    'order' => [
+        'Customers',
+        'UserCredentials',
+        'PasswordResetTokens',
+        'CustomerAddresses',
+        'PredefinedAddresses',
+        'Admins',
+        'Categories',
+        'Restaurants',
+        'CategoryRestaurant',
+        'RestaurantAddresses',
+        'OpeningWindows',
+        'ClosingWindows',
+        'FoodTypes',
+        'Products',
+        'ProductFormats',
+        'GroupOrders',
+        'Orders',
+        'OrderProductFormat',
+        'DeliveryAddresses',
+        'Devices',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Redis Databases
     |--------------------------------------------------------------------------
     |

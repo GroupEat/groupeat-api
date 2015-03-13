@@ -1,5 +1,7 @@
 <?php
+namespace Groupeat\Orders\Migrations;
 
+use Groupeat\Support\Migrations\Abstracts\AddressesMigration;
 use Illuminate\Database\Schema\Blueprint;
 
 class DeliveryAddressesMigration extends AddressesMigration

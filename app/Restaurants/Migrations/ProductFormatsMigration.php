@@ -1,7 +1,9 @@
 <?php
+namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class ProductFormatsMigration extends Migration
 {

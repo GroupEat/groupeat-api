@@ -1,11 +1,13 @@
 <?php
+namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class FoodTypesMigration extends Migration
+class CategoriesMigration extends Migration
 {
-    const TABLE = 'food_types';
+    const TABLE = 'restaurant_categories';
 
     public function up()
     {

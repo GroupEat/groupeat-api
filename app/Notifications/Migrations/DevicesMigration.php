@@ -1,5 +1,7 @@
 <?php
+namespace Groupeat\Notifications\Migrations;
 
+use Groupeat\Customers\Migrations\CustomersMigration;
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

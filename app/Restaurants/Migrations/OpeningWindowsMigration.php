@@ -1,8 +1,10 @@
 <?php
+namespace Groupeat\Restaurants\Migrations;
 
+use Groupeat\Restaurants\Migrations\Abstracts\WindowsMigration;
 use Illuminate\Database\Schema\Blueprint;
 
-class OpeningWindowsMigration extends RestaurantWindowsMigration
+class OpeningWindowsMigration extends WindowsMigration
 {
     const TABLE = 'opening_windows';
 

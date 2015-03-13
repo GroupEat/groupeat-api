@@ -1,7 +1,9 @@
 <?php
+namespace Groupeat\Customers\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CustomersMigration extends Migration
 {

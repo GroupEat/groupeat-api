@@ -1,7 +1,10 @@
 <?php
+namespace Groupeat\Orders\Migrations;
 
+use Groupeat\Restaurants\Migrations\ProductFormatsMigration;
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class OrderProductFormatMigration extends Migration
 {

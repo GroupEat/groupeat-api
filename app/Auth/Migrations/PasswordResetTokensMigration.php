@@ -1,7 +1,9 @@
 <?php
+namespace Groupeat\Admin\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class PasswordResetTokensMigration extends Migration
 {
