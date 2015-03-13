@@ -126,19 +126,13 @@ return [
         'Illuminate\Queue\QueueServiceProvider',
         'Illuminate\Redis\RedisServiceProvider',
         'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
-        'Illuminate\Session\SessionServiceProvider', // TODO: remove this and other uneeded providers
+        'Illuminate\Session\SessionServiceProvider',
         'Illuminate\Translation\TranslationServiceProvider',
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
 
         'Robbo\Presenter\PresenterServiceProvider',
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-
-        'Groupeat\Providers\AppServiceProvider',
-        'Groupeat\Providers\BusServiceProvider',
-        'Groupeat\Providers\ConfigServiceProvider',
-        'Groupeat\Providers\EventServiceProvider',
-        'Groupeat\Providers\RouteServiceProvider',
 
         'Groupeat\Support\PackageProvider',
         'Groupeat\Auth\PackageProvider',

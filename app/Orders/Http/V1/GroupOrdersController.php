@@ -4,7 +4,7 @@ namespace Groupeat\Orders\Http\V1;
 use Auth;
 use Carbon\Carbon;
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Input;
 
 class GroupOrdersController extends Controller

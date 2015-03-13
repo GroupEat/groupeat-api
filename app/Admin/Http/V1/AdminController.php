@@ -3,7 +3,7 @@ namespace Groupeat\Admin\Http\V1;
 
 use Auth;
 use Groupeat\Admin\Entities\Admin;
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 
 class AdminController extends Controller
 {

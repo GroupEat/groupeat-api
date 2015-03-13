@@ -1,10 +1,11 @@
 <?php
-namespace Groupeat\Providers;
+namespace Groupeat\Support\Providers;
 
-use Groupeat\Http\Responses\Output;
-use Illuminate\Support\ServiceProvider;
+use Groupeat\Support\Http\Output;
+use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+use League\Fractal\Manager;
 
-class HttpServiceProvider extends ServiceProvider
+class HttpServiceProvider extends IlluminateServiceProvider
 {
     /**
     * Bootstrap the application services.
@@ -13,7 +14,7 @@ class HttpServiceProvider extends ServiceProvider
     */
     public function boot()
     {
-    //
+        //
     }
 
     /**

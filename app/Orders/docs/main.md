@@ -82,8 +82,7 @@ Only the customer who created it or the corresponding restaurant can see the ord
 + Response 403
 
         {
-            "status_code": 403,
-            "error_key": "wrongAuthenticatedUser",
+            "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as customer 5 instead of 6."
         }
     
@@ -113,8 +112,7 @@ Only the customer who created it or the corresponding restaurant can see the ord
 + Response 403
 
         {
-            "status_code": 403,
-            "error_key": "wrongAuthenticatedUser",
+            "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as customer 5 instead of 6."
         }
 
@@ -155,80 +153,70 @@ When creating a group order, the distance between the given address and the rest
 + Response 403
 
         {
-            "status_code": 403,
-            "error_key": "userShouldBeActivated",
+            "errorKey": "userShouldBeActivated",
             "message": "The customer #26 should be activated to place an order."
         }
 
 + Response 404
 
         {
-            "status_code": 404,
-            "error_key": "unexistingProductFormats",
+            "errorKey": "unexistingProductFormats",
             "message": "The product formats #175 do not exist."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "invalidFoodRushDuration",
+            "errorKey": "invalidFoodRushDuration",
             "message": "The FoodRush duration must be between 5 and 60 minutes, 70 given."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "noProductFormats",
+            "errorKey": "noProductFormats",
             "message": "There must be at least one product format."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "productFormatsFromDifferentRestaurants",
+            "errorKey": "productFormatsFromDifferentRestaurants",
             "message": "The product formats must belong to the same restaurant."
         }
         
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "deliveryDistanceTooLong",
+            "errorKey": "deliveryDistanceTooLong",
             "message": "The delivery distance should be less than 7 kms, 10 given."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "restaurantDeliveryCapacityExceeded",
+            "errorKey": "restaurantDeliveryCapacityExceeded",
             "message": "The restaurant #6 cannot deliver more than 10 items in the same group order, 11 items asked."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "minimumOrderPriceNotReached",
+            "errorKey": "minimumOrderPriceNotReached",
             "message": "The order price is 810 but must be greater than 1100."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "groupOrderAlreadyExisting",
+            "errorKey": "groupOrderAlreadyExisting",
             "message": "A group order already exists for the restaurant #6."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "groupOrderCannotBeJoined",
+            "errorKey": "groupOrderCannotBeJoined",
             "message": "The groupOrder #6 cannot be joined anymore."
         }
 

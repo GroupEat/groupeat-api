@@ -1,13 +1,30 @@
 <?php
-namespace Groupeat\Support\Http\V1;
+namespace Groupeat\Support\Http\V1\Abstracts;
 
-use Groupeat\Http\Controllers\ApiController;
+use Groupeat\Support\Http\Output;
 use Groupeat\Support\Exceptions\Exception;
+use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
 use League\Fractal\TransformerAbstract;
+use Symfony\Component\HttpFoundation\Response;
 
-abstract class Controller extends ApiController
+abstract class Controller extends IlluminateController
 {
+    protected $statusCode = Response::HTTP_OK;
+
+    /**
+     * @var Output
+     */
+    private $output;
+
+    /**
+     * @param Output $output
+     */
+    public function __construct(Output $output)
+    {
+        $this->output = $output;
+    }
+
     /**
      * @param                     $item
      * @param TransformerAbstract $transformer
@@ -27,9 +44,9 @@ abstract class Controller extends ApiController
             $transformer = $this->getTransformerFor($item);
         }
 
-        return $this->respondWithItem($item, $transformer);
+        $out = $this->output->asItemArray($item, $transformer);
 
-        //return $this->response->item($item, $this->getTransformerFor($item));
+        return $this->arrayResponse($out)->setStatusCode($this->statusCode);
     }
 
     /**
@@ -51,21 +68,19 @@ abstract class Controller extends ApiController
             $transfomer = $this->getTransformerFor($collection->first());
         }
 
-        return $this->respondWithCollection($collection, $transfomer);
+        $out = $this->output->asCollectionArray($collection, $transfomer);
 
-        //return $this->response->collection($collection, $transfomer);
+        return $this->arrayResponse($out)->setStatusCode($this->statusCode);
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return \Illuminate\Http\Response
      */
-    protected function arrayResponse($data)
+    protected function arrayResponse(array $data)
     {
-        return $this->respondWithArray(compact('data'));
-
-       // return $this->response->array(compact('data'));
+        return response()->json($data, $this->statusCode);
     }
 
     /**

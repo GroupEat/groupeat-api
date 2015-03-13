@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Http;
+namespace Groupeat\Support\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -16,7 +16,7 @@ class Kernel extends HttpKernel
         'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
         'Illuminate\Session\Middleware\StartSession',
         'Illuminate\View\Middleware\ShareErrorsFromSession',
-        'Groupeat\Http\Middleware\Api',
+        'Groupeat\Support\Http\Middleware\Api',
     ];
 
     /**
@@ -25,6 +25,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => 'Groupeat\Http\Middleware\Authenticate',
+        'auth' => 'Groupeat\Auth\Http\Middleware\Authenticate',
     ];
 }

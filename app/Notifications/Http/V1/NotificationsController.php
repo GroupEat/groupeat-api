@@ -3,7 +3,7 @@ namespace Groupeat\Notifications\Http\V1;
 
 use Auth;
 use Groupeat\Notifications\Entities\Device;
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Input;
 use Sly\NotificationPusher\Adapter\Gcm;
 use Sly\NotificationPusher\Collection\DeviceCollection;

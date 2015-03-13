@@ -3,7 +3,7 @@ namespace Groupeat\Auth\Http\V1;
 
 use Auth;
 use Groupeat\Auth\Entities\Interfaces\User;
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Input;
 
 class AuthController extends Controller

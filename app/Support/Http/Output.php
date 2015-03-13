@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Http\Responses;
+namespace Groupeat\Support\Http;
 
 use League\Fractal\Manager as Fractal;
 use League\Fractal\Resource\Collection;

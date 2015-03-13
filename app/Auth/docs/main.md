@@ -37,7 +37,6 @@ According to the RESTful principles, this route should be a GET since it does no
 + Response 401
 
         {
-            "status_code": 401,
             "message": "Cannot authenticate with bad password.",
             "errors": {
                 "password": {
@@ -49,7 +48,6 @@ According to the RESTful principles, this route should be a GET since it does no
 + Response 404
 
         {
-            "status_code": 404,
             "message": "No user with mangeo@ensta.fr e-mail address found.",
             "errors": {
                 "email": {
@@ -76,7 +74,6 @@ Generate a new authentication token for an already registered user. Once hit, th
 + Response 401
 
         {
-            "status_code": 401,
             "message": "Cannot authenticate with bad password.",
             "errors": {
                 "password": {
@@ -88,7 +85,6 @@ Generate a new authentication token for an already registered user. Once hit, th
 + Response 404
 
         {
-            "status_code": 404,
             "message": "No user with mangeo@ensta.fr e-mail address found.",
             "errors": {
                 "email": {
@@ -114,7 +110,6 @@ Send a password reset link to the given e-mail address and revoke the previous a
 + Response 404
 
         {
-            "status_code": 404,
             "message": "No user with mangeo@ensta.fr e-mail address found.",
             "errors": {
                 "email": {

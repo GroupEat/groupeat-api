@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Http\Middleware;
+namespace Groupeat\Support\Http\Middleware;
 
 use Auth;
 use Closure;

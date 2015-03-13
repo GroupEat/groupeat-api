@@ -1,7 +1,8 @@
 <?php
-namespace Groupeat\Exceptions;
+namespace Groupeat\Support\Exceptions;
 
-use Exception;
+use Exception as BaseException;
+use Groupeat\Support\Exceptions\Exception as GroupeatException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -21,11 +22,11 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
+     * @param  BaseException  $e
      *
      * @return void
      */
-    public function report(Exception $e)
+    public function report(BaseException $e)
     {
         return parent::report($e);
     }
@@ -34,11 +35,11 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param  BaseException  $e
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, BaseException $e)
     {
         $headers = [
             'Access-Control-Allow-Origin' => '*',
@@ -46,7 +47,7 @@ class Handler extends ExceptionHandler
             'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept, Authorization, X-Request-With',
         ];
 
-        if ($e instanceof \Groupeat\Support\Exceptions\Exception) {
+        if ($e instanceof GroupeatException) {
             $statusCode = $e->getStatusCode();
             $data['errorKey'] = $e->getErrorKey();
             $data['message'] = $e->getMessage();

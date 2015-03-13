@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Deploy\Http\V1;
 
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 
 class OpCacheController extends Controller
 {

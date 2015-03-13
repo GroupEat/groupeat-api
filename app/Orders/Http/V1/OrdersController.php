@@ -6,7 +6,7 @@ use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Support\ProductFormats;
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Input;
 use Symfony\Component\HttpFoundation\Response;
 

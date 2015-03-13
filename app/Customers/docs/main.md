@@ -23,15 +23,13 @@ An e-mail will be sent to the given address with an activation link that must be
 + Response 400
 
         {
-            "status_code": 400,
-            "error_key": "unavailableLocale",
+            "errorKey": "unavailableLocale",
             "message": "The locale ru should belong to [fr]."
         }
 
 + Response 422
 
         {
-            "status_code": 422,
             "message": "Cannot register user with invalid credentials.",
             "errors": {
                 "email": {
@@ -76,8 +74,7 @@ An e-mail will be sent to the given address with an activation link that must be
 + Response 403
 
         {
-            "status_code": 403,
-            "error_key": "wrongAuthenticatedUser",
+            "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as customer 5 instead of 6."
         }
 
@@ -102,15 +99,13 @@ Replace the customer data with the one passed in the request. However, a custome
 + Response 403
 
         {
-            "status_code": 403,
-            "error_key": "wrongAuthenticatedUser",
+            "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as customer 1 instead of 5."
         }
 
 + Response 422
             
         {
-            "status_code": 422,
             "message": "Cannot save customer #6.",
             "errors": {
                 "phoneNumber": {
@@ -128,8 +123,7 @@ Replace the customer data with the one passed in the request. However, a custome
 + Response 403
 
         {
-            "status_code": 403,
-            "error_key": "wrongAuthenticatedUser",
+            "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as customer 1 instead of 5."
         }
 
@@ -182,8 +176,7 @@ For the MVP, all the addresses must be valid campus addresses. That's why the on
 + Response 422
 
         {
-            "status_code": 422,
-            "error_key": "validationErrors",
+            "errorKey": "validationErrors",
             "errors": {
                 "longitude": {
                     "numeric": []

@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Console;
+namespace Groupeat\Support\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

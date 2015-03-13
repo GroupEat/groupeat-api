@@ -4,7 +4,7 @@ namespace Groupeat\Customers\Http\V1;
 use Auth;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Entities\PredefinedAddress;
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Input;
 
 class AddressesController extends Controller

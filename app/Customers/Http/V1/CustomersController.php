@@ -4,7 +4,7 @@ namespace Groupeat\Customers\Http\V1;
 use Auth;
 use Groupeat\Auth\Http\V1\TokenTransformer;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Support\Http\V1\Controller;
+use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Input;
 use Symfony\Component\HttpFoundation\Response;
 
