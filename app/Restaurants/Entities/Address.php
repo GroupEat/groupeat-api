@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Restaurants\Entities;
 
-use RestaurantAddressesMigration;
+use Groupeat\Restaurants\Migrations\RestaurantAddressesMigration;
 use Groupeat\Support\Entities\Abstracts\Address as AbstractAddress;
 
 class Address extends AbstractAddress
@@ -22,6 +22,6 @@ class Address extends AbstractAddress
 
     protected function getRelatedMigration()
     {
-        return new RestaurantAddressesMigration();
+        return new RestaurantAddressesMigration;
     }
 }

@@ -193,10 +193,10 @@ abstract class Entity extends Model implements PresentableInterface
      */
     protected function getRelatedMigration()
     {
-        $temp = class_basename(static::class);
+        $temp = str_replace('\\Entities\\', '\\Migrations\\', static::class);
         $migrationClass = str_plural($temp).'Migration';
 
-        return new $migrationClass();
+        return new $migrationClass;
     }
 
     protected function getIdAttribute()
