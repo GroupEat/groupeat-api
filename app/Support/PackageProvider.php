@@ -4,8 +4,6 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
-use Illuminate\Cookie\CookieServiceProvider;
-use Illuminate\Session\SessionServiceProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
@@ -26,11 +24,6 @@ class PackageProvider extends WorkbenchPackageProvider
 
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
-        }
-
-        if (!$this->app->environment('production')) {
-            $this->app->register(CookieServiceProvider::class);
-            $this->app->register(SessionServiceProvider::class);
         }
     }
 }
