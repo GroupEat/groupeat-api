@@ -3,6 +3,7 @@ namespace Groupeat\Notifications\Http\V1;
 
 use Groupeat\Notifications\Entities\Device;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use Illuminate\Foundation\Inspiring;
 use Sly\NotificationPusher\Adapter\Gcm;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\Device as NotifiedDevice;
@@ -40,7 +41,7 @@ class NotificationsController extends Controller
 
         $devices = new DeviceCollection([new NotifiedDevice($deviceId)]);
 
-        $message = new Message('This is an example.');
+        $message = new Message(Inspiring::quote());
 
         $push = new Push($gcmAdapter, $devices, $message);
         $pushManager->add($push);
