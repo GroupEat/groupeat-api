@@ -3,7 +3,7 @@
     <file>app</file>
     <file>bootstrap</file>
     <file>config</file>
-    <file>database</file>
+    <file>database/seeds</file>
     <file>tests</file>
     <file>.rocketeer</file>
 
