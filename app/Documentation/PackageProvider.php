@@ -1,23 +1,20 @@
 <?php namespace Groupeat\Documentation;
 
 use Groupeat\Documentation\Services\GenerateApiDocumentation;
+use Groupeat\Documentation\Values\OrderedPackages;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
     protected $console = ['GenerateApiDocumentation'];
 
-    public function boot()
+    public function register()
     {
-        parent::boot();
+        parent::register();
 
-        $this->app->bind('GenerateApiDocumentationService', function ($app) {
-            return new GenerateApiDocumentation(
-                $app['files'],
-                $app['config'],
-                $app['config']->get('documentation.order'),
-                $app->isLocal()
-            );
-        });
+        $this->bindValueFromConfig(
+            OrderedPackages::class,
+            'documentation.order'
+        );
     }
 }

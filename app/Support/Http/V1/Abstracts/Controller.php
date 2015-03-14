@@ -1,8 +1,10 @@
 <?php
 namespace Groupeat\Support\Http\V1\Abstracts;
 
-use Groupeat\Support\Http\Output;
+use Groupeat\Auth\Auth;
 use Groupeat\Support\Exceptions\Exception;
+use Groupeat\Support\Http\Output;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
 use League\Fractal\TransformerAbstract;
@@ -10,7 +12,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller extends IlluminateController
 {
+    /**
+     * @var int
+     */
     protected $statusCode = Response::HTTP_OK;
+
+    /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * @var Auth
+     */
+    protected $auth;
 
     /**
      * @var Output
@@ -18,11 +33,46 @@ abstract class Controller extends IlluminateController
     private $output;
 
     /**
-     * @param Output $output
+     * @param Request $request
+     * @param Auth    $auth
+     * @param Output  $output
      */
-    public function __construct(Output $output)
+    public function __construct(Request $request, Auth $auth, Output $output)
     {
+        $this->request = $request;
+        $this->auth = $auth;
         $this->output = $output;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed  $default
+     * @param bool   $deep
+     *
+     * @return mixed
+     */
+    protected function get($key, $default = null, $deep = false)
+    {
+        return $this->request->query->get($key, $default, $deep);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\ParameterBag
+     */
+    protected function query()
+    {
+        return $this->request->query;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    protected function json($key = null, $default = null)
+    {
+        return $this->request->json($key, $default);
     }
 
     /**

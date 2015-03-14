@@ -6,18 +6,10 @@ use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Auth\Passwords\PasswordBroker;
-use Illuminate\Translation\Translator;
 
 class ResetPassword
 {
-    /**
-     * @var GenerateTokenForUser
-     */
     private $authTokenGenerator;
-
-    /**
-     * @var PasswordBroker
-     */
     private $passwordBroker;
 
     public function __construct(GenerateAuthToken $authTokenGenerator, PasswordBroker $passwordBroker)

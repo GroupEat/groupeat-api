@@ -51,15 +51,20 @@ class Handler extends ExceptionHandler
             $statusCode = $e->getStatusCode();
             $data['errorKey'] = $e->getErrorKey();
             $data['message'] = $e->getMessage();
-            $data['errors'] = $e->getErrors();
+
+            $errors = $e->getErrors();
+
+            if (!$errors->isEmpty()) {
+                $data['errors'] = $errors;
+            }
         } elseif ($e instanceof HttpException && in_array($e->getStatusCode(), [404, 503])) {
             if ($e->getStatusCode() == 404) {
-                return \Response::json([
+                return response()->json([
                     'errorKey' => 'notFound',
                     'message' => "The route ".$request->method()." ".$request->fullUrl()." does not exist.",
                 ], 404, $headers);
             } elseif ($e->getStatusCode() == 503) {
-                return \Response::json([
+                return response()->json([
                     'errorKey' => 'maintenanceMode',
                     'message' => "The application is in maintenance mode. Please come back in a few minutes.",
                 ], 503, $headers);
@@ -82,6 +87,6 @@ class Handler extends ExceptionHandler
             }
         }
 
-        return \Response::json(compact('data'), $statusCode, $headers);
+        return response()->json(compact('data'), $statusCode, $headers);
     }
 }

@@ -33,9 +33,6 @@ class DbInstallCommand extends Command
         if ($this->option('seed')) {
             $this->setEntries();
             $this->call('db:seed', ['--force' => $this->option('force')]);
-
-            $this->deleteMigrationFiles();
-            system('composer dump-autoload');
         }
     }
 
@@ -94,11 +91,11 @@ class DbInstallCommand extends Command
 
     private function publishCopy($migrationPath)
     {
-        $searchValue = str_replace('Migration.php', '', pathinfo($migrationPath, PATHINFO_BASENAME));
-        $migrationOrder = array_search($searchValue, $this->order);
+        $className = trim('Groupeat'.str_replace([app_path(), '/'], ['', '\\'], $migrationPath), '.php');
+        $migrationOrder = array_search($className, $this->order);
 
         if ($migrationOrder === false) {
-            throw new \RuntimeException("The order of the migration $searchValue is missing.");
+            throw new \RuntimeException("The order of the migration $className is missing.");
         }
 
         $baseName = '2015_03_13_'.sprintf('%06d', $migrationOrder).'_'.pathinfo($migrationPath, PATHINFO_BASENAME);

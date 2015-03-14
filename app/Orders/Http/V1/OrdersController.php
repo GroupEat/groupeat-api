@@ -1,13 +1,12 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
-use Auth;
-use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
+use Groupeat\Orders\Services\CreateGroupOrder;
+use Groupeat\Orders\Services\JoinGroupOrder;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Input;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrdersController extends Controller
@@ -26,17 +25,17 @@ class OrdersController extends Controller
         return $this->itemResponse($order->deliveryAddress);
     }
 
-    public function place()
+    public function place(JoinGroupOrder $joinGroupOrder, CreateGroupOrder $createGroupOrder)
     {
-        $customer = Auth::customer();
-        $productFormats = new ProductFormats(Input::json('productFormats'));
-        $deliveryAddressData = Input::json()->all();
-        $comment = Input::json('comment');
+        $customer = $this->auth->customer();
+        $productFormats = new ProductFormats($this->json('productFormats'));
+        $deliveryAddressData = $this->json()->all();
+        $comment = $this->json('comment');
 
-        if (Input::json('groupOrderId')) {
-            $groupOrder = GroupOrder::findOrFail(Input::json('groupOrderId'));
+        if ($this->json('groupOrderId')) {
+            $groupOrder = GroupOrder::findOrFail($this->json('groupOrderId'));
 
-            $order = app('JoinGroupOrderService')->call(
+            $order = $joinGroupOrder->call(
                 $groupOrder,
                 $customer,
                 $productFormats,
@@ -44,10 +43,10 @@ class OrdersController extends Controller
                 $comment
             );
         } else {
-            $order = app('CreateGroupOrderService')->call(
+            $order = $createGroupOrder->call(
                 $customer,
                 $productFormats,
-                Input::json()->getInt('foodRushDurationInMinutes'),
+                $this->json()->getInt('foodRushDurationInMinutes'),
                 $deliveryAddressData,
                 $comment
             );
@@ -60,8 +59,8 @@ class OrdersController extends Controller
 
     private function assertCanBeSeen(Order $order)
     {
-        if (!Auth::isSame($order->groupOrder->restaurant)) {
-            Auth::assertSame($order->customer);
+        if (!$this->auth->isSame($order->groupOrder->restaurant)) {
+            $this->auth->assertSame($order->customer);
         }
     }
 }

@@ -133,6 +133,16 @@ class Auth extends JWTAuth
     }
 
     /**
+     * @return string
+     */
+    public function userId()
+    {
+        $this->checkOrFail();
+
+        return $this->userCredentials->user->id;
+    }
+
+    /**
      * @param User $user
      */
     public function assertSame(User $user)

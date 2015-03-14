@@ -11,7 +11,7 @@ class SeedersOrderer
      *
      * @return array
      */
-    public static function getList()
+    public function getList()
     {
         $seeders = [];
 

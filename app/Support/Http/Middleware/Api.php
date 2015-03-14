@@ -1,26 +1,27 @@
 <?php
 namespace Groupeat\Support\Http\Middleware;
 
-use Auth;
 use Closure;
+use Groupeat\Auth\Auth;
+use Illuminate\Http\Request;
 
 class Api
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
+    private $auth;
+
+    public function __construct(Auth $auth)
+    {
+        $this->auth = $auth;
+    }
+
+    public function handle(Request $request, Closure $next)
     {
         $authorizationHeader = $request->header('authorization');
 
         if (!is_null($authorizationHeader)) {
             list($temp, $token) = explode(' ', $authorizationHeader);
 
-            Auth::login($token);
+            $this->auth->login($token);
         }
 
         $response = $next($request);

@@ -1,43 +1,28 @@
 <?php
 namespace Groupeat\Support\Http;
 
+use Illuminate\Http\Request;
 use League\Fractal\Manager as Fractal;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 
 class Output
 {
-    /**
-     * Fractal library used for data presention and transformation.
-     *
-     * @var Fractal
-     */
     private $fractal;
+    private $request;
 
-    /**
-     * Construct a new output manager with a fractal manager.
-     *
-     * @param Fractal $fractal
-     */
-    public function __construct(Fractal $fractal)
+    public function __construct(Fractal $fractal, Request $request)
     {
         $this->fractal = $fractal;
+        $this->request = $request;
     }
 
-    /**
-     * Output a single item.
-     *
-     * @param  mixed $item
-     * @param  mixed $callback
-     *
-     * @return array
-     */
     public function asItemArray($item, $callback)
     {
         $resource = new Item($item, $callback);
 
-        if (\Request::get('include')) {
-            $this->fractal->parseIncludes(\Request::get('include'));
+        if ($this->request->get('include')) {
+            $this->fractal->parseIncludes($this->request->get('include'));
         }
 
         $root = $this->fractal->createData($resource);
@@ -45,18 +30,10 @@ class Output
         return $root->toArray();
     }
 
-    /**
-     * Output as a collection of items.
-     *
-     * @param  mixed $collection
-     * @param  mixed $callback
-     *
-     * @return array
-     */
     public function asCollectionArray($collection, $callback)
     {
-        if (\Request::get('include')) {
-            $this->fractal->parseIncludes(\Request::get('include'));
+        if ($this->request->get('include')) {
+            $this->fractal->parseIncludes($this->request->get('include'));
             $collection->load($this->fractal->getRequestedIncludes());
         }
 

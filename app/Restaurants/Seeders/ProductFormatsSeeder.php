@@ -1,8 +1,8 @@
 <?php
 namespace Groupeat\Restaurants\Seeders;
 
-use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Product;
+use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Database\Seeder;
 
 class ProductFormatsSeeder extends Seeder

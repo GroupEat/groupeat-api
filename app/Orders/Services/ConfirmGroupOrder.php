@@ -3,32 +3,29 @@ namespace Groupeat\Orders\Services;
 
 use Carbon\Carbon;
 use Groupeat\Orders\Entities\GroupOrder;
+use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
+use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Events\Dispatcher;
 
 class ConfirmGroupOrder
 {
-    /**
-     * @var Dispatcher
-     */
     private $events;
-
-    /**
-     * @var int
-     */
     private $maximumPreparationTimeInMinutes;
 
-    public function __construct(Dispatcher $events, $maximumPreparationTimeInMinutes)
-    {
+    public function __construct(
+        Dispatcher $events,
+        MaximumPreparationTimeInMinutes $maximumPreparationTimeInMinutes
+    ) {
         $this->events = $events;
-        $this->maximumPreparationTimeInMinutes = (int) $maximumPreparationTimeInMinutes;
+        $this->maximumPreparationTimeInMinutes = $maximumPreparationTimeInMinutes->value();
     }
 
     /**
      * @param GroupOrder $groupOrder
      * @param Carbon     $preparedAt
      *
-     * @return static
+     * @return Carbon
      */
     public function call(GroupOrder $groupOrder, Carbon $preparedAt)
     {
@@ -37,14 +34,11 @@ class ConfirmGroupOrder
 
         $groupOrder->confirm($preparedAt);
 
-        $this->events->fire('groupOrderHasBeenConfirmed', [$groupOrder]);
+        $this->events->fire(new GroupOrderHasBeenConfirmed($groupOrder));
 
         return $preparedAt;
     }
 
-    /**
-     * @return int
-     */
     public function getMaximumPreparationTimeInMinutes()
     {
         return $this->maximumPreparationTimeInMinutes;

@@ -2,53 +2,25 @@
 namespace Groupeat\Auth;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Auth\Services\ActivateUser;
-use Groupeat\Auth\Services\GenerateAuthToken;
-use Groupeat\Auth\Services\RegisterUser;
+use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Auth\Services\SendActivationLink;
-use Groupeat\Auth\Services\SendPasswordResetLink;
-use Groupeat\Auth\Services\ResetPassword;
+use Groupeat\Auth\Values\TokenDurationInMinutes;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::HELPERS, self::FILTERS, self::ROUTES];
+    protected $require = [self::ROUTES];
 
     public function register()
     {
-        $this->app->bind('ActivateUserService', function () {
-            return new ActivateUser();
-        });
+        parent::register();
 
-        $this->app->bind('GenerateAuthTokenService', function ($app) {
-            return new GenerateAuthToken(
-                $app['tymon.jwt.auth'],
-                $app['config']->get('jwt.ttl')
-            );
-        });
+        $this->bindValueFromConfig(
+            TokenDurationInMinutes::class,
+            'jwt.ttl'
+        );
 
-        $this->app->bind('RegisterUserService', function ($app) {
-            return new RegisterUser(
-                $app['validator'],
-                $app['events'],
-                $app['GenerateAuthTokenService'],
-                $app['groupeat.locale']
-            );
-        });
-
-        $this->app->bind('SendActivationLinkService', function ($app) {
-            return new SendActivationLink($app['SendMailService'], $app['url']);
-        });
-
-        $this->app->bind('SendPasswordResetLinkService', function ($app) {
-            return new SendPasswordResetLink($app['auth.password'], $app['groupeat.locale'], $app['url']);
-        });
-
-        $this->app->bind('ResetPasswordService', function ($app) {
-            return new ResetPassword($app['GenerateAuthTokenService'], $app['auth.password']);
-        });
-
-        $this->app->bindShared('groupeat.auth', function ($app) {
+        $this->app->singleton(Auth::class, function ($app) {
             $auth = new Auth(
                 $app['tymon.jwt.manager'],
                 new UserCredentials,
@@ -64,6 +36,6 @@ class PackageProvider extends WorkbenchPackageProvider
     {
         parent::boot();
 
-        $this->app['events']->listen('userHasRegistered', 'SendActivationLinkService@call');
+        $this->listen(UserHasRegistered::class, SendActivationLink::class);
     }
 }

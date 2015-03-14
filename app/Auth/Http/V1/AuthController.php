@@ -1,44 +1,47 @@
 <?php
 namespace Groupeat\Auth\Http\V1;
 
-use Auth;
-use Groupeat\Auth\Entities\Interfaces\User;
+use Groupeat\Auth\Services\ActivateUser;
+use Groupeat\Auth\Services\GenerateAuthToken;
+use Groupeat\Auth\Services\ResetPassword;
+use Groupeat\Auth\Services\SendPasswordResetLink;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Input;
 
 class AuthController extends Controller
 {
-    public function activate()
+    public function activate(ActivateUser $activateUser)
     {
-        app('ActivateUserService')->call(Input::json('token'));
+        $activateUser->call($this->json('token'));
     }
 
     public function getToken()
     {
-        Auth::byCredentials(Input::json('email'), Input::json('password'));
+        $this->auth->byCredentials($this->json('email'), $this->json('password'));
 
-        return $this->itemResponse(Auth::user(), new TokenTransformer);
+        return $this->itemResponse($this->auth->user(), new TokenTransformer);
     }
 
-    public function resetToken()
+    public function resetToken(GenerateAuthToken $generateAuthToken)
     {
-        $userCredentials = app('GenerateAuthTokenService')
-            ->resetFromCredentials(Input::json('email'), Input::json('password'));
+        $userCredentials = $generateAuthToken->resetFromCredentials(
+            $this->json('email'),
+            $this->json('password')
+        );
 
         return $this->itemResponse($userCredentials->user, new TokenTransformer);
     }
 
-    public function sendPasswordResetLink()
+    public function sendPasswordResetLink(SendPasswordResetLink $sendPasswordResetLink)
     {
-        app('SendPasswordResetLinkService')->call(Input::json('email'));
+        $sendPasswordResetLink->call($this->json('email'));
     }
 
-    public function resetPassword()
+    public function resetPassword(ResetPassword $resetPassword)
     {
-        app('ResetPasswordService')->call(
-            Input::json('token'),
-            Input::json('email'),
-            Input::json('password')
+        $resetPassword->call(
+            $this->json('token'),
+            $this->json('email'),
+            $this->json('password')
         );
     }
 }

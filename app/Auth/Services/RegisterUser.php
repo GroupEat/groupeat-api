@@ -4,6 +4,7 @@ namespace Groupeat\Auth\Services;
 use Closure;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
 use Illuminate\Events\Dispatcher;
@@ -11,24 +12,9 @@ use Illuminate\Validation\Factory as Validation;
 
 class RegisterUser
 {
-    /**
-     * @var Validation
-     */
     private $validation;
-
-    /**
-     * @var Dispatcher
-     */
     private $events;
-
-    /**
-     * @var GenerateTokenForUser
-     */
     private $authTokenGenerator;
-
-    /**
-     * @var Locale
-     */
     private $localeService;
 
     public function __construct(
@@ -44,10 +30,11 @@ class RegisterUser
     }
 
     /**
-     * @param string $email
-     * @param string $plainPassword
-     * @param string $locale
-     * @param User   $userType
+     * @param string   $email
+     * @param string   $plainPassword
+     * @param string   $locale
+     * @param User     $userType
+     * @param callable $additionalValidationCallback
      *
      * @return User
      */
@@ -59,7 +46,7 @@ class RegisterUser
         $userCredentials = UserCredentials::register($email, $plainPassword, $locale, $userType->newInstance());
         $userCredentials->replaceAuthenticationToken($this->authTokenGenerator->forUser($userCredentials));
 
-        $this->events->fire('userHasRegistered', [$userCredentials]);
+        $this->events->fire(new UserHasRegistered($userCredentials));
 
         return $userCredentials->user;
     }

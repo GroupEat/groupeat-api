@@ -1,21 +1,16 @@
 <?php
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Http\V1\AuthController;
 
-Route::model('user', 'Groupeat\Auth\Entities\UserCredentials');
+Route::model('user', UserCredentials::class);
 
 Route::group(['prefix' => 'api'], function () {
     Route::group(['prefix' => 'auth'], function () {
-        $controller = 'Groupeat\Auth\Http\V1\AuthController';
-
-        Route::post('activationTokens', "$controller@activate");
-
-        Route::put('token', "$controller@getToken");
-
-        Route::post('token', "$controller@resetToken");
-
-        Route::delete('password', "$controller@sendPasswordResetLink");
-
-        Route::post('password', "$controller@resetPassword");
+        Route::post('activationTokens', AuthController::class.'@activate');
+        Route::put('token', AuthController::class.'@getToken');
+        Route::post('token', AuthController::class.'@resetToken');
+        Route::delete('password', AuthController::class.'@sendPasswordResetLink');
+        Route::post('password', AuthController::class.'@resetPassword');
     });
 });

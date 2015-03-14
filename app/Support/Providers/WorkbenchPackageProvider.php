@@ -29,6 +29,37 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $this->registerConsoleCommands(...$this->console);
     }
 
+    /**
+     * @param string $valueClass
+     * @param string $configKey
+     */
+    protected function bindValueFromConfig($valueClass, $configKey)
+    {
+        $this->bindValue($valueClass, $this->app['config']->get($configKey));
+    }
+
+    /**
+     * @param string $valueClass
+     * @param mixed  $value
+     */
+    protected function bindValue($valueClass, $value)
+    {
+        $this->app->instance(
+            $valueClass,
+            new $valueClass($value)
+        );
+    }
+
+    /**
+     * @param string $eventClass
+     * @param string $handlerClass
+     * @param string $method
+     */
+    protected function listen($eventClass, $handlerClass, $method = 'call')
+    {
+        $this->app['events']->listen($eventClass, "$handlerClass@$method");
+    }
+
     protected function requireFiles(...$files)
     {
         foreach ($files as $file) {

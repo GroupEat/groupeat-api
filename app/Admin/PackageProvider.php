@@ -2,6 +2,7 @@
 namespace Groupeat\Admin;
 
 use Groupeat\Admin\Entities\Admin;
+use Groupeat\Auth\Auth;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
@@ -12,6 +13,6 @@ class PackageProvider extends WorkbenchPackageProvider
     {
         parent::boot();
 
-        $this->app->make('groupeat.auth')->addUserType(new Admin);
+        $this->app[Auth::class]->addUserType(new Admin);
     }
 }

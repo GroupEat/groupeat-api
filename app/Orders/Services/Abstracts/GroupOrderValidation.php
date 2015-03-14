@@ -1,37 +1,30 @@
 <?php
 namespace Groupeat\Orders\Services\Abstracts;
 
+use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\Order;
+use Groupeat\Orders\Events\GroupOrderHasEnded;
+use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Support\Entities\Abstracts\Address;
+use Groupeat\Support\Events\Abstracts\Event;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Events\Dispatcher;
 
 abstract class GroupOrderValidation
 {
-    /**
-     * @var Dispatcher
-     */
     protected $events;
-
-    /**
-     * @var int
-     */
     protected $maximumDeliveryDistanceInKms;
-
-    /**
-     * @var array
-     */
     protected $deliveryAddressConstraints;
 
     public function __construct(
         Dispatcher $events,
-        $maximumDeliveryDistanceInKms,
-        array $deliveryAddressConstraints
+        MaximumDeliveryDistanceInKms $maximumDeliveryDistanceInKms,
+        AddressConstraints $addressConstraints
     ) {
         $this->events = $events;
-        $this->maximumDeliveryDistanceInKms = (float) $maximumDeliveryDistanceInKms;
-        $this->deliveryAddressConstraints = $deliveryAddressConstraints;
+        $this->maximumDeliveryDistanceInKms = $maximumDeliveryDistanceInKms->value();
+        $this->deliveryAddressConstraints = $addressConstraints->value();
     }
 
     /**
@@ -64,14 +57,14 @@ abstract class GroupOrderValidation
         }
     }
 
-    protected function fireSuitableEventsFor(Order $order, $default)
+    protected function fireSuitableEvents(Order $order, Event $event)
     {
         $groupOrder = $order->groupOrder;
 
-        $this->events->fire($default, [$order]);
+        $this->events->fire($event);
 
         if (!$groupOrder->isJoinable()) {
-            $this->events->fire('groupOrderHasEnded', [$groupOrder]);
+            $this->events->fire(new GroupOrderHasEnded($groupOrder));
         }
     }
 }

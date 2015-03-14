@@ -1,30 +1,29 @@
 <?php
 
-Route::model('order', 'Groupeat\Orders\Entities\Order');
-Route::model('groupOrder', 'Groupeat\Orders\Entities\GroupOrder');
+use Groupeat\Orders\Http\V1\GroupOrdersController;
+use Groupeat\Orders\Http\V1\OrdersController;
 
-Route::group(['prefix' => 'api', 'middleware' => 'auth'], function () {
-    Route::group(['prefix' => 'groupOrders'], function () {
-        $controller = 'Groupeat\Orders\Http\V1\GroupOrdersController';
+Route::model('order', \Groupeat\Orders\Entities\Order::class);
+Route::model('groupOrder', \Groupeat\Orders\Entities\GroupOrder::class);
 
-        Route::get('/', "$controller@index");
+Route::group(['prefix' => 'api'], function () {
+    Route::group(['middleware' => 'auth'], function () {
+        Route::group(['prefix' => 'groupOrders'], function () {
+            Route::get('/', GroupOrdersController::class.'@index');
+        });
 
-        Route::group(['prefix' => '{groupOrder}', 'before' => 'allowDifferentToken'], function () use ($controller) {
-            Route::get('/', "$controller@show");
+        Route::group(['prefix' => 'orders'], function () {
+            Route::group(['prefix' => '{order}'], function () {
+                Route::get('deliveryAddress', OrdersController::class.'@showDeliveryAddress');
+                Route::get('/', OrdersController::class.'@show');
+            });
 
-            Route::post('confirm', "$controller@confirm");
+            Route::post('/', OrdersController::class.'@place');
         });
     });
 
-    Route::group(['prefix' => 'orders'], function () {
-        $controller = 'Groupeat\Orders\Http\V1\OrdersController';
-
-        Route::group(['prefix' => '{order}'], function () use ($controller) {
-            Route::get('deliveryAddress', "$controller@showDeliveryAddress");
-
-            Route::get('/', "$controller@show");
-        });
-
-        Route::post('/', "$controller@place");
+    Route::group(['prefix' => 'groupOrders/{groupOrder}', 'middleware' => 'allowDifferentToken'], function () {
+        Route::get('/', GroupOrdersController::class.'@show');
+        Route::post('confirm', GroupOrdersController::class.'@confirm');
     });
 });

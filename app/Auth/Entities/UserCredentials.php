@@ -7,9 +7,9 @@ use Groupeat\Support\Entities\Entity;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Hash;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordInterface;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordInterface;
 use Tymon\JWTAuth\Providers\User\UserInterface;
 
 class UserCredentials extends Entity implements Authenticatable, CanResetPasswordInterface, UserInterface

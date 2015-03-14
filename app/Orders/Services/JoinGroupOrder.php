@@ -4,6 +4,7 @@ namespace Groupeat\Orders\Services;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
+use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Services\Abstracts\GroupOrderValidation;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
@@ -32,7 +33,7 @@ class JoinGroupOrder extends GroupOrderValidation
 
         $order = $groupOrder->addOrder($customer, $productFormats, $deliveryAddress, $comment);
 
-        $this->fireSuitableEventsFor($order, 'groupOrderHasBeenJoined');
+        $this->fireSuitableEvents($order, new GroupOrderHasBeenJoined($order));
 
         return $order;
     }

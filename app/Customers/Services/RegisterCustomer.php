@@ -7,9 +7,6 @@ use Groupeat\Support\Exceptions\UnprocessableEntity;
 
 class RegisterCustomer
 {
-    /**
-     * @var RegisterUser
-     */
     private $registerUser;
 
     public function __construct(RegisterUser $registerUser)

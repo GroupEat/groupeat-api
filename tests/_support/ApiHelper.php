@@ -1,6 +1,8 @@
 <?php
 namespace Codeception\Module;
 
+use Groupeat\Auth\Auth;
+
 class ApiHelper extends \Codeception\Module
 {
     public function amAnActivatedCustomer()
@@ -91,7 +93,7 @@ class ApiHelper extends \Codeception\Module
         $verb = strtoupper($verb);
         $url = $this->getApiUrl($path);
 
-        $this->getModule('Laravel5')->app['groupeat.auth']->logout();
+        $this->getModule('Laravel5')->app[Auth::class]->logout();
 
         $this->haveAcceptHeader();
         $body = $verb != 'GET' ? json_encode($params) : null;

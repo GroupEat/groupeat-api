@@ -53,7 +53,7 @@ class GroupOrdersCest
 
         $confirmUrl = "groupOrders/$groupOrderId/confirm";
 
-        $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
+        $I->sendApiGetWithToken($restaurantToken, "groupOrders/$groupOrderId");
         $I->assertEquals(0, $I->grabDataFromResponse('remainingCapacity'));
         $I->assertFalse($I->grabDataFromResponse('joinable'));
 

@@ -8,19 +8,8 @@ use Illuminate\Routing\UrlGenerator;
 
 class SendPasswordResetLink
 {
-    /**
-     * @var PasswordBroker
-     */
     private $passwordBroker;
-
-    /**
-     * @var Locale
-     */
     private $localeService;
-
-    /**
-     * @var UrlGenerator
-     */
     private $urlGenerator;
 
     public function __construct(

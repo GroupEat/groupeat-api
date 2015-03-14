@@ -1,30 +1,36 @@
 <?php namespace Groupeat\Support;
 
-use Groupeat\Support\Services\Locale;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
-use Groupeat\Support\Services\SendMail;
+use Groupeat\Support\Values\AvailableLocales;
+use Groupeat\Support\Values\Environment;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Cookie\CookieServiceProvider;
+use Illuminate\Session\SessionServiceProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::HELPERS, self::FILTERS];
+    protected $require = [self::HELPERS, self::ROUTES];
     protected $console = ['DbInstall'];
 
     public function register()
     {
-        $this->app->bindShared('groupeat.locale', function ($app) {
-            return new Locale(
-                $app['router'],
-                $app['translator'],
-                $app['config']->get('app.available_mailing_locales')
-            );
-        });
+        $this->bindValueFromConfig(
+            AvailableLocales::class,
+            'app.available_locales'
+        );
 
-        $this->app->bind('SendMailService', function ($app) {
-            return new SendMail($app['mailer'], $app['groupeat.locale']);
-        });
+        $this->bindValue(
+            Environment::class,
+            $this->app->environment()
+        );
 
         if ($this->app->isLocal()) {
-            $this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
+            $this->app->register(IdeHelperServiceProvider::class);
+        }
+
+        if (!$this->app->environment('production')) {
+            $this->app->register(CookieServiceProvider::class);
+            $this->app->register(SessionServiceProvider::class);
         }
     }
 }

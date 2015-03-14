@@ -1,26 +1,24 @@
 <?php
 
-Route::model('restaurant', 'Groupeat\Restaurants\Entities\Restaurant');
-Route::model('product', 'Groupeat\Restaurants\Entities\Product');
+use Groupeat\Restaurants\Entities\Restaurant;
+use Groupeat\Restaurants\Entities\Product;
+use Groupeat\Restaurants\Http\V1\RestaurantsController;
+
+Route::model('restaurant', Restaurant::class);
+Route::model('product', Product::class);
 
 Route::group(['prefix' => 'api', 'middleware' => 'auth'], function () {
-    $controller = 'Groupeat\Restaurants\Http\V1\RestaurantsController';
+    Route::get('restaurantCategories', RestaurantsController::class.'@categoriesIndex');
+    Route::get('foodTypes', RestaurantsController::class.'@foodTypesIndex');
+    Route::get('products/{product}/formats', RestaurantsController::class.'@productFormatsIndex');
 
-    Route::get('restaurantCategories', "$controller@categoriesIndex");
+    Route::group(['prefix' => 'restaurants'], function () {
+        Route::get('/', RestaurantsController::class.'@index');
 
-    Route::get('foodTypes', "$controller@foodTypesIndex");
-
-    Route::get('products/{product}/formats', "$controller@productFormatsIndex");
-
-    Route::group(['prefix' => 'restaurants'], function () use ($controller) {
-        Route::get('/', "$controller@index");
-
-        Route::group(['prefix' => '{restaurant}'], function () use ($controller) {
-            Route::get('/', "$controller@show");
-
-            Route::get('address', "$controller@showAddress");
-
-            Route::get('products', "$controller@productsIndex");
+        Route::group(['prefix' => '{restaurant}'], function () {
+            Route::get('/', RestaurantsController::class.'@show');
+            Route::get('address', RestaurantsController::class.'@showAddress');
+            Route::get('products', RestaurantsController::class.'@productsIndex');
         });
     });
 });

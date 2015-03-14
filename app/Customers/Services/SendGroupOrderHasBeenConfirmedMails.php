@@ -3,14 +3,11 @@ namespace Groupeat\Customers\Services;
 
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Restaurants\Entities\Restaurant;
+use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Support\Services\SendMail;
 
 class SendGroupOrderHasBeenConfirmedMails
 {
-    /**
-     * @var SendMail
-     */
     private $mailer;
 
     public function __construct(SendMail $mailer)
@@ -18,11 +15,10 @@ class SendGroupOrderHasBeenConfirmedMails
         $this->mailer = $mailer;
     }
 
-    /**
-     * @param GroupOrder $groupOrder
-     */
-    public function call(GroupOrder $groupOrder)
+    public function call(GroupOrderHasBeenConfirmed $groupOrderHasBeenConfirmed)
     {
+        $groupOrder = $groupOrderHasBeenConfirmed->getGroupOrder();
+
         $groupOrder->load(
             [
             'orders.productFormats.product.type',

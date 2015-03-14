@@ -3,48 +3,33 @@ namespace Groupeat\Restaurants\Services;
 
 use Groupeat\Auth\Services\GenerateAuthToken;
 use Groupeat\Orders\Entities\GroupOrder;
+use Groupeat\Orders\Events\GroupOrderHasEnded;
+use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Support\Services\SendMail;
 use Illuminate\Routing\UrlGenerator;
 
 class SendGroupOrderHasEndedMail
 {
-    /**
-     * @var SendMail
-     */
     private $mailer;
-
-    /**
-     * @var UrlGenerator
-     */
     private $urlGenerator;
-
-    /**
-     * @var GenerateAuthToken
-     */
     private $tokenGenerator;
-
-    /**
-     * @var int
-     */
-    private $tokenTtlInMinutes;
+    private $tokenDurationInMinutes;
 
     public function __construct(
         SendMail $mailer,
         UrlGenerator $urlGenerator,
         GenerateAuthToken $tokenGenerator,
-        $tokenTtlInMinutes
+        ConfirmationTokenDurationInMinutes $tokenDurationInMinutes
     ) {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
         $this->tokenGenerator = $tokenGenerator;
-        $this->tokenTtlInMinutes = (int) $tokenTtlInMinutes;
+        $this->tokenDurationInMinutes = $tokenDurationInMinutes->value();
     }
 
-    /**
-     * @param GroupOrder $groupOrder
-     */
-    public function call(GroupOrder $groupOrder)
+    public function call(GroupOrderHasEnded $groupOrderHasEnded)
     {
+        $groupOrder = $groupOrderHasEnded->getGroupOrder();
         $groupOrder->load('orders.productFormats.product.type');
         $orders = $groupOrder->orders;
         $totalDiscountedPrice = formatPrice($groupOrder->totalDiscountedPrice);
@@ -62,7 +47,7 @@ class SendGroupOrderHasEndedMail
     {
         $token = $this->tokenGenerator->forUser(
             $groupOrder->restaurant->credentials,
-            $this->tokenTtlInMinutes
+            $this->tokenDurationInMinutes
         );
 
         $id = $groupOrder->id;

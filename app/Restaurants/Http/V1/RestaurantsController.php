@@ -6,7 +6,6 @@ use Groupeat\Restaurants\Entities\FoodType;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Input;
 
 class RestaurantsController extends Controller
 {
@@ -14,12 +13,12 @@ class RestaurantsController extends Controller
     {
         $query = Restaurant::with('closingWindows', 'openingWindows')->orderBy('name', 'asc');
 
-        if ((bool) Input::get('opened')) {
+        if ((bool) $this->get('opened')) {
             $query->opened();
         }
 
-        if ((bool) Input::get('around')) {
-            $query->around(Input::get('latitude'), Input::get('longitude'));
+        if ((bool) $this->get('around')) {
+            $query->around($this->get('latitude'), $this->get('longitude'));
         }
 
         return $this->collectionResponse($query->get(), new RestaurantTransformer());

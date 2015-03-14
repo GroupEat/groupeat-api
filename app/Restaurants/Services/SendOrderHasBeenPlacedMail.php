@@ -2,13 +2,12 @@
 namespace Groupeat\Restaurants\Services;
 
 use Groupeat\Orders\Entities\Order;
+use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
+use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Support\Services\SendMail;
 
 class SendOrderHasBeenPlacedMail
 {
-    /**
-     * @var SendMail
-     */
     private $mailer;
 
     public function __construct(SendMail $mailer)
@@ -16,26 +15,16 @@ class SendOrderHasBeenPlacedMail
         $this->mailer = $mailer;
     }
 
-    /**
-     * @param Order $order
-     */
-    public function created(Order $order)
+    public function created(GroupOrderHasBeenCreated $groupOrderHasBeenCreated)
     {
-        $this->call($order, 'created');
+        $this->call($groupOrderHasBeenCreated->getOrder(), 'created');
     }
 
-    /**
-     * @param Order $order
-     */
-    public function joined(Order $order)
+    public function joined(GroupOrderHasBeenJoined $groupOrderHasBeenJoined)
     {
-        $this->call($order, 'joined');
+        $this->call($groupOrderHasBeenJoined->getOrder(), 'joined');
     }
 
-    /**
-     * @param Order  $order
-     * @param string $action
-     */
     private function call(Order $order, $action)
     {
         $order->productFormats->load('product.type');

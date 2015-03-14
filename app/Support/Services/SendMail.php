@@ -6,28 +6,21 @@ use Illuminate\Mail\Mailer;
 
 class SendMail
 {
-    /**
-     * @var Mailer
-     */
     private $mailer;
+    private $locale;
 
-    /**
-     * @var Locale
-     */
-    private $localeService;
-
-    public function __construct(Mailer $mailer, Locale $localeService)
+    public function __construct(Mailer $mailer, Locale $locale)
     {
         $this->mailer = $mailer;
-        $this->localeService = $localeService;
+        $this->locale = $locale;
     }
 
     /**
      * @return Locale
      */
-    public function getLocaleService()
+    public function getLocale()
     {
-        return $this->localeService;
+        return $this->locale;
     }
 
     /**
@@ -38,14 +31,14 @@ class SendMail
      */
     public function call(UserCredentials $user, $view, $subjectLangKey, array $data = [])
     {
-        $this->localeService->executeWithUserLocale(function () use ($user, $view, $subjectLangKey, $data) {
+        $this->locale->executeWithUserLocale(function () use ($user, $view, $subjectLangKey, $data) {
             $views = ["$view-html", "$view-text"];
 
             $this->mailer->send(
                 $views,
                 $data,
                 function ($message) use ($user, $subjectLangKey) {
-                    $subject = $this->localeService->getTranslator()->get($subjectLangKey);
+                    $subject = $this->locale->getTranslator()->get($subjectLangKey);
 
                     $message->to($user->email)->subject($subject);
                 }

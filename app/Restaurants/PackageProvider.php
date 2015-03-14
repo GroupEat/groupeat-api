@@ -1,43 +1,49 @@
 <?php namespace Groupeat\Restaurants;
 
+use Groupeat\Auth\Auth;
+use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
+use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
+use Groupeat\Orders\Events\GroupOrderHasEnded;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Services\SendGroupOrderHasEndedMail;
 use Groupeat\Restaurants\Services\SendOrderHasBeenPlacedMail;
+use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
+use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
+use Groupeat\Restaurants\Values\MinimumOpeningDurationInMinutes;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
     protected $require = [self::ROUTES];
 
-
     public function register()
     {
         parent::register();
 
-        $this->app->bind('SendOrderHasBeenPlacedMailService', function ($app) {
-            return new SendOrderHasBeenPlacedMail($app['SendMailService']);
-        });
+        $this->bindValueFromConfig(
+            MaximumDeliveryDistanceInKms::class,
+            'restaurants.around_distance_in_kilometers'
+        );
 
-        $this->app->bind('SendGroupOrderHasEndedMailService', function ($app) {
-            $tokenTtlInMinutes = 2 * $app['config']->get('orders.maximum_preparation_time_in_minutes');
+        $this->bindValueFromConfig(
+            MinimumOpeningDurationInMinutes::class,
+            'restaurants.opening_duration_in_minutes'
+        );
 
-            return new SendGroupOrderHasEndedMail(
-                $app['SendMailService'],
-                $app['url'],
-                $app['GenerateAuthTokenService'],
-                $tokenTtlInMinutes
-            );
-        });
+        $this->bindValueFromConfig(
+            ConfirmationTokenDurationInMinutes::class,
+            2 * $this->app['config']->get('orders.maximum_preparation_time_in_minutes')
+        );
     }
 
     public function boot()
     {
         parent::boot();
 
-        $this->app['groupeat.auth']->addUserType(new Restaurant);
+        $this->app[Auth::class]->addUserType(new Restaurant);
 
-        $this->app['events']->listen('groupOrderHasBeenCreated', 'SendOrderHasBeenPlacedMailService@created');
-        $this->app['events']->listen('groupOrderHasBeenJoined', 'SendOrderHasBeenPlacedMailService@joined');
-        $this->app['events']->listen('groupOrderHasEnded', 'SendGroupOrderHasEndedMailService@call');
+        $this->listen(GroupOrderHasBeenCreated::class, SendOrderHasBeenPlacedMail::class, 'created');
+        $this->listen(GroupOrderHasBeenJoined::class, SendOrderHasBeenPlacedMail::class, 'joined');
+        $this->listen(GroupOrderHasEnded::class, SendGroupOrderHasEndedMail::class);
     }
 }

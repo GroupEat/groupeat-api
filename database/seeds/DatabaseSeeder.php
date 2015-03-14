@@ -6,12 +6,19 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    private $seedersOrderer;
+
+    public function __construct(SeedersOrderer $seedersOrderer)
+    {
+        $this->seedersOrderer = $seedersOrderer;
+    }
+
     public function run()
     {
         Entity::$skipValidation = true;
         Eloquent::unguard();
 
-        foreach (SeedersOrderer::getList() as $seeder) {
+        foreach ($this->seedersOrderer->getList() as $seeder) {
             $this->call($seeder);
         }
 

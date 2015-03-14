@@ -1,10 +1,8 @@
 <?php
 namespace Groupeat\Notifications\Http\V1;
 
-use Auth;
 use Groupeat\Notifications\Entities\Device;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Input;
 use Sly\NotificationPusher\Adapter\Gcm;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\Device as NotifiedDevice;
@@ -17,8 +15,8 @@ class NotificationsController extends Controller
     public function saveRegistrationId()
     {
         $device = new Device;
-        $device->customer_id = Auth::user()->id;
-        $device->device_id = Input::json('registrationId');
+        $device->customer_id = $this->auth->userId();
+        $device->device_id = $this->json('registrationId');
 
         $device->save();
 
@@ -27,7 +25,7 @@ class NotificationsController extends Controller
 
     public function sendNotification()
     {
-        $customerId = Auth::user()->id;
+        $customerId = $this->auth->userId();
         $deviceId = Device::where('customer_id', $customerId)->first()->device_id;
 
         if (empty($deviceId)) {

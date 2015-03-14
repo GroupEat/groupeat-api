@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Admin\Migrations;
+namespace Groupeat\Auth\Migrations;
 
 use Groupeat\Support\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;

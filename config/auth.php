@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => 'Groupeat\Auth\Entities\UserCredentials',
+    'model' => \Groupeat\Auth\Entities\UserCredentials::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -60,7 +60,7 @@ return [
 
     'password' => [
         'email' => ['auth::resetPassword-html', 'auth::resetPassword-text'],
-        'table' => 'password_reset_tokens',
+        'table' => \Groupeat\Auth\Migrations\PasswordResetTokensMigration::TABLE,
         'expire' => 60,
     ],
 

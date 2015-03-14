@@ -1,3 +1,3 @@
 @lang('auth::resetPassword.text')
 
-{{ app('SendPasswordResetLinkService')->getUrl($token) }}
+{{ app(\Groupeat\Auth\Services\SendPasswordResetLink::class)->getUrl($token) }}

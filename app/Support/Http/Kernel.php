@@ -1,30 +1,25 @@
 <?php
 namespace Groupeat\Support\Http;
 
+use Groupeat\Auth\Http\Middleware\AllowDifferentToken;
+use Groupeat\Auth\Http\Middleware\Authenticate;
+use Groupeat\Auth\Http\Middleware\ForbidTokenInQueryString;
+use Groupeat\Support\Http\Middleware\Api;
+use Groupeat\Support\Http\Middleware\ForbidQueryStringForNonIdempotentMethods;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 
 class Kernel extends HttpKernel
 {
-    /**
-     * The application's global HTTP middleware stack.
-     *
-     * @var array
-     */
     protected $middleware = [
-        'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
-        'Illuminate\Cookie\Middleware\EncryptCookies',
-        'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
-        'Illuminate\Session\Middleware\StartSession',
-        'Illuminate\View\Middleware\ShareErrorsFromSession',
-        'Groupeat\Support\Http\Middleware\Api',
+        CheckForMaintenanceMode::class,
+        Api::class,
+        ForbidTokenInQueryString::class,
+        ForbidQueryStringForNonIdempotentMethods::class,
     ];
 
-    /**
-     * The application's route middleware.
-     *
-     * @var array
-     */
     protected $routeMiddleware = [
-        'auth' => 'Groupeat\Auth\Http\Middleware\Authenticate',
+        'allowDifferentToken' => AllowDifferentToken::class,
+        'auth' => Authenticate::class,
     ];
 }

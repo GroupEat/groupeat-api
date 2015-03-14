@@ -1,37 +1,36 @@
 <?php
 namespace Groupeat\Customers\Http\V1;
 
-use Auth;
 use Groupeat\Auth\Http\V1\TokenTransformer;
 use Groupeat\Customers\Entities\Customer;
+use Groupeat\Customers\Services\RegisterCustomer;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Input;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomersController extends Controller
 {
     public function show(Customer $customer)
     {
-        Auth::assertSame($customer);
+        $this->auth->assertSame($customer);
 
         return $this->itemResponse($customer);
     }
 
     public function update(Customer $customer)
     {
-        Auth::assertSame($customer);
+        $this->auth->assertSame($customer);
 
-        $customer->update(Input::json()->all());
+        $customer->update($this->json()->all());
 
         return $this->itemResponse($customer);
     }
 
-    public function register()
+    public function register(RegisterCustomer $registerCustomer)
     {
-        $email = Input::json('email');
-        $password = Input::json('password');
+        $email = $this->json('email');
+        $password = $this->json('password');
 
-        $customer = app('RegisterCustomerService')->call($email, $password, Input::json('locale'));
+        $customer = $registerCustomer->call($email, $password, $this->json('locale'));
 
         $this->statusCode = Response::HTTP_CREATED;
 
@@ -40,7 +39,7 @@ class CustomersController extends Controller
 
     public function unregister(Customer $customer)
     {
-        Auth::assertSame($customer);
+        $this->auth->assertSame($customer);
 
         $customer->delete();
     }

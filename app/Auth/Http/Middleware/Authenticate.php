@@ -1,21 +1,22 @@
 <?php
 namespace Groupeat\Auth\Http\Middleware;
 
-use Auth;
 use Closure;
+use Groupeat\Auth\Auth;
+use Illuminate\Http\Request;
 
 class Authenticate
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
+    private $auth;
+
+    public function __construct(Auth $auth)
     {
-        Auth::checkOrFail();
+        $this->auth = $auth;
+    }
+
+    public function handle(Request $request, Closure $next)
+    {
+        $this->auth->checkOrFail();
 
         return $next($request);
     }

@@ -19,11 +19,11 @@ class RestaurantsSeeder extends Seeder
      */
     private $pizzeriaCategory;
 
-    public function __construct()
+    public function __construct(GenerateAuthToken $generateAuthToken)
     {
         parent::__construct();
 
-        $this->tokenGenerator = app('GenerateAuthTokenService');
+        $this->tokenGenerator = $generateAuthToken;
         $this->pizzeriaCategory = Category::findByLabel('pizzeria');
     }
 

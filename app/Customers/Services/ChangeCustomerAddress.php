@@ -3,17 +3,15 @@ namespace Groupeat\Customers\Services;
 
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
+use Groupeat\Customers\Values\AddressConstraints;
 
 class ChangeCustomerAddress
 {
-    /**
-     * @var array
-     */
     private $addressConstraints;
 
-    public function __construct(array $addressConstraints)
+    public function __construct(AddressConstraints $addressConstraints)
     {
-        $this->addressConstraints = $addressConstraints;
+        $this->addressConstraints = $addressConstraints->value();
     }
 
     /**

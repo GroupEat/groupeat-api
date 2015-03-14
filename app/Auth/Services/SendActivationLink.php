@@ -2,20 +2,14 @@
 namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Services\SendMail;
 use Illuminate\Routing\UrlGenerator;
 
 class SendActivationLink
 {
-    /**
-     * @var Mailer
-     */
     private $mailer;
-
-    /**
-     * @var UrlGenerator
-     */
     private $urlGenerator;
 
     public function __construct(SendMail $mailer, UrlGenerator $urlGenerator)
@@ -24,13 +18,9 @@ class SendActivationLink
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param UserCredentials $userCredentials
-     *
-     * @return User
-     */
-    public function call(UserCredentials $userCredentials)
+    public function call(UserHasRegistered $userHasRegistered)
     {
+        $userCredentials = $userHasRegistered->getUser();
         $token = $this->generateActivationToken($userCredentials);
         $url = $this->urlGenerator->to("auth/activate?token=$token");
 

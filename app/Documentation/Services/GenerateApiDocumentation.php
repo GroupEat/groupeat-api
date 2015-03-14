@@ -1,46 +1,29 @@
 <?php
 namespace Groupeat\Documentation\Services;
 
+use Groupeat\Documentation\Values\OrderedPackages;
+use Groupeat\Support\Values\Environment;
 use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateApiDocumentation
 {
-    const PATH = '_generated-docs.html';
-
-    /**
-     * @var Filesystem
-     */
     private $filesystem;
-
-    /**
-     * @var Repository
-     */
     private $config;
-
-    /**
-     * @var array
-     */
     private $orderedPackages;
-
-    /**
-     * @var bool
-     */
     private $isLocal;
 
-    /**
-     * @param Filesystem $filesystem
-     * @param Repository $config
-     * @param array      $orderedPackages
-     * @param bool       $isLocal
-     */
-    public function __construct(Filesystem $filesystem, Repository $config, array $orderedPackages, $isLocal)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        Repository $config,
+        OrderedPackages $orderedPackages,
+        Environment $environment
+    ) {
         $this->filesystem = $filesystem;
         $this->config = $config;
-        $this->orderedPackages = $orderedPackages;
-        $this->isLocal = $isLocal;
+        $this->orderedPackages = $orderedPackages->value();
+        $this->isLocal = $environment->isLocal();
     }
 
     /**

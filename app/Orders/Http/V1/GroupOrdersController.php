@@ -1,11 +1,10 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
-use Auth;
 use Carbon\Carbon;
 use Groupeat\Orders\Entities\GroupOrder;
+use Groupeat\Orders\Services\ConfirmGroupOrder;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Input;
 
 class GroupOrdersController extends Controller
 {
@@ -13,12 +12,12 @@ class GroupOrdersController extends Controller
     {
         $query = GroupOrder::with('restaurant');
 
-        if ((bool) Input::get('joinable')) {
+        if ((bool) $this->get('joinable')) {
             $query->joinable();
         }
 
-        if ((bool) Input::get('around')) {
-            $query->around(Input::get('latitude'), Input::get('longitude'));
+        if ((bool) $this->get('around')) {
+            $query->around($this->get('latitude'), $this->get('longitude'));
         }
 
         return $this->collectionResponse($query->get(), new GroupOrderTransformer);
@@ -29,15 +28,15 @@ class GroupOrdersController extends Controller
         return $this->itemResponse($groupOrder);
     }
 
-    public function confirm(GroupOrder $groupOrder)
+    public function confirm(ConfirmGroupOrder $confirmGroupOrder, GroupOrder $groupOrder)
     {
-        Auth::assertSame($groupOrder->restaurant);
+        $this->auth->assertSame($groupOrder->restaurant);
 
-        app('ConfirmGroupOrderService')->call(
+        $confirmGroupOrder->call(
             $groupOrder,
             Carbon::createFromFormat(
                 Carbon::DEFAULT_TO_STRING_FORMAT,
-                Input::json('preparedAt')
+                $this->json('preparedAt')
             )->second(0)
         );
     }

@@ -45,6 +45,9 @@ class Exception extends HttpException
         return $this->errorKey;
     }
 
+    /**
+     * @return Bag
+     */
     public function getErrors()
     {
         return $this->errors;

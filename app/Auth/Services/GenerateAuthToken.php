@@ -2,24 +2,18 @@
 namespace Groupeat\Auth\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Values\TokenDurationInMinutes;
 use Tymon\JWTAuth\JWTAuth;
 
 class GenerateAuthToken
 {
-    /**
-     * @var JWTAuth
-     */
     private $JWTauth;
-
-    /**
-     * @var int
-     */
     private $defaultDurationInMinutes;
 
-    public function __construct(JWTAuth $JWTauth, $defaultDurationInMinutes)
+    public function __construct(JWTAuth $JWTauth, TokenDurationInMinutes $defaultTokenDurationInMinutes)
     {
         $this->JWTauth = $JWTauth; // TODO: check if Groupeat Auth can be used instead
-        $this->defaultDurationInMinutes = $defaultDurationInMinutes;
+        $this->defaultDurationInMinutes = $defaultTokenDurationInMinutes->value();
     }
 
     /**

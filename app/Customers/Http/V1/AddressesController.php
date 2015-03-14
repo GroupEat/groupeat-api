@@ -1,17 +1,16 @@
 <?php
 namespace Groupeat\Customers\Http\V1;
 
-use Auth;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Entities\PredefinedAddress;
+use Groupeat\Customers\Services\ChangeCustomerAddress;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Input;
 
 class AddressesController extends Controller
 {
     public function show(Customer $customer)
     {
-        Auth::assertSame($customer);
+        $this->auth->assertSame($customer);
 
         if (!$customer->address) {
             return $this->response->errorNotFound("No address has been set for this customer.");
@@ -20,13 +19,13 @@ class AddressesController extends Controller
         return $this->itemResponse($customer->address);
     }
 
-    public function change(Customer $customer)
+    public function change(ChangeCustomerAddress $changeCustomerAddress, Customer $customer)
     {
-        Auth::assertSame($customer);
+        $this->auth->assertSame($customer);
 
-        $address = app('ChangeCustomerAddressService')->call(
+        $address = $changeCustomerAddress->call(
             $customer,
-            Input::json()->all()
+            $this->json()->all()
         );
 
         return $this->itemResponse($address);

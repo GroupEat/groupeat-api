@@ -3,25 +3,12 @@ namespace Groupeat\Support\Services;
 
 use Closure;
 use Groupeat\Support\Exceptions\BadRequest;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Router;
+use Groupeat\Support\Values\AvailableLocales;
 use Illuminate\Translation\Translator;
 
 class Locale
 {
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var Translator
-     */
     private $translator;
-
-    /**
-     * @var array
-     */
     private $availableLocales;
 
     /**
@@ -29,16 +16,10 @@ class Locale
      */
     private $locale;
 
-    /**
-     * @param Router $router
-     * @param Translator $translator
-     * @param array $availableLocales
-     */
-    public function __construct(Router $router, Translator $translator, array $availableLocales)
+    public function __construct(Translator $translator, AvailableLocales $availableLocales)
     {
-        $this->router = $router;
         $this->translator = $translator;
-        $this->availableLocales = $availableLocales;
+        $this->availableLocales = $availableLocales->value();
     }
 
     /**
@@ -50,7 +31,7 @@ class Locale
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      *
      * @return $this
      */
@@ -92,7 +73,7 @@ class Locale
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      */
     public function assertAvailable($locale)
     {

@@ -1,9 +1,10 @@
 <?php namespace Groupeat\Customers;
 
+use Groupeat\Auth\Auth;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Customers\Services\ChangeCustomerAddress;
-use Groupeat\Customers\Services\RegisterCustomer;
 use Groupeat\Customers\Services\SendGroupOrderHasBeenConfirmedMails;
+use Groupeat\Customers\Values\AddressConstraints;
+use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
@@ -14,24 +15,18 @@ class PackageProvider extends WorkbenchPackageProvider
     {
         parent::register();
 
-        $this->app->bind('RegisterCustomerService', function ($app) {
-            return new RegisterCustomer($app['RegisterUserService']);
-        });
-
-        $this->app->bind('ChangeCustomerAddressService', function ($app) {
-            return new ChangeCustomerAddress($app['config']->get('customers.address_constraints'));
-        });
-
-        $this->app->bind('SendGroupOrderHasBeenConfirmedMailsService', function ($app) {
-            return new SendGroupOrderHasBeenConfirmedMails($app['SendMailService']);
-        });
+        $this->bindValueFromConfig(
+            AddressConstraints::class,
+            'customers.address_constraints'
+        );
     }
 
     public function boot()
     {
         parent::boot();
 
-        $this->app['groupeat.auth']->addUserType(new Customer);
-        $this->app['events']->listen('groupOrderHasBeenConfirmed', 'SendGroupOrderHasBeenConfirmedMailsService@call');
+        $this->app[Auth::class]->addUserType(new Customer);
+
+        $this->listen(GroupOrderHasBeenConfirmed::class, SendGroupOrderHasBeenConfirmedMails::class);
     }
 }

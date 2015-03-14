@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Orders\Entities;
 
-use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Entities\Entity;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
