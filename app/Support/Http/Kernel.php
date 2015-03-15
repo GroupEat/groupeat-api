@@ -36,5 +36,4 @@ class Kernel extends HttpKernel
             $this->pushMiddleware($clockworkMiddlewareClass);
         }
     }
-
 }
