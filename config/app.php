@@ -135,6 +135,7 @@ return [
         \Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
         \Groupeat\Support\PackageProvider::class,
+
         \Groupeat\Auth\PackageProvider::class,
         \Groupeat\Admin\PackageProvider::class,
         \Groupeat\Customers\PackageProvider::class,

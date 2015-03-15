@@ -9,6 +9,9 @@ use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Mail\MailServiceProvider;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\SyslogHandler;
+use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 
 class PackageProvider extends WorkbenchPackageProvider
@@ -32,6 +35,13 @@ class PackageProvider extends WorkbenchPackageProvider
             $this->app->register(IdeHelperServiceProvider::class);
             $this->app->register(ClockworkServiceProvider::class);
             $this->app[Kernel::class]->pushMiddleware(ClockworkMiddleware::class);
+        }
+
+        if ($this->app->environment('production')) {
+            $syslog = new SyslogHandler('laravel');
+            $syslog->setFormatter(new LineFormatter('%level_name%: %message% %extra%'));
+
+            $this->app[LoggerInterface::class]->pushHandler($syslog);
         }
 
         $this->replaceSwiftMailer();
