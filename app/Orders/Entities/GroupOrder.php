@@ -99,12 +99,12 @@ class GroupOrder extends Entity
 
     public function orders()
     {
-        return $this->hasMany('Groupeat\Orders\Entities\Order');
+        return $this->hasMany(Order::class);
     }
 
     public function restaurant()
     {
-        return $this->belongsTo('Groupeat\Restaurants\Entities\Restaurant');
+        return $this->belongsTo(Restaurant::class);
     }
 
     /**

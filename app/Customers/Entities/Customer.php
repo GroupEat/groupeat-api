@@ -23,6 +23,6 @@ class Customer extends Entity implements User
 
     public function address()
     {
-        return $this->hasOne('Groupeat\Customers\Entities\Address');
+        return $this->hasOne(Address::class);
     }
 }

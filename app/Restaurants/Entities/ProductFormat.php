@@ -21,7 +21,7 @@ class ProductFormat extends Entity
 
     public function product()
     {
-        return $this->belongsTo('Groupeat\Restaurants\Entities\Product');
+        return $this->belongsTo(Product::class);
     }
 
     protected function getPriceAttribute()

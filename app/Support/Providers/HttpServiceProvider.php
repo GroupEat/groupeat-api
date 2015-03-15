@@ -24,10 +24,6 @@ class HttpServiceProvider extends IlluminateServiceProvider
     */
     public function register()
     {
-        $this->app->instance('League\Fractal\Manager', new Manager);
-
-        $this->app->singleton('Groupeat\Http\Responses\Output', function ($app) {
-            return new Output($app['League\Fractal\Manager']);
-        });
+        $this->app->instance(Manager::class, new Manager);
     }
 }

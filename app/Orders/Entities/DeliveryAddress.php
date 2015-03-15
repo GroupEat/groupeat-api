@@ -18,6 +18,6 @@ class DeliveryAddress extends AbstractAddress
 
     public function order()
     {
-        return $this->belongsTo('Groupeat\Orders\Entities\Order');
+        return $this->belongsTo(Order::class);
     }
 }

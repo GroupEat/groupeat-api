@@ -17,7 +17,7 @@ class Address extends AbstractAddress
 
     public function restaurant()
     {
-        return $this->belongsTo('Groupeat\Restaurants\Entities\Restaurant');
+        return $this->belongsTo(Restaurant::class);
     }
 
     protected function getRelatedMigration()

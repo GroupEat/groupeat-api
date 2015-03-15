@@ -17,7 +17,7 @@ class Address extends AbstractAddress
 
     public function customer()
     {
-        return $this->belongsTo('Groupeat\Customers\Entities\Customer');
+        return $this->belongsTo(Customer::class);
     }
 
     protected function getRelatedMigration()

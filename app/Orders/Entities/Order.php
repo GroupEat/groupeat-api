@@ -1,6 +1,8 @@
 <?php
 namespace Groupeat\Orders\Entities;
 
+use Groupeat\Customers\Entities\Customer;
+use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Entities\Entity;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
@@ -22,22 +24,22 @@ class Order extends Entity
 
     public function customer()
     {
-        return $this->belongsTo('Groupeat\Customers\Entities\Customer');
+        return $this->belongsTo(Customer::class);
     }
 
     public function groupOrder()
     {
-        return $this->belongsTo('Groupeat\Orders\Entities\GroupOrder');
+        return $this->belongsTo(GroupOrder::class);
     }
 
     public function productFormats()
     {
-        return $this->belongsToMany('Groupeat\Restaurants\Entities\ProductFormat')->withPivot('amount');
+        return $this->belongsToMany(ProductFormat::class)->withPivot('amount');
     }
 
     public function deliveryAddress()
     {
-        return $this->hasOne('Groupeat\Orders\Entities\DeliveryAddress');
+        return $this->hasOne(DeliveryAddress::class);
     }
 
     public function getDiscountedPriceAttribute()

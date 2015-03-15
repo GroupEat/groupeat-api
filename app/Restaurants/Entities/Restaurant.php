@@ -44,27 +44,27 @@ class Restaurant extends Entity implements User
 
     public function categories()
     {
-        return $this->belongsToMany('Groupeat\Restaurants\Entities\Category');
+        return $this->belongsToMany(Category::class);
     }
 
     public function address()
     {
-        return $this->hasOne('Groupeat\Restaurants\Entities\Address');
+        return $this->hasOne(Address::class);
     }
 
     public function products()
     {
-        return $this->hasMany('Groupeat\Restaurants\Entities\Product');
+        return $this->hasMany(Product::class);
     }
 
     public function openingWindows()
     {
-        return $this->hasMany('Groupeat\Restaurants\Entities\OpeningWindow');
+        return $this->hasMany(OpeningWindow::class);
     }
 
     public function closingWindows()
     {
-        return $this->hasMany('Groupeat\Restaurants\Entities\ClosingWindow');
+        return $this->hasMany(ClosingWindow::class);
     }
 
     public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)

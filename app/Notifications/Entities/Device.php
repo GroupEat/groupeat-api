@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Notifications\Entities;
 
+use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Entities\Entity;
 
 class Device extends Entity
@@ -15,6 +16,6 @@ class Device extends Entity
 
     public function customer()
     {
-        return $this->hasOne('Groupeat\Customers\Entities\Customer');
+        return $this->hasOne(Customer::class);
     }
 }

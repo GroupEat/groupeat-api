@@ -86,7 +86,7 @@ trait HasCredentials
 
     public function credentials()
     {
-        return $this->morphOne('Groupeat\Auth\Entities\UserCredentials', 'user');
+        return $this->morphOne(UserCredentials::class, 'user');
     }
 
     public function setIsActivated($isActivated)

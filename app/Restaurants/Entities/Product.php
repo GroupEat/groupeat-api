@@ -21,16 +21,16 @@ class Product extends Entity
 
     public function type()
     {
-        return $this->belongsTo('Groupeat\Restaurants\Entities\FoodType');
+        return $this->belongsTo(FoodType::class);
     }
 
     public function formats()
     {
-        return $this->hasMany('Groupeat\Restaurants\Entities\ProductFormat');
+        return $this->hasMany(ProductFormat::class);
     }
 
     public function restaurant()
     {
-        return $this->belongsTo('Groupeat\Restaurants\Entities\Restaurant');
+        return $this->belongsTo(Restaurant::class);
     }
 }
