@@ -21,6 +21,7 @@
     "robclancy/presenter": "dev-develop"
   },
   "require-dev": {
+    "itsgoingd/clockwork": "1.7.*",
     "squizlabs/php_codesniffer": "2.3.*",
     "codeception/codeception": "2.0.*@dev",
     "barryvdh/laravel-ide-helper": "2.0.*"

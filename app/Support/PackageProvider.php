@@ -1,5 +1,6 @@
 <?php namespace Groupeat\Support;
 
+use Clockwork\Support\Laravel\ClockworkServiceProvider;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
@@ -24,6 +25,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
+            $this->app->register(ClockworkServiceProvider::class);
         }
     }
 }
