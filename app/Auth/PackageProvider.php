@@ -21,15 +21,19 @@ class PackageProvider extends WorkbenchPackageProvider
         );
 
         $this->app->singleton(Auth::class, function ($app) {
-            $auth = new Auth(
-                $app['tymon.jwt.manager'],
-                new UserCredentials,
-                $app['tymon.jwt.provider.auth'],
-                $app['request']
-            );
-
-            return $auth->setIdentifier($app['config']->get('jwt.identifier'));
+            return new Auth($app['tymon.jwt.auth'], $app['auth.driver']);
         });
+
+//        $this->app->singleton(Auth::class, function ($app) {
+//            $auth = new Auth(
+//                $app['tymon.jwt.manager'],
+//                new UserCredentials,
+//                $app['tymon.jwt.provider.auth'],
+//                $app['request']
+//            );
+//
+//            return $auth->setIdentifier($app['config']->get('jwt.identifier'));
+//        });
     }
 
     public function boot()

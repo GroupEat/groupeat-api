@@ -2,7 +2,6 @@
 namespace Groupeat\Restaurants\Entities;
 
 use Carbon\Carbon;
-use Config;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Restaurants\Support\DiscountRate;
@@ -37,9 +36,9 @@ class Restaurant extends Entity implements User
     {
         parent::boot();
 
-        static::$discountRates = Config::get('restaurants.discountRates');
-        static::$aroundDistanceInKms = Config::get('restaurants.around_distance_in_kilometers');
-        static::$openingDurationInMinutes = Config::get('restaurants.opening_duration_in_minutes');
+        static::$discountRates = config('restaurants.discountRates');
+        static::$aroundDistanceInKms = config('restaurants.around_distance_in_kilometers');
+        static::$openingDurationInMinutes = config('restaurants.opening_duration_in_minutes');
     }
 
     public function categories()
@@ -175,7 +174,7 @@ class Restaurant extends Entity implements User
 
     protected function getMinimumOrderPriceAttribute()
     {
-        return new EUR($this->attributes['minimumOrderPrice']); // TODO: Don't enforce a default currency
+        return new EUR($this->attributes['minimumOrderPrice']);
     }
 
     protected function getDeliveryCapacityAttribute()

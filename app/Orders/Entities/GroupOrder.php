@@ -2,7 +2,6 @@
 namespace Groupeat\Orders\Entities;
 
 use Carbon\Carbon;
-use Config;
 use DB;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Support\ProductFormats;
@@ -36,7 +35,7 @@ class GroupOrder extends Entity
     {
         parent::boot();
 
-        static::$aroundDistanceInKms = (float) Config::get('orders.around_distance_in_kilometers');
+        static::$aroundDistanceInKms = config('orders.around_distance_in_kilometers');
     }
 
     /**

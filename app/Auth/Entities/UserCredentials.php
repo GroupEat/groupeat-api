@@ -114,7 +114,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
     public function getBy($key, $value)
     {
-        dump('UserCredentials '.$key.' '.$value);
+        throw new \BadMethodCallException("Not implemented");
     }
 
     public function user()

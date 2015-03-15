@@ -8,11 +8,6 @@ use Groupeat\Support\Exceptions\Forbidden;
 trait HasCredentials
 {
     /**
-     * @var bool
-     */
-    protected $isActivated = null;
-
-    /**
      * @param $email
      *
      * @return User
@@ -60,10 +55,6 @@ trait HasCredentials
 
     public function isActivated()
     {
-        if (!is_null($this->isActivated)) {
-            return $this->isActivated;
-        }
-
         return $this->credentials->isActivated();
     }
 
@@ -87,10 +78,5 @@ trait HasCredentials
     public function credentials()
     {
         return $this->morphOne(UserCredentials::class, 'user');
-    }
-
-    public function setIsActivated($isActivated)
-    {
-        $this->isActivated = (bool) $isActivated;
     }
 }

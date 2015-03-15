@@ -12,7 +12,7 @@ class GenerateAuthToken
 
     public function __construct(JWTAuth $JWTauth, TokenDurationInMinutes $defaultTokenDurationInMinutes)
     {
-        $this->JWTauth = $JWTauth; // TODO: check if Groupeat Auth can be used instead
+        $this->JWTauth = $JWTauth;
         $this->defaultDurationInMinutes = $defaultTokenDurationInMinutes->value();
     }
 
@@ -32,7 +32,6 @@ class GenerateAuthToken
         }
 
         $userCredentials = $userCredentials->replaceAuthenticationToken($token);
-        $this->JWTauth->authenticate($token);
 
         return $userCredentials;
     }

@@ -81,36 +81,6 @@ if (!function_exists('getNamespaceOf')) {
     }
 }
 
-if (!function_exists('getClassNameWithoutNamespace')) {
-    /**
-     * Get the name of a class without its namespace.
-     *
-     * @param $class
-     *
-     * @return string
-     */
-    function getClassNameWithoutNamespace($class)
-    {
-        return removeNamespaceFromClassName(get_class($class));
-    }
-}
-
-if (!function_exists('removeNamespaceFromClassName')) {
-    /**
-     * Remove the namespace from a class name.
-     *
-     * @param string $className
-     *
-     * @return string
-     */
-    function removeNamespaceFromClassName($className)
-    {
-        $parts = explode('\\', $className);
-
-        return array_pop($parts);
-    }
-}
-
 if (!function_exists('translateIfNeeded')) {
     /**
      * If the text contains corresponds to a lang key its translation will be returned
@@ -177,8 +147,11 @@ if (!function_exists('mb_lcfirst')) {
 if (!function_exists('formatPrice')) {
     function formatPrice(\SebastianBergmann\Money\Money $price)
     {
-        // TODO: Add support for other locales
-        return (new \SebastianBergmann\Money\IntlFormatter('fr_FR'))->format($price);
+        $auth = app(\Groupeat\Auth\Auth::class);
+        $userLocale = $auth->check() ? $auth->credentials()->locale : 'fr';
+        $fullLocale = $userLocale.'_'.strtoupper($userLocale);
+
+        return (new \SebastianBergmann\Money\IntlFormatter($fullLocale))->format($price);
     }
 }
 
@@ -191,7 +164,7 @@ if (!function_exists('sumPrices')) {
     function sumPrices(\Illuminate\Support\Collection $prices)
     {
         if ($prices->isEmpty()) {
-            return new \SebastianBergmann\Money\EUR(0); // TODO: Find out how to choose default currency
+            return new \SebastianBergmann\Money\EUR(0);
         }
 
         $total = new \SebastianBergmann\Money\Money(0, $prices->first()->getCurrency());

@@ -49,7 +49,7 @@ class Order extends Entity
 
     protected function getRawPriceAttribute()
     {
-        return new EUR($this->attributes['rawPrice']); // TODO: Don't enforce a default currency
+        return new EUR($this->attributes['rawPrice']);
     }
 
     protected function setRawPriceAttribute(Money $rawPrice)

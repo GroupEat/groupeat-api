@@ -16,11 +16,11 @@ class AllowDifferentToken
 
     public function handle(Request $request, Closure $next)
     {
-        $this->auth->allowDifferentToken(true);
+        $this->auth->allowDifferentToken();
 
         $response = $next($request);
 
-        $this->auth->allowDifferentToken(false);
+        $this->auth->denyDifferentToken();
 
         return $response;
     }

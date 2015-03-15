@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'around_distance_in_kilometers' => 7,
+    'around_distance_in_kilometers' => 7.0,
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ return [
     | array that represent the price to reach to unlock a specific discount rate.
     | The different discount rates are given here.
     |
-    | Example: if the array below is [0, 10, 20, 30, 40, 50] and the restaurant
+    | Example: if the array below is [0.0, 10.0, 20.0, 30.0, 40.0, 50.0] and the restaurant
     | discount prices are [9, 10, 20, 25, 35, 60], it means that for 10e there
     | will be a 10% discount, for 20e 20%, for 25e 30%, for 35e 40% and for 60e 50%.
     | From 0e to 9e there won't be any discount. Between the given points, the discount
@@ -43,6 +43,6 @@ return [
     |
     */
 
-    'discountRates' => [0, 10, 20, 30, 40, 50],
+    'discountRates' => [0.0, 10.0, 20.0, 30.0, 40.0, 50.0],
 
 ];

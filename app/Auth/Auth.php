@@ -6,15 +6,11 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
+use Illuminate\Auth\Guard;
 use Tymon\JWTAuth\JWTAuth;
 
-class Auth extends JWTAuth
+class Auth
 {
-    /**
-     * @var UserCredentials
-     */
-    private $userCredentials;
-
     /**
      * @var array
      */
@@ -25,15 +21,24 @@ class Auth extends JWTAuth
      */
     private $allowDifferentToken = false;
 
+    private $jwtAuth;
+    private $illuminateAuth;
+
+    public function __construct(JWTAuth $jwtAuth, Guard $illuminateAuth)
+    {
+        $this->jwtAuth = $jwtAuth;
+        $this->illuminateAuth = $illuminateAuth;
+    }
+
     /**
-     * @param string      $token
-     * @param bool        $assertSameToken
+     * @param string $token
+     * @param bool   $assertSameToken
      *
      * @return UserCredentials
      */
-    public function login($token, $assertSameToken = true) // TODO: use Illuminate Auth directly
+    public function login($token, $assertSameToken = true)
     {
-        $userCredentials = $this->authenticate($token);
+        $userCredentials = $this->jwtAuth->authenticate($token);
 
         if (! $userCredentials instanceof UserCredentials) {
             throw new Unauthorized(
@@ -51,9 +56,7 @@ class Auth extends JWTAuth
             );
         }
 
-        $this->userCredentials = $userCredentials;
-
-        return $this->userCredentials;
+        return $this->credentials();
     }
 
     /**
@@ -62,26 +65,24 @@ class Auth extends JWTAuth
      */
     public function byCredentials($email, $password)
     {
-        if ($this->auth->byCredentials(compact('email', 'password'))) {
-            $user = $this->auth->user();
+        if ($this->illuminateAuth->once(compact('email', 'password'))) {
+            $user = $this->illuminateAuth->getUser();
 
             $this->assertCorrespondingUserExists($user);
-
-            $this->userCredentials = $user;
 
             return;
         }
 
-//        if (!$this->auth->getLastAttempted()) { // TODO: find a way to do this differently
-//            UserCredentials::throwNotFoundByEmailException($email);
-//        }
+        if (!$this->illuminateAuth->getLastAttempted()) {
+            UserCredentials::throwNotFoundByEmailException($email);
+        }
 
         UserCredentials::throwBadPasswordException();
     }
 
     public function logout()
     {
-        $this->userCredentials = null;
+        $this->illuminateAuth->logout();
     }
 
     public function allowDifferentToken()
@@ -99,7 +100,7 @@ class Auth extends JWTAuth
      */
     public function check()
     {
-        return !empty($this->userCredentials);
+        return !empty($this->illuminateAuth->getUser());
     }
 
     public function checkOrFail()
@@ -119,7 +120,7 @@ class Auth extends JWTAuth
     {
         $this->checkOrFail();
 
-        return $this->userCredentials;
+        return $this->illuminateAuth->getUser();
     }
 
     /**
@@ -127,9 +128,7 @@ class Auth extends JWTAuth
      */
     public function user()
     {
-        $this->checkOrFail();
-
-        return $this->userCredentials->user;
+        return $this->credentials()->user;
     }
 
     /**
@@ -137,9 +136,7 @@ class Auth extends JWTAuth
      */
     public function userId()
     {
-        $this->checkOrFail();
-
-        return $this->userCredentials->user->id;
+        return $this->user()->id;
     }
 
     /**
@@ -149,10 +146,10 @@ class Auth extends JWTAuth
     {
         $this->assertSameType($user);
 
-        if ($this->user()->id != $user->id) {
+        if ($this->userId() != $user->id) {
             $type = $this->currentType();
             $givenId = $user->id;
-            $currentId = $this->user()->id;
+            $currentId = $this->userId();
 
             throw new Forbidden(
                 "wrongAuthenticatedUser",
@@ -172,7 +169,7 @@ class Auth extends JWTAuth
             return false;
         }
 
-        return $this->currentType() == $this->typeOf($user) && $this->user()->id == $user->id;
+        return $this->currentType() == $this->typeOf($user) && $this->userId() == $user->id;
     }
 
     /**
@@ -323,7 +320,6 @@ class Auth extends JWTAuth
         }
 
         $credentials->user()->associate($user);
-        $user->setIsActivated(!is_null($credentials->activated_at)); // TODO: remove this dirty fix
     }
 
     /**
@@ -333,6 +329,6 @@ class Auth extends JWTAuth
      */
     private function toShortType($userType)
     {
-        return strtolower(removeNamespaceFromClassName($userType));
+        return strtolower(class_basename($userType));
     }
 }

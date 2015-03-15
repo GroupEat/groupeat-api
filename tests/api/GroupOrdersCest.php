@@ -73,5 +73,10 @@ class GroupOrdersCest
         $I->seeResponseCodeIs(200);
 
         $I->assertEquals('customers.orderHasBeenConfirmed', $I->grabLastMailId());
+
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
+        ]);
+        $I->seeErrorResponse(422, 'alreadyConfirmed');
     }
 }

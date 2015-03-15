@@ -125,6 +125,7 @@ class AuthCest
 
         $newPassword = 'new_password';
 
+        sleep(1);
         $I->sendApiPost('auth/password', [
             'email' => $email,
             'password' => $newPassword,
@@ -138,13 +139,13 @@ class AuthCest
         $I->seeResponseCodeIs(200);
         $newToken = $I->grabDataFromResponse('token');
         $I->assertNotEmpty($newToken);
-        //$I->assertNotEquals($oldToken, $newToken); // TODO: make this test pass
+        $I->assertNotEquals($oldToken, $newToken);
 
         $I->sendApiGetWithToken($newToken, $this->getUserResource().'/'.$id);
         $I->seeResponseCodeIs(200);
 
         $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
-        //$I->seeErrorResponse(403, 'obsoleteAuthenticationToken'); // TODO: make this test pass
+        $I->seeErrorResponse(403, 'obsoleteAuthenticationToken');
 
         $I->sendApiPut('auth/token', [
             'email' => $email,

@@ -29,8 +29,8 @@ class ConfirmGroupOrder
      */
     public function call(GroupOrder $groupOrder, Carbon $preparedAt)
     {
-        // TODO: check that the groupOrder has not already been confirmed
-        $this->guardAgainstInvalidPreparationTime($groupOrder->completed_at, $preparedAt);
+        $this->assertNotAlreadyConfirmed($groupOrder);
+        $this->guardAgainstInvalidPreparationTime($groupOrder, $preparedAt);
 
         $groupOrder->confirm($preparedAt);
 
@@ -44,12 +44,14 @@ class ConfirmGroupOrder
         return $this->maximumPreparationTimeInMinutes;
     }
 
-    private function guardAgainstInvalidPreparationTime(Carbon $completedAt, Carbon $preparedAt)
+    private function guardAgainstInvalidPreparationTime(GroupOrder $groupOrder, Carbon $preparedAt)
     {
+        $completedAt = $groupOrder->completed_at;
+
         if ($preparedAt < $completedAt) {
             throw new UnprocessableEntity(
                 'cannotBePreparedBeforeBeingCompleted',
-                "A group order cannot be completely prepared before being completed."
+                "The {$groupOrder->toShortString()} cannot be completely prepared before being completed."
             );
         }
 
@@ -58,8 +60,19 @@ class ConfirmGroupOrder
         if ($preparationTimeInMinutes > $this->maximumPreparationTimeInMinutes) {
             throw new UnprocessableEntity(
                 'preparationTimeTooLong',
-                "The preration time should not exceed {$this->maximumPreparationTimeInMinutes} "
+                "The preration time of the {$groupOrder->toShortString()} "
+                . "should not exceed {$this->maximumPreparationTimeInMinutes} "
                 . "minutes, $preparationTimeInMinutes given."
+            );
+        }
+    }
+
+    private function assertNotAlreadyConfirmed(GroupOrder $groupOrder)
+    {
+        if (!empty($groupOrder->confirmed_at)) {
+            throw new UnprocessableEntity(
+                'alreadyConfirmed',
+                "The {$groupOrder->toShortString()} has already been confirmed at {$groupOrder->confirmed_at}."
             );
         }
     }

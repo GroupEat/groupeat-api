@@ -2,28 +2,12 @@
 namespace Groupeat\Support\Http\Middleware;
 
 use Closure;
-use Groupeat\Auth\Auth;
 use Illuminate\Http\Request;
 
 class Api
 {
-    private $auth;
-
-    public function __construct(Auth $auth)
-    {
-        $this->auth = $auth;
-    }
-
     public function handle(Request $request, Closure $next)
     {
-        $authorizationHeader = $request->header('authorization');
-
-        if (!is_null($authorizationHeader)) {
-            list($temp, $token) = explode(' ', $authorizationHeader);
-
-            $this->auth->login($token);
-        }
-
         $response = $next($request);
 
         $headers = [

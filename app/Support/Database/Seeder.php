@@ -48,14 +48,11 @@ abstract class Seeder extends LaravelSeeder
         return $migration::TABLE;
     }
 
-    /**
-     * @return \Groupeat\Support\Database\Migration
-     */
     protected function getRelatedMigration()
     {
         $migrationClass = str_replace('Seeder', 'Migration', class_basename(static::class));
 
-        return new $migrationClass();
+        return new $migrationClass;
     }
 
     protected function cleanTable()

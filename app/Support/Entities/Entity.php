@@ -32,7 +32,7 @@ abstract class Entity extends Model implements PresentableInterface
     public static function findOrFail($id, $columns = ['*'])
     {
         $model = static::find($id, $columns);
-        $shortClassName = removeNamespaceFromClassName(static::CLASS);
+        $shortClassName = class_basename(static::CLASS);
 
         if (is_null($model)) {
             throw new NotFound(
@@ -62,7 +62,7 @@ abstract class Entity extends Model implements PresentableInterface
 
     protected static function throwNotFoundException()
     {
-        $shortClass = removeNamespaceFromClassName(static::class);
+        $shortClass = class_basename(static::class);
 
         throw new NotFound(
             lcfirst($shortClass).'NotFound',
@@ -163,7 +163,7 @@ abstract class Entity extends Model implements PresentableInterface
      */
     public function toShortString()
     {
-        $str = lcfirst(getClassNameWithoutNamespace($this));
+        $str = lcfirst(class_basename($this));
 
         if ($id = $this->getKey()) {
             $str .= ' #'.$id;

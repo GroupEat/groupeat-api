@@ -22,8 +22,11 @@ Route::group(['prefix' => 'api'], function () {
         });
     });
 
-    Route::group(['prefix' => 'groupOrders/{groupOrder}', 'middleware' => 'allowDifferentToken'], function () {
-        Route::get('/', GroupOrdersController::class.'@show');
-        Route::post('confirm', GroupOrdersController::class.'@confirm');
-    });
+    Route::group(
+        ['prefix' => 'groupOrders/{groupOrder}', 'middleware' => ['allowDifferentToken', 'auth']],
+        function () {
+            Route::get('/', GroupOrdersController::class.'@show');
+            Route::post('confirm', GroupOrdersController::class.'@confirm');
+        }
+    );
 });

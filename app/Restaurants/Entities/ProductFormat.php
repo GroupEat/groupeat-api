@@ -26,6 +26,6 @@ class ProductFormat extends Entity
 
     protected function getPriceAttribute()
     {
-        return new EUR($this->attributes['price']); // TODO: Don't enforce a default currency
+        return new EUR($this->attributes['price']);
     }
 }

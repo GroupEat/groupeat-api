@@ -153,7 +153,7 @@ abstract class Controller extends IlluminateController
     protected function getTransformerClassNameFor($item)
     {
         $controllerNamespace = getNamespaceOf($this);
-        $itemClass = getClassNameWithoutNamespace($item);
+        $itemClass = class_basename($item);
 
         return $controllerNamespace.'\\'.$itemClass.'Transformer';
     }
