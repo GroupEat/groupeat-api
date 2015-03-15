@@ -3,10 +3,13 @@
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Clockwork\Support\Laravel\ClockworkMiddleware;
 use Clockwork\Support\Laravel\ClockworkServiceProvider;
+use Groupeat\Support\Mail\TransportManager;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Mail\MailServiceProvider;
+use Swift_Mailer;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
@@ -30,5 +33,18 @@ class PackageProvider extends WorkbenchPackageProvider
             $this->app->register(ClockworkServiceProvider::class);
             $this->app[Kernel::class]->pushMiddleware(ClockworkMiddleware::class);
         }
+
+        $this->replaceSwiftMailer();
+    }
+
+    private function replaceSwiftMailer()
+    {
+        $this->app->register(MailServiceProvider::class);
+
+        $this->app['mailer']->setSwiftMailer(
+            new Swift_Mailer(
+                (new TransportManager($this->app))->driver()
+            )
+        );
     }
 }

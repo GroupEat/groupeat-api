@@ -73,20 +73,11 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
 
     protected function registerConsoleCommands(...$commandShortNames)
     {
-        $names = [];
+        $commands = array_map(function ($commandShortName) {
+            return 'Groupeat\\'.ucfirst($this->getPackageName()).'\\Console\\'.$commandShortName.'Command';
+        }, $commandShortNames);
 
-        foreach ($commandShortNames as $commandShortName) {
-            $className = 'Groupeat\\'.ucfirst($this->getPackageName()).'\\Console\\'.$commandShortName.'Command';
-            $name = 'groupeat.console.'.strtolower($commandShortName);
-
-            $this->app[$name] = $this->app->share(function ($app) use ($className) {
-                return new $className();
-            });
-
-            $names[] = $name;
-        }
-
-        $this->commands($names);
+        $this->commands($commands);
 
         return $this;
     }

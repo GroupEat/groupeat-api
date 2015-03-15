@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Documentation\Console;
 
+use Groupeat\Documentation\Services\GenerateApiDocumentation;
 use Groupeat\Support\Console\Command;
 
 class GenerateApiDocumentationCommand extends Command
@@ -8,11 +9,18 @@ class GenerateApiDocumentationCommand extends Command
     protected $name = 'api:docs';
     protected $description = "Generate the API documentation";
 
+    private $generateApiDocumentation;
+
+    public function __construct(GenerateApiDocumentation $generateApiDocumentation)
+    {
+        parent::__construct();
+
+        $this->generateApiDocumentation = $generateApiDocumentation;
+    }
+
     public function fire()
     {
-        $generator = $this->getLaravel()->make('GenerateApiDocumentationService');
-
-        $generator->call($this->output);
+        $this->generateApiDocumentation->call($this->output);
 
         $this->info('Documentation generated!');
     }
