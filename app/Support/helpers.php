@@ -39,20 +39,6 @@ if (!function_exists('formatTime')) {
     }
 }
 
-if (!function_exists('dbTransaction')) {
-    /**
-     * Execute callback in a database transaction.
-     *
-     * @param Closure $callback
-     *
-     * @return mixed
-     */
-    function dbTransaction(Closure $callback)
-    {
-        return DB::transaction($callback);
-    }
-}
-
 if (!function_exists('assertSameDay')) {
     function assertSameDay(\Carbon\Carbon $one, \Carbon\Carbon $two)
     {

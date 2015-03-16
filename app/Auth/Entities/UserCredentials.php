@@ -102,12 +102,10 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         $userCredentials->password = $password;
         $userCredentials->locale = $locale;
 
-        dbTransaction(function () use ($userCredentials, $user) {
-            // The user should be save in order to have its id
-            $user->save();
-            $userCredentials->user = $user;
-            $userCredentials->save();
-        });
+        // The user should be save in order to have its id
+        $user->save();
+        $userCredentials->user = $user;
+        $userCredentials->save();
 
         return $userCredentials;
     }

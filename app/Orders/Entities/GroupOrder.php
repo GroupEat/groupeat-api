@@ -141,13 +141,11 @@ class GroupOrder extends Entity
             $this->completed_at = $this->freshTimestamp();
         }
 
-        dbTransaction(function () use ($order, $address, $productFormats) {
-            $this->save();
-            $order->groupOrder()->associate($this);
-            $order->save();
-            $order->deliveryAddress()->save($address);
-            $productFormats->attachTo($order);
-        });
+        $this->save();
+        $order->groupOrder()->associate($this);
+        $order->save();
+        $order->deliveryAddress()->save($address);
+        $productFormats->attachTo($order);
 
         return $order;
     }
