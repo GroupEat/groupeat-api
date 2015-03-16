@@ -1,9 +1,8 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
-use Carbon\Carbon;
+use Groupeat\Orders\Commands\ConfirmGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Orders\Services\ConfirmGroupOrder;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 
 class GroupOrdersController extends Controller
@@ -28,16 +27,10 @@ class GroupOrdersController extends Controller
         return $this->itemResponse($groupOrder);
     }
 
-    public function confirm(ConfirmGroupOrder $confirmGroupOrder, GroupOrder $groupOrder)
+    public function confirm(GroupOrder $groupOrder)
     {
         $this->auth->assertSame($groupOrder->restaurant);
 
-        $confirmGroupOrder->call(
-            $groupOrder,
-            Carbon::createFromFormat(
-                Carbon::DEFAULT_TO_STRING_FORMAT,
-                $this->json('preparedAt')
-            )->second(0)
-        );
+        $this->dispatch(new ConfirmGroupOrder($groupOrder, $this->json('preparedAt')));
     }
 }

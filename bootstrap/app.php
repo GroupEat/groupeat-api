@@ -28,12 +28,12 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     \Illuminate\Contracts\Http\Kernel::class,
-    \Groupeat\Support\Http\Kernel::class
+    \Groupeat\Support\Kernels\Http::class
 );
 
 $app->singleton(
     \Illuminate\Contracts\Console\Kernel::class,
-    \Groupeat\Support\Console\Kernel::class
+    \Groupeat\Support\Kernels\Console::class
 );
 
 $app->singleton(

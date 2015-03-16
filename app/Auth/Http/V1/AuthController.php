@@ -1,17 +1,17 @@
 <?php
 namespace Groupeat\Auth\Http\V1;
 
-use Groupeat\Auth\Services\ActivateUser;
-use Groupeat\Auth\Services\GenerateAuthToken;
-use Groupeat\Auth\Services\ResetPassword;
-use Groupeat\Auth\Services\SendPasswordResetLink;
+use Groupeat\Auth\Commands\ActivateUser;
+use Groupeat\Auth\Commands\ResetPassword;
+use Groupeat\Auth\Commands\ResetToken;
+use Groupeat\Auth\Commands\SendPasswordResetLink;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 
 class AuthController extends Controller
 {
-    public function activate(ActivateUser $activateUser)
+    public function activate()
     {
-        $activateUser->call($this->json('token'));
+        $this->dispatch(new ActivateUser($this->json('token')));
     }
 
     public function getToken()
@@ -21,27 +21,27 @@ class AuthController extends Controller
         return $this->itemResponse($this->auth->user(), new TokenTransformer);
     }
 
-    public function resetToken(GenerateAuthToken $generateAuthToken)
+    public function resetToken()
     {
-        $userCredentials = $generateAuthToken->resetFromCredentials(
+        $userCredentials = $this->dispatch(new ResetToken(
             $this->json('email'),
             $this->json('password')
-        );
+        ));
 
         return $this->itemResponse($userCredentials->user, new TokenTransformer);
     }
 
-    public function sendPasswordResetLink(SendPasswordResetLink $sendPasswordResetLink)
+    public function sendPasswordResetLink()
     {
-        $sendPasswordResetLink->call($this->json('email'));
+        $this->dispatch(new SendPasswordResetLink($this->json('email')));
     }
 
-    public function resetPassword(ResetPassword $resetPassword)
+    public function resetPassword()
     {
-        $resetPassword->call(
+        $this->dispatch(new ResetPassword(
             $this->json('token'),
             $this->json('email'),
             $this->json('password')
-        );
+        ));
     }
 }

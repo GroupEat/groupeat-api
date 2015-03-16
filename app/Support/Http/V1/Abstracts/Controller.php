@@ -2,8 +2,10 @@
 namespace Groupeat\Support\Http\V1\Abstracts;
 
 use Groupeat\Auth\Auth;
+use Groupeat\Support\Commands\Abstracts\Command;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Http\Output;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
@@ -17,31 +19,23 @@ abstract class Controller extends IlluminateController
      */
     protected $statusCode = Response::HTTP_OK;
 
-    /**
-     * @var Request
-     */
     protected $request;
-
-    /**
-     * @var Auth
-     */
     protected $auth;
-
-    /**
-     * @var Output
-     */
     private $output;
+    private $dispatcher;
 
     /**
-     * @param Request $request
-     * @param Auth    $auth
-     * @param Output  $output
+     * @param Request    $request
+     * @param Auth       $auth
+     * @param Output     $output
+     * @param Dispatcher $dispatcher
      */
-    public function __construct(Request $request, Auth $auth, Output $output)
+    public function __construct(Request $request, Auth $auth, Output $output, Dispatcher $dispatcher)
     {
         $this->request = $request;
         $this->auth = $auth;
         $this->output = $output;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -156,5 +150,15 @@ abstract class Controller extends IlluminateController
         $itemClass = class_basename($item);
 
         return $controllerNamespace.'\\'.$itemClass.'Transformer';
+    }
+
+    /**
+     * @param Command $command
+     *
+     * @return mixed
+     */
+    protected function dispatch(Command $command)
+    {
+        return $this->dispatcher->dispatch($command);
     }
 }

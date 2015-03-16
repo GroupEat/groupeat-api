@@ -7,12 +7,8 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::ROUTES];
-
-    public function boot()
+    protected function bootPackage()
     {
-        parent::boot();
-
         $this->app[Auth::class]->addUserType(new Admin);
     }
 }

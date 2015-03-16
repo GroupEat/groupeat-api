@@ -9,12 +9,8 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::ROUTES];
-
-    public function register()
+    protected function registerPackage()
     {
-        parent::register();
-
         $this->bindValueFromConfig(
             MinimumFoodrushInMinutes::class,
             'orders.minimum_foodrush_in_minutes'

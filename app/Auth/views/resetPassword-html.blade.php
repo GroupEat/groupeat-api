@@ -12,7 +12,7 @@
 @section('buttonId'){{ 'password-reset-link' }}@stop
 
 @section('buttonUrl')
-    {{ app(\Groupeat\Auth\Services\SendPasswordResetLink::class)->getUrl($token) }}
+    {{ app(\Groupeat\Auth\Handlers\Commands\SendPasswordResetLinkHandler::class)->getUrl($token) }}
 @stop
 
 @section('button')

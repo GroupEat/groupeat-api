@@ -17,38 +17,13 @@ class GenerateAuthToken
     }
 
     /**
-     * @param $email
-     * @param $password
-     *
-     * @return UserCredentials
-     */
-    public function resetFromCredentials($email, $password)
-    {
-        $userCredentials = UserCredentials::findByEmailOrFail($email);
-        $token = $this->JWTauth->attempt(compact('email', 'password'));
-
-        if ($token === false) {
-            UserCredentials::throwBadPasswordException();
-        }
-
-        $userCredentials = $userCredentials->replaceAuthenticationToken($token);
-
-        return $userCredentials;
-    }
-
-    /**
      * @param UserCredentials $userCredentials
      * @param int             $durationInMinutes Null for default duration
      *
      * @return string The authentication token
      */
-    public function forUser(UserCredentials $userCredentials, $durationInMinutes = null)
+    public function call(UserCredentials $userCredentials, $durationInMinutes = null)
     {
-        if (!$userCredentials->exists) {
-            // We need to save the credentials to have the id
-            $userCredentials->save();
-        }
-
         if (!is_null($durationInMinutes)) {
             $this->JWTauth->manager()->getPayloadFactory()->setTTL($durationInMinutes);
         }

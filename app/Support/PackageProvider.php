@@ -16,10 +16,7 @@ use Swift_Mailer;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::HELPERS, self::ROUTES];
-    protected $console = ['DbInstall'];
-
-    public function register()
+    protected function registerPackage()
     {
         $this->bindValueFromConfig(
             AvailableLocales::class,
@@ -45,6 +42,11 @@ class PackageProvider extends WorkbenchPackageProvider
         }
 
         $this->replaceSwiftMailer();
+    }
+
+    protected function bootPackage()
+    {
+        include $this->getPackagePath('helpers.php');
     }
 
     private function replaceSwiftMailer()

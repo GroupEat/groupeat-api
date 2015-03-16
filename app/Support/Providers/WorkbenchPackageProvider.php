@@ -1,22 +1,17 @@
 <?php
 namespace Groupeat\Support\Providers;
 
+use File;
+use Illuminate\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 
 abstract class WorkbenchPackageProvider extends ServiceProvider
 {
-    const FILTERS = 'filters';
-    const HELPERS = 'helpers';
-    const ROUTES = 'routes';
-
     protected $defer = false;
-
-    protected $require = [];
-    protected $console = [];
 
     public function register()
     {
-        // Implemented by inheritance
+        $this->registerPackage();
     }
 
     public function boot()
@@ -25,8 +20,21 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $this->loadViewsFrom($this->getPackagePath('views'), $name);
         $this->loadTranslationsFrom($this->getPackagePath('lang'), $name);
 
-        $this->requireFiles(...$this->require);
-        $this->registerConsoleCommands(...$this->console);
+        $this->includeRoutes();
+        $this->registerConsoleCommands();
+        $this->registerCommandMapping();
+
+        $this->bootPackage();
+    }
+
+    protected function registerPackage()
+    {
+        // Implemented by inheritance
+    }
+
+    protected function bootPackage()
+    {
+        // Implemented by inheritance
     }
 
     /**
@@ -55,31 +63,50 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
      * @param string $handlerClass
      * @param string $method
      */
-    protected function listen($eventClass, $handlerClass, $method = 'call')
+    protected function listen($eventClass, $handlerClass, $method = 'handle')
     {
         $this->app['events']->listen($eventClass, "$handlerClass@$method");
     }
 
-    protected function requireFiles(...$files)
+    private function includeRoutes()
     {
-        foreach ($files as $file) {
-            $path = $this->getPackagePath("$file.php");
+        $routesPath = $this->getPackagePath('routes.php');
 
-            include $path;
+        if (file_exists($routesPath)) {
+            include $routesPath;
         }
-
-        return $this;
     }
 
-    protected function registerConsoleCommands(...$commandShortNames)
+    protected function registerConsoleCommands()
     {
-        $commands = array_map(function ($commandShortName) {
-            return 'Groupeat\\'.ucfirst($this->getPackageName()).'\\Console\\'.$commandShortName.'Command';
-        }, $commandShortNames);
+        $namespacePrefix = 'Groupeat\\'.$this->getPackageName().'\Console\\';
+        $consoleCommandPaths = File::files($this->getPackagePath('Console'));
 
-        $this->commands($commands);
+        $consoleCommandNamespaces = array_map(function ($consoleCommandPath) use ($namespacePrefix) {
+            $className = pathinfo($consoleCommandPath, PATHINFO_FILENAME);
 
-        return $this;
+            return $namespacePrefix.$className;
+        }, $consoleCommandPaths);
+
+        $this->commands($consoleCommandNamespaces);
+    }
+
+    protected function registerCommandMapping()
+    {
+        $maps = [];
+        $commandPaths = File::files($this->getPackagePath('Commands'));
+        $namespacePrefix = 'Groupeat\\'.$this->getPackageName();
+
+        foreach ($commandPaths as $commandPath) {
+            $method = 'handle';
+            $className = pathinfo($commandPath, PATHINFO_FILENAME);
+            $commandClass = $namespacePrefix.'\Commands\\'.$className;
+            $handlerClass = $namespacePrefix.'\Handlers\Commands\\'.$className.'Handler';
+
+            $maps[$commandClass] = "$handlerClass@$method";
+        }
+
+        $this->app[Dispatcher::class]->maps($maps);
     }
 
     protected function getPackagePath($file = '')

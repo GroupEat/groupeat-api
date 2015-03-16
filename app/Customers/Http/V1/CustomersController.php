@@ -2,8 +2,8 @@
 namespace Groupeat\Customers\Http\V1;
 
 use Groupeat\Auth\Http\V1\TokenTransformer;
+use Groupeat\Customers\Commands\RegisterCustomer;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Customers\Services\RegisterCustomer;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,12 +25,13 @@ class CustomersController extends Controller
         return $this->itemResponse($customer);
     }
 
-    public function register(RegisterCustomer $registerCustomer)
+    public function register()
     {
-        $email = $this->json('email');
-        $password = $this->json('password');
-
-        $customer = $registerCustomer->call($email, $password, $this->json('locale'));
+        $customer = $this->dispatch(new RegisterCustomer(
+            $this->json('email'),
+            $this->json('password'),
+            $this->json('locale')
+        ));
 
         $this->statusCode = Response::HTTP_CREATED;
 

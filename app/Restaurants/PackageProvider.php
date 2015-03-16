@@ -5,8 +5,8 @@ use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Events\GroupOrderHasEnded;
 use Groupeat\Restaurants\Entities\Restaurant;
-use Groupeat\Restaurants\Services\SendGroupOrderHasEndedMail;
-use Groupeat\Restaurants\Services\SendOrderHasBeenPlacedMail;
+use Groupeat\Restaurants\Handlers\Events\SendGroupOrderHasEndedMail;
+use Groupeat\Restaurants\Handlers\Events\SendOrderHasBeenPlacedMail;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Restaurants\Values\MinimumOpeningDurationInMinutes;
@@ -14,12 +14,8 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::ROUTES];
-
-    public function register()
+    protected function registerPackage()
     {
-        parent::register();
-
         $this->bindValueFromConfig(
             MaximumDeliveryDistanceInKms::class,
             'restaurants.around_distance_in_kilometers'
@@ -36,10 +32,8 @@ class PackageProvider extends WorkbenchPackageProvider
         );
     }
 
-    public function boot()
+    protected function bootPackage()
     {
-        parent::boot();
-
         $this->app[Auth::class]->addUserType(new Restaurant);
 
         $this->listen(GroupOrderHasBeenCreated::class, SendOrderHasBeenPlacedMail::class, 'created');

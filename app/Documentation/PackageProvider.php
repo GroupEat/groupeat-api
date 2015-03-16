@@ -6,12 +6,8 @@ use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $console = ['GenerateApiDocumentation'];
-
-    public function register()
+    protected function registerPackage()
     {
-        parent::register();
-
         $this->bindValueFromConfig(
             OrderedPackages::class,
             'documentation.order'

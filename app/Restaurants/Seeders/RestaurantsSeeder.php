@@ -12,7 +12,7 @@ class RestaurantsSeeder extends Seeder
     /**
      * @var GenerateAuthToken
      */
-    private $tokenGenerator;
+    private $generateAuthToken;
 
     /**
      * @var Category
@@ -23,7 +23,7 @@ class RestaurantsSeeder extends Seeder
     {
         parent::__construct();
 
-        $this->tokenGenerator = $generateAuthToken;
+        $this->generateAuthToken = $generateAuthToken;
         $this->pizzeriaCategory = Category::findByLabel('pizzeria');
     }
 
@@ -91,6 +91,6 @@ class RestaurantsSeeder extends Seeder
 
     private function setAuthTokenFor(UserCredentials $userCredentials)
     {
-        $userCredentials->replaceAuthenticationToken($this->tokenGenerator->forUser($userCredentials));
+        $userCredentials->replaceAuthenticationToken($this->generateAuthToken->call($userCredentials));
     }
 }

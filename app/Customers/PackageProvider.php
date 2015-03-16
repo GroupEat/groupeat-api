@@ -1,30 +1,25 @@
 <?php namespace Groupeat\Customers;
 
 use Groupeat\Auth\Auth;
+use Groupeat\Customers\Commands\Register;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Customers\Services\SendGroupOrderHasBeenConfirmedMails;
+use Groupeat\Customers\Handlers\Events\SendGroupOrderHasBeenConfirmedMails;
 use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Support\Providers\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $require = [self::ROUTES];
-
-    public function register()
+    protected function registerPackage()
     {
-        parent::register();
-
         $this->bindValueFromConfig(
             AddressConstraints::class,
             'customers.address_constraints'
         );
     }
 
-    public function boot()
+    protected function bootPackage()
     {
-        parent::boot();
-
         $this->app[Auth::class]->addUserType(new Customer);
 
         $this->listen(GroupOrderHasBeenConfirmed::class, SendGroupOrderHasBeenConfirmedMails::class);
