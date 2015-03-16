@@ -42,6 +42,7 @@ class LogDomainActivity
 
     private function getLogDataFor($activity)
     {
+        $getMethodPrefix = 'get';
         $class = get_class($activity);
 
         $methodNames = Collection::make((new ReflectionClass($class))->getMethods())
@@ -51,15 +52,15 @@ class LogDomainActivity
             ->map(function (ReflectionMethod $reflectionMethod) {
                 return $reflectionMethod->name;
             })
-            ->filter(function ($methodName) {
-                return starts_with($methodName, 'get')
+            ->filter(function ($methodName) use ($getMethodPrefix) {
+                return starts_with($methodName, $getMethodPrefix)
                     && !str_contains(lcfirst($methodName), 'password');
             });
 
         $logData = [];
 
         foreach ($methodNames as $methodName) {
-            $name = lcfirst(trim($methodName, 'get'));
+            $name = lcfirst(substr($methodName, strlen($getMethodPrefix)));
             $value = $activity->$methodName();
 
             if ($value instanceof Entity) {
