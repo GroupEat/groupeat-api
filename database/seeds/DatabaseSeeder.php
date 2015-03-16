@@ -1,6 +1,6 @@
 <?php
 
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Database\SeedersOrderer;
 use Illuminate\Database\Seeder;
 

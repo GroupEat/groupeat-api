@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Support\Entities;
+namespace Groupeat\Support\Entities\Abstracts;
 
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
@@ -189,7 +189,7 @@ abstract class Entity extends Model implements PresentableInterface
     }
 
     /**
-     * @return \Groupeat\Support\Database\Migration
+     * @return \Groupeat\Support\Database\Abstracts\Migration
      */
     protected function getRelatedMigration()
     {

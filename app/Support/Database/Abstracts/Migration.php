@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Support\Database;
+namespace Groupeat\Support\Database\Abstracts;
 
 use Illuminate\Database\Migrations\Migration as LaravelMigration;
 use Illuminate\Support\Facades\Schema;

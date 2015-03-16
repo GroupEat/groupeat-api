@@ -3,7 +3,7 @@ namespace Groupeat\Auth\Entities;
 
 use Carbon\Carbon;
 use Groupeat\Auth\Entities\Interfaces\User;
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Hash;

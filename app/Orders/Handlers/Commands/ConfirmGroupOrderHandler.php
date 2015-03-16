@@ -7,7 +7,7 @@ use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class ConfirmGroupOrderHandler
 {

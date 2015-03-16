@@ -3,7 +3,7 @@ namespace Groupeat\Customers\Entities;
 
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Entity implements User

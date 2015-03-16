@@ -6,7 +6,7 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Services\Locale;
 use Groupeat\Support\Values\AvailableLocales;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Routing\UrlGenerator;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
 class SendPasswordResetLinkHandler
 {

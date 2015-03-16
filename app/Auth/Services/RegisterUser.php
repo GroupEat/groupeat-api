@@ -7,8 +7,8 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
-use Illuminate\Events\Dispatcher;
-use Illuminate\Validation\Factory as Validation;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Validation\Factory as Validation;
 
 class RegisterUser
 {

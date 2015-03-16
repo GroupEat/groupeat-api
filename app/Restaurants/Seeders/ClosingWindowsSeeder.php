@@ -3,7 +3,7 @@ namespace Groupeat\Restaurants\Seeders;
 
 use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\ClosingWindow;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class ClosingWindowsSeeder extends Seeder
 {

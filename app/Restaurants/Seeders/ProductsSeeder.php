@@ -4,7 +4,7 @@ namespace Groupeat\Restaurants\Seeders;
 use Groupeat\Restaurants\Entities\FoodType;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class ProductsSeeder extends Seeder
 {

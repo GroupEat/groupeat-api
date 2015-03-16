@@ -3,7 +3,7 @@ namespace Groupeat\Admin\Entities;
 
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 
 class Admin extends Entity implements User
 {

@@ -10,7 +10,7 @@ use Groupeat\Restaurants\Handlers\Events\SendOrderHasBeenPlacedMail;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Restaurants\Values\MinimumOpeningDurationInMinutes;
-use Groupeat\Support\Providers\WorkbenchPackageProvider;
+use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {

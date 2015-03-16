@@ -6,7 +6,7 @@ use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasEnded;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Support\Services\SendMail;
-use Illuminate\Routing\UrlGenerator;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
 class SendGroupOrderHasEndedMail
 {

@@ -4,7 +4,7 @@ namespace Groupeat\Auth;
 use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Auth\Handlers\Events\SendActivationLink;
 use Groupeat\Auth\Values\TokenDurationInMinutes;
-use Groupeat\Support\Providers\WorkbenchPackageProvider;
+use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {

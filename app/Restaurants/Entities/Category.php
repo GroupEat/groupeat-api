@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Restaurants\Entities;
 
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 
 class Category extends Entity
 {

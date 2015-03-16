@@ -3,7 +3,7 @@ namespace Groupeat\Orders\Entities;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Restaurants\Entities\ProductFormat;
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
 

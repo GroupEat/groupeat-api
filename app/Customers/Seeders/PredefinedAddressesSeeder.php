@@ -2,7 +2,7 @@
 namespace Groupeat\Customers\Seeders;
 
 use Groupeat\Customers\Entities\PredefinedAddress;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class PredefinedAddressesSeeder extends Seeder
 {

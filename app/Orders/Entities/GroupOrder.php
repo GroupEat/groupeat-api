@@ -8,7 +8,7 @@ use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Support\DiscountRate;
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

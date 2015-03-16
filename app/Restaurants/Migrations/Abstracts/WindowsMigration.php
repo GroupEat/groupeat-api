@@ -2,7 +2,7 @@
 namespace Groupeat\Restaurants\Migrations\Abstracts;
 
 use Groupeat\Restaurants\Migrations\RestaurantsMigration;
-use Groupeat\Support\Database\Migration;
+use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 

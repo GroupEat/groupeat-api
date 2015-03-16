@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Support\Entities\Abstracts;
 
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Presenters\Address as AddressPresenter;
 use Illuminate\Database\Eloquent\Builder;

@@ -1,6 +1,6 @@
 <?php namespace Groupeat\Notifications;
 
-use Groupeat\Support\Providers\WorkbenchPackageProvider;
+use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {

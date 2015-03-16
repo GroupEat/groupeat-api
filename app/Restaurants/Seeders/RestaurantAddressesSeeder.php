@@ -2,7 +2,7 @@
 namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Restaurants\Entities\Address;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class RestaurantAddressesSeeder extends Seeder
 {

@@ -3,7 +3,7 @@ namespace Groupeat\Admin\Seeders;
 
 use Groupeat\Admin\Entities\Admin;
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class AdminsSeeder extends Seeder
 {

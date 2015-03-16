@@ -5,7 +5,7 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\GenerateAuthToken;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class RestaurantsSeeder extends Seeder
 {

@@ -1,8 +1,8 @@
 <?php
-namespace Groupeat\Support\Providers;
+namespace Groupeat\Support\Providers\Abstracts;
 
 use File;
-use Illuminate\Bus\Dispatcher;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 
 abstract class WorkbenchPackageProvider extends ServiceProvider

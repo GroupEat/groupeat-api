@@ -2,7 +2,7 @@
 namespace Groupeat\Support\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Illuminate\Mail\Mailer;
+use Illuminate\Contracts\Mail\Mailer;
 
 class SendMail
 {

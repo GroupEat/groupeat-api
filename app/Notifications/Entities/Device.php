@@ -2,7 +2,7 @@
 namespace Groupeat\Notifications\Entities;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Support\Entities\Entity;
+use Groupeat\Support\Entities\Abstracts\Entity;
 
 class Device extends Entity
 {

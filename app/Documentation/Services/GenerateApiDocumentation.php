@@ -3,8 +3,8 @@ namespace Groupeat\Documentation\Services;
 
 use Groupeat\Documentation\Values\OrderedPackages;
 use Groupeat\Support\Values\Environment;
-use Illuminate\Config\Repository;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateApiDocumentation

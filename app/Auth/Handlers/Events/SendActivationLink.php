@@ -5,7 +5,7 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Services\SendMail;
-use Illuminate\Routing\UrlGenerator;
+use Illuminate\Contracts\Routing\UrlGenerator;
 
 class SendActivationLink
 {

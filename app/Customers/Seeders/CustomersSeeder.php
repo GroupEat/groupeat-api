@@ -4,7 +4,7 @@ namespace Groupeat\Customers\Seeders;
 use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class CustomersSeeder extends Seeder
 {

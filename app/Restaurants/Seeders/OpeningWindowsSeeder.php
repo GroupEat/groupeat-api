@@ -2,7 +2,7 @@
 namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Restaurants\Entities\OpeningWindow;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class OpeningWindowsSeeder extends Seeder
 {

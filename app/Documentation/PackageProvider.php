@@ -2,7 +2,7 @@
 
 use Groupeat\Documentation\Services\GenerateApiDocumentation;
 use Groupeat\Documentation\Values\OrderedPackages;
-use Groupeat\Support\Providers\WorkbenchPackageProvider;
+use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {

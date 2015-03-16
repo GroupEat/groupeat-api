@@ -4,7 +4,7 @@ use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Clockwork\Support\Laravel\ClockworkMiddleware;
 use Clockwork\Support\Laravel\ClockworkServiceProvider;
 use Groupeat\Support\Mail\TransportManager;
-use Groupeat\Support\Providers\WorkbenchPackageProvider;
+use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Http\Kernel;

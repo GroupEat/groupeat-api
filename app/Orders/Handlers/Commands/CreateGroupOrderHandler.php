@@ -16,7 +16,7 @@ use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Restaurants\Values\MinimumOpeningDurationInMinutes;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class CreateGroupOrderHandler extends GroupOrderValidation
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Support\Database;
+namespace Groupeat\Support\Database\Abstracts;
 
 use Config;
 use DB;

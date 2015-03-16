@@ -5,7 +5,7 @@ use Groupeat\Orders\Values\DeliveryAddressConstraints;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
-use Groupeat\Support\Providers\WorkbenchPackageProvider;
+use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {

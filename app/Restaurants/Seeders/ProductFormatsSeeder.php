@@ -3,7 +3,7 @@ namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\ProductFormat;
-use Groupeat\Support\Database\Seeder;
+use Groupeat\Support\Database\Abstracts\Seeder;
 
 class ProductFormatsSeeder extends Seeder
 {

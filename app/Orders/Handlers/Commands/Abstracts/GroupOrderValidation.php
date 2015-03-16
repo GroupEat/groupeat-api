@@ -9,7 +9,7 @@ use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Events\Abstracts\Event;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 abstract class GroupOrderValidation
 {
