@@ -53,8 +53,7 @@ class LogDomainActivity
                 return $reflectionMethod->name;
             })
             ->filter(function ($methodName) use ($getMethodPrefix) {
-                return starts_with($methodName, $getMethodPrefix)
-                    && !str_contains(lcfirst($methodName), 'password');
+                return starts_with($methodName, $getMethodPrefix);
             });
 
         $logData = [];
@@ -65,6 +64,8 @@ class LogDomainActivity
 
             if ($value instanceof Entity) {
                 $value = $value->getKey();
+            } elseif (str_contains(strtolower($name), 'password')) {
+                $value = '***hidden***';
             }
 
             $logData[$name] = $value;
