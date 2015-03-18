@@ -75,7 +75,7 @@ class Handler extends ExceptionHandler
             $data['message'] = \App::isLocal() ? $e->getMessage() : "The server encountered an internal error";
         }
 
-        if (\App::isLocal()) {
+        if (\Config::get('app.debug')) {
             $data['debug'] = [
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
