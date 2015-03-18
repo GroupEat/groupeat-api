@@ -13,6 +13,7 @@ use Illuminate\Contracts\Bus\Dispatcher as CommandDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Mail\MailServiceProvider;
+use Illuminate\Queue\QueueServiceProvider;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\SyslogHandler;
 use Psr\Log\LoggerInterface;
@@ -32,19 +33,8 @@ class PackageProvider extends WorkbenchPackageProvider
             $this->app->environment()
         );
 
-        if ($this->app->isLocal()) {
-            $this->app->register(IdeHelperServiceProvider::class);
-            $this->app->register(ClockworkServiceProvider::class);
-            $this->app[Kernel::class]->pushMiddleware(ClockworkMiddleware::class);
-        }
-
-        if ($this->app->environment('production')) {
-            $syslog = new SyslogHandler('laravel');
-            $syslog->setFormatter(new LineFormatter('%level_name%: %message% %extra%'));
-
-            $this->app[LoggerInterface::class]->pushHandler($syslog);
-        }
-
+        $this->registerLocalPackages();
+        $this->registerPapertrailLogger();
         $this->replaceSwiftMailer();
     }
 
@@ -59,8 +49,28 @@ class PackageProvider extends WorkbenchPackageProvider
         ]);
     }
 
+    private function registerLocalPackages()
+    {
+        if ($this->app->isLocal()) {
+            $this->app->register(IdeHelperServiceProvider::class);
+            $this->app->register(ClockworkServiceProvider::class);
+            $this->app[Kernel::class]->pushMiddleware(ClockworkMiddleware::class);
+        }
+    }
+
+    private function registerPapertrailLogger()
+    {
+        if ($this->app->environment('production')) {
+            $syslog = new SyslogHandler('laravel');
+            $syslog->setFormatter(new LineFormatter('%level_name%: %message% %extra%'));
+
+            $this->app[LoggerInterface::class]->pushHandler($syslog);
+        }
+    }
+
     private function replaceSwiftMailer()
     {
+        $this->app->register(QueueServiceProvider::class);
         $this->app->register(MailServiceProvider::class);
 
         $this->app['mailer']->setSwiftMailer(

@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'host' => 'mail.gandi.net',
+    'host' => env('MAIL_HOST', 'mail.gandi.net'),
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'encryption' => 'ssl',
+    'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'username' => 'service@groupeat.fr',
+    'username' => env('MAIL_USERNAME', 'service@groupeat.fr'),
 
     /*
     |--------------------------------------------------------------------------

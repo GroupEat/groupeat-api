@@ -14,7 +14,7 @@
 
     <p>@lang('restaurants::groupOrders.orderedProducts', ['orderRef' => $order->reference])</p>
 
-    {{ $order->productsTableForMail }}
+    {!! $order->productsTableForMail !!}
 
     @include('orders::partials.comment-html')
 

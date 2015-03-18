@@ -16,7 +16,7 @@
     </p>
 
     @foreach($orders as $order)
-        {{ $order->summaryForMail }}
+        {!! $order->summaryForMail !!}
         @include('orders::partials.comment-html')
         <hr>
         <br>
@@ -27,7 +27,7 @@
     </h2>
 
     @if ($orders->count() > 1)
-        {{ $groupOrder->productsTableForMail }}
+        {!! $groupOrder->productsTableForMail !!}
     @endif
 
     <p>

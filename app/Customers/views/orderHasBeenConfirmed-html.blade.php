@@ -15,11 +15,11 @@
          ])
     </p>
 
-    {{ $order->presentDetailsTableForCustomerForMail() }}
+    {!! $order->presentDetailsTableForCustomerForMail() !!}
 
     <p>@lang('customers::orders.confirmed.summary')</p>
 
-    {{ $order->presentProductsTableForMail(false) }}
+    {!! $order->presentProductsTableForMail(false) !!}
 
     @include('orders::partials.comment-html')
 
