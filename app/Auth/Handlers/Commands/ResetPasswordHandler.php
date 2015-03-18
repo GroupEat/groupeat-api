@@ -24,14 +24,14 @@ class ResetPasswordHandler
     {
         $email = $command->getEmail();
         $token = $command->getToken();
-        $password = $command->getNewPlainPassword();
+        $password = $command->getNewPassword();
 
         $broker = $this->passwordBroker;
         $password_confirmation = $password;
         $credentials = compact('token', 'email', 'password', 'password_confirmation');
 
-        $status = $broker->reset($credentials, function (UserCredentials $userCredentials, $plainPassword) {
-            $userCredentials->resetPassword($plainPassword, $this->generateAutToken->call($userCredentials));
+        $status = $broker->reset($credentials, function (UserCredentials $userCredentials, $password) {
+            $userCredentials->resetPassword($password, $this->generateAutToken->call($userCredentials));
         });
 
         switch ($status) {

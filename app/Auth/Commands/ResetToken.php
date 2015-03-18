@@ -6,16 +6,16 @@ use Groupeat\Support\Commands\Abstracts\Command;
 class ResetToken extends Command
 {
     private $email;
-    private $plainPassword;
+    private $password;
 
     /**
      * @param string $email
-     * @param string $plainPassword
+     * @param string $password
      */
-    public function __construct($email, $plainPassword)
+    public function __construct($email, $password)
     {
         $this->email = $email;
-        $this->plainPassword = $plainPassword;
+        $this->password = $password;
     }
 
     public function getEmail()
@@ -23,8 +23,8 @@ class ResetToken extends Command
         return $this->email;
     }
 
-    public function getPlainPassword()
+    public function getPassword()
     {
-        return $this->plainPassword;
+        return $this->password;
     }
 }

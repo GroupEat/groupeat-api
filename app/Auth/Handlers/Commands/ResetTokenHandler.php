@@ -20,7 +20,7 @@ class ResetTokenHandler
     public function handle(ResetToken $command)
     {
         $email = $command->getEmail();
-        $password = $command->getPlainPassword();
+        $password = $command->getPassword();
 
         $userCredentials = UserCredentials::findByEmailOrFail($email);
         $token = $this->jwtAuth->attempt(compact('email', 'password'));

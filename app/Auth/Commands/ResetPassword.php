@@ -7,18 +7,18 @@ class ResetPassword extends Command
 {
     private $token;
     private $email;
-    private $newPlainPassword;
+    private $newPassword;
 
     /**
      * @param string $token
      * @param string $email
-     * @param string $newPlainPassword
+     * @param string $newPassword
      */
-    public function __construct($token, $email, $newPlainPassword)
+    public function __construct($token, $email, $newPassword)
     {
         $this->token = $token;
         $this->email = $email;
-        $this->newPlainPassword = $newPlainPassword;
+        $this->newPassword = $newPassword;
     }
 
     public function getToken()
@@ -31,8 +31,8 @@ class ResetPassword extends Command
         return $this->email;
     }
 
-    public function getNewPlainPassword()
+    public function getNewPassword()
     {
-        return $this->newPlainPassword;
+        return $this->newPassword;
     }
 }

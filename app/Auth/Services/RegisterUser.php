@@ -31,19 +31,19 @@ class RegisterUser
 
     /**
      * @param string   $email
-     * @param string   $plainPassword
+     * @param string   $password
      * @param string   $locale
      * @param User     $userType
      * @param callable $additionalValidationCallback
      *
      * @return User
      */
-    public function call($email, $plainPassword, $locale, User $userType, Closure $additionalValidationCallback = null)
+    public function call($email, $password, $locale, User $userType, Closure $additionalValidationCallback = null)
     {
         $this->localeService->assertAvailable($locale);
-        $this->assertValidCredentials($email, $plainPassword, $additionalValidationCallback);
+        $this->assertValidCredentials($email, $password, $additionalValidationCallback);
 
-        $userCredentials = UserCredentials::register($email, $plainPassword, $locale, $userType->newInstance());
+        $userCredentials = UserCredentials::register($email, $password, $locale, $userType->newInstance());
         $userCredentials->replaceAuthenticationToken($this->generateAuthToken->call($userCredentials));
 
         $this->events->fire(new UserHasRegistered($userCredentials));

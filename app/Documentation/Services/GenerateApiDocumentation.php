@@ -10,7 +10,7 @@ class GenerateApiDocumentation
 {
     private $config;
     private $orderedPackages;
-    private $isLocal;
+    private $environment;
 
     public function __construct(
         Repository $config,
@@ -19,7 +19,7 @@ class GenerateApiDocumentation
     ) {
         $this->config = $config;
         $this->orderedPackages = collect($orderedPackages->value());
-        $this->isLocal = $environment->isLocal();
+        $this->environment = $environment;
     }
 
     /**
@@ -66,7 +66,11 @@ class GenerateApiDocumentation
     {
         $path = $this->getOutputPath();
 
-        if ($this->isLocal || !file_exists($path)) {
+        if ($this->environment->is('building')) {
+            return file_get_contents($this->getDiskPathFor('Documentation'));
+        }
+
+        if ($this->environment->isLocal() || !file_exists($path)) {
             $errorOutput = $this->call();
 
             if ($errorOutput) {

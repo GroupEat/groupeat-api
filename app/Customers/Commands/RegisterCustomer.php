@@ -6,18 +6,18 @@ use Groupeat\Support\Commands\Abstracts\Command;
 class RegisterCustomer extends Command
 {
     private $email;
-    private $plainPassword;
+    private $password;
     private $locale;
 
     /**
      * @param string $email
-     * @param string $plainPassword
+     * @param string $password
      * @param string $locale
      */
-    public function __construct($email, $plainPassword, $locale)
+    public function __construct($email, $password, $locale)
     {
         $this->email = $email;
-        $this->plainPassword = $plainPassword;
+        $this->password = $password;
         $this->locale = $locale;
     }
 
@@ -26,9 +26,9 @@ class RegisterCustomer extends Command
         return $this->email;
     }
 
-    public function getPlainPassword()
+    public function getPassword()
     {
-        return $this->plainPassword;
+        return $this->password;
     }
 
     public function getLocale()

@@ -19,7 +19,7 @@ class RegisterCustomerHandler
     {
         return $this->registerUser->call(
             $command->getEmail(),
-            $command->getPlainPassword(),
+            $command->getPassword(),
             $command->getLocale(),
             new Customer,
             function ($credentials) {

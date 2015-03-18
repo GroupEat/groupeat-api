@@ -154,28 +154,28 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
     }
 
     /**
-     * @param string $plainPassword
+     * @param string $password
      * @param string $authenticationToken
      *
      * @return $this
      */
-    public function resetPassword($plainPassword, $authenticationToken)
+    public function resetPassword($password, $authenticationToken)
     {
         $this->token = $authenticationToken;
-        $this->setPassword($plainPassword);
+        $this->hashAndSetPassword($password);
         $this->save();
 
         return $this;
     }
 
     /**
-     * @param string $plainPassword
+     * @param string $password
      *
      * @return $this
      */
-    public function setPassword($plainPassword)
+    public function hashAndSetPassword($password)
     {
-        $this->attributes['password'] = Hash::make($plainPassword);
+        $this->attributes['password'] = Hash::make($password);
 
         return $this;
     }
@@ -215,10 +215,10 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         $this->hashPasswordBeforeInsertion($password);
     }
 
-    private function hashPasswordBeforeInsertion($plainPassword)
+    private function hashPasswordBeforeInsertion($password)
     {
         if (!$this->exists) {
-            $this->setPassword($plainPassword);
+            $this->hashAndSetPassword($password);
         }
     }
 }
