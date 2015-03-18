@@ -14,7 +14,7 @@ class ActivateUserHandler
 
         if (empty($token)) {
             throw new BadRequest(
-                "missingActivationToken",
+                'missingActivationToken',
                 "A valid activation token should be given."
             );
         }
@@ -23,7 +23,7 @@ class ActivateUserHandler
 
         if (!$userCredentials) {
             throw new NotFound(
-                "noUserForActivationToken",
+                'noUserForActivationToken',
                 "Cannot retrieve user from activation token."
             );
         }

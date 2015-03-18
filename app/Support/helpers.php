@@ -209,40 +209,18 @@ if (!function_exists('process')) {
     }
 }
 
-if (!function_exists('listGroupeatPackages')) {
+if (!function_exists('getGroupeatPackagesCollection')) {
     /**
-     * Get the list of the GroupEat packages with the same case than the corresponding folders.
+     * Get the collection of the GroupEat packages with the same case than the corresponding folders.
      *
-     * @param bool $withoutSupport
-     *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
-    function listGroupeatPackages($withoutSupport = false)
+    function getGroupeatPackagesCollection()
     {
-        $directories = \Illuminate\Support\Facades\File::directories(app_path());
+        return collect(glob(app_path('*'), GLOB_ONLYDIR))->map(function ($directory) {
+            $segments = explode('/', $directory);
 
-        $packages = array_map(function ($directory) {
-            $parts = explode('/', $directory);
-
-            return array_pop($parts);
-        }, $directories);
-
-        if ($withoutSupport) {
-            return array_filter($packages, function ($package) {
-                return $package != 'Support';
-            });
-        } else {
-            return $packages;
-        }
-    }
-
-    /**
-     * Same as above but without the Support package.
-     *
-     * @return array
-     */
-    function listGroupeatPackagesWithoutSupport()
-    {
-        return listGroupeatPackages(true);
+            return end($segments);
+        });
     }
 }

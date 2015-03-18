@@ -14,7 +14,9 @@ return [
     */
 
     'order' => [
+        'Documentation',
         'Auth',
+        'Admin',
         'Customers',
         'Restaurants',
         'Orders',

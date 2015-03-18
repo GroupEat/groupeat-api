@@ -4,7 +4,6 @@ namespace Groupeat\Support\Services;
 use Groupeat\Support\Commands\Abstracts\Command;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Events\Abstracts\Event;
-use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionMethod;
@@ -45,7 +44,7 @@ class LogDomainActivity
         $getMethodPrefix = 'get';
         $class = get_class($activity);
 
-        $methodNames = Collection::make((new ReflectionClass($class))->getMethods())
+        $methodNames = collect((new ReflectionClass($class))->getMethods())
             ->filter(function (ReflectionMethod $reflectionMethod) {
                 return $reflectionMethod->isPublic();
             })

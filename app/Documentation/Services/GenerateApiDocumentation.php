@@ -4,25 +4,21 @@ namespace Groupeat\Documentation\Services;
 use Groupeat\Documentation\Values\OrderedPackages;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateApiDocumentation
 {
-    private $filesystem;
     private $config;
     private $orderedPackages;
     private $isLocal;
 
     public function __construct(
-        Filesystem $filesystem,
         Repository $config,
         OrderedPackages $orderedPackages,
         Environment $environment
     ) {
-        $this->filesystem = $filesystem;
         $this->config = $config;
-        $this->orderedPackages = $orderedPackages->value();
+        $this->orderedPackages = collect($orderedPackages->value());
         $this->isLocal = $environment->isLocal();
     }
 
@@ -33,28 +29,31 @@ class GenerateApiDocumentation
      */
     public function call(OutputInterface $output = null)
     {
-        $docContent = $this->filesystem->get(__DIR__.'/../resources/api-docs-introduction.md');
+        $docContent = $this->orderedPackages
+            ->filter(function ($package) {
+                $path = $this->getDiskPathFor($package);
 
-        foreach ($this->orderedPackages as $package) {
-            $paths = $this->getPathsForPackage($package);
+                return file_exists($path);
+            })
+            ->map(function ($package) {
+                $path = $this->getIncludePathFor($package);
 
-            if ($this->filesystem->exists($paths['disk'])) {
-                $packageDocContent = "\n<!-- include({$paths['include']}) -->\n";
-
-                $docContent .= $packageDocContent;
-            }
-        }
+                return "<!-- include($path) -->";
+            })
+            ->implode("\n");
 
         $inputPath = $this->getInputPath();
         $outputPath = $this->getOutputPath();
 
-        $this->filesystem->put($inputPath, $docContent);
+        file_put_contents($inputPath, $docContent);
 
         $command = "aglio -t flatly --full-width -i $inputPath -o $outputPath";
 
         $status = process($command, $output)->getErrorOutput();
 
-        $this->filesystem->put($outputPath, $this->parseConfig($this->filesystem->get($outputPath)));
+        $html = $this->parseConfig(file_get_contents($outputPath));
+
+        file_put_contents($outputPath, $html);
 
         return $status;
     }
@@ -66,7 +65,7 @@ class GenerateApiDocumentation
     {
         $path = $this->getOutputPath();
 
-        if ($this->isLocal || !$this->filesystem->exists($path)) {
+        if ($this->isLocal || !file_exists($path)) {
             $errorOutput = $this->call();
 
             if ($errorOutput) {
@@ -74,7 +73,7 @@ class GenerateApiDocumentation
             }
         }
 
-        return $this->filesystem->get($path);
+        return file_get_contents($path);
     }
 
     private function parseConfig($doc)
@@ -84,12 +83,14 @@ class GenerateApiDocumentation
         }, $doc);
     }
 
-    private function getPathsForPackage($package)
+    private function getDiskPathFor($package)
     {
-        return [
-            'disk' => realpath(app_path($package.'/docs/main.md')),
-            'include' => "../../$package/docs/main.md",
-        ];
+        return app_path($package.'/docs/main.md');
+    }
+
+    private function getIncludePathFor($package)
+    {
+        return "../../app/$package/docs/main.md";
     }
 
     private function getInputPath()
@@ -104,6 +105,6 @@ class GenerateApiDocumentation
 
     private function getPathForExtension($extension)
     {
-        return app_path("Documentation/generated/documentation.$extension");
+        return storage_path("app/documentation.$extension");
     }
 }

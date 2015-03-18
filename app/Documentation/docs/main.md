@@ -15,8 +15,8 @@ All of the paths below must be prefixed by {{ app.url }}/api to have the full an
 
 ### Attaching data to a request
 
- - For security reasons (_sending passwords or tokens in the URL is not safe even on HTTPS_), passing data through the URL query string is allowed for GET requests only.
- - For POST, PUT, PATCH and DELETE requests, the data should be sent through the body. Thus, when creating a request with the Postman Chrome extension, the `raw` mode should be used instead of the `form-data` and `x-www-form-urlencoded` modes.
+ - For security reasons (_sending passwords or tokens in the URL is not safe even on HTTPS_), passing data through the URL query string is allowed for GET methods only.
+ - For POST, PUT, PATCH and DELETE methods, the data should be sent through the body. Thus, when creating a request with the Postman Chrome extension, the `raw` mode should be used instead of the `form-data` and `x-www-form-urlencoded` modes.
 
 ### Data scope
 

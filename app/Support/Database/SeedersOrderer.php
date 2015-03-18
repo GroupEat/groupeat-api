@@ -15,7 +15,7 @@ class SeedersOrderer
     {
         $seeders = [];
 
-        foreach (listGroupeatPackagesWithoutSupport() as $package) {
+        foreach (getGroupeatPackagesCollection() as $package) {
             $seedersDirectory = app_path("$package/Seeders");
 
             if (File::isDirectory($seedersDirectory)) {

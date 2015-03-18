@@ -56,10 +56,10 @@ class DbInstall extends Command
     {
         $this->deleteMigrationFiles();
 
-        foreach (listGroupeatPackagesWithoutSupport() as $package) {
+        foreach (getGroupeatPackagesCollection() as $package) {
             $migrationsDirectory = app_path("$package/Migrations");
 
-            if (File::isDirectory($migrationsDirectory)) {
+            if (is_dir($migrationsDirectory)) {
                 array_map(function ($migrationPath) {
                     $this->publishCopy($migrationPath);
                 }, File::files($migrationsDirectory));

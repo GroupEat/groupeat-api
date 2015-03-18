@@ -11,7 +11,6 @@ use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 
 class GroupOrder extends Entity
 {
@@ -182,7 +181,7 @@ class GroupOrder extends Entity
      */
     public function getTotalRawPriceAttribute()
     {
-        return sumPrices(Collection::make($this->orders->lists('rawPrice')));
+        return sumPrices(collect($this->orders->lists('rawPrice')));
     }
 
     /**
