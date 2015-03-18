@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Restaurants\Handlers\Events;
 
-use Groupeat\Auth\Services\GenerateAuthToken;
+use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasEnded;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
@@ -12,18 +12,18 @@ class SendGroupOrderHasEndedMail
 {
     private $mailer;
     private $urlGenerator;
-    private $generateAuthToken;
+    private $generateToken;
     private $tokenDurationInMinutes;
 
     public function __construct(
         SendMail $mailer,
         UrlGenerator $urlGenerator,
-        GenerateAuthToken $generateAuthToken,
+        GenerateToken $generateToken,
         ConfirmationTokenDurationInMinutes $tokenDurationInMinutes
     ) {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
-        $this->generateAuthToken = $generateAuthToken;
+        $this->generateToken = $generateToken;
         $this->tokenDurationInMinutes = $tokenDurationInMinutes->value();
     }
 
@@ -45,7 +45,7 @@ class SendGroupOrderHasEndedMail
 
     private function makeConfirmationUrl(GroupOrder $groupOrder)
     {
-        $token = $this->generateAuthToken->call(
+        $token = $this->generateToken->call(
             $groupOrder->restaurant->credentials,
             $this->tokenDurationInMinutes
         );

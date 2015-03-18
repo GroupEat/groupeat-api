@@ -44,11 +44,7 @@ class SendPasswordResetLinkHandler
             UserCredentials::throwNotFoundByEmailException($email);
         }
 
-        $userCredentials = $broker->getUser($credentials);
-
-        $userCredentials->password = 'WAITING FOR PASSWORD RESET';
-        $userCredentials->token = null;
-        $userCredentials->save();
+        $broker->getUser($credentials)->discardPasswordAndToken();
     }
 
     /**

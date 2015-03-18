@@ -12,7 +12,7 @@ class TokenTransformer extends TransformerAbstract
         return [
             'id' => $user->id,
             'type' => app(Auth::class)->shortTypeOf($user),
-            'token' => (string) $user->credentials->token,
+            'token' => $user->credentials->token,
             'activated' => $user->credentials->isActivated(),
         ];
     }

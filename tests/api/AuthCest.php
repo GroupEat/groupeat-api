@@ -116,6 +116,7 @@ class AuthCest
         $email = 'user@ensta.fr';
         $oldPassword = 'password';
         list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $oldPassword);
+        $userUrl = $this->getUserResource().'/'.$id;
 
         $I->sendApiDelete('auth/password', compact('email'));
         $I->seeResponseCodeIs(200);
@@ -136,15 +137,16 @@ class AuthCest
             'email' => $email,
             'password' => $newPassword,
         ]);
+
         $I->seeResponseCodeIs(200);
         $newToken = $I->grabDataFromResponse('token');
         $I->assertNotEmpty($newToken);
         $I->assertNotEquals($oldToken, $newToken);
 
-        $I->sendApiGetWithToken($newToken, $this->getUserResource().'/'.$id);
+        $I->sendApiGetWithToken($newToken, $userUrl);
         $I->seeResponseCodeIs(200);
 
-        $I->sendApiGetWithToken($oldToken, $this->getUserResource().'/'.$id);
+        $I->sendApiGetWithToken($oldToken, $userUrl);
         $I->seeErrorResponse(403, 'obsoleteAuthenticationToken');
 
         $I->sendApiPut('auth/token', [
@@ -153,6 +155,56 @@ class AuthCest
         ]);
         $I->seeResponseCodeIs(401);
         $I->seeErrorsContain(['password' => ['invalid' => []]]);
+    }
+
+    public function testThatAUserCanChangeItsPassword(ApiTester $I)
+    {
+        $email = 'user@ensta.fr';
+        $oldPassword = 'oldPassword';
+        $newPassword= 'newPassword';
+        list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $oldPassword);
+        $userUrl = $this->getUserResource().'/'.$id;
+
+        $I->sendApiGetWithToken($oldToken, $userUrl);
+        $I->seeResponseCodeIs(200);
+
+        $I->sendApiPut('auth/password', [
+            'email' => 'bademail@ensta.fr',
+            'oldPassword' => $oldPassword,
+            'newPassword' => $newPassword,
+        ]);
+        $I->seeResponseCodeIs(404);
+
+        $I->sendApiPut('auth/password', [
+            'email' => $email,
+            'oldPassword' => 'wrongPassword',
+            'newPassword' => $newPassword,
+        ]);
+        $I->seeResponseCodeIs(401);
+        $I->seeErrorsContain(['password' => ['invalid' => []]]);
+
+        $I->sendApiPut('auth/password', [
+            'email' => $email,
+            'oldPassword' => $oldPassword,
+            'newPassword' => 'short',
+        ]);
+        $I->seeErrorResponse(422, 'badPassword');
+
+        $I->sendApiPut('auth/password', compact('email', 'oldPassword', 'newPassword'));
+        $I->seeResponseCodeIs(200);
+
+        $I->sendApiGetWithToken($oldToken, $userUrl);
+        $I->seeErrorResponse(403, 'obsoleteAuthenticationToken');
+
+        $I->sendApiPut('auth/token', [
+            'email' => $email,
+            'password' => $newPassword
+        ]);
+        $I->seeResponseCodeIs(200);
+        $newToken = $I->grabDataFromResponse('token');
+
+        $I->sendApiGetWithToken($newToken, $userUrl);
+        $I->seeResponseCodeIs(200);
     }
 
     protected function sendRegistrationRequest(

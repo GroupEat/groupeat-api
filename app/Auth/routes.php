@@ -12,5 +12,6 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('token', AuthController::class.'@resetToken');
         Route::delete('password', AuthController::class.'@sendPasswordResetLink');
         Route::post('password', AuthController::class.'@resetPassword');
+        Route::put('password', AuthController::class.'@changePassword');
     });
 });

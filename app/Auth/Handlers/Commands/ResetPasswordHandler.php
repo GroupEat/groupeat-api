@@ -3,7 +3,7 @@ namespace Groupeat\Auth\Handlers\Commands;
 
 use Groupeat\Auth\Commands\ResetPassword;
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Auth\Services\GenerateAuthToken;
+use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
@@ -11,13 +11,13 @@ use Illuminate\Contracts\Auth\PasswordBroker;
 
 class ResetPasswordHandler
 {
-    private $generateAutToken;
     private $passwordBroker;
+    private $generateToken;
 
-    public function __construct(GenerateAuthToken $generateAutToken, PasswordBroker $passwordBroker)
+    public function __construct(PasswordBroker $passwordBroker, GenerateToken $generateToken)
     {
-        $this->generateAutToken = $generateAutToken;
         $this->passwordBroker = $passwordBroker;
+        $this->generateToken = $generateToken;
     }
 
     public function handle(ResetPassword $command)
@@ -29,10 +29,15 @@ class ResetPasswordHandler
         $broker = $this->passwordBroker;
         $password_confirmation = $password;
         $credentials = compact('token', 'email', 'password', 'password_confirmation');
+        $user = null;
 
-        $status = $broker->reset($credentials, function (UserCredentials $userCredentials, $password) {
-            $userCredentials->resetPassword($password, $this->generateAutToken->call($userCredentials));
-        });
+        $status = $broker->reset(
+            $credentials,
+            function (UserCredentials $userCredentials, $password) use (&$user) {
+                $userCredentials->resetPassword($password, $this->generateToken->call($userCredentials));
+                $user = $userCredentials;
+            }
+        );
 
         switch ($status) {
             case $broker::INVALID_USER:
@@ -53,5 +58,7 @@ class ResetPasswordHandler
                     "This password reset token is invalid."
                 );
         }
+
+        return $user;
     }
 }

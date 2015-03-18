@@ -19,8 +19,6 @@ Authorization: bearer {token}
 
 ### Retrieve token [PUT]
 
-Retrieve the authentication token of an already registered user.
-
 According to the RESTful principles, this route's method should be GET since it does not change the server state. However, passing the plain password in the URL query string is unsafe so a body is required but it is unusual to send a body along a GET request.
 
 + Request
@@ -56,9 +54,9 @@ According to the RESTful principles, this route's method should be GET since it 
             }
         }
 
-### Generate token [POST]
+### Reset token [POST]
 
-Generate a new authentication token for an already registered user. Once hit, this route will make the old token obsolete so only the new one should be used to authenticate.
+Once hit, this route will make the old token obsolete: only the new one can be used to authenticate.
 
 + Request
 
@@ -95,6 +93,8 @@ Generate a new authentication token for an already registered user. Once hit, th
 
 ## Password [/auth/password]
 
+Changing or reseting a password will make the current authentication token obsolete. 
+
 ### Send password reset link [DELETE]
 
 + Request
@@ -116,7 +116,7 @@ Generate a new authentication token for an already registered user. Once hit, th
             }
         }
 
-### Reset [POST]
+### Reset password [POST]
 
 + Request
 
@@ -127,6 +127,8 @@ Generate a new authentication token for an already registered user. Once hit, th
         }
 
 + Response 200
+
+    [Token][]
 
 + Response 403
 
@@ -140,6 +142,47 @@ Generate a new authentication token for an already registered user. Once hit, th
         {
             "errorKey": "noUserForPasswordResetToken",
             "message": "No user corresponding to this password reset token."
+        }
+        
++ Response 422
+
+        {
+            "errorKey": "badPassword",
+            "message": "The password must be at least six characters."
+        }
+
+### Change password [PUT]
+
++ Request
+
+        {
+            "email": "customer@ensta.fr",
+            "oldPassword": "theOldPassword",
+            "newPassword": "theNewPassword"
+        }
+
++ Response 200
+
+    [Token][]
+
++ Response 400
+                
+        {
+            "errorKey": "passwordsMustBeDifferent",
+            "message": "The new password cannot be the same as the old one."
+        }
+        
+
+
++ Response 404
+
+        {
+            "message": "No user with mangeo@ensta.fr e-mail address found.",
+            "errors": {
+                "email": {
+                    "notFound": []
+                }
+            }
         }
         
 + Response 422

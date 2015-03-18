@@ -127,8 +127,6 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
     /**
      * @param Carbon $now
-     *
-     * @return $this
      */
     public function activate(Carbon $now = null)
     {
@@ -136,48 +134,46 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
         $this->activationToken = null;
         $this->activated_at = $now;
-
-        return $this;
+        $this->save();
     }
 
     /**
      * @param string $token
-     *
-     * @return $this
      */
     public function replaceAuthenticationToken($token)
     {
         $this->token = $token;
         $this->save();
-
-        return $this;
     }
 
-    /**
-     * @param string $password
-     * @param string $authenticationToken
-     *
-     * @return $this
-     */
-    public function resetPassword($password, $authenticationToken)
+    public function discardPasswordAndToken()
     {
-        $this->token = $authenticationToken;
-        $this->hashAndSetPassword($password);
-        $this->save();
+        $this->hashAndSetPassword("WAITING FOR PASSWORD RESET");
+        $this->discardToken();
+    }
 
-        return $this;
+    /**
+     * @param $password
+     * @param $token
+     */
+    public function resetPassword($password, $token)
+    {
+        $this->hashAndSetPassword($password);
+        $this->replaceAuthenticationToken($token);
+    }
+
+    public function discardToken()
+    {
+        $this->token = null;
+        $this->save();
     }
 
     /**
      * @param string $password
-     *
-     * @return $this
      */
     public function hashAndSetPassword($password)
     {
         $this->attributes['password'] = Hash::make($password);
-
-        return $this;
     }
 
     public function getAuthIdentifier()
@@ -192,17 +188,17 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
     public function getRememberToken()
     {
-        // Not used
+        // Not implemented
     }
 
     public function setRememberToken($value)
     {
-        // Not used
+        // Not implemented
     }
 
     public function getRememberTokenName()
     {
-        // Not used
+        // Not implemented
     }
 
     protected function setUserAttribute(User $user)

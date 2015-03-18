@@ -32,4 +32,16 @@ class CustomerAddressesCest
         $I->sendApiGetWithToken($token, "predefinedAddresses");
         $I->seeResponseCodeIs(200);
     }
+
+    public function testThatANotFoundErrorIsReturnedWhenTheCustomerDoesNotHaveAnAddress(ApiTester $I)
+    {
+        list($token, $id) = $I->sendRegistrationRequest(
+            'userWithoutAddress@ensta.fr',
+            'password',
+            'customers',
+            'fr'
+        );
+        $I->sendApiGetWithToken($token, "customers/$id/address");
+        $I->seeErrorResponse(404, 'noAddressForThisCustomer');
+    }
 }

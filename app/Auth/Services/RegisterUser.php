@@ -14,18 +14,18 @@ class RegisterUser
 {
     private $validation;
     private $events;
-    private $generateAuthToken;
+    private $generateToken;
     private $localeService;
 
     public function __construct(
         Validation $validation,
         Dispatcher $events,
-        GenerateAuthToken $generateAuthToken,
+        GenerateToken $generateToken,
         Locale $localeService
     ) {
         $this->validation = $validation;
         $this->events = $events;
-        $this->generateAuthToken = $generateAuthToken;
+        $this->generateToken = $generateToken;
         $this->localeService = $localeService;
     }
 
@@ -44,7 +44,7 @@ class RegisterUser
         $this->assertValidCredentials($email, $password, $additionalValidationCallback);
 
         $userCredentials = UserCredentials::register($email, $password, $locale, $userType->newInstance());
-        $userCredentials->replaceAuthenticationToken($this->generateAuthToken->call($userCredentials));
+        $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
 
         $this->events->fire(new UserHasRegistered($userCredentials));
 

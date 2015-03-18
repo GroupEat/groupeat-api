@@ -5,7 +5,7 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Values\TokenDurationInMinutes;
 use Tymon\JWTAuth\JWTAuth;
 
-class GenerateAuthToken
+class GenerateToken
 {
     private $JWTauth;
     private $defaultDurationInMinutes;

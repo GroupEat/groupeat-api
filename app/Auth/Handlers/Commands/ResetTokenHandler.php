@@ -3,20 +3,25 @@ namespace Groupeat\Auth\Handlers\Commands;
 
 use Groupeat\Auth\Commands\ResetToken;
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Auth\Services\GenerateAuthToken;
+use Groupeat\Auth\Services\GenerateToken;
 use Tymon\JWTAuth\JWTAuth;
 
 class ResetTokenHandler
 {
-    private $generateAuthToken;
     private $jwtAuth;
+    private $generateToken;
 
-    public function __construct(GenerateAuthToken $generateAuthToken, JWTAuth $jwtAuth)
+    public function __construct(JWTAuth $jwtAuth, GenerateToken $generateToken)
     {
-        $this->generateAuthToken = $generateAuthToken;
         $this->jwtAuth = $jwtAuth;
+        $this->generateToken = $generateToken;
     }
 
+    /**
+     * @param ResetToken $command
+     *
+     * @return UserCredentials
+     */
     public function handle(ResetToken $command)
     {
         $email = $command->getEmail();
@@ -29,7 +34,7 @@ class ResetTokenHandler
             UserCredentials::throwBadPasswordException();
         }
 
-        $userCredentials = $userCredentials->replaceAuthenticationToken($token);
+        $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
 
         return $userCredentials;
     }

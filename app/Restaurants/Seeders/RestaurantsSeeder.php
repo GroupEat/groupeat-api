@@ -2,7 +2,7 @@
 namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Auth\Services\GenerateAuthToken;
+use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Database\Abstracts\Seeder;
@@ -10,20 +10,20 @@ use Groupeat\Support\Database\Abstracts\Seeder;
 class RestaurantsSeeder extends Seeder
 {
     /**
-     * @var GenerateAuthToken
+     * @var GenerateToken
      */
-    private $generateAuthToken;
+    private $generateToken;
 
     /**
      * @var Category
      */
     private $pizzeriaCategory;
 
-    public function __construct(GenerateAuthToken $generateAuthToken)
+    public function __construct(GenerateToken $generateToken)
     {
         parent::__construct();
 
-        $this->generateAuthToken = $generateAuthToken;
+        $this->generateToken = $generateToken;
         $this->pizzeriaCategory = Category::findByLabel('pizzeria');
     }
 
@@ -91,6 +91,6 @@ class RestaurantsSeeder extends Seeder
 
     private function setAuthTokenFor(UserCredentials $userCredentials)
     {
-        $userCredentials->replaceAuthenticationToken($this->generateAuthToken->call($userCredentials));
+        $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
     }
 }

@@ -28,6 +28,6 @@ class ActivateUserHandler
             );
         }
 
-        $userCredentials->activate()->save();
+        $userCredentials->activate();
     }
 }
