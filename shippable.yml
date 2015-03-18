@@ -27,7 +27,7 @@ before_script:
 
 script:
   - ./vendor/bin/phpcs
-  - ./vendor/bin/codecept run --fail-fast --steps --xml ../../shippable/testresults/results.xml
+  - ./vendor/bin/codecept run --fail-fast --debug --xml ../../shippable/testresults/results.xml
 
 after_success:
   - if [[ $(git log -1 HEAD --pretty=format:%s) != *skip\ deploy* ]]; then echo "Starting deployment"; ./rocketeer.phar deploy; else echo "Deployment cancelled"; fi
