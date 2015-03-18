@@ -51,7 +51,8 @@ class GenerateApiDocumentation
 
         $status = process($command, $output)->getErrorOutput();
 
-        $html = $this->parseConfig(file_get_contents($outputPath));
+        $html = file_get_contents($outputPath);
+        $html = $this->parseConfig($html);
 
         file_put_contents($outputPath, $html);
 

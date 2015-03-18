@@ -72,7 +72,7 @@ class Handler extends ExceptionHandler
         } else {
             $statusCode = 500;
             $data['errorKey'] = 'internalServerError';
-            $data['message'] = \App::isLocal() ? $e->getMessage() : "The server encountered an internal error";
+            $data['message'] = \Config::get('app.debug') ? $e->getMessage() : "The server encountered an internal error";
         }
 
         if (\Config::get('app.debug')) {
