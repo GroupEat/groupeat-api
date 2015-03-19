@@ -8,7 +8,7 @@
     "sebastian/money": "1.5.*",
     "fzaninotto/faker": "1.4.*",
     "laravel/framework": "5.0.*",
-    "league/fractal": "0.11.*@dev",
+    "league/fractal": "0.12.*",
     "robclancy/presenter": "1.3.*",
     "Treffynnon/Navigator": "1.0.*",
     "anahkiasen/html-object": "1.4.*",
