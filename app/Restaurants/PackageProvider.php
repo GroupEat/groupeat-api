@@ -22,11 +22,6 @@ class PackageProvider extends WorkbenchPackageProvider
         );
 
         $this->bindValueFromConfig(
-            MinimumOpeningDurationInMinutes::class,
-            'restaurants.opening_duration_in_minutes'
-        );
-
-        $this->bindValueFromConfig(
             ConfirmationTokenDurationInMinutes::class,
             2 * $this->app['config']->get('orders.maximum_preparation_time_in_minutes')
         );

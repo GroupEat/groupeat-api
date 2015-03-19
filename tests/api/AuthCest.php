@@ -190,6 +190,7 @@ class AuthCest
         ]);
         $I->seeErrorResponse(422, 'badPassword');
 
+        sleep(1);
         $I->sendApiPut('auth/password', compact('email', 'oldPassword', 'newPassword'));
         $I->seeResponseCodeIs(200);
 

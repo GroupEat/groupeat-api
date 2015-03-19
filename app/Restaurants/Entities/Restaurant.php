@@ -85,7 +85,7 @@ class Restaurant extends Entity implements User
     {
         $from = $from ?: Carbon::now();
         $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
-        assertSameDay($from, $to);
+        assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
 
         $hasClosingWindow = ! $this->closingWindows->filter(
             function ($closingWindow) use ($from, $to) {
@@ -110,7 +110,7 @@ class Restaurant extends Entity implements User
     {
         $from = $from ?: Carbon::now();
         $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
-        assertSameDay($from, $to);
+        assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
 
         if (!$this->isOpened($from, $to)) {
             throw new UnprocessableEntity(
@@ -124,7 +124,7 @@ class Restaurant extends Entity implements User
     {
         $from = $from ?: Carbon::now();
         $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
-        assertSameDay($from, $to);
+        assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
 
         $query->whereHas('openingWindows', function (Builder $subQuery) use ($from, $to) {
             $openingWindow = $subQuery->getModel();
