@@ -19,7 +19,7 @@ class GroupOrderTransformer extends TransformerAbstract
             'discountRate' => $groupOrder->discountRate->toPercentage(),
             'createdAt' => (string) $groupOrder->created_at,
             'remainingCapacity' => $groupOrder->computeRemainingCapacity(),
-            'completedAt' => $groupOrder->completed_at ? (string) $groupOrder->completed_at : null,
+            'closedAt' => $groupOrder->closed_at ? (string) $groupOrder->closed_at : null,
             'endingAt' => (string) $groupOrder->ending_at,
             'confirmed' => !is_null($groupOrder->confirmed_at),
             'preparedAt' => $groupOrder->prepared_at ? (string) $groupOrder->prepared_at : null,

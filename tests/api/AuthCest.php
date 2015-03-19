@@ -19,13 +19,13 @@ class AuthCest
     public function testThatAUserCanBeActivatedAfterSuccessfulRegistration(ApiTester $I)
     {
         list($token, $id) = $this->sendRegistrationRequest($I);
+        $activationLink = $I->grabHrefInLinkByIdInFirstMail('activation-link');
+        $I->assertNotEmpty($activationLink);
+        list($temp, $activationToken) = explode("token=", $activationLink);
 
         $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
         $I->assertFalse($I->grabDataFromResponse('activated'));
 
-        $activationLink = $I->grabHrefInLinkByIdInLastMail('activation-link');
-        $I->assertNotEmpty($activationLink);
-        list($temp, $activationToken) = explode("token=", $activationLink);
         $I->sendApiPost('auth/activationTokens', ['token' => $activationToken]);
         $I->seeResponseCodeIs(200);
 
@@ -120,7 +120,7 @@ class AuthCest
 
         $I->sendApiDelete('auth/password', compact('email'));
         $I->seeResponseCodeIs(200);
-        $link = $I->grabHrefInLinkByIdInLastMail('password-reset-link');
+        $link = $I->grabHrefInLinkByIdInFirstMail('password-reset-link');
         $I->assertNotEmpty($link);
         list($temp, $resetToken) = explode('token=', $link);
 

@@ -83,7 +83,7 @@ class Restaurant extends Entity implements User
      */
     public function isOpened(Carbon $from = null, Carbon $to = null)
     {
-        $from = $from ?: Carbon::now();
+        $from = $from ?: $this->freshTimestamp();
         $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
         assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
 
@@ -108,7 +108,7 @@ class Restaurant extends Entity implements User
 
     public function assertOpened(Carbon $from = null, Carbon $to = null)
     {
-        $from = $from ?: Carbon::now();
+        $from = $from ?: $this->freshTimestamp();
         $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
         assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
 
@@ -122,7 +122,7 @@ class Restaurant extends Entity implements User
 
     public function scopeOpened(Builder $query, Carbon $from = null, Carbon $to = null)
     {
-        $from = $from ?: Carbon::now();
+        $from = $from ?: $this->freshTimestamp();
         $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
         assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
 

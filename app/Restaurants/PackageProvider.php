@@ -3,9 +3,9 @@
 use Groupeat\Auth\Auth;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
-use Groupeat\Orders\Events\GroupOrderHasEnded;
+use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Restaurants\Entities\Restaurant;
-use Groupeat\Restaurants\Handlers\Events\SendGroupOrderHasEndedMail;
+use Groupeat\Restaurants\Handlers\Events\SendGroupOrderHasBeenClosedMail;
 use Groupeat\Restaurants\Handlers\Events\SendOrderHasBeenPlacedMail;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
@@ -33,6 +33,6 @@ class PackageProvider extends WorkbenchPackageProvider
 
         $this->listen(GroupOrderHasBeenCreated::class, SendOrderHasBeenPlacedMail::class, 'created');
         $this->listen(GroupOrderHasBeenJoined::class, SendOrderHasBeenPlacedMail::class, 'joined');
-        $this->listen(GroupOrderHasEnded::class, SendGroupOrderHasEndedMail::class);
+        $this->listen(GroupOrderHasBeenClosed::class, SendGroupOrderHasBeenClosedMail::class);
     }
 }

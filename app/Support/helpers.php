@@ -10,7 +10,7 @@ if (!function_exists('artisan')) {
      *
      * @return string Command output
      */
-    function artisan($command, $parameters = [], $verbosity = null)
+    function artisan($command, array $parameters = [], $verbosity = null)
     {
         $output = new \Symfony\Component\Console\Output\BufferedOutput($verbosity);
         Artisan::call($command, $parameters, $output);

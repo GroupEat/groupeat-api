@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('mailId'){{ 'restaurants.groupOrderHasEnded' }}@stop
+@section('mailId'){{ 'restaurants.groupOrderHasBeenClosed' }}@stop
 
 @section('firstLineWrapper')
 @overwrite

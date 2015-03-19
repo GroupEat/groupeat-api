@@ -42,16 +42,16 @@ class ConfirmGroupOrderHandler
 
     private function guardAgainstInvalidPreparationTime(GroupOrder $groupOrder, Carbon $preparedAt)
     {
-        $completedAt = $groupOrder->completed_at;
+        $closedAt = $groupOrder->closed_at;
 
-        if ($preparedAt < $completedAt) {
+        if ($preparedAt < $closedAt) {
             throw new UnprocessableEntity(
-                'cannotBePreparedBeforeBeingCompleted',
-                "The {$groupOrder->toShortString()} cannot be completely prepared before being completed."
+                'cannotBePreparedBeforeBeingClosed',
+                "The {$groupOrder->toShortString()} cannot be completely prepared before being closed."
             );
         }
 
-        $preparationTimeInMinutes = $completedAt->diffInMinutes($preparedAt, false);
+        $preparationTimeInMinutes = $closedAt->diffInMinutes($preparedAt, false);
 
         if ($preparationTimeInMinutes > $this->maximumPreparationTimeInMinutes) {
             throw new UnprocessableEntity(

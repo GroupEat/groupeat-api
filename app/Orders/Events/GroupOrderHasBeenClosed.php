@@ -4,7 +4,7 @@ namespace Groupeat\Orders\Events;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Events\Abstracts\Event;
 
-class GroupOrderHasEnded extends Event
+class GroupOrderHasBeenClosed extends Event
 {
     private $groupOrder;
 

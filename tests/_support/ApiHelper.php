@@ -93,6 +93,7 @@ class ApiHelper extends \Codeception\Module
         $verb = strtoupper($verb);
         $url = $this->getApiUrl($path);
 
+        $this->getModule('MailWatcher')->flush();
         $this->getModule('Laravel5')->app[Auth::class]->logout();
 
         $this->haveAcceptHeader();
@@ -165,5 +166,12 @@ class ApiHelper extends \Codeception\Module
     public function haveAcceptHeader()
     {
         $this->getModule('REST')->haveHttpHeader('Accept', 'application/vnd.groupeat.v1+json');
+    }
+
+    public function runArtisan($command, array $parameters = [])
+    {
+        $output = artisan($command, $parameters);
+
+        $this->debugSection("Artisan $command", $output);
     }
 }

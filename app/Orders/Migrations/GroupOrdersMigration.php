@@ -18,7 +18,7 @@ class GroupOrdersMigration extends Migration
             $table->unsignedInteger('discountRate')->index()->default(0);
             $table->timestamps();
             $table->index(['created_at', 'updated_at']);
-            $table->timestamp('completed_at')->nullable()->index();
+            $table->timestamp('closed_at')->nullable()->index();
             $table->timestamp('ending_at')->index();
             $table->timestamp('confirmed_at')->nullable();
             $table->timestamp('prepared_at')->nullable();

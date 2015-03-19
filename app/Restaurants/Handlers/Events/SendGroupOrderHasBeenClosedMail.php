@@ -3,12 +3,12 @@ namespace Groupeat\Restaurants\Handlers\Events;
 
 use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Orders\Events\GroupOrderHasEnded;
+use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Support\Services\SendMail;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
-class SendGroupOrderHasEndedMail
+class SendGroupOrderHasBeenClosedMail
 {
     private $mailer;
     private $urlGenerator;
@@ -27,9 +27,9 @@ class SendGroupOrderHasEndedMail
         $this->tokenDurationInMinutes = $tokenDurationInMinutes->value();
     }
 
-    public function handle(GroupOrderHasEnded $groupOrderHasEnded)
+    public function handle(GroupOrderHasBeenClosed $groupOrderHasBeenClosed)
     {
-        $groupOrder = $groupOrderHasEnded->getGroupOrder();
+        $groupOrder = $groupOrderHasBeenClosed->getGroupOrder();
         $groupOrder->load('orders.productFormats.product.type');
         $orders = $groupOrder->orders;
         $totalDiscountedPrice = formatPrice($groupOrder->totalDiscountedPrice);
@@ -37,7 +37,7 @@ class SendGroupOrderHasEndedMail
 
         $this->mailer->call(
             $groupOrder->restaurant->credentials,
-            'restaurants::groupOrderHasEnded',
+            'restaurants::groupOrderHasBeenClosed',
             'restaurants::groupOrders.ended.subject',
             compact('groupOrder', 'orders', 'totalDiscountedPrice', 'confirmationUrl')
         );

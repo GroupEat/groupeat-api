@@ -22,8 +22,8 @@ class OrdersCest
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $productFormatId = array_keys($orderDetails['productFormats'])[0];
         $restaurantEmail = $this->getRestaurantEmailFromProductFormat($productFormatId);
-        $I->assertEquals('restaurants.orderHasBeenPlaced', $I->grabLastMailId());
-        $I->assertEquals($restaurantEmail, $I->grabLastMailRecipient());
+        $I->assertEquals('restaurants.orderHasBeenPlaced', $I->grabFirstMailId());
+        $I->assertEquals($restaurantEmail, $I->grabFirstMailRecipient());
     }
 
     public function testThatTheFoodRushDurationMustBeValid(ApiTester $I)
@@ -292,7 +292,7 @@ class OrdersCest
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
         $I->assertEquals($comment, $I->grabDataFromResponse('comment'));
-        $I->assertLastMailContains($comment);
+        $I->assertFirstMailContains($comment);
     }
 
     private function getProducts(

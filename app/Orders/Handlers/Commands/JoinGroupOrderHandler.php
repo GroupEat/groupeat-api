@@ -27,7 +27,7 @@ class JoinGroupOrderHandler extends GroupOrderValidation
             $command->getComment()
         );
 
-        $this->fireSuitableEvents($order, new GroupOrderHasBeenJoined($order));
+        $this->events->fire(new GroupOrderHasBeenJoined($order));
 
         return $order;
     }

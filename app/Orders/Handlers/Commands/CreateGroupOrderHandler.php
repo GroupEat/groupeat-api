@@ -61,7 +61,7 @@ class CreateGroupOrderHandler extends GroupOrderValidation
             $command->getComment()
         );
 
-        $this->fireSuitableEvents($order, new GroupOrderHasBeenCreated($order));
+        $this->events->fire(new GroupOrderHasBeenCreated($order));
 
         return $order;
     }
@@ -83,7 +83,7 @@ class CreateGroupOrderHandler extends GroupOrderValidation
 
     private function assertThatTheRestaurantWontCloseTooSoon(Restaurant $restaurant, $foodRushInMinutes)
     {
-        $now = new Carbon();
+        $now = Carbon::now();
         $minimumMinutes = $foodRushInMinutes + $this->maximumPreparationTimeInMinutes;
         $to = $now->copy()->addMinutes($minimumMinutes);
 

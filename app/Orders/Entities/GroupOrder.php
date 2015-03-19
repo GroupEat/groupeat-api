@@ -4,6 +4,7 @@ namespace Groupeat\Orders\Entities;
 use Carbon\Carbon;
 use DB;
 use Groupeat\Customers\Entities\Customer;
+use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
@@ -19,7 +20,7 @@ class GroupOrder extends Entity
      */
     private static $aroundDistanceInKms;
 
-    protected $dates = ['completed_at', 'ending_at', 'confirmed_at', 'prepared_at'];
+    protected $dates = ['closed_at', 'ending_at', 'confirmed_at', 'prepared_at'];
 
     public function getRules()
     {
@@ -53,10 +54,9 @@ class GroupOrder extends Entity
         $foodRushDurationInMinutes,
         $comment = null
     ) {
-        $time = new Carbon;
         $restaurant = $productFormats->getRestaurant();
         static::assertNotExistingFor($restaurant);
-        $groupOrder = new static();
+        $groupOrder = new static;
         $groupOrder->restaurant()->associate($restaurant);
         $groupOrder->setFoodRushDurationInMinutes($foodRushDurationInMinutes);
 
@@ -64,15 +64,11 @@ class GroupOrder extends Entity
     }
 
     /**
-     * @param Carbon $time Null for now
-     *
      * @return bool
      */
-    public function isJoinable(Carbon $time = null)
+    public function isJoinable()
     {
-        $time = $time ?: new Carbon;
-
-        return empty($this->completed_at) && $time->lt($this->ending_at);
+        return empty($this->closed_at);
     }
 
     public function productFormatsQuery()
@@ -136,17 +132,25 @@ class GroupOrder extends Entity
             $order->initiator = true;
         }
 
-        if ($nbProductFormats == $this->restaurant->deliveryCapacity) {
-            $this->completed_at = $this->freshTimestamp();
-        }
-
         $this->save();
         $order->groupOrder()->associate($this);
         $order->save();
         $order->deliveryAddress()->save($address);
         $productFormats->attachTo($order);
 
+        if ($nbProductFormats == $this->restaurant->deliveryCapacity) {
+            $this->close();
+        }
+
         return $order;
+    }
+
+    public function close()
+    {
+        $this->closed_at = $this->freshTimestamp();
+        $this->save();
+
+        event(new GroupOrderHasBeenClosed($this));
     }
 
     /**
@@ -194,11 +198,10 @@ class GroupOrder extends Entity
 
     public function scopeJoinable(Builder $query, Carbon $time = null)
     {
-        $time = $time ?: new Carbon();
+        $time = $time ?: $this->freshTimestamp();
         $model = $query->getModel();
 
-        $query->whereNull('completed_at')
-            ->where($model->getTableField('ending_at'), '>', $time);
+        $query->whereNull($model->getTableField('closed_at'));
     }
 
     /**
@@ -229,11 +232,15 @@ class GroupOrder extends Entity
      */
     public function scopeUnconfirmed(Builder $query, $sinceMinutes = null)
     {
-        $query->whereNotNull($this->getTableField('completed_at'))
+        $query->whereNotNull($this->getTableField('closed_at'))
             ->whereNull($this->getTableField('confirmed_at'));
 
         if (is_int($sinceMinutes)) {
-            $query->where($this->getTableField('completed_at'), '<', Carbon::now()->subMinutes($sinceMinutes));
+            $query->where(
+                $this->getTableField('closed_at'),
+                '<',
+                $this->freshTimestamp()->subMinutes($sinceMinutes)
+            );
         }
     }
 
@@ -249,10 +256,10 @@ class GroupOrder extends Entity
 
     private static function assertNotExistingFor(Restaurant $restaurant)
     {
-        $now = new Carbon();
-        $model = new static();
+        $model = new static;
+        $now = $model->freshTimestamp();
 
-        $alreadyExisting = $model->whereNull($model->getTableField('completed_at'))
+        $alreadyExisting = $model->whereNull($model->getTableField('closed_at'))
             ->where($model->getTableField('created_at'), '<=', $now)
             ->where($model->getTableField('ending_at'), '>=', $now)
             ->where($model->getTableField('restaurant_id'), $restaurant->id)

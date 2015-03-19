@@ -1,8 +1,84 @@
 <?php
 
+use Carbon\Carbon;
+
 class GroupOrdersCest
 {
     public function testThatACustomerReceiveAMailWhenAGroupOrderIsConfirmed(ApiTester $I)
+    {
+        list($token, $orderId, $restaurantCapacity, $orderDetails) = $this->createGroupOrder($I);
+
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
+        $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
+        $remainingCapacity = $restaurantCapacity - 1;
+        $I->assertEquals($remainingCapacity, $I->grabDataFromResponse('groupOrder.data.remainingCapacity'));
+
+        for ($i = $remainingCapacity; $i > 1; $i--) {
+            $orderDetails['groupOrderId'] = $groupOrderId;
+            $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+            $I->seeResponseCodeIs(201);
+            $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
+            $I->assertEquals($i - 1, $I->grabDataFromResponse('remainingCapacity'));
+            $I->assertTrue($I->grabDataFromResponse('joinable'));
+        }
+
+        $orderDetails['groupOrderId'] = $groupOrderId;
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeResponseCodeIs(201);
+        $mail = $I->grabMailById('restaurants.groupOrderHasBeenClosed');
+
+        list($temp, $restaurantToken) = explode(
+            'token=',
+            $I->grabHrefInLinkByIdInMail($mail, 'confirm-group-order-link')
+        );
+
+        $confirmUrl = "groupOrders/$groupOrderId/confirm";
+
+        $I->sendApiGetWithToken($restaurantToken, "groupOrders/$groupOrderId");
+        $I->assertEquals(0, $I->grabDataFromResponse('remainingCapacity'));
+        $I->assertFalse($I->grabDataFromResponse('joinable'));
+
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->subMinute(),
+        ]);
+        $I->seeErrorResponse(422, 'cannotBePreparedBeforeBeingClosed');
+
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->addHours(2),
+        ]);
+        $I->seeErrorResponse(422, 'preparationTimeTooLong');
+
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
+        ]);
+        $I->seeResponseCodeIs(200);
+
+        $I->assertEquals('customers.orderHasBeenConfirmed', $I->grabFirstMailId());
+
+        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
+            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
+        ]);
+        $I->seeErrorResponse(422, 'alreadyConfirmed');
+    }
+
+    public function testThatAGroupOrderClosesAutomaticallyWhenFoodrushIsOver(ApiTester $I)
+    {
+        list($token, $orderId) = $this->createGroupOrder($I);
+
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
+
+        $I->runArtisan('group-orders:close');
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
+
+        $I->runArtisan('group-orders:close', ['--minutes' => 31]);
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $I->assertFalse($I->grabDataFromResponse('groupOrder.data.joinable'));
+    }
+
+    private function createGroupOrder(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
 
@@ -26,57 +102,7 @@ class GroupOrdersCest
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $orderId = $I->grabDataFromResponse('id');
-        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
-        $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
-        $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
-        $remainingCapacity = $restaurantCapacity - 1;
-        $I->assertEquals($remainingCapacity, $I->grabDataFromResponse('groupOrder.data.remainingCapacity'));
 
-        for ($i = $remainingCapacity; $i > 1; $i--) {
-            $orderDetails['groupOrderId'] = $groupOrderId;
-            $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-            $I->seeResponseCodeIs(201);
-            $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
-            $I->assertEquals($i - 1, $I->grabDataFromResponse('remainingCapacity'));
-            $I->assertTrue($I->grabDataFromResponse('joinable'));
-        }
-
-        $orderDetails['groupOrderId'] = $groupOrderId;
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeResponseCodeIs(201);
-        $I->assertEquals('restaurants.groupOrderHasEnded', $I->grabLastMailId());
-
-        list($temp, $restaurantToken) = explode(
-            'token=',
-            $I->grabHrefInLinkByIdInLastMail('confirm-group-order-link')
-        );
-
-        $confirmUrl = "groupOrders/$groupOrderId/confirm";
-
-        $I->sendApiGetWithToken($restaurantToken, "groupOrders/$groupOrderId");
-        $I->assertEquals(0, $I->grabDataFromResponse('remainingCapacity'));
-        $I->assertFalse($I->grabDataFromResponse('joinable'));
-
-        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->subMinute(),
-        ]);
-        $I->seeErrorResponse(422, 'cannotBePreparedBeforeBeingCompleted');
-
-        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addHours(2),
-        ]);
-        $I->seeErrorResponse(422, 'preparationTimeTooLong');
-
-        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
-        ]);
-        $I->seeResponseCodeIs(200);
-
-        $I->assertEquals('customers.orderHasBeenConfirmed', $I->grabLastMailId());
-
-        $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
-        ]);
-        $I->seeErrorResponse(422, 'alreadyConfirmed');
+        return [$token, $orderId, $restaurantCapacity, $orderDetails];
     }
 }
