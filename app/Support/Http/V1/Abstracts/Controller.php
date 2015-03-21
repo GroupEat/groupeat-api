@@ -127,6 +127,11 @@ abstract class Controller extends IlluminateController
         return response()->json($data, $this->statusCode);
     }
 
+    protected function noContentResponse()
+    {
+        return response('', $this->statusCode);
+    }
+
     /**
      * @param $item
      *
@@ -136,7 +141,7 @@ abstract class Controller extends IlluminateController
     {
         $className = $this->getTransformerClassNameFor($item);
 
-        return new $className();
+        return new $className;
     }
 
     /**

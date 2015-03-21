@@ -2,7 +2,7 @@
 namespace Groupeat\Notifications\Services;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Notifications\Entities\Device;
+use Groupeat\Devices\Entities\Device;
 use Groupeat\Notifications\Values\GcmApiKey;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Inspiring;
@@ -22,11 +22,11 @@ class SendGcmNotification
 
     public function call(Customer $customer)
     {
-        $registrationId = Device::where('customer_id', $customer->id)->first()->device_id;
+        $notificationToken = Device::where('customer_id', $customer->id)->first()->notificationToken;
 
         return $this->client->post(static::URL, [
             'json' => [
-                'registration_ids' => [$registrationId],
+                'registration_ids' => [$notificationToken],
                 'data' => [
                     'message' => Inspiring::quote(),
                 ],

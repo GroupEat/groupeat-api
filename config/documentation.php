@@ -20,6 +20,8 @@ return [
         'Customers',
         'Restaurants',
         'Orders',
+        'Devices',
+        'Notifications',
     ],
 
 ];

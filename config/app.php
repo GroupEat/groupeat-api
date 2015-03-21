@@ -140,6 +140,7 @@ return [
         \Groupeat\Admin\PackageProvider::class,
         \Groupeat\Customers\PackageProvider::class,
         \Groupeat\Deploy\PackageProvider::class,
+        \Groupeat\Devices\PackageProvider::class,
         \Groupeat\Documentation\PackageProvider::class,
         \Groupeat\Notifications\PackageProvider::class,
         \Groupeat\Orders\PackageProvider::class,
