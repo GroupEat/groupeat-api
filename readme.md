@@ -8,7 +8,7 @@
 
 # Updating
 
-`git pull; `composer install; php artisan db:install -s`
+`git pull; composer install; php artisan db:install -s`
 
 # Linting
 
