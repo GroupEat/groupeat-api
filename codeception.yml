@@ -8,11 +8,6 @@ coverage:
     enabled: true
     include:
         - app/*
-        - workbench/*
-    exclude:
-        - vendor/*
-        - app/config/*
-        - app/storage/*
 settings:
     bootstrap: ./_bootstrap.php
     suite_class: Groupeat\Tests\Support\TestCase
