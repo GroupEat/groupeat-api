@@ -171,9 +171,18 @@ Changing or reseting a password will make the current authentication token obsol
             "errorKey": "passwordsMustBeDifferent",
             "message": "The new password cannot be the same as the old one."
         }
+
++ Response 401
+
+        {
+            "message": "Cannot authenticate with old password.",
+            "errors": {
+                "oldPassword": {
+                    "invalid": []
+                }
+            }
+        }
         
-
-
 + Response 404
 
         {

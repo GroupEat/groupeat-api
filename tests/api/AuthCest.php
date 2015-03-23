@@ -181,7 +181,7 @@ class AuthCest
             'newPassword' => $newPassword,
         ]);
         $I->seeResponseCodeIs(401);
-        $I->seeErrorsContain(['password' => ['invalid' => []]]);
+        $I->seeErrorsContain(['oldPassword' => ['invalid' => []]]);
 
         $I->sendApiPut('auth/password', [
             'email' => $email,

@@ -5,6 +5,7 @@ use Groupeat\Auth\Commands\ChangePassword;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Support\Exceptions\BadRequest;
+use Groupeat\Support\Exceptions\Unauthorized;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -32,7 +33,10 @@ class ChangePasswordHandler
         $token = $this->jwtAuth->attempt(compact('email', 'password'));
 
         if ($token === false) {
-            UserCredentials::throwBadPasswordException();
+            throw new Unauthorized(
+                ['oldPassword' => ['invalid' => []]],
+                "Cannot authenticate with old password."
+            );
         }
 
         $userCredentials->resetPassword($newPassword, $this->generateToken->call($userCredentials));
