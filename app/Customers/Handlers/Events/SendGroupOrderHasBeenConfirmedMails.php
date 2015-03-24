@@ -4,9 +4,10 @@ namespace Groupeat\Customers\Handlers\Events;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
+use Groupeat\Support\Handlers\Events\Abstracts\QueuedHandler;
 use Groupeat\Support\Services\SendMail;
 
-class SendGroupOrderHasBeenConfirmedMails
+class SendGroupOrderHasBeenConfirmedMails extends QueuedHandler
 {
     private $mailer;
 
@@ -19,13 +20,11 @@ class SendGroupOrderHasBeenConfirmedMails
     {
         $groupOrder = $groupOrderHasBeenConfirmed->getGroupOrder();
 
-        $groupOrder->load(
-            [
+        $groupOrder->load([
             'orders.productFormats.product.type',
             'orders.customer.credentials',
             'orders.deliveryAddress',
-            ]
-        );
+        ]);
 
         foreach ($groupOrder->orders as $order) {
             return $this->sendFor($groupOrder, $order);

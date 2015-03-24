@@ -47,7 +47,7 @@ class SendMail
             $text = $viewFactory->make("$viewName-text", $data)->render();
             $html = $viewFactory->make("$viewName-html", $data)->render();
 
-            $this->mailer->queue(
+            $this->mailer->send(
                 ['raw' => $text],
                 [],
                 function (Message $message) use ($email, $subject, $html) {
@@ -56,7 +56,7 @@ class SendMail
                 }
             );
 
-            $this->logger->info("The email [$viewName] has been queued for {$user->user->toShortString()}.");
+            $this->logger->info("The email [$viewName] has been sent for {$user->user->toShortString()}.");
         }, $user->locale);
     }
 }

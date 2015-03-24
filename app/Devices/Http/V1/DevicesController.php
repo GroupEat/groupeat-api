@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Devices\Http\V1;
 
+use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Commands\AttachDevice;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Devices\Entities\OperatingSystem;
@@ -14,10 +15,12 @@ class DevicesController extends Controller
         return $this->collectionResponse(OperatingSystem::all(), new OperatingSystemTransformer);
     }
 
-    public function attach()
+    public function attach(Customer $customer)
     {
+        $this->auth->assertSame($customer);
+
         $this->dispatch(new AttachDevice(
-            $this->auth->customer(),
+            $customer,
             $this->json('hardwareId'),
             $this->json('notificationToken'),
             OperatingSystem::findOrFail($this->json('operatingSystemId')),

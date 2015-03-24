@@ -1,12 +1,21 @@
 <?php
 namespace Groupeat\Devices\Handlers\Commands;
 
+use Groupeat\Devices\Events\DeviceHasBeenAttached;
 use Groupeat\Devices\Commands\AttachDevice;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AttachDeviceHandler
 {
+    private $events;
+
+    public function __construct(Dispatcher $events)
+    {
+        $this->events = $events;
+    }
+
     public function handle(AttachDevice $command)
     {
         $hardwareId = $command->getHardwareId();
@@ -24,6 +33,7 @@ class AttachDeviceHandler
         $device->longitude = $command->getLongitude();
 
         $device->save();
+        $this->events->fire(new DeviceHasBeenAttached($device));
     }
 
     private function assertNotAlreadyExisting($hardwareId)

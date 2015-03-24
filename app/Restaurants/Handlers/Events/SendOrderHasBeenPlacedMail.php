@@ -4,9 +4,10 @@ namespace Groupeat\Restaurants\Handlers\Events;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
+use Groupeat\Support\Handlers\Events\Abstracts\QueuedHandler;
 use Groupeat\Support\Services\SendMail;
 
-class SendOrderHasBeenPlacedMail
+class SendOrderHasBeenPlacedMail extends QueuedHandler
 {
     private $mailer;
 

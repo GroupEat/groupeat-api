@@ -35,7 +35,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
         $this->registerLocalPackages();
         $this->registerPapertrailLogger();
-        $this->replaceSwiftMailer();
+        $this->replaceSwiftMailer(); // TODO: check if it can be deferred
     }
 
     protected function bootPackage()

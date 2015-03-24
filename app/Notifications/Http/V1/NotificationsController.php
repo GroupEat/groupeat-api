@@ -9,6 +9,8 @@ class NotificationsController extends Controller
 {
     public function send(SendGcmNotification $sendGcmNotification)
     {
-        return $sendGcmNotification->call($this->auth->customer());
+        $response = $sendGcmNotification->call($this->auth->customer());
+
+        return response($response->getBody(), $response->getStatusCode());
     }
 }
