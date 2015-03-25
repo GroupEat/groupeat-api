@@ -12,7 +12,7 @@ class Product extends Entity
     public function getRules()
     {
         return [
-            'restaurant_id' => 'required|integer',
+            'restaurant_id' => 'required',
             'type_id' => 'required',
             'name' => 'required|max:40',
             'description' => 'required|max:255',

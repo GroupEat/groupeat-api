@@ -13,7 +13,7 @@ class ProductFormat extends Entity
     public function getRules()
     {
         return [
-            'product_id' => 'required|integer',
+            'product_id' => 'required',
             'name' => 'required',
             'price' => 'required|integer',
         ];

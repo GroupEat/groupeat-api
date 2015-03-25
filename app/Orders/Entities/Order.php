@@ -16,8 +16,8 @@ class Order extends Entity
     public function getRules()
     {
         return [
-            'customer_id' => 'required|integer',
-            'group_order_id' => 'required|integer',
+            'customer_id' => 'required',
+            'group_order_id' => 'required',
             'rawPrice' => 'required|integer',
         ];
     }

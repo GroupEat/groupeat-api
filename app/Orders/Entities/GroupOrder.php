@@ -25,7 +25,7 @@ class GroupOrder extends Entity
     public function getRules()
     {
         return [
-            'restaurant_id' => 'required|integer',
+            'restaurant_id' => 'required',
             'discountRate' => 'required|integer',
             'ending_at' => 'required',
         ];

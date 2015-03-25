@@ -12,7 +12,7 @@ class Device extends Entity
             'customer_id' => 'required',
             'hardwareId' => 'required',
             'notificationToken' => 'required',
-            'operating_system_id' => 'required|numeric',
+            'operating_system_id' => 'required',
             'operatingSystemVersion' => 'required',
             'model' => 'required',
             'latitude' => 'required|numeric',
