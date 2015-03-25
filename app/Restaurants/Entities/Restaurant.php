@@ -16,7 +16,6 @@ class Restaurant extends Entity implements User
 {
     use HasCredentials, SoftDeletes;
 
-    private static $discountRates;
     private static $aroundDistanceInKms;
     private static $openingDurationInMinutes;
 
@@ -36,7 +35,6 @@ class Restaurant extends Entity implements User
     {
         parent::boot();
 
-        static::$discountRates = config('restaurants.discountRates');
         static::$aroundDistanceInKms = config('restaurants.around_distance_in_kilometers');
         static::$openingDurationInMinutes = config('restaurants.opening_duration_in_minutes');
     }
@@ -152,19 +150,15 @@ class Restaurant extends Entity implements User
         foreach ($this->discountPrices as $index => $amount) {
             if ($rawPrice->getAmount() <= $amount) {
                 if ($index == 0) {
-                    return new DiscountRate(static::$discountRates[$index]);
                 } else {
-                    $slope = ((float) (static::$discountRates[$index] - static::$discountRates[$index - 1]))
                         / ($amount - $this->discountPrices[$index - 1]);
 
-                    $offset = static::$discountRates[$index] - $slope * $amount;
 
                     return new DiscountRate((int) round($slope * $rawPrice->getAmount() + $offset));
                 }
             }
         }
 
-        return new DiscountRate((int) end(static::$discountRates));
     }
 
     protected function getDiscountPricesAttribute()
@@ -184,6 +178,5 @@ class Restaurant extends Entity implements User
 
     protected function getDiscountPolicyAttribute()
     {
-        return array_combine($this->discountPrices, static::$discountRates);
     }
 }
