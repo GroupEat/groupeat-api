@@ -12,7 +12,6 @@ class RestaurantTransformer extends TransformerAbstract
     {
         return [
             'id' => $restaurant->id,
-            'opened' => $restaurant->isOpened(),
             'name' => $restaurant->name,
             'phoneNumber' => $restaurant->phoneNumber,
             'minimumOrderPrice' => $restaurant->minimumOrderPrice->getAmount(),

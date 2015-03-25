@@ -1,17 +1,19 @@
 <?php
 namespace Groupeat\Restaurants\Http\V1;
 
+use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\FoodType;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use League\Period\Period;
 
 class RestaurantsController extends Controller
 {
     public function index()
     {
-        $query = Restaurant::with('closingWindows', 'openingWindows')->orderBy('name', 'asc');
+        $query = Restaurant::orderBy('name', 'asc');
 
         if ((bool) $this->get('opened')) {
             $query->opened();
@@ -58,7 +60,12 @@ class RestaurantsController extends Controller
 
     public function show(Restaurant $restaurant)
     {
-        return $this->itemResponse($restaurant);
+        $start = Carbon::now()->hour(23)->minute(45);
+        $end = $start->copy()->addMinutes(45);
+
+        return (string) $restaurant->isOpened(new Period($start, $end));
+
+        //return $this->itemResponse($restaurant);
     }
 
     public function showAddress(Restaurant $restaurant)

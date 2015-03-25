@@ -17,6 +17,7 @@ use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
+use League\Period\Period;
 
 class CreateGroupOrderHandler extends GroupOrderValidation
 {
@@ -83,10 +84,9 @@ class CreateGroupOrderHandler extends GroupOrderValidation
 
     private function assertThatTheRestaurantWontCloseTooSoon(Restaurant $restaurant, $foodRushInMinutes)
     {
-        $now = Carbon::now();
-        $minimumMinutes = $foodRushInMinutes + $this->maximumPreparationTimeInMinutes;
-        $to = $now->copy()->addMinutes($minimumMinutes);
+        $start = Carbon::now()->addMinutes($foodRushInMinutes);
+        $end = $start->copy()->addMinutes($this->maximumPreparationTimeInMinutes);
 
-        $restaurant->assertOpened($now, $to);
+        $restaurant->assertOpened(new Period($start, $end));
     }
 }

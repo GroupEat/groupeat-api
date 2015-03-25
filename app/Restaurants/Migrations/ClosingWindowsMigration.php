@@ -10,7 +10,7 @@ class ClosingWindowsMigration extends WindowsMigration
 
     protected function addFieldsTo(Blueprint $table)
     {
-        $table->timestamp('from')->index();
-        $table->timestamp('to')->index();
+        $table->timestamp('start')->index();
+        $table->timestamp('end')->index();
     }
 }

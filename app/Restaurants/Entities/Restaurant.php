@@ -1,23 +1,22 @@
 <?php
 namespace Groupeat\Restaurants\Entities;
 
-use Carbon\Carbon;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
+use Groupeat\Restaurants\Services\ApplyAroundScope;
+use Groupeat\Restaurants\Services\ApplyOpenedScope;
 use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use League\Period\Period;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
 
 class Restaurant extends Entity implements User
 {
     use HasCredentials, SoftDeletes;
-
-    private static $aroundDistanceInKms;
-    private static $openingDurationInMinutes;
 
     protected $fillable = ['name', 'phoneNumber'];
 
@@ -34,9 +33,6 @@ class Restaurant extends Entity implements User
     protected static function boot()
     {
         parent::boot();
-
-        static::$aroundDistanceInKms = config('restaurants.around_distance_in_kilometers');
-        static::$openingDurationInMinutes = config('restaurants.opening_duration_in_minutes');
     }
 
     public function categories()
@@ -66,78 +62,27 @@ class Restaurant extends Entity implements User
 
     public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
     {
-        $distanceInKms = $distanceInKms ?: static::$aroundDistanceInKms;
-
-        $query->whereHas('address', function (Builder $subQuery) use ($latitude, $longitude, $distanceInKms) {
-            $subQuery->aroundInKilometers($latitude, $longitude, $distanceInKms);
-        });
+        app(ApplyAroundScope::class)->call($query, $latitude, $longitude, $distanceInKms);
     }
 
-    /**
-     * @param Carbon $from
-     * @param Carbon $to
-     *
-     * @return bool
-     */
-    public function isOpened(Carbon $from = null, Carbon $to = null)
+    public function isOpened(Period $period = null)
     {
-        $from = $from ?: $this->freshTimestamp();
-        $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
-        assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
-
-        $hasClosingWindow = ! $this->closingWindows->filter(
-            function ($closingWindow) use ($from, $to) {
-                return $closingWindow->from <= $to && $closingWindow->to >= $from;
-            }
-        )->isEmpty();
-
-        if ($hasClosingWindow) {
-            return false;
-        }
-
-        return ! $this->openingWindows->filter(
-            function ($openingWindow) use ($from, $to) {
-                return $openingWindow->dayOfWeek == $from->dayOfWeek
-                && $openingWindow->from <= $from
-                && $openingWindow->to >= $to;
-            }
-        )->isEmpty();
+        return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
 
-    public function assertOpened(Carbon $from = null, Carbon $to = null)
+    public function assertOpened(Period $period = null)
     {
-        $from = $from ?: $this->freshTimestamp();
-        $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
-        assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
-
-        if (!$this->isOpened($from, $to)) {
+        if (!$this->isOpened($period)) {
             throw new UnprocessableEntity(
                 'restaurantClosed',
-                "The {$this->toShortString()} is not opened from $from to $to."
+                "The {$this->toShortString()} do not stay opened during $period."
             );
         }
     }
 
-    public function scopeOpened(Builder $query, Carbon $from = null, Carbon $to = null)
+    public function scopeOpened(Builder $query, Period $period = null)
     {
-        $from = $from ?: $this->freshTimestamp();
-        $to = $to ?: $from->copy()->addMinutes(static::$openingDurationInMinutes);
-        assertSameDay($from, $to); // TODO support restaurants that are still opened at midnight
-
-        $query->whereHas('openingWindows', function (Builder $subQuery) use ($from, $to) {
-            $openingWindow = $subQuery->getModel();
-
-            $subQuery->where($openingWindow->getTableField('dayOfWeek'), $from->dayOfWeek)
-                ->where($openingWindow->getTableField('from'), '<=', $from->toTimeString())
-                ->where($openingWindow->getTableField('to'), '>=', $to->toTimeString());
-        });
-
-        $query->whereDoesntHave('closingWindows', function (Builder $subQuery) use ($from, $to) {
-            $closingWindow = $subQuery->getModel();
-
-            $subQuery->where($closingWindow->getTableField('from'), '<=', $to)
-                ->where($closingWindow->getTableField('to'), '>=', $from);
-        });
+        app(ApplyOpenedScope::class)->call($query, $period);
     }
 
     /**
@@ -147,18 +92,24 @@ class Restaurant extends Entity implements User
      */
     public function getDiscountRateFor(Money $rawPrice)
     {
+        $percentages = DiscountRate::PERCENTAGES;
+
         foreach ($this->discountPrices as $index => $amount) {
             if ($rawPrice->getAmount() <= $amount) {
                 if ($index == 0) {
+                    return new DiscountRate($percentages[$index]);
                 } else {
+                    $slope = ((float) ($percentages[$index] - $percentages[$index - 1]))
                         / ($amount - $this->discountPrices[$index - 1]);
 
+                    $offset = $percentages[$index] - $slope * $amount;
 
                     return new DiscountRate((int) round($slope * $rawPrice->getAmount() + $offset));
                 }
             }
         }
 
+        return new DiscountRate(end($percentages));
     }
 
     protected function getDiscountPricesAttribute()
@@ -178,5 +129,6 @@ class Restaurant extends Entity implements User
 
     protected function getDiscountPolicyAttribute()
     {
+        return array_combine($this->discountPrices, DiscountRate::PERCENTAGES);
     }
 }

@@ -18,8 +18,8 @@ class OpeningWindowsSeeder extends Seeder
         OpeningWindow::create([
             'restaurant_id' => $id,
             'dayOfWeek' => 0,
-            'from' => '08:30:00',
-            'to' => '13:30:00',
+            'start' => '08:30:00',
+            'end' => '13:30:00',
         ]);
 
         // Always opened
@@ -27,8 +27,8 @@ class OpeningWindowsSeeder extends Seeder
             OpeningWindow::create([
                 'restaurant_id' => $id + 1,
                 'dayOfWeek' => $dayOfWeek,
-                'from' => '00:00:00',
-                'to' => '23:59:59',
+                'start' => '00:00:00',
+                'end' => '23:59:59',
             ]);
         }
     }
@@ -39,8 +39,8 @@ class OpeningWindowsSeeder extends Seeder
             OpeningWindow::create([
                 'restaurant_id' => $id,
                 'dayOfWeek' => $dayOfWeek,
-                'from' => '08:30:00',
-                'to' => '22:30:00',
+                'start' => '08:30:00',
+                'end' => '22:30:00',
             ]);
         }
     }

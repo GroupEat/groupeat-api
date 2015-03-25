@@ -62,7 +62,7 @@ class OrdersCest
         list($token) = $I->amAnActivatedCustomer();
         $products = $this->getProducts($I, $token, ['around' => true, 'opened' => false], function ($restaurants) {
             foreach ($restaurants as $restaurant) {
-                if (!$restaurant['opened']) {
+                if ($restaurant['name'] == 'Toujours fermé') {
                     return $restaurant['id'];
                 }
             }
@@ -110,7 +110,7 @@ class OrdersCest
         $I->sendApiGetWithToken($token, 'restaurants');
 
         foreach ($I->grabDataFromResponse() as $restaurant) {
-            if (!$restaurant['opened']) {
+            if ($restaurant['name'] == 'Toujours fermé') {
                 $wrongRestaurantId = $restaurant['id'];
                 break;
             }

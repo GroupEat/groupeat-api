@@ -32,7 +32,6 @@
 
         {
             "id": "1",
-            "opened": false,
             "name": "Pizza di Genova",
             "phoneNumber": "0689731323",
             "minimumOrderPrice": 1088,

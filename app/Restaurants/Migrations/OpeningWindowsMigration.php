@@ -11,7 +11,7 @@ class OpeningWindowsMigration extends WindowsMigration
     protected function addFieldsTo(Blueprint $table)
     {
         $table->tinyInteger('dayOfWeek')->index();
-        $table->time('from')->index();
-        $table->time('to')->index();
+        $table->time('start')->index();
+        $table->time('end')->index();
     }
 }
