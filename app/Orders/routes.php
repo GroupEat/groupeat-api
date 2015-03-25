@@ -3,9 +3,6 @@
 use Groupeat\Orders\Http\V1\GroupOrdersController;
 use Groupeat\Orders\Http\V1\OrdersController;
 
-Route::model('order', \Groupeat\Orders\Entities\Order::class);
-Route::model('groupOrder', \Groupeat\Orders\Entities\GroupOrder::class);
-
 Route::group(['prefix' => 'api'], function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'groupOrders'], function () {

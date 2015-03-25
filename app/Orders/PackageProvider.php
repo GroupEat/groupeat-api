@@ -1,5 +1,7 @@
 <?php namespace Groupeat\Orders;
 
+use Groupeat\Orders\Entities\GroupOrder;
+use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Values\AroundDistanceInKms;
 use Groupeat\Orders\Values\DeliveryAddressConstraints;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
@@ -30,5 +32,8 @@ class PackageProvider extends WorkbenchPackageProvider
             AroundDistanceInKms::class,
             'orders.around_distance_in_kilometers'
         );
+
+        $this->app['router']->model('order', Order::class);
+        $this->app['router']->model('groupOrder', GroupOrder::class);
     }
 }

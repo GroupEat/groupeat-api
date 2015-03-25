@@ -1,9 +1,6 @@
 <?php
 
-use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Http\V1\AuthController;
-
-Route::model('user', UserCredentials::class);
 
 Route::group(['prefix' => 'api'], function () {
     Route::group(['prefix' => 'auth'], function () {

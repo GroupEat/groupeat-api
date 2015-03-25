@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Auth;
 
+use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Auth\Handlers\Events\SendActivationLink;
 use Groupeat\Auth\Values\TokenDurationInMinutes;
@@ -20,6 +21,8 @@ class PackageProvider extends WorkbenchPackageProvider
         $this->app->singleton(Auth::class, function ($app) {
             return new Auth($app['tymon.jwt.auth'], $app['auth.driver']);
         });
+
+        $this->app['router']->model('user', UserCredentials::class);
     }
 
     protected function bootPackage()

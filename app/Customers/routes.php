@@ -1,10 +1,7 @@
 <?php
 
-use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Http\V1\CustomersController;
 use Groupeat\Customers\Http\V1\AddressesController;
-
-Route::model('customer', Customer::class);
 
 Route::group(['prefix' => 'api'], function () {
     Route::group(['middleware' => 'auth'], function () {

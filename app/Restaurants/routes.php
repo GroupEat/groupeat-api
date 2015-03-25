@@ -1,11 +1,6 @@
 <?php
 
-use Groupeat\Restaurants\Entities\Restaurant;
-use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Http\V1\RestaurantsController;
-
-Route::model('restaurant', Restaurant::class);
-Route::model('product', Product::class);
 
 Route::group(['prefix' => 'api', 'middleware' => 'auth'], function () {
     Route::get('restaurantCategories', RestaurantsController::class.'@categoriesIndex');

@@ -6,6 +6,7 @@ use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
+use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Handlers\Events\SendGroupOrderHasBeenClosedMail;
 use Groupeat\Restaurants\Handlers\Events\SendOrderHasBeenPlacedMail;
@@ -29,6 +30,9 @@ class PackageProvider extends WorkbenchPackageProvider
             ConfirmationTokenDurationInMinutes::class,
             2 * $this->app['config']->get('orders.maximum_preparation_time_in_minutes')
         );
+
+        $this->app['router']->model('restaurant', Restaurant::class);
+        $this->app['router']->model('product', Product::class);
     }
 
     protected function bootPackage()

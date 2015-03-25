@@ -145,6 +145,7 @@ return [
         \Groupeat\Notifications\PackageProvider::class,
         \Groupeat\Orders\PackageProvider::class,
         \Groupeat\Restaurants\PackageProvider::class,
+        \Groupeat\Settings\PackageProvider::class,
 
     ],
 

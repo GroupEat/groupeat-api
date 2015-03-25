@@ -16,6 +16,8 @@ class PackageProvider extends WorkbenchPackageProvider
             AddressConstraints::class,
             'customers.address_constraints'
         );
+
+        $this->app['router']->model('customer', Customer::class);
     }
 
     protected function bootPackage()
