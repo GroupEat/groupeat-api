@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Support\Providers\Abstracts;
 
+use Closure;
 use File;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
@@ -55,6 +56,16 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $this->app->instance(
             $valueClass,
             new $valueClass($value)
+        );
+    }
+
+    protected function bindValueFromCallback($valueClass, Closure $callback)
+    {
+        $this->app->singleton(
+            $valueClass,
+            function ($app) use ($valueClass, $callback) {
+                return new $valueClass($callback($app));
+            }
         );
     }
 
