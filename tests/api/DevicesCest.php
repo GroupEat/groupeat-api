@@ -2,7 +2,7 @@
 
 class DevicesCest
 {
-    public function testThatTheOperatingSystemsCanBeLister(ApiTester $I)
+    public function testThatTheOperatingSystemsCanBeListed(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
 
