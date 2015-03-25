@@ -2,7 +2,9 @@
 .DS_Store
 Thumbs.db
 .env
+.phpstorm.meta.php
 _ide_helper.php
+_ide_helper_models.php
 .rocketeer/logs
 /vendor
 /bootstrap/compiled.php

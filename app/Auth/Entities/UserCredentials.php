@@ -18,6 +18,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
     public $timestamps = false;
 
+    protected $dates = ['activated_at'];
     protected $hidden = ['password', 'token', 'activationToken'];
 
     public function getRules()
