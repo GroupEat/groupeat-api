@@ -1,6 +1,6 @@
 # Group Devices
 
-## List operating systems [/devices/operatingSystems]
+## List platforms [/devices/platforms]
 
 ### GET
 
@@ -28,10 +28,10 @@
 + Request
 
         {
-            "hardwareId": "1sfqsf557845sfsf", // A unique ID representing the device
+            "UUID": "1sfqsf557845sfsf", // A unique ID representing the device
             "notificationToken": "353SQKFJ323fdsf", // The token to use with GCM, APNS or equivalent services
-            "operatingSystemId": "1", // See the route above
-            "operatingSystemVersion": "5.0.1 Lollipop",
+            "platform": "android", // Should be one of the labels returned by the route above.
+            "version": "5.0.1 Lollipop",
             "model": "Black 16 Go Nexus 5",
             "latitude": 48.7173,
             "longitude": 2.23935

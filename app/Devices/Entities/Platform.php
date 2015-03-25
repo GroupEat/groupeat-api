@@ -2,15 +2,18 @@
 namespace Groupeat\Devices\Entities;
 
 use Groupeat\Support\Entities\Abstracts\Entity;
+use Groupeat\Support\Entities\Traits\HasLabel;
 
-class OperatingSystem extends Entity
+class Platform extends Entity
 {
+    use HasLabel;
+
     public $timestamps = false;
 
     public function getRules()
     {
         return [
-            'label' => 'required|string',
+            'label' => $this->labelRules,
         ];
     }
 }

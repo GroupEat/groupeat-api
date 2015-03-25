@@ -18,16 +18,16 @@ class AttachDeviceHandler
 
     public function handle(AttachDevice $command)
     {
-        $hardwareId = $command->getHardwareId();
+        $hardwareId = $command->getUUID();
 
         $this->assertNotAlreadyExisting($hardwareId);
 
         $device = new Device;
         $device->customer()->associate($command->getCustomer());
-        $device->hardwareId = $command->getHardwareId();
+        $device->UUID = $command->getUUID();
         $device->notificationToken = $command->getNotificationToken();
-        $device->operatingSystem()->associate($command->getOperatingSystem());
-        $device->operatingSystemVersion = $command->getOperatingSystemVersion();
+        $device->platform()->associate($command->getPlatform());
+        $device->version = $command->getVersion();
         $device->model = $command->getModel();
         $device->latitude = $command->getLatitude();
         $device->longitude = $command->getLongitude();
@@ -36,12 +36,12 @@ class AttachDeviceHandler
         $this->events->fire(new DeviceHasBeenAttached($device));
     }
 
-    private function assertNotAlreadyExisting($hardwareId)
+    private function assertNotAlreadyExisting($UUID)
     {
-        if (Device::where('hardwareId', $hardwareId)->exists()) {
+        if (Device::where('UUID', $UUID)->exists()) {
             throw new UnprocessableEntity(
                 'deviceAlreadyExists',
-                "The device #$hardwareId already exists."
+                "The device #$UUID already exists."
             );
         }
     }

@@ -5,9 +5,9 @@ use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class OperatingSystemsMigration extends Migration
+class PlatformsMigration extends Migration
 {
-    const TABLE = 'operating_systems';
+    const TABLE = 'platforms';
 
     public function up()
     {

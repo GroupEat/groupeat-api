@@ -2,25 +2,18 @@
 namespace Groupeat\Restaurants\Entities;
 
 use Groupeat\Support\Entities\Abstracts\Entity;
+use Groupeat\Support\Entities\Traits\HasLabel;
 
 class FoodType extends Entity
 {
+    use HasLabel;
+
     public $timestamps = false;
 
     public function getRules()
     {
         return [
-            'label' => 'required|string',
+            'label' => $this->labelRules,
         ];
-    }
-
-    /**
-     * @param string $label
-     *
-     * @return FoodType or null if not found
-     */
-    public static function findByLabel($label)
-    {
-        return static::where('label', $label)->first();
     }
 }

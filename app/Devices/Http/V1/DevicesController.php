@@ -4,15 +4,15 @@ namespace Groupeat\Devices\Http\V1;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Commands\AttachDevice;
 use Groupeat\Devices\Entities\Device;
-use Groupeat\Devices\Entities\OperatingSystem;
+use Groupeat\Devices\Entities\Platform;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 class DevicesController extends Controller
 {
-    public function operatingSystemsIndex()
+    public function platformsIndex()
     {
-        return $this->collectionResponse(OperatingSystem::all(), new OperatingSystemTransformer);
+        return $this->collectionResponse(Platform::all(), new PlatformTransformer);
     }
 
     public function attach(Customer $customer)
@@ -21,10 +21,10 @@ class DevicesController extends Controller
 
         $this->dispatch(new AttachDevice(
             $customer,
-            $this->json('hardwareId'),
+            $this->json('UUID'),
             $this->json('notificationToken'),
-            OperatingSystem::findOrFail($this->json('operatingSystemId')),
-            $this->json('operatingSystemVersion'),
+            Platform::findByLabelOrFail($this->json('platform')),
+            $this->json('version'),
             $this->json('model'),
             (float) $this->json('latitude'),
             (float) $this->json('longitude')

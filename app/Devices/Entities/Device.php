@@ -10,10 +10,10 @@ class Device extends Entity
     {
         return [
             'customer_id' => 'required',
-            'hardwareId' => 'required',
+            'UUID' => 'required',
             'notificationToken' => 'required',
-            'operating_system_id' => 'required',
-            'operatingSystemVersion' => 'required',
+            'platform_id' => 'required',
+            'version' => 'required',
             'model' => 'required',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
@@ -25,8 +25,8 @@ class Device extends Entity
         return $this->belongsTo(Customer::class);
     }
 
-    public function operatingSystem()
+    public function platform()
     {
-        return $this->belongsTo(OperatingSystem::class);
+        return $this->belongsTo(Platform::class);
     }
 }

@@ -2,46 +2,46 @@
 namespace Groupeat\Devices\Commands;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Devices\Entities\OperatingSystem;
+use Groupeat\Devices\Entities\Platform;
 use Groupeat\Support\Commands\Abstracts\Command;
 
 class AttachDevice extends Command
 {
 
     private $customer;
-    private $hardwareId;
+    private $UUID;
     private $notificationToken;
-    private $operatingSystem;
-    private $operatingSystemVersion;
+    private $platform;
+    private $version;
     private $model;
     private $latitude;
     private $longitude;
 
     /**
      * @param Customer        $customer
-     * @param string          $hardwareId
+     * @param string          $UUID
      * @param string          $notificationToken
-     * @param OperatingSystem $operatingSystem
-     * @param string          $operatingSystemVersion
+     * @param Platform        $platform
+     * @param string          $version
      * @param string          $model
      * @param float           $latitude
      * @param float           $longitude
      */
     public function __construct(
         Customer $customer,
-        $hardwareId,
+        $UUID,
         $notificationToken,
-        OperatingSystem $operatingSystem,
-        $operatingSystemVersion,
+        Platform $platform,
+        $version,
         $model,
         $latitude,
         $longitude
     ) {
         $this->customer = $customer;
-        $this->hardwareId = $hardwareId;
+        $this->UUID = $UUID;
         $this->notificationToken = $notificationToken;
-        $this->operatingSystem = $operatingSystem;
-        $this->operatingSystemVersion = $operatingSystemVersion;
+        $this->platform = $platform;
+        $this->version = $version;
         $this->model = $model;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
@@ -52,9 +52,9 @@ class AttachDevice extends Command
         return $this->customer;
     }
 
-    public function getHardwareId()
+    public function getUUID()
     {
-        return $this->hardwareId;
+        return $this->UUID;
     }
 
     public function getNotificationToken()
@@ -62,14 +62,14 @@ class AttachDevice extends Command
         return $this->notificationToken;
     }
 
-    public function getOperatingSystem()
+    public function getPlatform()
     {
-        return $this->operatingSystem;
+        return $this->platform;
     }
 
-    public function getOperatingSystemVersion()
+    public function getVersion()
     {
-        return $this->operatingSystemVersion;
+        return $this->version;
     }
 
     public function getModel()

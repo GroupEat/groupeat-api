@@ -2,11 +2,11 @@
 
 class DevicesCest
 {
-    public function testThatTheOperatingSystemsCanBeListed(ApiTester $I)
+    public function testThatThePlatformsCanBeListed(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
 
-        $I->sendApiGetWithToken($token, 'devices/operatingSystems');
+        $I->sendApiGetWithToken($token, 'devices/platforms');
         $I->seeResponseCodeIs(200);
     }
 
@@ -14,29 +14,15 @@ class DevicesCest
     {
         list($token, $id) = $I->amAnActivatedCustomer();
 
-        $androidId = $this->getAndroidOsId($I, $token);
         $I->sendApiPostWithToken($token, "customers/$id/devices", [
-            'hardwareId' => 'hardwareId',
+            'UUID' => 'UUID',
             'notificationToken' => 'notificationToken',
-            'operatingSystemId' => $androidId,
-            'operatingSystemVersion' => '5.0.1 Lollipop',
+            'platform' => 'android',
+            'version' => '5.0.1 Lollipop',
             'model' => 'black 16Go Nexus 5',
             'latitude' => 48.7173,
             'longitude' => 2.23935,
         ]);
         $I->seeResponseCodeIs(201);
-    }
-
-    private function getAndroidOsId(ApiTester $I, $token)
-    {
-        $I->sendApiGetWithToken($token, 'devices/operatingSystems');
-
-        foreach ($I->grabDataFromResponse('') as $os) {
-            if ($os['label'] == 'android') {
-                return $os['id'];
-            }
-        }
-
-        $I->fail("Cannot find android OS id.");
     }
 }
