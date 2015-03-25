@@ -10,7 +10,7 @@ class FoodType extends Entity
     public function getRules()
     {
         return [
-            'label' => 'required',
+            'label' => 'required|string',
         ];
     }
 
