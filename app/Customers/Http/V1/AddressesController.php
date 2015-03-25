@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Customers\Http\V1;
 
-use Groupeat\Customers\Commands\ChangeAddress;
+use Groupeat\Customers\Commands\UpdateAddress;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Entities\PredefinedAddress;
 use Groupeat\Support\Exceptions\NotFound;
@@ -23,11 +23,11 @@ class AddressesController extends Controller
         return $this->itemResponse($customer->address);
     }
 
-    public function change(Customer $customer)
+    public function update(Customer $customer)
     {
         $this->auth->assertSame($customer);
 
-        $address = $this->dispatch(new ChangeAddress($customer, $this->json()->all()));
+        $address = $this->dispatch(new UpdateAddress($customer, $this->json()->all()));
 
         return $this->itemResponse($address);
     }

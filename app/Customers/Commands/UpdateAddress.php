@@ -4,7 +4,7 @@ namespace Groupeat\Customers\Commands;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Commands\Abstracts\Command;
 
-class ChangeAddress extends Command
+class UpdateAddress extends Command
 {
     private $customer;
     private $addressData;

@@ -22,7 +22,7 @@ Route::group(['prefix' => 'api'], function () {
 
                 Route::group(['prefix' => 'address'], function () {
                     Route::get('/', AddressesController::class.'@show');
-                    Route::put('/', AddressesController::class.'@change');
+                    Route::put('/', AddressesController::class.'@update');
                 });
             });
         });

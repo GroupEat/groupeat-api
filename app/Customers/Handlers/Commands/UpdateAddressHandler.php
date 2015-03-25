@@ -1,12 +1,12 @@
 <?php
 namespace Groupeat\Customers\Handlers\Commands;
 
-use Groupeat\Customers\Commands\ChangeAddress;
+use Groupeat\Customers\Commands\UpdateAddress;
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;
 
-class ChangeAddressHandler
+class UpdateAddressHandler
 {
     private $addressConstraints;
 
@@ -16,11 +16,11 @@ class ChangeAddressHandler
     }
 
     /**
-     * @param ChangeAddress $command
+     * @param UpdateAddress $command
      *
      * @return Address
      */
-    public function handle(ChangeAddress $command)
+    public function handle(UpdateAddress $command)
     {
         $attributes = $command->getAddressData();
         $customer = $command->getCustomer();
