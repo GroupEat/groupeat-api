@@ -13,7 +13,7 @@ class OperatingSystemsMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->string('label')->index();
+            $table->string('label')->unique();
         });
     }
 }
