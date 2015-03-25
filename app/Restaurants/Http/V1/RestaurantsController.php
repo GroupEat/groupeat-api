@@ -60,12 +60,7 @@ class RestaurantsController extends Controller
 
     public function show(Restaurant $restaurant)
     {
-        $start = Carbon::now()->hour(23)->minute(45);
-        $end = $start->copy()->addMinutes(45);
-
-        return (string) $restaurant->isOpened(new Period($start, $end));
-
-        //return $this->itemResponse($restaurant);
+        return $this->itemResponse($restaurant);
     }
 
     public function showAddress(Restaurant $restaurant)
