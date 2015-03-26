@@ -22,6 +22,7 @@ return [
         'Orders',
         'Devices',
         'Notifications',
+        'Settings',
     ],
 
 ];

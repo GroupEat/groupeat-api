@@ -15,7 +15,7 @@ class DevicesCest
         list($token, $id) = $I->amAnActivatedCustomer();
 
         $I->sendApiPostWithToken($token, "customers/$id/devices", [
-            'UUID' => 'UUID',
+            'UUID' => uniqid(),
             'notificationToken' => 'notificationToken',
             'platform' => 'android',
             'version' => '5.0.1 Lollipop',

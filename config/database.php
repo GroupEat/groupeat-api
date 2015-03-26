@@ -113,8 +113,10 @@ return [
         \Groupeat\Orders\Migrations\OrdersMigration::class,
         \Groupeat\Orders\Migrations\OrderProductFormatMigration::class,
         \Groupeat\Orders\Migrations\DeliveryAddressesMigration::class,
-        \Groupeat\Devices\Migrations\OperatingSystemsMigration::class,
+        \Groupeat\Devices\Migrations\PlatformsMigration::class,
         \Groupeat\Devices\Migrations\DevicesMigration::class,
+        \Groupeat\Settings\Migrations\SettingsMigration::class,
+        \Groupeat\Settings\Migrations\CustomerSettingMigration::class,
     ],
 
     /*
