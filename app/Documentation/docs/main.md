@@ -11,7 +11,7 @@ To make requests to the API, the desired version must be specified through the A
 Accept: application/vnd.groupeat.v1+json
 ```
 
-All of the paths below must be prefixed by {{ app.url }}/api to have the full and correct URL.
+All of the paths below must be prefixed by {{ app.url }} to have the full and correct URL.
 
 ### Attaching data to a request
 
