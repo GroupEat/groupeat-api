@@ -10,6 +10,6 @@ class Console extends Kernel
 
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('group-orders:close')->cron('* * * * *');
+        $schedule->command('group-orders:close')->cron('* * * * *')->withoutOverlapping();
     }
 }
