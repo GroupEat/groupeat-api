@@ -25,6 +25,4 @@ class CustomerHasUpdatedItsSettings extends Event
     {
         return $this->settingBag;
     }
-
-
 }
