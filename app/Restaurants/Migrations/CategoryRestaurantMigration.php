@@ -15,6 +15,9 @@ class CategoryRestaurantMigration extends Migration
             $table->increments('id');
             $table->integer('category_id')->index();
             $table->integer('restaurant_id')->index();
+
+            $table->foreign('category_id')->references('id')->on(CategoriesMigration::TABLE);
+            $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
         });
     }
 }
