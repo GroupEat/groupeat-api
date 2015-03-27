@@ -28,7 +28,7 @@ class GroupOrdersCest
         $I->seeResponseCodeIs(201);
         $mail = $I->grabMailById('restaurants.groupOrderHasBeenClosed');
 
-        list($temp, $restaurantToken) = explode(
+        list(, $restaurantToken) = explode(
             'token=',
             $I->grabHrefInLinkByIdInMail($mail, 'confirm-group-order-link')
         );

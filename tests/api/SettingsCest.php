@@ -40,7 +40,7 @@ class SettingsCest
 
     public function testThatACustomerCannotEditTheSettingOfSomeoneElse(ApiTester $I)
     {
-        list($temp, $strangerId) = $I->sendRegistrationRequest('stranger@ensta.fr');
+        list(, $strangerId) = $I->sendRegistrationRequest('stranger@ensta.fr');
         list($token, $id) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, "customers/$strangerId/settings");

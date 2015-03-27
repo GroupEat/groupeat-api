@@ -19,7 +19,7 @@ class Authenticate
         $authorizationHeader = $request->header('authorization');
 
         if (!empty($authorizationHeader)) {
-            list($temp, $token) = explode(' ', $authorizationHeader);
+            list(, $token) = explode(' ', $authorizationHeader);
             $this->auth->login($token);
         }
 

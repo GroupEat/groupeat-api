@@ -21,7 +21,7 @@ class AuthCest
         list($token, $id) = $this->sendRegistrationRequest($I);
         $activationLink = $I->grabHrefInLinkByIdInFirstMail('activation-link');
         $I->assertNotEmpty($activationLink);
-        list($temp, $activationToken) = explode("token=", $activationLink);
+        list(, $activationToken) = explode("token=", $activationLink);
 
         $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
         $I->assertFalse($I->grabDataFromResponse('activated'));
@@ -122,7 +122,7 @@ class AuthCest
         $I->seeResponseCodeIs(200);
         $link = $I->grabHrefInLinkByIdInFirstMail('password-reset-link');
         $I->assertNotEmpty($link);
-        list($temp, $resetToken) = explode('token=', $link);
+        list(, $resetToken) = explode('token=', $link);
 
         $newPassword = 'new_password';
 
