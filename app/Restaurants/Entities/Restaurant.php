@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Restaurants\Entities;
 
+use Carbon\Carbon;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Restaurants\Services\ApplyAroundScope;
@@ -73,9 +74,12 @@ class Restaurant extends Entity implements User
     public function assertOpened(Period $period = null)
     {
         if (!$this->isOpened($period)) {
+            $start = Carbon::instance($period->getStartDate());
+            $end = Carbon::instance($period->getEndDate());
+
             throw new UnprocessableEntity(
                 'restaurantClosed',
-                "The {$this->toShortString()} do not stay opened during $period."
+                "The {$this->toShortString()} do not stay opened from $start to $end."
             );
         }
     }
