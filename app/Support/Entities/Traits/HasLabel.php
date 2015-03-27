@@ -29,7 +29,7 @@ trait HasLabel
         if (is_null($entity)) {
             throw new NotFound(
                 'unexistingLabel',
-                "Cannot find $entity ".class_basename(static::class)." with label $label."
+                "Cannot find ".class_basename(static::class)." with label $label."
             );
         }
 

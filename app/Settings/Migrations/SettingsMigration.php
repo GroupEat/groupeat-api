@@ -13,7 +13,7 @@ class SettingsMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cast')->default('string');
+            $table->string('cast');
             $table->string('label')->unique();
             $table->string('default');
         });

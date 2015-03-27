@@ -21,6 +21,7 @@ class SettingsSeeder extends Seeder
         ]);
 
         Setting::create([
+            'cast' => 'string',
             'label' => 'noNotificationAfter',
             'default' => '22:00:00',
         ]);
