@@ -19,7 +19,8 @@ class ActivateUserHandler
             );
         }
 
-        $userCredentials = UserCredentials::where('activationToken', $token)->first();
+        $model = new UserCredentials;
+        $userCredentials = $model->where($model->getTableField('activationToken'), $token)->first();
 
         if (!$userCredentials) {
             throw new NotFound(

@@ -38,7 +38,9 @@ class AttachDeviceHandler
 
     private function assertNotAlreadyExisting($UUID)
     {
-        if (Device::where('UUID', $UUID)->exists()) {
+        $model = new Device;
+
+        if ($model->where($model->getTableField('UUID'), $UUID)->exists()) {
             throw new UnprocessableEntity(
                 'deviceAlreadyExists',
                 "The device #$UUID already exists."
