@@ -11,7 +11,7 @@ class DeliveryAddress extends AbstractAddress
     {
         $rules = parent::getRules();
 
-        $rules['order_id'] = 'required|integer';
+        $rules['orderId'] = 'required|integer';
 
         return $rules;
     }

@@ -12,6 +12,10 @@ use Validator;
 
 abstract class Entity extends Model implements PresentableInterface
 {
+    const CREATED_AT = 'createdAt';
+    const UPDATED_AT = 'updatedAt';
+    const DELETED_AT = 'deletedAt';
+
     /**
      * Can be set to true for easier seeding.
      *
@@ -186,6 +190,35 @@ abstract class Entity extends Model implements PresentableInterface
         }
 
         return new Presenter($this);
+    }
+
+    public function getForeignKey()
+    {
+        return lcfirst(class_basename($this).'Id');
+    }
+
+    public function belongsTo($related, $foreignKey = null, $otherKey = null, $relation = null)
+    {
+        if (is_null($relation)) {
+            list(, $caller) = debug_backtrace(false, 2);
+
+            $relation = $caller['function'];
+        }
+
+        if (is_null($foreignKey)) {
+            $foreignKey = lcfirst($relation).'Id';
+        }
+
+        return parent::belongsTo($related, $foreignKey, $otherKey, $relation);
+    }
+
+    protected function getMorphs($name, $type, $id)
+    {
+        $type = $type ?: $name.'Type';
+
+        $id = $id ?: $name.'Id';
+
+        return [$type, $id];
     }
 
     /**

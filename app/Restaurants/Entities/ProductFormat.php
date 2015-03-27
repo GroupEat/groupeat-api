@@ -8,12 +8,12 @@ class ProductFormat extends Entity
 {
     public $timestamps = false;
 
-    protected $fillable = ['product_id', 'name', 'price'];
+    protected $fillable = ['productId', 'name', 'price'];
 
     public function getRules()
     {
         return [
-            'product_id' => 'required',
+            'productId' => 'required',
             'name' => 'required',
             'price' => 'required|integer',
         ];

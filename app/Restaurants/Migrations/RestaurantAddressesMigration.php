@@ -10,9 +10,10 @@ class RestaurantAddressesMigration extends AddressesMigration
 
     protected function addFields(Blueprint $table)
     {
-        $table->unsignedInteger('restaurant_id')->unique();
-        $table->timestamps();
+        $table->unsignedInteger('restaurantId')->unique();
+        $table->timestamp('createdAt');
+        $table->timestamp('updatedAt');
 
-        $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
+        $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
     }
 }

@@ -16,7 +16,7 @@ class OpeningWindowsSeeder extends Seeder
         $this->addWindows($id);
 
         OpeningWindow::create([
-            'restaurant_id' => $id,
+            'restaurantId' => $id,
             'dayOfWeek' => 0,
             'start' => '08:30:00',
             'end' => '13:30:00',
@@ -25,7 +25,7 @@ class OpeningWindowsSeeder extends Seeder
         // Always opened
         foreach ([0, 1, 2, 3, 4, 5, 6] as $dayOfWeek) {
             OpeningWindow::create([
-                'restaurant_id' => $id + 1,
+                'restaurantId' => $id + 1,
                 'dayOfWeek' => $dayOfWeek,
                 'start' => '00:00:00',
                 'end' => '23:59:59',
@@ -37,7 +37,7 @@ class OpeningWindowsSeeder extends Seeder
     {
         foreach ([1, 2, 3, 4, 5, 6] as $dayOfWeek) {
             OpeningWindow::create([
-                'restaurant_id' => $id,
+                'restaurantId' => $id,
                 'dayOfWeek' => $dayOfWeek,
                 'start' => '08:30:00',
                 'end' => '22:30:00',

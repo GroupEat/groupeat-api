@@ -14,18 +14,19 @@ class DevicesMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('customer_id');
+            $table->unsignedInteger('customerId');
             $table->string('UUID')->unique();
             $table->string('notificationToken');
-            $table->unsignedInteger('platform_id');
+            $table->unsignedInteger('platformId');
             $table->string('version');
             $table->string('model');
             $table->float('latitude')->index();
             $table->float('longitude')->index();
-            $table->timestamps();
+            $table->timestamp('createdAt');
+            $table->timestamp('updatedAt');
 
-            $table->foreign('customer_id')->references('id')->on(CustomersMigration::TABLE);
-            $table->foreign('platform_id')->references('id')->on(PlatformsMigration::TABLE);
+            $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
+            $table->foreign('platformId')->references('id')->on(PlatformsMigration::TABLE);
         });
     }
 }

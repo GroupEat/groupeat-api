@@ -25,11 +25,11 @@ class SettingBag implements JsonSerializable
         }
 
         $model = new CustomerSetting;
-        $customerSettingEntities = $model->where($model->getTableField('customer_id'), $customer->id)->get();
+        $customerSettingEntities = $model->where($model->getTableField('customerId'), $customer->id)->get();
         $customerSettings = [];
 
         foreach ($customerSettingEntities as $customerSettingEntitiy) {
-            $label = $labels[$customerSettingEntitiy->setting_id];
+            $label = $labels[$customerSettingEntitiy->settingId];
             $customerSettings[$label] = $customerSettingEntitiy->value;
         }
 

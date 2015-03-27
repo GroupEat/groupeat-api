@@ -18,7 +18,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
     public $timestamps = false;
 
-    protected $dates = ['activated_at'];
+    protected $dates = ['activatedAt'];
     protected $hidden = ['password', 'token', 'activationToken'];
 
     public function getRules()
@@ -26,7 +26,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         return [
             'email' => 'email|required',
             'password' => 'min:6|required',
-            'user_id' => 'required',
+            'userId' => 'required',
             'user_type' => 'required',
             'locale' => 'max:6:required',
         ];
@@ -123,7 +123,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
     public function isActivated()
     {
-        return !empty($this->activated_at);
+        return !empty($this->activatedAt);
     }
 
     /**
@@ -134,7 +134,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         $now = $now ?: $this->freshTimestamp();
 
         $this->activationToken = null;
-        $this->activated_at = $now;
+        $this->activatedAt = $now;
         $this->save();
     }
 

@@ -10,7 +10,7 @@ class Address extends AbstractAddress
     {
         $rules = parent::getRules();
 
-        $rules['restaurant_id'] = 'required|integer';
+        $rules['restaurantId'] = 'required|integer';
 
         return $rules;
     }

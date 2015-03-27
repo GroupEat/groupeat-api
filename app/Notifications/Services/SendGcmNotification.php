@@ -27,7 +27,7 @@ class SendGcmNotification
 
     public function call(Customer $customer)
     {
-        $device = Device::where('customer_id', $customer->id)->first();
+        $device = Device::where('customerId', $customer->id)->first();
 
         if (!is_null($device)) {
             $notificationToken = $device->notificationToken;
@@ -38,7 +38,7 @@ class SendGcmNotification
 
             $response = $this->client->post(static::URL, [
                 'json' => [
-                    'registration_ids' => [$notificationToken],
+                    'registrationIds' => [$notificationToken],
                     'data' => $data,
                 ],
                 'headers' => [

@@ -7,13 +7,13 @@ class Product extends Entity
 {
     public $timestamps = false;
 
-    protected $fillable = ['type_id', 'name', 'description'];
+    protected $fillable = ['typeId', 'name', 'description'];
 
     public function getRules()
     {
         return [
-            'restaurant_id' => 'required',
-            'type_id' => 'required',
+            'restaurantId' => 'required',
+            'typeId' => 'required',
             'name' => 'required|max:40',
             'description' => 'required|max:255',
         ];

@@ -14,12 +14,12 @@ class CustomerSettingMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('customer_id');
-            $table->unsignedInteger('setting_id');
+            $table->unsignedInteger('customerId');
+            $table->unsignedInteger('settingId');
             $table->string('value');
 
-            $table->foreign('customer_id')->references('id')->on(CustomersMigration::TABLE);
-            $table->foreign('setting_id')->references('id')->on(SettingsMigration::TABLE);
+            $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
+            $table->foreign('settingId')->references('id')->on(SettingsMigration::TABLE);
         });
     }
 }

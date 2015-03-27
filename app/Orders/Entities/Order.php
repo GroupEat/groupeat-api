@@ -11,13 +11,13 @@ class Order extends Entity
 {
     public $timestamps = false;
 
-    protected $dates = ['created_at'];
+    protected $dates = ['createdAt'];
 
     public function getRules()
     {
         return [
-            'customer_id' => 'required',
-            'group_order_id' => 'required',
+            'customerId' => 'required',
+            'groupOrderId' => 'required',
             'rawPrice' => 'required|integer',
         ];
     }

@@ -14,16 +14,16 @@ class GroupOrdersMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('restaurant_id')->index();
+            $table->unsignedInteger('restaurantId')->index();
             $table->unsignedInteger('discountRate')->index()->default(0);
-            $table->timestamps();
-            $table->index(['created_at', 'updated_at']);
-            $table->timestamp('closed_at')->nullable()->index();
-            $table->timestamp('ending_at')->index();
-            $table->timestamp('confirmed_at')->nullable();
-            $table->timestamp('prepared_at')->nullable();
+            $table->timestamp('createdAt')->index();
+            $table->timestamp('updatedAt')->index();
+            $table->timestamp('closedAt')->nullable()->index();
+            $table->timestamp('endingAt')->index();
+            $table->timestamp('confirmedAt')->nullable();
+            $table->timestamp('preparedAt')->nullable();
 
-            $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
+            $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
         });
     }
 }

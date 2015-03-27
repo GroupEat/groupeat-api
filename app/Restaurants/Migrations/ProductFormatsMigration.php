@@ -13,11 +13,11 @@ class ProductFormatsMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('product_id')->index();
+            $table->unsignedInteger('productId')->index();
             $table->string('name');
             $table->unsignedInteger('price');
 
-            $table->foreign('product_id')->references('id')->on(ProductsMigration::TABLE);
+            $table->foreign('productId')->references('id')->on(ProductsMigration::TABLE);
         });
     }
 }

@@ -34,8 +34,8 @@ class ProductsSeeder extends Seeder
 
             foreach ($products as $product) {
                 Product::create([
-                    'restaurant_id' => $restaurant->id,
-                    'type_id' => $pizzaType->id,
+                    'restaurantId' => $restaurant->id,
+                    'typeId' => $pizzaType->id,
                     'name' => $product['name'],
                     'description' => $product['description'],
                 ]);

@@ -18,8 +18,9 @@ class RestaurantsMigration extends Migration
             $table->unsignedInteger('minimumOrderPrice');
             $table->tinyInteger('deliveryCapacity');
             $table->string('discountPrices');
-            $table->timestamps();
-            $table->softDeletes()->index();
+            $table->timestamp('createdAt');
+            $table->timestamp('updatedAt');
+            $table->timestamp('deletedAt')->nullable()->index();
         });
     }
 }

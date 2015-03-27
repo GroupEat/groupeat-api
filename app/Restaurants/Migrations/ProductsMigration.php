@@ -13,13 +13,13 @@ class ProductsMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('restaurant_id')->index();
-            $table->unsignedInteger('type_id')->index();
+            $table->unsignedInteger('restaurantId')->index();
+            $table->unsignedInteger('typeId')->index();
             $table->string('name');
             $table->string('description');
 
-            $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
-            $table->foreign('type_id')->references('id')->on(FoodTypesMigration::TABLE);
+            $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
+            $table->foreign('typeId')->references('id')->on(FoodTypesMigration::TABLE);
         });
     }
 }

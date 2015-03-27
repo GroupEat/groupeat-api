@@ -15,8 +15,9 @@ class AdminsMigration extends Migration
             $table->increments('id');
             $table->string('firstName');
             $table->string('lastName');
-            $table->timestamps();
-            $table->softDeletes()->index();
+            $table->timestamp('createdAt');
+            $table->timestamp('updatedAt');
+            $table->timestamp('deletedAt')->nullable()->index();
         });
     }
 }

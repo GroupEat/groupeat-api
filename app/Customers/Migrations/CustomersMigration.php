@@ -16,8 +16,9 @@ class CustomersMigration extends Migration
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
             $table->string('phoneNumber', 25)->nullable();
-            $table->timestamps();
-            $table->softDeletes()->index();
+            $table->timestamp('createdAt');
+            $table->timestamp('updatedAt');
+            $table->timestamp('deletedAt')->nullable()->index();
         });
     }
 }

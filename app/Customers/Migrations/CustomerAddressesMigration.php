@@ -11,10 +11,10 @@ class CustomerAddressesMigration extends AddressesMigration
 
     protected function addFields(Blueprint $table)
     {
-        $table->unsignedInteger('customer_id')->unique();
-        $table->timestamps();
-        $table->index(['created_at', 'updated_at']);
+        $table->unsignedInteger('customerId')->unique();
+        $table->timestamp('createdAt')->index();
+        $table->timestamp('updatedAt')->index();
 
-        $table->foreign('customer_id')->references('id')->on(CustomersMigration::TABLE);
+        $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
     }
 }

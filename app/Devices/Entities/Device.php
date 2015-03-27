@@ -9,10 +9,10 @@ class Device extends Entity
     public function getRules()
     {
         return [
-            'customer_id' => 'required',
+            'customerId' => 'required',
             'UUID' => 'required',
             'notificationToken' => 'required',
-            'platform_id' => 'required',
+            'platformId' => 'required',
             'version' => 'required',
             'model' => 'required',
             'latitude' => 'required|numeric',

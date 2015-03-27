@@ -20,14 +20,14 @@ class GroupOrder extends Entity
      */
     private static $aroundDistanceInKms;
 
-    protected $dates = ['closed_at', 'ending_at', 'confirmed_at', 'prepared_at'];
+    protected $dates = ['closedAt', 'endingAt', 'confirmedAt', 'preparedAt'];
 
     public function getRules()
     {
         return [
-            'restaurant_id' => 'required',
+            'restaurantId' => 'required',
             'discountRate' => 'required|integer',
-            'ending_at' => 'required',
+            'endingAt' => 'required',
         ];
     }
 
@@ -68,7 +68,7 @@ class GroupOrder extends Entity
      */
     public function isJoinable()
     {
-        return empty($this->closed_at);
+        return empty($this->closedAt);
     }
 
     public function productFormatsQuery()
@@ -147,7 +147,7 @@ class GroupOrder extends Entity
 
     public function close()
     {
-        $this->closed_at = $this->freshTimestamp();
+        $this->closedAt = $this->freshTimestamp();
         $this->save();
 
         event(new GroupOrderHasBeenClosed($this));
@@ -158,14 +158,14 @@ class GroupOrder extends Entity
      */
     public function confirm(Carbon $preparedAt)
     {
-        $this->confirmed_at = $this->freshTimestamp();
-        $this->prepared_at = $preparedAt;
+        $this->confirmedAt = $this->freshTimestamp();
+        $this->preparedAt = $preparedAt;
         $this->save();
     }
 
     public function isConfirmed()
     {
-        return !is_null($this->confirmed_at);
+        return !is_null($this->confirmedAt);
     }
 
     /**
@@ -174,7 +174,7 @@ class GroupOrder extends Entity
     public function computeRemainingCapacity()
     {
         $nbProductFormats = DB::table((new Order())->productFormats()->getTable())
-            ->whereIn('order_id', $this->orders()->lists('id'))
+            ->whereIn('orderId', $this->orders()->lists('id'))
             ->sum('amount');
 
         return $this->restaurant->deliveryCapacity - $nbProductFormats;
@@ -201,7 +201,7 @@ class GroupOrder extends Entity
         $time = $time ?: $this->freshTimestamp();
         $model = $query->getModel();
 
-        $query->whereNull($model->getTableField('closed_at'));
+        $query->whereNull($model->getTableField('closedAt'));
     }
 
     /**
@@ -232,12 +232,12 @@ class GroupOrder extends Entity
      */
     public function scopeUnconfirmed(Builder $query, $sinceMinutes = null)
     {
-        $query->whereNotNull($this->getTableField('closed_at'))
-            ->whereNull($this->getTableField('confirmed_at'));
+        $query->whereNotNull($this->getTableField('closedAt'))
+            ->whereNull($this->getTableField('confirmedAt'));
 
         if (is_int($sinceMinutes)) {
             $query->where(
-                $this->getTableField('closed_at'),
+                $this->getTableField('closedAt'),
                 '<',
                 $this->freshTimestamp()->subMinutes($sinceMinutes)
             );
@@ -259,10 +259,10 @@ class GroupOrder extends Entity
         $model = new static;
         $now = $model->freshTimestamp();
 
-        $alreadyExisting = $model->whereNull($model->getTableField('closed_at'))
-            ->where($model->getTableField('created_at'), '<=', $now)
-            ->where($model->getTableField('ending_at'), '>=', $now)
-            ->where($model->getTableField('restaurant_id'), $restaurant->id)
+        $alreadyExisting = $model->whereNull($model->getTableField('closedAt'))
+            ->where($model->getTableField('createdAt'), '<=', $now)
+            ->where($model->getTableField('endingAt'), '>=', $now)
+            ->where($model->getTableField('restaurantId'), $restaurant->id)
             ->count();
 
         if ($alreadyExisting) {
@@ -275,11 +275,11 @@ class GroupOrder extends Entity
 
     private function setFoodRushDurationInMinutes($minutes)
     {
-        if (!$this->created_at) {
-            $this->created_at = $this->freshTimestamp();
+        if (!$this->createdAt) {
+            $this->createdAt = $this->freshTimestamp();
         }
 
-        $this->ending_at = $this->created_at->copy()->addMinutes($minutes);
+        $this->endingAt = $this->createdAt->copy()->addMinutes($minutes);
     }
 
     private function getNbProductFormatsAndRawPriceWith(ProductFormats $productFormats)

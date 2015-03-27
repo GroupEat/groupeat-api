@@ -20,8 +20,8 @@ class CustomerSetting extends Entity
         $defaultSetting = Setting::findByLabelOrFail($label);
         $value = $defaultSetting->applyCasting($value);
         $existingSetting = $model
-            ->where('customer_id', $customer->id)
-            ->where('setting_id', $defaultSetting->id)
+            ->where('customerId', $customer->id)
+            ->where('settingId', $defaultSetting->id)
             ->first();
 
         if (!is_null($existingSetting)) {
@@ -45,8 +45,8 @@ class CustomerSetting extends Entity
     public function getRules()
     {
         return [
-            'customer_id' => 'required',
-            'setting_id' => 'required',
+            'customerId' => 'required',
+            'settingId' => 'required',
             'value' => 'required',
         ];
     }

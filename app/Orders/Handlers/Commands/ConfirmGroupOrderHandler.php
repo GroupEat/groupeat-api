@@ -42,7 +42,7 @@ class ConfirmGroupOrderHandler
 
     private function guardAgainstInvalidPreparationTime(GroupOrder $groupOrder, Carbon $preparedAt)
     {
-        $closedAt = $groupOrder->closed_at;
+        $closedAt = $groupOrder->closedAt;
 
         if ($preparedAt < $closedAt) {
             throw new UnprocessableEntity(
@@ -65,10 +65,10 @@ class ConfirmGroupOrderHandler
 
     private function assertNotAlreadyConfirmed(GroupOrder $groupOrder)
     {
-        if (!empty($groupOrder->confirmed_at)) {
+        if (!empty($groupOrder->confirmedAt)) {
             throw new UnprocessableEntity(
                 'alreadyConfirmed',
-                "The {$groupOrder->toShortString()} has already been confirmed at {$groupOrder->confirmed_at}."
+                "The {$groupOrder->toShortString()} has already been confirmed at {$groupOrder->confirmedAt}."
             );
         }
     }

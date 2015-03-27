@@ -13,11 +13,11 @@ class CategoryRestaurantMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id')->index();
-            $table->integer('restaurant_id')->index();
+            $table->integer('categoryId')->index();
+            $table->integer('restaurantId')->index();
 
-            $table->foreign('category_id')->references('id')->on(CategoriesMigration::TABLE);
-            $table->foreign('restaurant_id')->references('id')->on(RestaurantsMigration::TABLE);
+            $table->foreign('categoryId')->references('id')->on(CategoriesMigration::TABLE);
+            $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
         });
     }
 }

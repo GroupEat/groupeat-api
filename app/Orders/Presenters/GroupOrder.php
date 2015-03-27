@@ -8,17 +8,17 @@ class GroupOrder extends Presenter
 {
     public function presentCreationTime()
     {
-        return $this->formatTime($this->created_at);
+        return $this->formatTime($this->createdAt);
     }
 
     public function presentEndingTime()
     {
-        return $this->formatTime($this->ending_at);
+        return $this->formatTime($this->endingAt);
     }
 
     public function presentPreparedAtTime()
     {
-        return $this->formatTime($this->prepared_at);
+        return $this->formatTime($this->preparedAt);
     }
 
     public function presentDiscountRate()

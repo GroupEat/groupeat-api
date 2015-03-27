@@ -9,7 +9,7 @@ class RestaurantAddressesSeeder extends Seeder
     protected function makeEntry($id, $max)
     {
         Address::create([
-            'restaurant_id' => $id,
+            'restaurantId' => $id,
             'street' => $this->faker->streetAddress,
             'city' => $this->faker->city,
             'postcode' => $this->faker->postcode,
@@ -24,7 +24,7 @@ class RestaurantAddressesSeeder extends Seeder
     {
         foreach ([$id, $id + 1, $id + 2] as $currentId) {
             Address::create([
-                'restaurant_id' => $currentId,
+                'restaurantId' => $currentId,
                 'street' => "8{$currentId} Rue Maurice Berteaux",
                 'city' => "Palaiseau",
                 'postcode' => 91120,

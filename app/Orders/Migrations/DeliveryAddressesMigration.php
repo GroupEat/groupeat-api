@@ -10,8 +10,8 @@ class DeliveryAddressesMigration extends AddressesMigration
 
     protected function addFields(Blueprint $table)
     {
-        $table->unsignedInteger('order_id')->unique();
+        $table->unsignedInteger('orderId')->unique();
 
-        $table->foreign('order_id')->references('id')->on(OrdersMigration::TABLE);
+        $table->foreign('orderId')->references('id')->on(OrdersMigration::TABLE);
     }
 }

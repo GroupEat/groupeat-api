@@ -36,7 +36,7 @@ class CustomersSeeder extends Seeder
             'user' => $customer,
             'email' => 'groupeat@ensta.fr',
             'password' => 'groupeat',
-            'activated_at' => Carbon::now(),
+            'activatedAt' => Carbon::now(),
             'locale' => 'fr',
             // @codingStandardsIgnoreStart
             'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJzdWIiOiI2IiwiaXNzIjoiaHR0cDpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwiaWF0IjoiMTQyNjE3ODI0MyIsImV4cCI6IjIwNTY4OTgyNDMiLCJuYmYiOiIxNDI2MTc4MjQzIiwianRpIjoiZTIxMjg3YmI1YTBiNzA5NmNlMzc1MmVmMzRiNTYxODkifQ.MGMyOTM5ZDFiNDRjMjg5MDgwM2I0MmU3MDdmMzE4YTY1Nzc2MTQwOThiOWIyMDVmNWE3MGQ1MTc1NDU1ZDVjMw',

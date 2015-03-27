@@ -14,12 +14,15 @@ class UserCredentialsMigration extends Migration
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->string('email')->unique();
-            $table->morphs('user');
-            $table->timestamp('activated_at')->nullable();
+            $table->unsignedInteger("userId");
+            $table->string("userType");
+            $table->timestamp('activatedAt')->nullable();
             $table->string('activationToken')->nullable()->unique();
             $table->string('password');
             $table->text('token')->unique()->nullable();
             $table->string('locale', 6);
+
+            $table->index(['userType', 'userId']);
         });
     }
 }

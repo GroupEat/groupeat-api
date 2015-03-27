@@ -12,7 +12,7 @@ class ClosingWindowsSeeder extends Seeder
         $now = Carbon::now();
 
         ClosingWindow::create([
-            'restaurant_id' => $id,
+            'restaurantId' => $id,
             'start' => $now->toDateTimeString(),
             'end' => $now->copy()->addHour()->toDateTimeString(),
         ]);

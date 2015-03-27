@@ -10,7 +10,7 @@ class Admin extends Entity implements User
 {
     use HasCredentials, SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = [self::DELETED_AT];
 
     public function getRules()
     {

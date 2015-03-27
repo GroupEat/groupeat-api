@@ -10,7 +10,7 @@ abstract class Window extends Entity
     public function getRules()
     {
         return [
-            'restaurant_id' => 'required',
+            'restaurantId' => 'required',
             'from' => 'required',
             'to' => 'required',
         ];

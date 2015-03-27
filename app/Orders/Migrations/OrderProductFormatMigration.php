@@ -14,12 +14,12 @@ class OrderProductFormatMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('order_id')->index();
-            $table->unsignedInteger('product_format_id');
+            $table->unsignedInteger('orderId')->index();
+            $table->unsignedInteger('productFormatId');
             $table->tinyInteger('amount');
 
-            $table->foreign('order_id')->references('id')->on(OrdersMigration::TABLE);
-            $table->foreign('product_format_id')->references('id')->on(ProductFormatsMigration::TABLE);
+            $table->foreign('orderId')->references('id')->on(OrdersMigration::TABLE);
+            $table->foreign('productFormatId')->references('id')->on(ProductFormatsMigration::TABLE);
         });
     }
 }

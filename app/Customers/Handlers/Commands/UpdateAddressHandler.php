@@ -30,7 +30,7 @@ class UpdateAddressHandler
             $address->fill($attributes);
         } else {
             $address = new Address($attributes);
-            $address->customer_id = $customer->id;
+            $address->customerId = $customer->id;
         }
 
         $address->fill($this->addressConstraints);

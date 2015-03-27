@@ -16,7 +16,7 @@ class CloseGroupOrdersWithElapsedFoodrush
     {
         $model = new GroupOrder;
 
-        $query = $model->joinable()->where($model->getTableField('ending_at'), '<', Carbon::now());
+        $query = $model->joinable()->where($model->getTableField('endingAt'), '<', Carbon::now());
 
         $nb = $query->get()
             ->each(function (GroupOrder $groupOrder) use ($output) {

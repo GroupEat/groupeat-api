@@ -11,7 +11,7 @@ class Customer extends Entity implements User
 {
     use HasCredentials, SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+    protected $dates = [self::DELETED_AT];
     protected $fillable = ['firstName', 'lastName', 'phoneNumber'];
 
     public function getRules()
