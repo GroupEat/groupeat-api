@@ -27,7 +27,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
             'email' => 'email|required',
             'password' => 'min:6|required',
             'userId' => 'required',
-            'user_type' => 'required',
+            'userType' => 'required',
             'locale' => 'max:6:required',
         ];
     }
