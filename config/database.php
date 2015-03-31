@@ -117,6 +117,7 @@ return [
         \Groupeat\Devices\Migrations\DevicesMigration::class,
         \Groupeat\Settings\Migrations\SettingsMigration::class,
         \Groupeat\Settings\Migrations\CustomerSettingMigration::class,
+        \Groupeat\Notifications\Migrations\NotificationsMigration::class,
     ],
 
     /*

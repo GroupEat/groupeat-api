@@ -2,10 +2,11 @@
 namespace Groupeat\Notifications\Services;
 
 use Groupeat\Customers\Entities\Customer;
+use Groupeat\Devices\Entities\Device;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 
-class SelectCustomersToNotify
+class SelectDevicesToNotify
 {
     /**
      * @param GroupOrder $groupOrder
@@ -18,11 +19,11 @@ class SelectCustomersToNotify
             return $order->customer->id;
         })->all();
 
-        $customerModel = new Customer;
+        $deviceModel = new Device();
 
-        return $customerModel
-            ->whereNotIn($customerModel->getTableField('id'), $customerAlreadyInIds)
-            ->has('devices')
+        return $deviceModel
+            ->whereNotIn($deviceModel->getTableField('customerId'), $customerAlreadyInIds)
+            ->with('customer', 'platform')
             ->get();
     }
 }
