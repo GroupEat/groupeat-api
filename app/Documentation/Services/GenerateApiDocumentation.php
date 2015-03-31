@@ -29,6 +29,8 @@ class GenerateApiDocumentation
      */
     public function call(OutputInterface $output = null)
     {
+        $output->writeln('Including all the docs files');
+
         $docContent = $this->orderedPackages
             ->filter(function ($package) {
                 $path = $this->getDiskPathFor($package);
@@ -45,7 +47,11 @@ class GenerateApiDocumentation
         $inputPath = $this->getInputPath();
         $outputPath = $this->getOutputPath();
 
+        $output->writeln('Saving the markdown file');
+
         file_put_contents($inputPath, $docContent);
+
+        $output->writeln('Compiling markdown to HTML');
 
         $command = "aglio -t flatly --full-width -i $inputPath -o $outputPath";
 
