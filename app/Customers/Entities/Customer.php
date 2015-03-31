@@ -4,6 +4,7 @@ namespace Groupeat\Customers\Entities;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Devices\Entities\Device;
+use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -31,5 +32,10 @@ class Customer extends Entity implements User
     public function devices()
     {
         return $this->hasMany(Device::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

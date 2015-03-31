@@ -22,8 +22,8 @@ class OrdersCest
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $productFormatId = array_keys($orderDetails['productFormats'])[0];
         $restaurantEmail = $this->getRestaurantEmailFromProductFormat($productFormatId);
-        $I->assertEquals('restaurants.orderHasBeenPlaced', $I->grabFirstMailId());
-        $I->assertEquals($restaurantEmail, $I->grabFirstMailRecipient());
+        $I->assertSame('restaurants.orderHasBeenPlaced', $I->grabFirstMailId());
+        $I->assertSame($restaurantEmail, $I->grabFirstMailRecipient());
     }
 
     public function testThatTheFoodRushDurationMustBeValid(ApiTester $I)
@@ -220,9 +220,9 @@ class OrdersCest
         $orderId = $I->grabDataFromResponse('id');
         $I->sendApiGetWithToken($token, "orders/$orderId");
         $I->seeResponseCodeIs(200);
-        $I->assertEquals($orderId, $I->grabDataFromResponse('id'));
+        $I->assertSame($orderId, $I->grabDataFromResponse('id'));
 
-        list($token2) = $I->sendRegistrationRequest();
+        list($token2) = $I->amAnActivatedCustomer();
         $I->sendApiGetWithToken($token2, "orders/$orderId");
         $I->seeErrorResponse(403, 'wrongAuthenticatedUser');
     }
@@ -254,16 +254,16 @@ class OrdersCest
         $newDiscountRateFormGroupOrder = $I->grabDataFromResponse('discountRate');
 
         $I->assertGreaterThan($oldDiscountRate, $newDiscountRate);
-        $I->assertEquals($newDiscountRate, $newDiscountRateFormGroupOrder);
+        $I->assertSame($newDiscountRate, $newDiscountRateFormGroupOrder);
 
         $I->sendApiGetWithToken($token, "orders/$orderId");
         $newRawPrice = $I->grabDataFromResponse('rawPrice');
-        $I->assertEquals($oldRawPrice, $newRawPrice);
+        $I->assertSame($oldRawPrice, $newRawPrice);
         $newDiscountRateFromOrder = $this->computeDiscountRate(
             $I->grabDataFromResponse('discountedPrice'),
             $newRawPrice
         );
-        $I->assertEquals($newDiscountRate, $newDiscountRateFromOrder);
+        $I->assertSame($newDiscountRate, $newDiscountRateFromOrder);
     }
 
     public function testThatTheDeliveryAddressMustBeCloseEnoughToJoinAGroupOrder(ApiTester $I)
@@ -291,8 +291,48 @@ class OrdersCest
         $orderDetails['comment'] = $comment;
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
-        $I->assertEquals($comment, $I->grabDataFromResponse('comment'));
+        $I->assertSame($comment, $I->grabDataFromResponse('comment'));
         $I->assertFirstMailContains($comment);
+    }
+
+    public function testThatACustomerCanListItsOrders(ApiTester $I)
+    {
+        list($token1, $orderId1,,, $customerId1) = $I->createGroupOrder();
+        list($token2, $orderId2,,, $customerId2) = $I->createGroupOrder();
+
+        $I->sendApiGetWithToken($token1, "customers/$customerId1/orders");
+        $orders1 = $I->grabDataFromResponse('');
+        $found = false;
+
+        foreach ($orders1 as $order1) {
+            $I->assertNotEquals($orderId2, $order1['id']);
+
+            if ($order1['id'] == $orderId1) {
+                $found = true;
+            }
+        }
+
+        $I->assertSame(true, $found);
+    }
+
+    public function testThatACustomerCanListItsOrdersInASpecificGroupOrder(ApiTester $I)
+    {
+        list($token, $orderId,,, $customerId) = $I->createGroupOrder();
+
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
+
+        $I->sendApiGetWithToken($token, "customers/$customerId/groupOrders/$groupOrderId/orders");
+        $orders = $I->grabDataFromResponse('');
+        $found = false;
+
+        foreach ($orders as $order) {
+            if ($order['id'] == $orderId) {
+                $found = true;
+            }
+        }
+
+        $I->assertSame(true, $found);
     }
 
     private function getProducts(

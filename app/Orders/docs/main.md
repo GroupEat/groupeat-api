@@ -220,3 +220,47 @@ When creating a group order, the distance between the given address and the rest
             "message": "The groupOrder #6 cannot be joined anymore."
         }
 
+## List customer's orders  [/customers/{id}/orders/{?include}]
+
+### GET
+
++ Parameters
+
+    + id (required, string, `123`) ... The customer ID
+    + include (optional, string, `groupOrder`) ... [groupOrder, restaurant, deliveryAddress]
+
++ Response 200
+
+        [
+            {
+                "id": "10",
+                ... // Same data as the GET /orders/{id} response
+            },
+            {
+                "id": "12",
+                ...
+            }
+        ]
+
+## List customer's orders in specific group order  [/customers/{customerId}/groupOrders/{groupOrderId}/orders/{?include}]
+
+### GET
+
++ Parameters
+
+    + customerId (required, string, `123`) ... The customer ID
+    + groupOrderId (required, string, `123`) ... The group order ID
+    + include (optional, string, `restaurant`) ... [restaurant, deliveryAddress]
+    
++ Response 200
+
+        [
+            {
+                "id": "10",
+                ... // Same data as the GET /orders/{id} response
+            },
+            {
+                "id": "12",
+                ...
+            }
+        ]

@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
+use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Commands\CreateGroupOrder;
 use Groupeat\Orders\Commands\JoinGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
@@ -11,6 +12,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrdersController extends Controller
 {
+    public function indexForCustomer(Customer $customer)
+    {
+        $this->auth->assertSame($customer);
+
+        return $this->collectionResponse($customer->orders);
+    }
+
+    public function indexForGroupOrder(Customer $customer, GroupOrder $groupOrder)
+    {
+        $this->auth->assertSame($customer);
+
+        $orders = $groupOrder->orders->filter(function (Order $order) use ($customer) {
+            return $order->customerId == $customer->id;
+        });
+
+        return $this->collectionResponse($orders);
+    }
+
     public function show(Order $order)
     {
         $this->assertCanBeSeen($order);

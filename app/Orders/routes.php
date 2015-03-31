@@ -5,6 +5,12 @@ use Groupeat\Orders\Http\V1\OrdersController;
 
 Route::group(['prefix' => 'api'], function () {
     Route::group(['middleware' => 'auth'], function () {
+        Route::get('customers/{customer}/orders', OrdersController::class.'@indexForCustomer');
+        Route::get(
+            'customers/{customer}/groupOrders/{groupOrder}/orders',
+            OrdersController::class.'@indexForGroupOrder'
+        );
+
         Route::group(['prefix' => 'groupOrders'], function () {
             Route::get('/', GroupOrdersController::class.'@index');
         });

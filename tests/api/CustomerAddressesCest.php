@@ -35,12 +35,7 @@ class CustomerAddressesCest
 
     public function testThatANotFoundErrorIsReturnedWhenTheCustomerDoesNotHaveAnAddress(ApiTester $I)
     {
-        list($token, $id) = $I->sendRegistrationRequest(
-            'userWithoutAddress@ensta.fr',
-            'password',
-            'customers',
-            'fr'
-        );
+        list($token, $id) = $I->amAnActivatedCustomer();
         $I->sendApiGetWithToken($token, "customers/$id/address");
         $I->seeErrorResponse(404, 'noAddressForThisCustomer');
     }

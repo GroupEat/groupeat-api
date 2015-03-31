@@ -7,29 +7,76 @@ class ApiHelper extends \Codeception\Module
 {
     public function amAnActivatedCustomer()
     {
-        $this->sendApiPost('auth/token', [
-            'email' => 'groupeat@ensta.fr',
-            'password' => 'groupeat',
-        ]);
-
-        $id = $this->grabDataFromResponse('id');
-        $token = $this->grabDataFromResponse('token');
+        list($token, $id) = $this->sendRegistrationRequest();
+        $activationLink = $this->getModule('MailWatcher')->grabHrefInLinkByIdInFirstMail('activation-link');
+        list(, $activationToken) = explode("token=", $activationLink);
+        $this->sendApiPost('auth/activationTokens', ['token' => $activationToken]);
 
         return [$token, $id];
     }
 
     public function sendRegistrationRequest(
-        $email = 'user@ensta.fr',
+        $email = null,
         $password = 'password',
         $resource = 'customers',
         $locale = 'fr'
     ) {
+        if (is_null($email)) {
+            $email = uniqid().'@ensta.fr';
+        }
+
         $this->sendApiPost($resource, compact('email', 'password', 'locale'));
         $id = $this->grabDataFromResponse('id');
         $token = $this->grabDataFromResponse('token');
         $type = $this->grabDataFromResponse('type');
 
         return [$token, $id, $type];
+    }
+
+    public function createGroupOrder()
+    {
+        list($token, $customerId) = $this->amAnActivatedCustomer();
+
+        $this->sendApiGetWithToken(
+            $token,
+            'groupOrders?joinable=1&around=1&latitude=48.7173&longitude=2.23935&include=restaurant'
+        );
+        $groupOrders = $this->grabDataFromResponse('');
+
+        if (!empty($groupOrders)) {
+            $groupOrderId = $groupOrders[0]['id'];
+            $restaurantId = $groupOrders[0]['restaurant']['data']['id'];
+        } else {
+            $groupOrderId = null;
+            $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.7173&longitude=2.23935');
+            $restaurants = $this->grabDataFromResponse();
+            $restaurantId = $restaurants[0]['id'];
+        }
+
+        $this->sendApiGetWithToken($token, "restaurants/$restaurantId");
+        $restaurantCapacity = $this->grabDataFromResponse('deliveryCapacity');
+        $this->assertGreaterThan(1, $restaurantCapacity);
+        $this->sendApiGetWithToken($token, "restaurants/$restaurantId/products?include=formats");
+        $productFormatId = last(last($this->grabDataFromResponse())['formats']['data'])['id'];
+        $productFormats = [$productFormatId => 1];
+
+        $orderDetails = [
+            'foodRushDurationInMinutes' => 30,
+            'productFormats' => $productFormats,
+            'street' => "Allée des techniques avancées",
+            'details' => "Bâtiment A, chambre 200",
+            'latitude' => 48.7173,
+            'longitude' => 2.23935,
+        ];
+
+        if (!is_null($groupOrderId)) {
+            $orderDetails['groupOrderId'] = $groupOrderId;
+        }
+
+        $this->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $orderId = $this->grabDataFromResponse('id');
+
+        return [$token, $orderId, $restaurantCapacity, $orderDetails, $customerId];
     }
 
     public function sendApiGetWithToken($token, $path, $params = [])

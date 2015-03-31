@@ -6,20 +6,20 @@ class GroupOrdersCest
 {
     public function testThatACustomerReceiveAMailWhenAGroupOrderIsConfirmed(ApiTester $I)
     {
-        list($token, $orderId, $restaurantCapacity, $orderDetails) = $this->createGroupOrder($I);
+        list($token, $orderId, $restaurantCapacity, $orderDetails) = $I->createGroupOrder();
 
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
         $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
         $remainingCapacity = $restaurantCapacity - 1;
-        $I->assertEquals($remainingCapacity, $I->grabDataFromResponse('groupOrder.data.remainingCapacity'));
+        $I->assertSame($remainingCapacity, $I->grabDataFromResponse('groupOrder.data.remainingCapacity'));
 
         for ($i = $remainingCapacity; $i > 1; $i--) {
             $orderDetails['groupOrderId'] = $groupOrderId;
             $I->sendApiPostWithToken($token, 'orders', $orderDetails);
             $I->seeResponseCodeIs(201);
             $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
-            $I->assertEquals($i - 1, $I->grabDataFromResponse('remainingCapacity'));
+            $I->assertSame($i - 1, $I->grabDataFromResponse('remainingCapacity'));
             $I->assertTrue($I->grabDataFromResponse('joinable'));
         }
 
@@ -36,7 +36,7 @@ class GroupOrdersCest
         $confirmUrl = "groupOrders/$groupOrderId/confirm";
 
         $I->sendApiGetWithToken($restaurantToken, "groupOrders/$groupOrderId");
-        $I->assertEquals(0, $I->grabDataFromResponse('remainingCapacity'));
+        $I->assertSame(0, $I->grabDataFromResponse('remainingCapacity'));
         $I->assertFalse($I->grabDataFromResponse('joinable'));
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
@@ -54,7 +54,7 @@ class GroupOrdersCest
         ]);
         $I->seeResponseCodeIs(200);
 
-        $I->assertEquals('customers.orderHasBeenConfirmed', $I->grabFirstMailId());
+        $I->assertSame('customers.orderHasBeenConfirmed', $I->grabFirstMailId());
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
             'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
@@ -64,7 +64,7 @@ class GroupOrdersCest
 
     public function testThatAGroupOrderClosesAutomaticallyWhenFoodrushIsOver(ApiTester $I)
     {
-        list($token, $orderId) = $this->createGroupOrder($I);
+        list($token, $orderId) = $I->createGroupOrder();
 
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
@@ -78,14 +78,28 @@ class GroupOrdersCest
         $I->assertFalse($I->grabDataFromResponse('groupOrder.data.joinable'));
     }
 
-    private function createGroupOrder(ApiTester $I)
+    public function createGroupOrder(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token, $customerId) = $I->amAnActivatedCustomer();
 
-        $I->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.7173&longitude=2.23935');
-        $restaurants = $I->grabDataFromResponse();
-        $restaurantId = $restaurants[0]['id'];
-        $restaurantCapacity = $restaurants[0]['deliveryCapacity'];
+        $I->sendApiGetWithToken(
+            $token,
+            'groupOrders?joinable=1&around=1&latitude=48.7173&longitude=2.23935&include=restaurant'
+        );
+        $groupOrders = $I->grabDataFromResponse('');
+
+        if (!empty($groupOrders)) {
+            $groupOrderId = $groupOrders[0]['id'];
+            $restaurantId = $groupOrders[0]['restaurant']['data']['id'];
+        } else {
+            $groupOrderId = null;
+            $I->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.7173&longitude=2.23935');
+            $restaurants = $I->grabDataFromResponse();
+            $restaurantId = $restaurants[0]['id'];
+        }
+
+        $I->sendApiGetWithToken($token, "restaurants/$restaurantId");
+        $restaurantCapacity = $I->grabDataFromResponse('deliveryCapacity');
         $I->assertGreaterThan(1, $restaurantCapacity);
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/products?include=formats");
         $productFormatId = last(last($I->grabDataFromResponse())['formats']['data'])['id'];
@@ -100,9 +114,13 @@ class GroupOrdersCest
             'longitude' => 2.23935,
         ];
 
+        if (!is_null($groupOrderId)) {
+            $orderDetails['groupOrderId'] = $groupOrderId;
+        }
+
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $orderId = $I->grabDataFromResponse('id');
 
-        return [$token, $orderId, $restaurantCapacity, $orderDetails];
+        return [$token, $orderId, $restaurantCapacity, $orderDetails, $customerId];
     }
 }

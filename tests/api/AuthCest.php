@@ -67,7 +67,7 @@ class AuthCest
 
         $I->sendApiPut('auth/token', compact('email', 'password'));
         $I->seeResponseCodeIs(200);
-        $I->assertEquals($originalToken, $I->grabDataFromResponse('token'));
+        $I->assertSame($originalToken, $I->grabDataFromResponse('token'));
     }
 
     public function testThatAUserMustGiveAWellFormattedEmailToRegister(ApiTester $I)

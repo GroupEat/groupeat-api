@@ -52,7 +52,7 @@ class CustomersCest
         $I->seeResponseCodeIs(200);
 
         foreach ($data as $key => $value) {
-            $I->assertEquals($value, $I->grabDataFromResponse($key));
+            $I->assertSame($value, $I->grabDataFromResponse($key));
         }
     }
 
