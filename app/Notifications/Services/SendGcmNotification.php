@@ -5,6 +5,7 @@ use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Notifications\Values\GcmApiKey;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,18 +37,26 @@ class SendGcmNotification
             'groupOrderId' => $groupOrder->id,
         ];
 
-        $response = $this->client->post(static::URL, [
-            'json' => [
-                'registrationIds' => [$notificationToken],
-                'data' => $data,
-            ],
-            'headers' => [
-                'Authorization' => "key={$this->apiKey}",
-                'Content-type' => 'application/json',
-            ],
-        ]);
+        try {
+            $response = $this->client->post(static::URL, [
+                'json' => [
+                    'registration_ids' => [$notificationToken],
+                    'data' => $data,
+                ],
+                'headers' => [
+                    'Authorization' => "key={$this->apiKey}",
+                    'Content-type' => 'application/json',
+                ],
+            ]);
+        } catch (ClientException $e) {
+            throw new UnprocessableEntity(
+                'gcmError',
+                (string) $e->getResponse()->getBody()
+            );
+        }
 
         if ($response->getStatusCode() == Response::HTTP_OK) {
+            $notification->createdAt = $notification->freshTimestamp();
             $notification->save();
 
             $this->logger->info(
@@ -59,7 +68,7 @@ class SendGcmNotification
         } else {
             throw new UnprocessableEntity(
                 'gcmError',
-                $response->getBody()
+                (string) $response->getBody()
             );
         }
     }

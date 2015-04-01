@@ -8,6 +8,8 @@ use Groupeat\Support\Entities\Abstracts\Entity;
 
 class Notification extends Entity
 {
+    public $timestamps = false;
+
     protected $dates = ['createdAt'];
 
     public function getRules()

@@ -22,7 +22,7 @@ class SelectDevicesToNotify
         $deviceModel = new Device();
 
         return $deviceModel
-            ->whereNotIn($deviceModel->getTableField('customerId'), $customerAlreadyInIds)
+            ->whereNotIn($deviceModel->getTableField('customerId'), [])
             ->with('customer', 'platform')
             ->get();
     }
