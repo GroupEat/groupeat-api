@@ -32,6 +32,8 @@ class SendNotificationToCustomers extends QueuedHandler
                 $notification->customer()->associate($device->customer);
                 $notification->device()->associate($device);
                 $notification->groupOrder()->associate($groupOrder);
+                $notification->longitude = $device->longitude;
+                $notification->latitude = $device->latitude;
 
                 $this->sendGcmNotification->call($notification);
             });
