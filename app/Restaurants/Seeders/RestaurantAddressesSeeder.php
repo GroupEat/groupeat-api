@@ -25,13 +25,13 @@ class RestaurantAddressesSeeder extends Seeder
         foreach ([$id, $id + 1, $id + 2] as $currentId) {
             Address::create([
                 'restaurantId' => $currentId,
-                'street' => "8{$currentId} Rue Maurice Berteaux",
+                'street' => "8 Rue Maurice Berteaux",
                 'city' => "Palaiseau",
                 'postcode' => 91120,
                 'state' => "Essonne",
                 'country' => "France",
-                'latitude' => 48.717104,
-                'longitude' => 2.239332,
+                'latitude' => 48.855118,
+                'longitude' => 2.345730,
             ]);
         }
     }
