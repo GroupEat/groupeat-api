@@ -4,6 +4,7 @@ namespace Groupeat\Documentation\Services;
 use Groupeat\Documentation\Values\OrderedPackages;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Config\Repository;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateApiDocumentation
@@ -29,7 +30,9 @@ class GenerateApiDocumentation
      */
     public function call(OutputInterface $output = null)
     {
-        $output->writeln('Including all the docs files');
+        if (empty($output)) {
+            $output = new NullOutput;
+        }
 
         $docContent = $this->orderedPackages
             ->filter(function ($package) {
@@ -83,7 +86,7 @@ class GenerateApiDocumentation
                 return $errorOutput;
             }
         }
-
+        
         return file_get_contents($path);
     }
 
