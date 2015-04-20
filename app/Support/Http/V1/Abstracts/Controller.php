@@ -3,7 +3,6 @@ namespace Groupeat\Support\Http\V1\Abstracts;
 
 use Groupeat\Auth\Auth;
 use Groupeat\Support\Commands\Abstracts\Command;
-use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Http\Output;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\Request;
@@ -78,10 +77,7 @@ abstract class Controller extends IlluminateController
     protected function itemResponse($item, TransformerAbstract $transformer = null)
     {
         if (empty($item)) {
-            throw new Exception(
-                'cannotMakeResponseFromEmptyItem',
-                "Cannot make response from empty item."
-            );
+            return $this->arrayResponse(['data' => null])->setStatusCode($this->statusCode);
         }
 
         if (is_null($transformer)) {
@@ -103,10 +99,7 @@ abstract class Controller extends IlluminateController
     {
         if (is_null($transfomer)) {
             if ($collection->isEmpty()) {
-                throw new Exception(
-                    'cannotFindTransformerFromEmptyCollection',
-                    "Cannot find transfomer from empty collection."
-                );
+                return $this->arrayResponse(['data' => []])->setStatusCode($this->statusCode);
             }
 
             $transfomer = $this->getTransformerFor($collection->first());
