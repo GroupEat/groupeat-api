@@ -18,7 +18,7 @@
     "doctrine/dbal": "2.3.*",
     "itsgoingd/clockwork": "1.7.*",
     "squizlabs/php_codesniffer": "2.3.*",
-    "codeception/codeception": "2.0.*@dev",
+    "codeception/codeception": "2.0.*",
     "barryvdh/laravel-ide-helper": "2.0.*"
   },
   "autoload": {
@@ -36,5 +36,6 @@
   },
   "config": {
     "preferred-install": "dist"
-  }
+  },
+  "minimum-stability": "stable"
 }

@@ -86,7 +86,7 @@ class GenerateApiDocumentation
                 return $errorOutput;
             }
         }
-        
+
         return file_get_contents($path);
     }
 
