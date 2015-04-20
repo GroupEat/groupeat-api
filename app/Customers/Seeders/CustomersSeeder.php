@@ -39,7 +39,7 @@ class CustomersSeeder extends Seeder
             'activatedAt' => Carbon::now(),
             'locale' => 'fr',
             // @codingStandardsIgnoreStart
-            'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJzdWIiOiI2IiwiaXNzIjoiaHR0cDpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwiaWF0IjoiMTQyOTU2MDc3MSIsImV4cCI6IjIwNjAyODA3NzEiLCJuYmYiOiIxNDI5NTYwNzcxIiwianRpIjoiYjRmN2ZhMzQ4ZTI2ZWZlY2I3NTg4M2MzYzE3MGFkZGIifQ.MTZhNzA3YmQ2N2Y2OTVhYjJjNGRjYzVhMzI1NmU0OGFkOGRiZTQwOTI1NjIzYjM4YjkzNWFkNTZlMGJiMWVlZQ',
+            'token' => 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXUyJ9.eyJzdWIiOiIzIiwiaXNzIjoiaHR0cDpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwiaWF0IjoiMTQyOTU2NDM2OSIsImV4cCI6IjIwNjAyODQzNjkiLCJuYmYiOiIxNDI5NTY0MzY5IiwianRpIjoiOWIxYmVmYjk0N2YwYWMxZWEyOTNmMzQ1YWJiZDdhYmYifQ.YzczMWRhZjk0ODY3YjJiZjVlNDU1NjM1YmViOTM5NDE4NDRjNmJhZmRlODEzYmFmNjRjNDcxMzljYWE4ZjNmMzNjNTBiYjZjMWRkYmY4NzI1MTM2NzRiZjdjMjdhZGM3',
             // @codingStandardsIgnoreEnd
         ]);
     }
