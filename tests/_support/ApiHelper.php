@@ -39,7 +39,7 @@ class ApiHelper extends \Codeception\Module
 
         $this->sendApiGetWithToken(
             $token,
-            'groupOrders?joinable=1&around=1&latitude=48.7173&longitude=2.23935&include=restaurant'
+            'groupOrders?joinable=1&around=1&latitude=48.855118&longitude=2.34573&include=restaurant'
         );
         $groupOrders = $this->grabDataFromResponse('');
 
@@ -48,7 +48,7 @@ class ApiHelper extends \Codeception\Module
             $restaurantId = $groupOrders[0]['restaurant']['data']['id'];
         } else {
             $groupOrderId = null;
-            $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.7173&longitude=2.23935');
+            $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.855118&longitude=2.34573');
             $restaurants = $this->grabDataFromResponse();
             $restaurantId = $restaurants[0]['id'];
         }
@@ -65,8 +65,8 @@ class ApiHelper extends \Codeception\Module
             'productFormats' => $productFormats,
             'street' => "Allée des techniques avancées",
             'details' => "Bâtiment A, chambre 200",
-            'latitude' => 48.7173,
-            'longitude' => 2.23935,
+            'latitude' => 48.855118,
+            'longitude' => 2.345730,
         ];
 
         if (!is_null($groupOrderId)) {
