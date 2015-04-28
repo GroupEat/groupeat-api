@@ -1,6 +1,6 @@
 <?php
 
-dd(config('app.key'));
+dump(config('app'));
 
 return [
 
@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'secret' => config('app.key'),
+    'secret' => '0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7',
 
     /*
     |--------------------------------------------------------------------------
