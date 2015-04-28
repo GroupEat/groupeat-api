@@ -18,11 +18,9 @@ before_script:
   - mkdir -p shippable/testresults
   - psql -c 'CREATE DATABASE groupeat;' -U postgres
   - echo "xdebug.max_nesting_level = 250" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - composer config -g github-oauth.github.com $GITHUB_TOKEN
   - composer self-update
+  - composer config -g github-oauth.github.com $GITHUB_TOKEN
   - composer install --no-interaction --no-progress
-  - wget http://pastebin.com/raw.php?i=1gkPrA4C -O ./vendor/namshi/jose/src/Namshi/JOSE/JWS.php
-  - wget http://pastebin.com/raw.php?i=LiLxAbUe -O ./vendor/namshi/jose/src/Namshi/JOSE/Signer/HMAC.php
   - php artisan db:install --seed --entries 2
   - ./vendor/bin/codecept build
 

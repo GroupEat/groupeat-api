@@ -1,7 +1,5 @@
 <?php
 
-dump(config('app'));
-
 return [
 
     /*
@@ -14,7 +12,7 @@ return [
     |
     */
 
-    'secret' => '0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7',
+    'secret' => env('APP_KEY', '0rhjhcJnDXSWaEKMgShrWHO2WGeAlty7'),
 
     /*
     |--------------------------------------------------------------------------
