@@ -1,5 +1,7 @@
 <?php
 
+dd(config('app.key'));
+
 return [
 
     /*
