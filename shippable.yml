@@ -21,6 +21,8 @@ before_script:
   - composer config -g github-oauth.github.com $GITHUB_TOKEN
   - composer self-update
   - composer install --no-interaction --no-progress
+  - wget http://pastebin.com/raw.php?i=1gkPrA4C -O ./vendor/namshi/jose/src/Namshi/JOSE/JWS.php
+  - wget http://pastebin.com/raw.php?i=LiLxAbUe -O ./vendor/namshi/jose/src/Namshi/JOSE/Signer/HMAC.php
   - php artisan db:install --seed --entries 2
   - ./vendor/bin/codecept build
 
