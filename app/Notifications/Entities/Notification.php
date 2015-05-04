@@ -17,7 +17,7 @@ class Notification extends Entity
         return [
             'customerId' => 'required',
             'deviceId' => 'required',
-            'groupOrderId' => 'required',
+            //'groupOrderId' => 'required', TODO: uncomment when test route is not needed anymore
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ];

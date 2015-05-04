@@ -18,14 +18,14 @@ class NotificationsMigration extends Migration
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('deviceId');
-            $table->unsignedInteger('groupOrderId');
+            $table->unsignedInteger('groupOrderId')->nullable(); // TODO: remove nullable when test route is not needed anymore
             $table->float('latitude')->index();
             $table->float('longitude')->index();
             $table->timestamp('createdAt')->index();
 
             $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
             $table->foreign('deviceId')->references('id')->on(DevicesMigration::TABLE);
-            $table->foreign('groupOrderId')->references('id')->on(GroupOrdersMigration::TABLE);
+            // $table->foreign('groupOrderId')->references('id')->on(GroupOrdersMigration::TABLE); TODO: uncomment when test route is not needed anymore
         });
     }
 }

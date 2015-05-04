@@ -4,22 +4,22 @@ namespace Groupeat\Notifications\Handlers\Events;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Notifications\Entities\Notification;
+use Groupeat\Notifications\Services\SendNotification;
 use Groupeat\Notifications\Services\SelectDevicesToNotify;
-use Groupeat\Notifications\Services\SendGcmNotification;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Handlers\Events\Abstracts\QueuedHandler;
 
 class SendNotificationToCustomers extends QueuedHandler
 {
     private $selectDevicesToNotify;
-    private $sendGcmNotification;
+    private $sendNotification;
 
     public function __construct(
         SelectDevicesToNotify $selectDevicesToNotify,
-        SendGcmNotification $sendGcmNotification
+        SendNotification $sendNotification
     ) {
         $this->selectDevicesToNotify = $selectDevicesToNotify;
-        $this->sendGcmNotification = $sendGcmNotification;
+        $this->sendNotification = $sendNotification;
     }
 
     public function handle(GroupOrderHasBeenCreated $groupOrderHasBeenCreated)
@@ -35,7 +35,7 @@ class SendNotificationToCustomers extends QueuedHandler
                 $notification->longitude = $device->longitude;
                 $notification->latitude = $device->latitude;
 
-                $this->sendGcmNotification->call($notification);
+                $this->sendNotification->call($notification);
             });
     }
 }

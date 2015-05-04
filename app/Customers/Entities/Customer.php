@@ -28,14 +28,4 @@ class Customer extends Entity implements User
     {
         return $this->hasOne(Address::class);
     }
-
-    public function devices()
-    {
-        return $this->hasMany(Device::class);
-    }
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
 }

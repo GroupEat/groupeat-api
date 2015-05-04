@@ -16,7 +16,7 @@ class OrdersController extends Controller
     {
         $this->auth->assertSame($customer);
 
-        return $this->collectionResponse($customer->orders);
+        return $this->collectionResponse(Order::where('customerId', $customer->id)->get());
     }
 
     public function indexForGroupOrder(Customer $customer, GroupOrder $groupOrder)

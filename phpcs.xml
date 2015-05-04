@@ -11,7 +11,9 @@
     <exclude-pattern>*/lang/*</exclude-pattern>
     <exclude-pattern>tests/*/*Tester.php</exclude-pattern>
 
-    <rule ref="PSR2"/>
+    <rule ref="PSR2">
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+    </rule>
 
     <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
         <exclude-pattern>bootstrap/autoload.php</exclude-pattern>
