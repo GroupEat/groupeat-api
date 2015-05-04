@@ -24,6 +24,8 @@ class SettingsCest
         $I->sendApiPutWithToken($token, "customers/$id/settings", [
             'notificationsEnabled' => false
         ]);
+        $I->assertSame(false, $I->grabDataFromResponse('notificationsEnabled'));
+
         $I->sendApiGetWithToken($token, "customers/$id/settings");
         $I->assertSame(false, $I->grabDataFromResponse('notificationsEnabled'));
     }

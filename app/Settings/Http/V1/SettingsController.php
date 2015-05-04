@@ -23,5 +23,7 @@ class SettingsController extends Controller
             $customer,
             $this->json()->all()
         ));
+
+        return $this->itemResponse(new SettingBag($customer));
     }
 }
