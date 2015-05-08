@@ -29,13 +29,7 @@ return [
                 $task->run('mv ~vagrant/.env '.$sharedFolder);
             },
         ],
-        'deploy'  => [
-            function ($task) {
-                // TODO: Remove this before app launch.
-                $path = $task->releasesManager->getCurrentReleasePath('');
-                $task->run("cd $path; php artisan db:install --force --seed --entries 15");
-            },
-        ],
+        'deploy'  => [],
         'cleanup' => [],
     ],
 
