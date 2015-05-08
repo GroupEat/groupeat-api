@@ -2,26 +2,28 @@
 namespace Groupeat\Notifications\Services;
 
 use Groupeat\Notifications\Entities\Notification;
+use Groupeat\Notifications\Services\Abstracts\NotificationSender;
 use Groupeat\Notifications\Values\GcmApiKey;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
+use Groupeat\Support\Services\Locale;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class SendGcmNotification
+class SendGcmNotification extends NotificationSender
 {
     const URL = 'https://android.googleapis.com/gcm/send';
 
     private $client;
     private $apiKey;
-    private $logger;
 
-    public function __construct(GcmApiKey $apiKey, LoggerInterface $logger)
+    public function __construct(Locale $locale, LoggerInterface $logger, GcmApiKey $apiKey)
     {
+        parent::__construct($locale, $logger);
+
         $this->client = new Client;
         $this->apiKey = $apiKey;
-        $this->logger = $logger;
     }
 
     public function call(Notification $notification)
@@ -33,7 +35,7 @@ class SendGcmNotification
         $notificationToken = $device->notificationToken;
 
         $data = [
-            'message' => "A new group order has been created. Join it now!",
+            'message' => $this->translateFor('joinGroupOrder', $customer->credentials),
             'groupOrderId' => $groupOrder->id,
         ];
 
@@ -60,11 +62,9 @@ class SendGcmNotification
             $notification->save();
 
             $this->logger->info(
-                "Notification has been sent to {$customer->toShortString()} with data: "
+                "GCM notification has been sent to {$customer->toShortString()} with data: "
                 . json_encode($data).'.'
             );
-
-            return $response;
         } else {
             throw new UnprocessableEntity(
                 'gcmError',

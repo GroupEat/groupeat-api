@@ -8,10 +8,12 @@ use Groupeat\Support\Exceptions\Exception;
 class SendNotification
 {
     private $gcm;
+    private $apns;
 
-    public function __construct(SendGcmNotification $gcm)
+    public function __construct(SendGcmNotification $gcm, SendApnsNotification $apns)
     {
         $this->gcm = $gcm;
+        $this->apns = $apns;
     }
 
     public function call(Notification $notification)
@@ -20,7 +22,11 @@ class SendNotification
 
         switch ($platformLabel) {
             case 'android':
-                return $this->gcm->call($notification);
+                $this->gcm->call($notification);
+                break;
+
+            case 'ios':
+                $this->apns->call($notification);
                 break;
 
             default:
