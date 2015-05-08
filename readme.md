@@ -8,7 +8,7 @@
 
 # Updating
 
-`art pull`
+`php artisan pull`
 
 # Linting
 
