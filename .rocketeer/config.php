@@ -2,6 +2,8 @@
 
 use Rocketeer\Services\Connections\ConnectionsHandler;
 
+date_default_timezone_set('CET');
+
 return [
 
     // The name of the application to deploy
@@ -40,9 +42,7 @@ return [
             'host'      => 'groupeat.fr',
             'username'  => 'vagrant',
             'password'  => '',
-            'key'       => gethostname() == 'PizzeriaDev' ?
-                '/home/vagrant/.ssh/id_rsa'
-                : '/home/shippable/.ssh/id_rsa',
+            'key'       => posix_getpwuid(posix_geteuid())['dir'].'/.ssh/id_rsa',
             'keyphrase' => '',
             'agent'     => '',
             'db_role'   => true,

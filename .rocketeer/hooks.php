@@ -26,7 +26,10 @@ return [
         'setup'   => [
             function ($task) {
                 $sharedFolder = $task->paths->getFolder('shared');
-                $task->run('mv ~vagrant/.env '.$sharedFolder);
+
+                foreach (['.env', 'APNS.pem'] as $file) {
+                    $task->run("ln -s ~vagrant/$file $sharedFolder/$file");
+                }
             },
         ],
         'deploy'  => [],
