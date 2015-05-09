@@ -1,7 +1,7 @@
 <?php
 
-use Groupeat\Support\Http\V1\DebugController;
+use Groupeat\Support\Http\V1\PingController;
 
 Route::group(['prefix' => 'api'], function () {
-    Route::get('debug', DebugController::class.'@debug');
+    Route::get('ping', PingController::class.'@ping');
 });
