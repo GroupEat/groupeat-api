@@ -5,13 +5,13 @@ HOST: {{ app.url }}/api
 
 ## Introduction
 
-To make requests to the API, the desired version must be specified through the Accept header. For the current version, it will be:
+To make requests to the API, the desired version must be specified through the `Accept` header. For the current version, it will be:
 
 ```http
 Accept: application/vnd.groupeat.v1+json
 ```
 
-All of the paths below must be prefixed by {{ app.url }} to have the full and correct URL.
+All of the paths below must be prefixed by `{{ app.url }}` to have the full and correct URL.
 
 ### Attaching data to a request
 

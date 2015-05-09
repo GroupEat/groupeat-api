@@ -1,6 +1,6 @@
 # Group Authentication
 
-To access protected routes, the authentication token should be passed on each request through the Authorization header like so:
+To access protected routes, the authentication token should be passed on each request through the `Authorization` header like so:
 
 ```http
 Authorization: bearer {token}
