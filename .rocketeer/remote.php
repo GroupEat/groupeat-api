@@ -55,15 +55,15 @@ return [
         // the correct path to the public folder
         'files'    => [
             'storage',
-            'public',
         ],
 
         // Here you can configure what actions will be executed to set
         // permissions on the folder above. The Closure can return
         // a single command as a string or an array of commands
         'callback' => function ($task, $file) {
+            var_dump($file);
             return [
-                sprintf('chmod -R 755 %s', $file),
+                sprintf('chmod -R 775 %s', $file),
                 sprintf('chmod -R g+s %s', $file),
                 sprintf('chown -R vagrant:vagrant %s', $file),
             ];
