@@ -41,6 +41,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, BaseException $e)
     {
+        $isDebug = \Config::get('app.debug');
+        $debugInfo = [
+            'line' => $e->getLine(),
+            'file' => $e->getFile(),
+            'class' => get_class($e),
+            'trace' => explode("\n", $e->getTraceAsString()),
+        ];
+
         $headers = [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS',
@@ -59,33 +67,39 @@ class Handler extends ExceptionHandler
             }
         } elseif ($e instanceof HttpException && in_array($e->getStatusCode(), [404, 503])) {
             if ($e->getStatusCode() == 404) {
-                return response()->json([
+                $json = [
                     'errorKey' => 'notFound',
                     'message' => "The route ".$request->method()." ".$request->fullUrl()." does not exist.",
-                ], 404, $headers);
+                ];
+
+                if ($isDebug) {
+                    $json['debug'] = $debugInfo;
+                }
+
+                return response()->json($json, 404, $headers);
             } elseif ($e->getStatusCode() == 503) {
-                return response()->json([
+                $json = [
                     'errorKey' => 'maintenanceMode',
                     'message' => "The application is in maintenance mode. Please come back in a few minutes.",
-                ], 503, $headers);
+                ];
+
+                if ($isDebug) {
+                    $json['debug'] = $debugInfo;
+                }
+
+                return response()->json($json, 503, $headers);
             }
         } else {
             $statusCode = 500;
             $data['errorKey'] = 'internalServerError';
-            $data['message'] = \Config::get('app.debug') ?
-                $e->getMessage()
-                : "The server encountered an internal error";
+            $data['message'] = $isDebug ? $e->getMessage() : "The server encountered an internal error";
         }
 
-        if (\Config::get('app.debug')) {
-            $data['debug'] = [
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
-                'class' => get_class($e),
-            ];
+        if ($isDebug) {
+            $data['debug'] = $debugInfo;
 
-            if (true || !\App::runningInConsole()) {
-                $data['debug']['trace'] = explode("\n", $e->getTraceAsString());
+            if (\App::runningInConsole()) {
+                unset($data['debug']['trace']);
             }
         }
 
