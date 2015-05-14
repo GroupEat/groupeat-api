@@ -63,7 +63,7 @@ class LogDomainActivity
 
             if ($value instanceof Entity) {
                 $value = $value->getKey();
-            } elseif (str_contains(strtolower($name), 'password')) {
+            } elseif (str_contains(strtolower($name), 'password') || str_contains(strtolower($name), 'token')) {
                 $value = '***hidden***';
             }
 
