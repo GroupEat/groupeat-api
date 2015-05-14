@@ -30,6 +30,13 @@ class OpeningWindowsSeeder extends Seeder
                 'start' => '00:00:00',
                 'end' => '23:59:59',
             ]);
+
+            OpeningWindow::create([
+                'restaurantId' => $id + 3,
+                'dayOfWeek' => $dayOfWeek,
+                'start' => '00:00:00',
+                'end' => '23:59:59',
+            ]);
         }
     }
 

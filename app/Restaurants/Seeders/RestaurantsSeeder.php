@@ -63,6 +63,10 @@ class RestaurantsSeeder extends Seeder
                 'name' => "Toujours fermé",
                 'phoneNumber' => '0605040300',
             ],
+            [
+                'name' => "Toujours ouvert à Paris",
+                'phoneNumber' => '0605040301',
+            ],
         ];
 
         foreach ($restaurantsData as $restaurantData) {

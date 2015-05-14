@@ -412,12 +412,12 @@ class OrdersCest
 
     private function getDefaultLatitude()
     {
-        return 48.855118;
+        return 48.716941;
     }
 
     private function getDefaultLongitude()
     {
-        return 2.34573;
+        return 2.239171;
     }
 
     private function getRestaurantEmailFromProductFormat($productFormatId)

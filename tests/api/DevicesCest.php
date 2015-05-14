@@ -20,8 +20,8 @@ class DevicesCest
             'platform' => 'android',
             'version' => '5.0.1 Lollipop',
             'model' => 'black 16Go Nexus 5',
-            'latitude' => 48.855118,
-            'longitude' => 2.345730,
+            'latitude' => 48.716941,
+            'longitude' => 2.239171,
         ]);
         $I->seeResponseCodeIs(201);
     }

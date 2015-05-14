@@ -9,8 +9,8 @@ class CustomerAddressesCest
         $address = [
             'street' => "Allée des techniques avancées",
             'details' => "Bâtiment A, chambre 200",
-            'latitude' => 48.855118,
-            'longitude' => 2.345730,
+            'latitude' => 48.716941,
+            'longitude' => 2.239171,
         ];
 
         $I->sendApiPutWithToken($token, "customers/$id/address", $address);

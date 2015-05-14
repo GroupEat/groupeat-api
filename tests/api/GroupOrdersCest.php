@@ -84,7 +84,7 @@ class GroupOrdersCest
 
         $I->sendApiGetWithToken(
             $token,
-            'groupOrders?joinable=1&around=1&latitude=48.855118&longitude=2.34573&include=restaurant'
+            'groupOrders?joinable=1&around=1&latitude=48.716941&longitude=2.239171&include=restaurant'
         );
         $groupOrders = $I->grabDataFromResponse('');
 
@@ -93,7 +93,7 @@ class GroupOrdersCest
             $restaurantId = $groupOrders[0]['restaurant']['data']['id'];
         } else {
             $groupOrderId = null;
-            $I->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.855118&longitude=2.34573');
+            $I->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.716941&longitude=2.239171');
             $restaurants = $I->grabDataFromResponse();
             $restaurantId = $restaurants[0]['id'];
         }
@@ -110,8 +110,8 @@ class GroupOrdersCest
             'productFormats' => $productFormats,
             'street' => "Allée des techniques avancées",
             'details' => "Bâtiment A, chambre 200",
-            'latitude' => 48.855118,
-            'longitude' => 2.345730,
+            'latitude' => 48.716941,
+            'longitude' => 2.239171,
         ];
 
         if (!is_null($groupOrderId)) {

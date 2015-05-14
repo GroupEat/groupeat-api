@@ -31,8 +31,8 @@ class CustomerAddressesSeeder extends Seeder
             'postcode' => 91120,
             'state' => "IdF",
             'country' => "France",
-            'latitude' => 48.855118,
-            'longitude' => 2.345730,
+            'latitude' => 48.712219,
+            'longitude' => 2.217853,
         ]);
     }
 }
