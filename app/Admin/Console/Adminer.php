@@ -4,7 +4,7 @@ namespace Groupeat\Admin\Console;
 use Groupeat\Admin\Services\GenerateAdminerFiles;
 use Groupeat\Support\Console\Abstracts\Command;
 
-class AdminerCommand extends Command
+class Adminer extends Command
 {
     protected $name = 'adminer';
     protected $description = "Generate the Adminer files to manage the DB";
