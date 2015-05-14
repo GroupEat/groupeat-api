@@ -49,12 +49,6 @@ class Handler extends ExceptionHandler
             'trace' => explode("\n", $e->getTraceAsString()),
         ];
 
-        $headers = [
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept, Authorization, X-Request-With',
-        ];
-
         if ($e instanceof GroupeatException) {
             $statusCode = $e->getStatusCode();
             $data['errorKey'] = $e->getErrorKey();
@@ -76,7 +70,7 @@ class Handler extends ExceptionHandler
                     $json['debug'] = $debugInfo;
                 }
 
-                return response()->json($json, 404, $headers);
+                return response()->json($json, 404);
             } elseif ($e->getStatusCode() == 503) {
                 $json = [
                     'errorKey' => 'maintenanceMode',
@@ -87,7 +81,7 @@ class Handler extends ExceptionHandler
                     $json['debug'] = $debugInfo;
                 }
 
-                return response()->json($json, 503, $headers);
+                return response()->json($json, 503);
             }
         } else {
             $statusCode = 500;
@@ -103,6 +97,6 @@ class Handler extends ExceptionHandler
             }
         }
 
-        return response()->json(compact('data'), $statusCode, $headers);
+        return response()->json(compact('data'), $statusCode);
     }
 }

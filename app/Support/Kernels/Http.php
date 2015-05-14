@@ -13,7 +13,6 @@ class Http extends Kernel
 {
     protected $middleware = [
         CheckForMaintenanceMode::class,
-        Api::class,
         ForbidTokenInQueryString::class,
         ForbidQueryStringForNonIdempotentMethods::class,
     ];
