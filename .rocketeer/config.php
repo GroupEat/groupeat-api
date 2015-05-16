@@ -31,7 +31,7 @@ return [
     ////////////////////////////////////////////////////////////////////
 
     // The default remote connection(s) to execute tasks on
-    'default'          => ['production'],
+    'default'          => [],
 
     // The various connections you defined
     // You can leave all of this empty or remove it entirely if you don't want
@@ -40,6 +40,15 @@ return [
     'connections'      => [
         'production' => [
             'host'      => 'groupeat.fr',
+            'username'  => 'vagrant',
+            'password'  => '',
+            'key'       => posix_getpwuid(posix_geteuid())['dir'].'/.ssh/id_rsa',
+            'keyphrase' => '',
+            'agent'     => '',
+            'db_role'   => true,
+        ],
+        'staging' => [
+            'host'      => 'staging.groupeat.fr',
             'username'  => 'vagrant',
             'password'  => '',
             'key'       => posix_getpwuid(posix_geteuid())['dir'].'/.ssh/id_rsa',
