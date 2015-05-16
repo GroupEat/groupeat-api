@@ -29,7 +29,7 @@ script:
   - ./vendor/bin/codecept run --fail-fast --debug --xml ../../shippable/testresults/results.xml
 
 after_success:
-  - if [[ $(git log -1 HEAD --pretty=format:%s) != *skip\ deploy* ]]; then echo "Starting deployment"; wget http://rocketeer.autopergamene.eu/versions/rocketeer.phar; chmod +x rocketeer.phar; ./rocketeer.phar deploy; else echo "Deployment cancelled"; fi
+  - if [[ $(git log -1 HEAD --pretty=format:%s) != *skip\ deploy* ]]; then echo "Starting deployment"; wget http://rocketeer.autopergamene.eu/versions/rocketeer.phar; chmod +x rocketeer.phar; if [ "$BRANCH" == "master" ]; then ./rocketeer.phar deploy --on=production --branch=master; else ./rocketeer.phar deploy --on=staging --branch=develop; fi; else echo "Deployment cancelled"; fi
 
 notifications:
      email:
