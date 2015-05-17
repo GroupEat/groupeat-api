@@ -60,7 +60,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
     private function registerPapertrailLogger()
     {
-        if ($this->app->environment('production')) {
+        if (!$this->app->isLocal()) {
             $syslog = new SyslogHandler('laravel');
             $syslog->setFormatter(new LineFormatter('%level_name%: %message% %extra%'));
 
