@@ -8,7 +8,7 @@ use League\Fractal\TransformerAbstract;
 
 class OrderTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['customer', 'groupOrder', 'restaurant', 'deliveryAddress'];
+    protected $availableIncludes = ['customer', 'groupOrder', 'deliveryAddress'];
 
     public function transform(Order $order)
     {
@@ -29,11 +29,6 @@ class OrderTransformer extends TransformerAbstract
     public function includeGroupOrder(Order $order)
     {
         return $this->item($order->groupOrder, new GroupOrderTransformer);
-    }
-
-    public function includeRestaurant(Order $order)
-    {
-        return $this->item($order->groupOrder->restaurant, new RestaurantTransformer);
     }
 
     public function includeDeliveryAddress(Order $order)

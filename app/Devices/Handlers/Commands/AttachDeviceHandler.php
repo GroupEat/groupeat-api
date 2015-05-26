@@ -4,47 +4,43 @@ namespace Groupeat\Devices\Handlers\Commands;
 use Groupeat\Devices\Events\DeviceHasBeenAttached;
 use Groupeat\Devices\Commands\AttachDevice;
 use Groupeat\Devices\Entities\Device;
+use Groupeat\Devices\Services\ChangeDeviceOwner;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AttachDeviceHandler
 {
     private $events;
+    private $changeDeviceOwner;
 
-    public function __construct(Dispatcher $events)
+    public function __construct(Dispatcher $events, ChangeDeviceOwner $changeDeviceOwner)
     {
         $this->events = $events;
+        $this->changeDeviceOwner = $changeDeviceOwner;
     }
 
     public function handle(AttachDevice $command)
     {
-        $hardwareId = $command->getUUID();
+        $deviceUUID = $command->getUUID();
+        $device = Device::where('UUID', $deviceUUID)->first();
 
-        $this->assertNotAlreadyExisting($hardwareId);
+        if (!is_null($device)) {
+            $this->changeDeviceOwner->call($device, $command->getCustomer());
+        } else {
+            $device = new Device;
+            $device->customer()->associate($command->getCustomer());
+            $device->UUID = $deviceUUID;
+            $device->notificationToken = $command->getNotificationToken();
+            $device->platform()->associate($command->getPlatform());
+            $device->version = $command->getVersion();
+            $device->model = $command->getModel();
+            $device->latitude = $command->getLatitude();
+            $device->longitude = $command->getLongitude();
 
-        $device = new Device;
-        $device->customer()->associate($command->getCustomer());
-        $device->UUID = $command->getUUID();
-        $device->notificationToken = $command->getNotificationToken();
-        $device->platform()->associate($command->getPlatform());
-        $device->version = $command->getVersion();
-        $device->model = $command->getModel();
-        $device->latitude = $command->getLatitude();
-        $device->longitude = $command->getLongitude();
-
-        $device->save();
-        $this->events->fire(new DeviceHasBeenAttached($device));
-    }
-
-    private function assertNotAlreadyExisting($UUID)
-    {
-        $model = new Device;
-
-        if ($model->where($model->getTableField('UUID'), $UUID)->exists()) {
-            throw new UnprocessableEntity(
-                'deviceAlreadyExists',
-                "The device #$UUID already exists."
-            );
+            $device->save();
+            $this->events->fire(new DeviceHasBeenAttached($device));
         }
+
+        return $device;
     }
 }

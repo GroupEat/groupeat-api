@@ -19,7 +19,7 @@ class DevicesController extends Controller
     {
         $this->auth->assertSame($customer);
 
-        $this->dispatch(new AttachDevice(
+        $device = $this->dispatch(new AttachDevice(
             $customer,
             $this->json('UUID'),
             $this->json('notificationToken'),
@@ -32,6 +32,13 @@ class DevicesController extends Controller
 
         $this->statusCode = Response::HTTP_CREATED;
 
-        return $this->noContentResponse();
+        return $this->itemResponse($device);
+    }
+
+    public function index(Customer $customer)
+    {
+        $this->auth->assertSame($customer);
+
+        return $this->collectionResponse(Device::where('customerId', $customer->id)->get());
     }
 }

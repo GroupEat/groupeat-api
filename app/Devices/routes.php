@@ -8,6 +8,7 @@ Route::group(['prefix' => 'api'], function () {
 
         Route::group(['prefix' => 'customers/{customer}/devices'], function () {
             Route::post('/', DevicesController::class.'@attach');
+            Route::get('/', DevicesController::class.'@index');
         });
     });
 });

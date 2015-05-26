@@ -82,16 +82,16 @@ abstract class Address extends Entity
 
     protected function getPostcodeAttribute()
     {
-        return (int) $this->attributes['postcode'];
+        return (int) $this->attributes['postcode']; // TODO: use casting instead
     }
 
     protected function getLatitudeAttribute()
     {
-        return (float) $this->attributes['latitude'];
+        return (float) $this->attributes['latitude']; // TODO: use casting instead
     }
 
     protected function getLongitudeAttribute()
     {
-        return (float) $this->attributes['longitude'];
+        return (float) $this->attributes['longitude']; // TODO: use casting instead
     }
 }

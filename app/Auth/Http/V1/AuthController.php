@@ -7,7 +7,9 @@ use Groupeat\Auth\Commands\ResetPassword;
 use Groupeat\Auth\Commands\ResetToken;
 use Groupeat\Auth\Commands\SendPasswordResetLink;
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Events\UserHasRetrievedItsToken;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AuthController extends Controller
 {
@@ -16,9 +18,11 @@ class AuthController extends Controller
         $this->dispatch(new ActivateUser($this->json('token')));
     }
 
-    public function getToken()
+    public function getToken(Dispatcher $events)
     {
         $this->auth->byCredentials($this->json('email'), $this->json('password'));
+
+        $events->fire(new UserHasRetrievedItsToken($this->auth->user()));
 
         return $this->tokenResponseFor($this->auth->credentials());
     }
