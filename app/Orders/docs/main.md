@@ -59,7 +59,7 @@
 + Parameters
 
     + id (required, string, `123`) ... The order ID
-    + include (optional, string, `customer`) ... [customer, groupOrder, restaurant, deliveryAddress]
+    + include (optional, string, `customer`) ... [customer, groupOrder, deliveryAddress]
     
 + Model
 
