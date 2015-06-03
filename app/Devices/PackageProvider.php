@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Devices;
 
 use Groupeat\Auth\Events\UserHasRetrievedItsToken;
+use Groupeat\Devices\Entities\Device;
 use Groupeat\Devices\Handlers\Events\KeepDeviceOwnerUpToDate;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Psr\Log\LoggerInterface;
@@ -12,6 +13,10 @@ class PackageProvider extends WorkbenchPackageProvider
         $this->listen(UserHasRetrievedItsToken::class, KeepDeviceOwnerUpToDate::class);
 
         $this->addDeviceInLogContext();
+
+        $this->app['router']->bind('device', function ($UUID) {
+            return Device::findByUUID($UUID);
+        });
     }
 
     private function addDeviceInLogContext()

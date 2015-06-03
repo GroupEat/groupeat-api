@@ -58,7 +58,6 @@ class SendGcmNotification extends NotificationSender
         }
 
         if ($response->getStatusCode() == Response::HTTP_OK) {
-            $notification->createdAt = $notification->freshTimestamp();
             $notification->save();
 
             $this->logger->info(

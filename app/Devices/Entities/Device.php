@@ -6,6 +6,11 @@ use Groupeat\Support\Entities\Abstracts\Entity;
 
 class Device extends Entity
 {
+    public static function findByUUID($UUID)
+    {
+        return static::where('UUID', $UUID)->first();
+    }
+
     public function getRules()
     {
         return [
@@ -13,10 +18,7 @@ class Device extends Entity
             'UUID' => 'required',
             'notificationToken' => 'required',
             'platformId' => 'required',
-            'version' => 'required',
             'model' => 'required',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
         ];
     }
 

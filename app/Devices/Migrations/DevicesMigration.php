@@ -18,10 +18,7 @@ class DevicesMigration extends Migration
             $table->string('UUID')->unique();
             $table->string('notificationToken');
             $table->unsignedInteger('platformId');
-            $table->string('version');
             $table->string('model');
-            $table->float('latitude')->index();
-            $table->float('longitude')->index();
             $table->timestamp('createdAt');
             $table->timestamp('updatedAt');
 

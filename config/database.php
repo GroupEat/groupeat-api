@@ -115,6 +115,7 @@ return [
         \Groupeat\Orders\Migrations\DeliveryAddressesMigration::class,
         \Groupeat\Devices\Migrations\PlatformsMigration::class,
         \Groupeat\Devices\Migrations\DevicesMigration::class,
+        \Groupeat\Devices\Migrations\StatusesMigration::class,
         \Groupeat\Settings\Migrations\SettingsMigration::class,
         \Groupeat\Settings\Migrations\CustomerSettingMigration::class,
         \Groupeat\Notifications\Migrations\NotificationsMigration::class,

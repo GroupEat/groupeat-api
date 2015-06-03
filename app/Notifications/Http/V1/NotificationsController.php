@@ -24,10 +24,9 @@ class NotificationsController extends Controller
             $notification->customer()->associate($device->customer);
             $notification->device()->associate($device);
             $notification->groupOrder()->associate($groupOrder);
-            $notification->longitude = $device->longitude;
-            $notification->latitude = $device->latitude;
 
-            $sendNotification->call($notification);
+            $forceOnDev = true;
+            $sendNotification->call($notification, $forceOnDev);
         }
     }
 }

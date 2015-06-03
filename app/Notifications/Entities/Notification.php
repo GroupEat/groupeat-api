@@ -4,22 +4,16 @@ namespace Groupeat\Notifications\Entities;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Support\Entities\Abstracts\Entity;
+use Groupeat\Support\Entities\Abstracts\ImmutableDatedEntity;
 
-class Notification extends Entity
+class Notification extends ImmutableDatedEntity
 {
-    public $timestamps = false;
-
-    protected $dates = ['createdAt'];
-
     public function getRules()
     {
         return [
             'customerId' => 'required',
             'deviceId' => 'required',
             //'groupOrderId' => 'required', TODO: uncomment when test route is not needed anymore
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
         ];
     }
 

@@ -11,4 +11,6 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/', DevicesController::class.'@index');
         });
     });
+
+    Route::put('devices/{device}', DevicesController::class.'@update');
 });

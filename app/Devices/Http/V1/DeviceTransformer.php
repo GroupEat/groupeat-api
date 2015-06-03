@@ -13,10 +13,7 @@ class DeviceTransformer extends TransformerAbstract
         return [
             'id' => $device->id,
             'UUID' => $device->UUID,
-            'version' => $device->version,
             'model' => $device->model,
-            'latitude' => (float) $device->latitude,
-            'longitude' => (float) $device->longitude,
             'createdAt' => (string) $device->createdAt,
             'updatedAt' => (string) $device->updatedAt,
         ];

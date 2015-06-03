@@ -29,10 +29,7 @@
         {
             "id": "1",
             "UUID": "8556336d027b4788",
-            "version": "5.1",
             "model": "Nexus 5",
-            "latitude": 48.7173,
-            "longitude": 2.23935,
             "createdAt": "2015-05-18 22:36:59",
             "updatedAt": "2015-05-18 22:36:59"
         }
@@ -45,20 +42,14 @@
             {
                 "id": "1",
                 "UUID": "8556336d027b4788",
-                "version": "5.1",
                 "model": "Nexus 5",
-                "latitude": 48.7173,
-                "longitude": 2.23935,
                 "createdAt": "2015-05-18 22:36:59",
                 "updatedAt": "2015-05-18 22:36:59"
             },
             {
                 "id": "2",
                 "UUID": "7476Sqfsd77",
-                "version": "8.2",
-                "model": "iPhone 1",
-                "latitude": 48.71100,
-                "longitude": 2.21874,
+                "model": "iPhone 6",
                 "createdAt": "2015-05-26 23:06:03",
                 "updatedAt": "2015-05-26 23:06:03"
             }
@@ -79,10 +70,7 @@
             "UUID": "1sfqsf557845sfsf", // A unique ID representing the device
             "notificationToken": "353SQKFJ323fdsf", // The token to use with GCM, APNS or equivalent services
             "platform": "android", // Should be one of the labels returned by the route above.
-            "version": "5.0.1 Lollipop",
-            "model": "Black 16 Go Nexus 5",
-            "latitude": 48.7173,
-            "longitude": 2.23935
+            "model": "Black 16 Go Nexus 5"
         }
 
 + Response 201

@@ -24,10 +24,7 @@ class DevicesController extends Controller
             $this->json('UUID'),
             $this->json('notificationToken'),
             Platform::findByLabelOrFail($this->json('platform')),
-            $this->json('version'),
-            $this->json('model'),
-            (float) $this->json('latitude'),
-            (float) $this->json('longitude')
+            $this->json('model')
         ));
 
         $this->statusCode = Response::HTTP_CREATED;
@@ -40,5 +37,10 @@ class DevicesController extends Controller
         $this->auth->assertSame($customer);
 
         return $this->collectionResponse(Device::where('customerId', $customer->id)->get());
+    }
+
+    public function update(Device $device)
+    {
+        dd($device);
     }
 }

@@ -275,7 +275,7 @@ class GroupOrder extends Entity
 
     private function setFoodRushDurationInMinutes($minutes)
     {
-        if (!$this->createdAt) {
+        if (!$this->exists) {
             $this->createdAt = $this->freshTimestamp();
         }
 

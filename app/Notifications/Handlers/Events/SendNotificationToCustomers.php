@@ -7,17 +7,22 @@ use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Notifications\Services\SendNotification;
 use Groupeat\Notifications\Services\SelectDevicesToNotify;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
+use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Handlers\Events\Abstracts\QueuedHandler;
+use Psr\Log\LoggerInterface;
 
 class SendNotificationToCustomers extends QueuedHandler
 {
+    private $logger;
     private $selectDevicesToNotify;
     private $sendNotification;
 
     public function __construct(
+        LoggerInterface $logger,
         SelectDevicesToNotify $selectDevicesToNotify,
         SendNotification $sendNotification
     ) {
+        $this->logger = $logger;
         $this->selectDevicesToNotify = $selectDevicesToNotify;
         $this->sendNotification = $sendNotification;
     }
@@ -32,10 +37,19 @@ class SendNotificationToCustomers extends QueuedHandler
                 $notification->customer()->associate($device->customer);
                 $notification->device()->associate($device);
                 $notification->groupOrder()->associate($groupOrder);
-                $notification->longitude = $device->longitude;
-                $notification->latitude = $device->latitude;
 
-                $this->sendNotification->call($notification);
+                try {
+                    $this->sendNotification->call($notification);
+                } catch (Exception $groupeatException) {
+                    $this->logger->critical(
+                        'Failed to send notification to '
+                        . $device->customer->toShortString()
+                        . ' on ' . $device->toShortString()
+                        . ' for ' . $groupOrder->toShortString()
+                        . ' with message ' . $groupeatException->getMessage()
+                        . ' with trace ' . $groupeatException->getTraceAsString()
+                    );
+                }
             });
     }
 }

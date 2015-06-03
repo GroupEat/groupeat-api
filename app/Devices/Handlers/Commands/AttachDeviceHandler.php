@@ -32,10 +32,7 @@ class AttachDeviceHandler
             $device->UUID = $deviceUUID;
             $device->notificationToken = $command->getNotificationToken();
             $device->platform()->associate($command->getPlatform());
-            $device->version = $command->getVersion();
             $device->model = $command->getModel();
-            $device->latitude = $command->getLatitude();
-            $device->longitude = $command->getLongitude();
 
             $device->save();
             $this->events->fire(new DeviceHasBeenAttached($device));
