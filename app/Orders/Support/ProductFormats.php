@@ -61,7 +61,7 @@ class ProductFormats
             $this->models = $models;
         }
 
-        $foundIds = $this->models->lists('id');
+        $foundIds = $this->models->pluck('id')->all();
         $missingIds = array_diff($askedIds, $foundIds);
 
         if (!empty($missingIds)) {

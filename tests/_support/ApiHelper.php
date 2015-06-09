@@ -41,7 +41,7 @@ class ApiHelper extends \Codeception\Module
             $token,
             'groupOrders?joinable=1&around=1&latitude=48.716941&longitude=2.239171&include=restaurant'
         );
-        
+
         $groupOrders = $this->grabDataFromResponse('');
 
         if (!empty($groupOrders)) {

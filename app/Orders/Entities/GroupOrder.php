@@ -185,7 +185,7 @@ class GroupOrder extends Entity
      */
     public function getTotalRawPriceAttribute()
     {
-        return sumPrices(collect($this->orders->lists('rawPrice')));
+        return sumPrices($this->orders->pluck('rawPrice'));
     }
 
     /**

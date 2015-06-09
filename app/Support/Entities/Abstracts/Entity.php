@@ -35,7 +35,7 @@ abstract class Entity extends Model implements PresentableInterface
 
     public static function findOrFail($id, $columns = ['*'])
     {
-        $model = static::find($id, $columns);
+        $model = static::query()->find($id, $columns);
         $shortClassName = class_basename(static::CLASS);
 
         if (is_null($model)) {
