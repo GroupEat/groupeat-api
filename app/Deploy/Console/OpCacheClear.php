@@ -6,10 +6,10 @@ use GuzzleHttp\Client;
 
 class OpCacheClear extends Command
 {
-    protected $name = 'opcache:clear';
+    protected $signature = 'opcache:clear';
     protected $description = "Clear the OPcache on both server and CLI";
 
-    public function fire()
+    public function handle()
     {
         $this->clearServer();
         $this->clearCLI();

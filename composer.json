@@ -15,6 +15,7 @@
     "anahkiasen/html-object": "1.4.*"
   },
   "require-dev": {
+    "doctrine/dbal": "2.4.*",
     "itsgoingd/clockwork": "1.7.*",
     "squizlabs/php_codesniffer": "2.3.*",
     "codeception/codeception": "2.0.*",

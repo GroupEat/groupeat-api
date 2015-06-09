@@ -6,7 +6,7 @@ use Groupeat\Support\Console\Abstracts\Command;
 
 class Adminer extends Command
 {
-    protected $name = 'adminer';
+    protected $signature = 'adminer';
     protected $description = "Generate the Adminer files to manage the DB";
 
     private $generateAdminerFiles;
@@ -18,7 +18,7 @@ class Adminer extends Command
         $this->generateAdminerFiles = $generateAdminerFiles;
     }
 
-    public function fire()
+    public function handle()
     {
         $this->generateAdminerFiles->call($this->getOutput());
     }

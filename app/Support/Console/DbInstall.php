@@ -11,7 +11,11 @@ use Symfony\Component\Console\Input\InputOption;
 
 class DbInstall extends Command
 {
-    protected $name = 'db:install';
+    protected $signature = 'db:install
+        {--force : Force the operation to run when in production}
+        {--seed : Migrate and seed}
+        {--entries= : Number of fake entries to seed the DB with}';
+
     protected $description = "Install the DB by running all the migrations and seed if needed";
 
     /**
@@ -19,7 +23,7 @@ class DbInstall extends Command
      */
     private $order;
 
-    public function fire()
+    public function handle()
     {
         $this->order = Config::get('database.order');
 
@@ -109,14 +113,5 @@ class DbInstall extends Command
         );
 
         File::put($dest, $migration);
-    }
-
-    protected function getOptions()
-    {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Force the operation to run when in production.', null],
-            ['seed', 's', InputOption::VALUE_NONE, 'Migrate and seed.', null],
-            ['entries', 'e', InputOption::VALUE_REQUIRED, 'Number of fake entries to seed the DB with.', null],
-        ];
     }
 }
