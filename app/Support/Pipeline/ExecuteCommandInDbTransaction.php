@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Support\Pipeline;
 
-use Groupeat\Support\Commands\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Command;
 use Illuminate\Database\DatabaseManager;
 
 class ExecuteCommandInDbTransaction

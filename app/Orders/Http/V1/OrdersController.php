@@ -2,8 +2,8 @@
 namespace Groupeat\Orders\Http\V1;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Orders\Commands\CreateGroupOrder;
-use Groupeat\Orders\Commands\JoinGroupOrder;
+use Groupeat\Orders\Jobs\CreateGroupOrder;
+use Groupeat\Orders\Jobs\JoinGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Support\ProductFormats;

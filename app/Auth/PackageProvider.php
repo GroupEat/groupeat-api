@@ -3,7 +3,7 @@ namespace Groupeat\Auth;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
-use Groupeat\Auth\Handlers\Events\SendActivationLink;
+use Groupeat\Auth\Listeners\SendActivationLink;
 use Groupeat\Auth\Values\TokenDurationInMinutes;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Illuminate\Http\Request;

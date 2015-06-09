@@ -2,7 +2,7 @@
 
 use Groupeat\Auth\Events\UserHasRetrievedItsToken;
 use Groupeat\Devices\Entities\Device;
-use Groupeat\Devices\Handlers\Events\KeepDeviceOwnerUpToDate;
+use Groupeat\Devices\Listeners\KeepDeviceOwnerUpToDate;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Psr\Log\LoggerInterface;
 

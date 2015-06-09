@@ -2,7 +2,7 @@
 namespace Groupeat\Support\Http\V1\Abstracts;
 
 use Groupeat\Auth\Auth;
-use Groupeat\Support\Commands\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Command;
 use Groupeat\Support\Http\Output;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\Request;

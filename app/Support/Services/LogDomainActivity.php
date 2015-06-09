@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Support\Services;
 
-use Groupeat\Support\Commands\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Command;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Events\Abstracts\Event;
 use Psr\Log\LoggerInterface;

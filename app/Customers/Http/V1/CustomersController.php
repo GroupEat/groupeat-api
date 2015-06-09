@@ -2,7 +2,7 @@
 namespace Groupeat\Customers\Http\V1;
 
 use Groupeat\Auth\Http\V1\TokenTransformer;
-use Groupeat\Customers\Commands\RegisterCustomer;
+use Groupeat\Customers\Jobs\RegisterCustomer;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Symfony\Component\HttpFoundation\Response;

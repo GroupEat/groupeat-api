@@ -23,7 +23,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
 
         $this->includeRoutes();
         $this->registerConsoleCommands();
-        $this->registerCommandMapping();
+        $this->registerJobsMapping();
 
         $this->bootPackage();
     }
@@ -102,19 +102,19 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $this->commands($consoleCommandNamespaces);
     }
 
-    protected function registerCommandMapping()
+    protected function registerJobsMapping()
     {
         $maps = [];
-        $commandPaths = File::files($this->getPackagePath('Commands'));
+        $jobsPaths = File::files($this->getPackagePath('Jobs'));
         $namespacePrefix = 'Groupeat\\'.$this->getPackageName();
 
-        foreach ($commandPaths as $commandPath) {
+        foreach ($jobsPaths as $jobsPath) {
             $method = 'handle';
-            $className = pathinfo($commandPath, PATHINFO_FILENAME);
-            $commandClass = $namespacePrefix.'\Commands\\'.$className;
-            $handlerClass = $namespacePrefix.'\Handlers\Commands\\'.$className.'Handler';
+            $className = pathinfo($jobsPath, PATHINFO_FILENAME);
+            $jobsClass = $namespacePrefix.'\Jobs\\'.$className;
+            $handlerClass = $namespacePrefix.'\Jobs\\'.$className.'Handler';
 
-            $maps[$commandClass] = "$handlerClass@$method";
+            $maps[$jobsClass] = "$handlerClass@$method";
         }
 
         $this->app[Dispatcher::class]->maps($maps);

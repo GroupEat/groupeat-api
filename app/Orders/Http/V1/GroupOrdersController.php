@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
-use Groupeat\Orders\Commands\ConfirmGroupOrder;
+use Groupeat\Orders\Jobs\ConfirmGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 

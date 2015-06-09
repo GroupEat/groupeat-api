@@ -4,7 +4,7 @@ use Groupeat\Notifications\Values\ApnsCertificate;
 use Groupeat\Notifications\Values\GcmApiKey;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
-use Groupeat\Notifications\Handlers\Events\SendNotificationToCustomers;
+use Groupeat\Notifications\Listeners\SendNotificationToCustomers;
 use Groupeat\Support\Values\Environment;
 
 class PackageProvider extends WorkbenchPackageProvider

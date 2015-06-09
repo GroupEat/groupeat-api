@@ -1,11 +1,11 @@
 <?php
 namespace Groupeat\Auth\Http\V1;
 
-use Groupeat\Auth\Commands\ActivateUser;
-use Groupeat\Auth\Commands\ChangePassword;
-use Groupeat\Auth\Commands\ResetPassword;
-use Groupeat\Auth\Commands\ResetToken;
-use Groupeat\Auth\Commands\SendPasswordResetLink;
+use Groupeat\Auth\Jobs\ActivateUser;
+use Groupeat\Auth\Jobs\ChangePassword;
+use Groupeat\Auth\Jobs\ResetPassword;
+use Groupeat\Auth\Jobs\ResetToken;
+use Groupeat\Auth\Jobs\SendPasswordResetLink;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRetrievedItsToken;
 use Groupeat\Support\Http\V1\Abstracts\Controller;

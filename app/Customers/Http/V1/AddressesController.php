@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Customers\Http\V1;
 
-use Groupeat\Customers\Commands\UpdateAddress;
+use Groupeat\Customers\Jobs\UpdateAddress;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Entities\PredefinedAddress;
 use Groupeat\Support\Exceptions\NotFound;

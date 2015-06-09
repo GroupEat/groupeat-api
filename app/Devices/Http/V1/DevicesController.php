@@ -2,7 +2,7 @@
 namespace Groupeat\Devices\Http\V1;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Devices\Commands\AttachDevice;
+use Groupeat\Devices\Jobs\AttachDevice;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Devices\Entities\Platform;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
