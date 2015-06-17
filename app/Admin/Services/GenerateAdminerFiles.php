@@ -7,6 +7,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateAdminerFiles
 {
+    const THEME = 'pappu687';
+
     private $client;
     private $filesystem;
 
@@ -39,7 +41,7 @@ class GenerateAdminerFiles
         $output->writeln("Downloading CSS file");
 
         $css = (string) $this->client
-            ->get('https://raw.github.com/vrana/adminer/master/designs/pappu687/adminer.css')
+            ->get('https://raw.github.com/vrana/adminer/master/designs/' . self::THEME . '/adminer.css')
             ->getBody();
 
         $output->writeln("Applying GroupEat theme");
