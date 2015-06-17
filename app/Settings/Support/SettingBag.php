@@ -12,28 +12,17 @@ class SettingBag implements JsonSerializable
     /**
      * @var array
      */
-    private $values;
+    private $values = [];
 
     public function __construct(Customer $customer)
     {
-        $labels = [];
-        $defaultSettings = [];
-
-        foreach (Setting::all() as $settingEntity) {
-            $labels[$settingEntity->id] = $settingEntity->label;
-            $defaultSettings[$settingEntity->label] = $settingEntity->default;
-        }
-
-        $model = new CustomerSetting;
-        $customerSettingEntities = $model->where($model->getTableField('customerId'), $customer->id)->get();
-        $customerSettings = [];
-
-        foreach ($customerSettingEntities as $customerSettingEntitiy) {
-            $label = $labels[$customerSettingEntitiy->settingId];
-            $customerSettings[$label] = $customerSettingEntitiy->value;
-        }
-
-        $this->values = array_merge($defaultSettings, $customerSettings);
+        $customerSettings = CustomerSetting::query()
+            ->where('customerId', $customer->id)
+            ->with('setting')
+            ->get()
+            ->each(function (CustomerSetting $customerSetting) {
+                $this->values[$customerSetting->setting->label] = $customerSetting->value;
+            });
     }
 
     /**

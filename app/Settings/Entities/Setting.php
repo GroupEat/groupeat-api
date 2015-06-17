@@ -8,8 +8,6 @@ class Setting extends Entity
 {
     use HasLabel;
 
-    public $timestamps = false;
-
     public function getRules()
     {
         return [

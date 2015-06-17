@@ -16,7 +16,9 @@ class CustomerSettingMigration extends Migration
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('settingId');
-            $table->string('value');
+            $table->string('value')->index();
+            $table->timestamp('createdAt');
+            $table->timestamp('updatedAt');
 
             $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
             $table->foreign('settingId')->references('id')->on(SettingsMigration::TABLE);

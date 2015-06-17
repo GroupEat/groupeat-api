@@ -20,13 +20,17 @@ class UpdateSettingsHandler
     {
         $customer = $job->getCustomer();
 
-            CustomerSetting::set($customer, $label, $value);
         foreach ($job->getValues() as $label => $value) {
+            CustomerSetting::setByLabel($label, $customer, $value);
         }
 
+        $settingBag = new SettingBag($customer);
+
         $this->events->fire(new CustomerHasUpdatedItsSettings(
-            new SettingBag($customer)
             $job->getCustomer($customer),
+            $settingBag
         ));
+
+        return $settingBag;
     }
 }

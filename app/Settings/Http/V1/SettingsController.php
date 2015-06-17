@@ -19,11 +19,11 @@ class SettingsController extends Controller
     {
         $this->auth->assertSame($customer);
 
-        $this->dispatch(new UpdateSettings(
+        $settingBag = $this->dispatch(new UpdateSettings(
             $customer,
             $this->json()->all()
         ));
 
-        return $this->itemResponse(new SettingBag($customer));
+        return $this->itemResponse($settingBag);
     }
 }

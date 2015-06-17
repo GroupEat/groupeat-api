@@ -16,6 +16,8 @@ class SettingsMigration extends Migration
             $table->string('cast');
             $table->string('label')->unique();
             $table->string('default');
+            $table->timestamp('createdAt');
+            $table->timestamp('updatedAt');
         });
     }
 }

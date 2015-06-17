@@ -7,33 +7,38 @@ use Groupeat\Support\Entities\Abstracts\Entity;
 
 class CustomerSetting extends Entity
 {
-    public $timestamps = false;
-
     /**
-     * @param Customer $customer
      * @param string   $label
+     * @param Customer $customer
      * @param mixed    $value
      */
-    public static function set(Customer $customer, $label, $value)
+    public static function setByLabel($label, Customer $customer, $value)
     {
-        $model = new static;
-        $defaultSetting = Setting::findByLabelOrFail($label);
+        static::set(Setting::findByLabelOrFail($label), $customer, $value);
+    }
+
+    /**
+     * @param Setting  $defaultSetting
+     * @param Customer $customer
+     * @param mixed    $value
+     */
+    public static function set(Setting $defaultSetting, Customer $customer, $value)
+    {
         $value = $defaultSetting->applyCasting($value);
-        $existingSetting = $model
+
+        $existingSetting = static::query()
             ->where('customerId', $customer->id)
             ->where('settingId', $defaultSetting->id)
             ->first();
 
         if (!is_null($existingSetting)) {
+            $existingSetting->setting()->associate($defaultSetting);
+
             if ($existingSetting->value != $value) {
-                if ($defaultSetting->default == $value) {
-                    $existingSetting->delete(); // The default value will be used
-                } else {
-                    $existingSetting->value = $value;
-                    $existingSetting->save();
-                }
+                $existingSetting->value = $value;
+                $existingSetting->save();
             }
-        } elseif ($defaultSetting->default != $value) {
+        } else {
             $newSetting = new static;
             $newSetting->customer()->associate($customer);
             $newSetting->setting()->associate($defaultSetting);
