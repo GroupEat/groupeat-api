@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: {{ app.url }}/api
+HOST: {{ app.url }}
 
 # GroupEat RESTful API
 
