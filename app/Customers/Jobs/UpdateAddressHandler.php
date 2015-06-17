@@ -16,14 +16,14 @@ class UpdateAddressHandler
     }
 
     /**
-     * @param UpdateAddress $command
+     * @param UpdateAddress $job
      *
      * @return Address
      */
-    public function handle(UpdateAddress $command)
+    public function handle(UpdateAddress $job)
     {
-        $attributes = $command->getAddressData();
-        $customer = $command->getCustomer();
+        $attributes = $job->getAddressData();
+        $customer = $job->getCustomer();
 
         if ($customer->address) {
             $address = $customer->address;

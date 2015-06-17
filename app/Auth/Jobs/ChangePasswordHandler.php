@@ -20,11 +20,11 @@ class ChangePasswordHandler
         $this->generateToken = $generateToken;
     }
 
-    public function handle(ChangePassword $command)
+    public function handle(ChangePassword $job)
     {
-        $email = $command->getEmail();
-        $password = $command->getOldPassword();
-        $newPassword = $command->getNewPassword();
+        $email = $job->getEmail();
+        $password = $job->getOldPassword();
+        $newPassword = $job->getNewPassword();
 
         $this->assertLongEnough($newPassword);
         $this->assertDifferent($password, $newPassword);

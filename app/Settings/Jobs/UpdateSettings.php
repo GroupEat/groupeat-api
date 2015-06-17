@@ -2,9 +2,9 @@
 namespace Groupeat\Settings\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class UpdateSettings extends Command
+class UpdateSettings extends Job
 {
     private $customer;
     private $values;

@@ -8,9 +8,9 @@ use Groupeat\Support\Exceptions\NotFound;
 
 class ActivateUserHandler
 {
-    public function handle(ActivateUser $command)
+    public function handle(ActivateUser $job)
     {
-        $token = $command->getToken();
+        $token = $job->getToken();
 
         if (empty($token)) {
             throw new BadRequest(

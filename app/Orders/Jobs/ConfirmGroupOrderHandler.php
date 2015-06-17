@@ -22,10 +22,10 @@ class ConfirmGroupOrderHandler
         $this->maximumPreparationTimeInMinutes = $maximumPreparationTimeInMinutes->value();
     }
 
-    public function handle(ConfirmGroupOrder $command)
+    public function handle(ConfirmGroupOrder $job)
     {
-        $groupOrder = $command->getGroupOrder();
-        $preparedAt = $command->getPreparedAt();
+        $groupOrder = $job->getGroupOrder();
+        $preparedAt = $job->getPreparedAt();
 
         $this->assertNotAlreadyConfirmed($groupOrder);
         $this->guardAgainstInvalidPreparationTime($groupOrder, $preparedAt);

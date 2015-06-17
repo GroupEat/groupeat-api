@@ -19,20 +19,20 @@ class AttachDeviceHandler
         $this->changeDeviceOwner = $changeDeviceOwner;
     }
 
-    public function handle(AttachDevice $command)
+    public function handle(AttachDevice $job)
     {
-        $deviceUUID = $command->getUUID();
+        $deviceUUID = $job->getUUID();
         $device = Device::where('UUID', $deviceUUID)->first();
 
         if (!is_null($device)) {
-            $this->changeDeviceOwner->call($device, $command->getCustomer());
+            $this->changeDeviceOwner->call($device, $job->getCustomer());
         } else {
             $device = new Device;
-            $device->customer()->associate($command->getCustomer());
+            $device->customer()->associate($job->getCustomer());
             $device->UUID = $deviceUUID;
-            $device->notificationToken = $command->getNotificationToken();
-            $device->platform()->associate($command->getPlatform());
-            $device->model = $command->getModel();
+            $device->notificationToken = $job->getNotificationToken();
+            $device->platform()->associate($job->getPlatform());
+            $device->model = $job->getModel();
 
             $device->save();
             $this->events->fire(new DeviceHasBeenAttached($device));

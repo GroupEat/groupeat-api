@@ -40,11 +40,11 @@ class CreateGroupOrderHandler extends GroupOrderValidation
         $this->maximumPreparationTimeInMinutes = $maximumPreparationTimeInMinutes->value();
     }
 
-    public function handle(CreateGroupOrder $command)
+    public function handle(CreateGroupOrder $job)
     {
-        $productFormats = $command->getProductFormats();
-        $foodRushInMinutes = $command->getFoodRushInMinutes();
-        $deliveryAddressData = $command->getDeliveryAddressData();
+        $productFormats = $job->getProductFormats();
+        $foodRushInMinutes = $job->getFoodRushInMinutes();
+        $deliveryAddressData = $job->getDeliveryAddressData();
 
         $this->guardAgainstInvalidFoodRushDuration($foodRushInMinutes);
 
@@ -55,11 +55,11 @@ class CreateGroupOrderHandler extends GroupOrderValidation
         $this->assertCloseEnough($deliveryAddress, $restaurant->address);
 
         $order = GroupOrder::createWith(
-            $command->getCustomer(),
+            $job->getCustomer(),
             $deliveryAddress,
             $productFormats,
             $foodRushInMinutes,
-            $command->getComment()
+            $job->getComment()
         );
 
         $this->events->fire(new GroupOrderHasBeenCreated($order));

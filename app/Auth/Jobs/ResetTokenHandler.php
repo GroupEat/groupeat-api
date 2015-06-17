@@ -18,14 +18,14 @@ class ResetTokenHandler
     }
 
     /**
-     * @param ResetToken $command
+     * @param ResetToken $job
      *
      * @return UserCredentials
      */
-    public function handle(ResetToken $command)
+    public function handle(ResetToken $job)
     {
-        $email = $command->getEmail();
-        $password = $command->getPassword();
+        $email = $job->getEmail();
+        $password = $job->getPassword();
 
         $userCredentials = UserCredentials::findByEmailOrFail($email);
         $token = $this->jwtAuth->attempt(compact('email', 'password'));

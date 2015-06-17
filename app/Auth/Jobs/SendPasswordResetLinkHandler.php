@@ -27,9 +27,9 @@ class SendPasswordResetLinkHandler
         $this->availableLocales = $availableLocales;
     }
 
-    public function handle(SendPasswordResetLink $command)
+    public function handle(SendPasswordResetLink $job)
     {
-        $email = $command->getEmail();
+        $email = $job->getEmail();
         $broker = $this->passwordBroker;
         $credentials = compact('email');
 

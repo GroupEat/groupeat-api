@@ -16,17 +16,17 @@ class UpdateSettingsHandler
         $this->events = $events;
     }
 
-    public function handle(UpdateSettings $command)
+    public function handle(UpdateSettings $job)
     {
-        $customer = $command->getCustomer();
+        $customer = $job->getCustomer();
 
-        foreach ($command->getValues() as $label => $value) {
             CustomerSetting::set($customer, $label, $value);
+        foreach ($job->getValues() as $label => $value) {
         }
 
         $this->events->fire(new CustomerHasUpdatedItsSettings(
-            $command->getCustomer($customer),
             new SettingBag($customer)
+            $job->getCustomer($customer),
         ));
     }
 }

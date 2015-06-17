@@ -2,9 +2,9 @@
 namespace Groupeat\Customers\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class UpdateAddress extends Command
+class UpdateAddress extends Job
 {
     private $customer;
     private $addressData;

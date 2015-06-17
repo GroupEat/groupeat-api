@@ -3,9 +3,9 @@ namespace Groupeat\Orders\Jobs;
 
 use Carbon\Carbon;
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class ConfirmGroupOrder extends Command
+class ConfirmGroupOrder extends Job
 {
     private $groupOrder;
 

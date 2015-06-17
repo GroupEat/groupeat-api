@@ -3,9 +3,9 @@ namespace Groupeat\Orders\Jobs\Abstracts;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Support\ProductFormats;
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-abstract class PlaceOrder extends Command
+abstract class PlaceOrder extends Job
 {
     protected $customer;
     protected $productFormats;

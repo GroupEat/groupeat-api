@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Customers\Jobs;
 
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class RegisterCustomer extends Command
+class RegisterCustomer extends Job
 {
     private $email;
     private $password;

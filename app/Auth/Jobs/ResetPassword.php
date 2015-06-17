@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class ResetPassword extends Command
+class ResetPassword extends Job
 {
     private $token;
     private $email;

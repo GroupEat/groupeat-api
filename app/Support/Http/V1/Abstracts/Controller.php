@@ -2,7 +2,7 @@
 namespace Groupeat\Support\Http\V1\Abstracts;
 
 use Groupeat\Auth\Auth;
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 use Groupeat\Support\Http\Output;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\Request;
@@ -151,12 +151,12 @@ abstract class Controller extends IlluminateController
     }
 
     /**
-     * @param Command $command
+     * @param Job $job
      *
      * @return mixed
      */
-    protected function dispatch(Command $command)
+    protected function dispatch(Job $job)
     {
-        return $this->dispatcher->dispatch($command);
+        return $this->dispatcher->dispatch($job);
     }
 }

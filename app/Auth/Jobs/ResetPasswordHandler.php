@@ -20,11 +20,11 @@ class ResetPasswordHandler
         $this->generateToken = $generateToken;
     }
 
-    public function handle(ResetPassword $command)
+    public function handle(ResetPassword $job)
     {
-        $email = $command->getEmail();
-        $token = $command->getToken();
-        $password = $command->getNewPassword();
+        $email = $job->getEmail();
+        $token = $job->getToken();
+        $password = $job->getNewPassword();
 
         $broker = $this->passwordBroker;
         $password_confirmation = $password;

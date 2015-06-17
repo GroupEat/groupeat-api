@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class SendPasswordResetLink extends Command
+class SendPasswordResetLink extends Job
 {
     private $email;
 

@@ -15,12 +15,12 @@ class RegisterCustomerHandler
         $this->registerUser = $registerUser;
     }
 
-    public function handle(RegisterCustomer $command)
+    public function handle(RegisterCustomer $job)
     {
         return $this->registerUser->call(
-            $command->getEmail(),
-            $command->getPassword(),
-            $command->getLocale(),
+            $job->getEmail(),
+            $job->getPassword(),
+            $job->getLocale(),
             new Customer,
             function ($credentials) {
                 $this->assertEmailFromCampus($credentials['email']);

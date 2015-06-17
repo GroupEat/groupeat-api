@@ -3,9 +3,9 @@ namespace Groupeat\Devices\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Platform;
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class AttachDevice extends Command
+class AttachDevice extends Job
 {
     private $customer;
     private $UUID;

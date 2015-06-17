@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
-use Groupeat\Support\Jobs\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 
-class ChangePassword extends Command
+class ChangePassword extends Job
 {
     private $email;
     private $oldPassword;
