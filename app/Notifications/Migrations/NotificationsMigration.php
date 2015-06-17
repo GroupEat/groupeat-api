@@ -19,8 +19,6 @@ class NotificationsMigration extends Migration
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('deviceId');
             $table->unsignedInteger('groupOrderId')->nullable(); // TODO: remove nullable when test route is not needed anymore
-            $table->float('latitude')->index();
-            $table->float('longitude')->index();
             $table->timestamp('createdAt')->index();
 
             $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
