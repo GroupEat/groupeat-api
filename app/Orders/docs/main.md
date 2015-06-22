@@ -12,6 +12,7 @@
         {
             "id": "20",
             "joinable": false,
+            "totalRawPrice": 2966,
             "discountRate": 28, // Percentage
             "createdAt": "2015-01-30 16:09:26",
             "remainingCapacity": 5, // The number of product formats that can still be added

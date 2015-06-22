@@ -16,6 +16,7 @@ class GroupOrderTransformer extends TransformerAbstract
         return [
             'id' => $groupOrder->id,
             'joinable' => $groupOrder->isJoinable(),
+            'totalRawPrice' => $groupOrder->totalRawPrice->getAmount(),
             'discountRate' => $groupOrder->discountRate->toPercentage(),
             'createdAt' => (string) $groupOrder->createdAt,
             'remainingCapacity' => $groupOrder->computeRemainingCapacity(),
