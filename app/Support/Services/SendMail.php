@@ -2,6 +2,7 @@
 namespace Groupeat\Support\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Support\Values\Environment;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
 use Illuminate\View\Factory;
@@ -10,18 +11,23 @@ use Robbo\Presenter\Decorator;
 
 class SendMail
 {
+    const STAGING_EMAIL = 'dev@groupeat.fr';
+
     private $mailer;
     private $locale;
     private $logger;
+    private $environment;
 
     public function __construct(
         Mailer $mailer,
         Locale $locale,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Environment $environment
     ) {
         $this->mailer = $mailer;
         $this->locale = $locale;
         $this->logger = $logger;
+        $this->environment = $environment;
     }
 
     /**
@@ -41,7 +47,7 @@ class SendMail
     public function call(UserCredentials $user, $viewName, $subjectLangKey, array $data = [])
     {
         $this->locale->executeWithUserLocale(function () use ($user, $viewName, $subjectLangKey, $data) {
-            $email = $user->email;
+            $email = $this->getEmail($user);
             $viewFactory = $this->mailer->getViewFactory();
             $subject = $this->locale->getTranslator()->get($subjectLangKey);
             $text = $viewFactory->make("$viewName-text", $data)->render();
@@ -58,5 +64,14 @@ class SendMail
 
             $this->logger->info("The email [$viewName] has been sent for {$user->user->toShortString()}.");
         }, $user->locale);
+    }
+
+    public function getEmail(UserCredentials $user)
+    {
+        if ($this->environment->isStaging()) {
+            return self::STAGING_EMAIL;
+        } else {
+            return $user->email;
+        }
     }
 }

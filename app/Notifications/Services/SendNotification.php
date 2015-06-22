@@ -55,6 +55,6 @@ class SendNotification
 
     private function needToSend()
     {
-        return $this->environment->is('production') || $this->environment->is('staging');
+        return !$this->environment->isLocal();
     }
 }

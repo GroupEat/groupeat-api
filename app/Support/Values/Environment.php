@@ -7,7 +7,17 @@ class Environment extends Value
 {
     public function isLocal()
     {
-        return $this->value == 'local';
+        return $this->is('local');
+    }
+
+    public function isStaging()
+    {
+        return $this->is('staging');
+    }
+
+    public function isProduction()
+    {
+        return $this->is('production');
     }
 
     public function is($environment)
