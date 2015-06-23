@@ -57,7 +57,7 @@ class SendMail
                 }
             );
 
-            $this->logger->info("The email [$viewName] has been sent for {$user->user->toShortString()}.");
+            $this->logger->info("The email [$viewName] has been sent to {$user->user->toShortString()}.");
         }, $user->locale);
     }
 }
