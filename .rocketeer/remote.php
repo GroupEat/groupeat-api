@@ -61,7 +61,6 @@ return [
         // permissions on the folder above. The Closure can return
         // a single command as a string or an array of commands
         'callback' => function ($task, $file) {
-            var_dump($file);
             return [
                 sprintf('chmod -R 775 %s', $file),
                 sprintf('chmod -R g+s %s', $file),
