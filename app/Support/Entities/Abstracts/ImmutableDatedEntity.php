@@ -5,7 +5,7 @@ abstract class ImmutableDatedEntity extends Entity
 {
     public $timestamps = false;
 
-    protected $dates = [Entity::CREATED_AT];
+    protected $dates = [self::CREATED_AT];
 
     /**
      * @param array $attributes
@@ -15,7 +15,7 @@ abstract class ImmutableDatedEntity extends Entity
         parent::__construct($attributes);
 
         if (!$this->exists) {
-            $createdAtField = Entity::CREATED_AT;
+            $createdAtField = self::CREATED_AT;
             $this->$createdAtField = $this->freshTimestamp();
         }
     }

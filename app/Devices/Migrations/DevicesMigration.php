@@ -2,6 +2,7 @@
 namespace Groupeat\Devices\Migrations;
 
 use Groupeat\Customers\Migrations\CustomersMigration;
+use Groupeat\Devices\Entities\Device;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,8 +20,8 @@ class DevicesMigration extends Migration
             $table->string('notificationToken');
             $table->unsignedInteger('platformId');
             $table->string('model');
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+            $table->timestamp(Device::CREATED_AT);
+            $table->timestamp(Device::UPDATED_AT);
 
             $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
             $table->foreign('platformId')->references('id')->on(PlatformsMigration::TABLE);

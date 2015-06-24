@@ -41,7 +41,7 @@ class GenerateAdminerFiles
         $output->writeln("Downloading CSS file");
 
         $css = (string) $this->client
-            ->get('https://raw.github.com/vrana/adminer/master/designs/' . self::THEME . '/adminer.css')
+            ->get('https://raw.github.com/vrana/adminer/master/designs/' . static::THEME . '/adminer.css')
             ->getBody();
 
         $output->writeln("Applying GroupEat theme");

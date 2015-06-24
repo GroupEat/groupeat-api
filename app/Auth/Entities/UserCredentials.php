@@ -16,9 +16,11 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 {
     use CanResetPasswordTrait;
 
+    const ACTIVATED_AT = 'activatedAt';
+
     public $timestamps = false;
 
-    protected $dates = ['activatedAt'];
+    protected $dates = [self::ACTIVATED_AT];
     protected $hidden = ['password', 'token', 'activationToken'];
 
     public function getRules()

@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Orders\Migrations;
 
+use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Restaurants\Migrations\RestaurantsMigration;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,12 +17,12 @@ class GroupOrdersMigration extends Migration
             $table->increments('id');
             $table->unsignedInteger('restaurantId')->index();
             $table->unsignedInteger('discountRate')->index()->default(0);
-            $table->timestamp('createdAt')->index();
-            $table->timestamp('updatedAt')->index();
-            $table->timestamp('closedAt')->nullable()->index();
-            $table->timestamp('endingAt')->index();
-            $table->timestamp('confirmedAt')->nullable();
-            $table->timestamp('preparedAt')->nullable();
+            $table->timestamp(GroupOrder::CREATED_AT)->index();
+            $table->timestamp(GroupOrder::UPDATED_AT)->index();
+            $table->timestamp(GroupOrder::CLOSED_AT)->nullable()->index();
+            $table->timestamp(GroupOrder::ENDING_AT)->index();
+            $table->timestamp(GroupOrder::CONFIRMED_AT)->nullable();
+            $table->timestamp(GroupOrder::PREPARED_AT)->nullable();
 
             $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
         });

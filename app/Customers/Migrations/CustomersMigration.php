@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Customers\Migrations;
 
+use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +17,9 @@ class CustomersMigration extends Migration
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
             $table->string('phoneNumber', 25)->nullable();
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
-            $table->timestamp('deletedAt')->nullable()->index();
+            $table->timestamp(Customer::CREATED_AT);
+            $table->timestamp(Customer::UPDATED_AT);
+            $table->timestamp(Customer::DELETED_AT)->nullable()->index();
         });
     }
 }

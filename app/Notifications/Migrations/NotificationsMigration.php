@@ -3,6 +3,7 @@ namespace Groupeat\Notifications\Migrations;
 
 use Groupeat\Customers\Migrations\CustomersMigration;
 use Groupeat\Devices\Migrations\DevicesMigration;
+use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Orders\Migrations\GroupOrdersMigration;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,7 +20,7 @@ class NotificationsMigration extends Migration
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('deviceId');
             $table->unsignedInteger('groupOrderId')->nullable(); // TODO: remove nullable when test route is not needed anymore
-            $table->timestamp('createdAt')->index();
+            $table->timestamp(Notification::CREATED_AT)->index();
 
             $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
             $table->foreign('deviceId')->references('id')->on(DevicesMigration::TABLE);

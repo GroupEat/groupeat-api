@@ -15,19 +15,24 @@ use Illuminate\Database\Eloquent\Builder;
 
 class GroupOrder extends Entity
 {
+    const CLOSED_AT = 'closedAt';
+    const ENDING_AT = 'endingAt';
+    const CONFIRMED_AT = 'confirmedAt';
+    const PREPARED_AT = 'preparedAt';
+
     /**
      * @var float
      */
     private static $aroundDistanceInKms;
 
-    protected $dates = ['closedAt', 'endingAt', 'confirmedAt', 'preparedAt'];
+    protected $dates = [self::CLOSED_AT, self::ENDING_AT, self::CONFIRMED_AT, self::PREPARED_AT];
 
     public function getRules()
     {
         return [
             'restaurantId' => 'required',
             'discountRate' => 'required|integer',
-            'endingAt' => 'required',
+            self::ENDING_AT => 'required',
         ];
     }
 
@@ -121,7 +126,7 @@ class GroupOrder extends Entity
         $this->assertMaximumCapacityNotExceeded($nbProductFormats);
         $this->discountRate = $productFormats->getRestaurant()->getDiscountRateFor($totalRawPrice);
 
-        $order = new Order();
+        $order = new Order;
 
         $order->comment = $comment;
         $order->rawPrice = $productFormats->totalPrice();
@@ -173,7 +178,7 @@ class GroupOrder extends Entity
      */
     public function computeRemainingCapacity()
     {
-        $nbProductFormats = DB::table((new Order())->productFormats()->getTable())
+        $nbProductFormats = DB::table((new Order)->productFormats()->getTable())
             ->whereIn('orderId', $this->orders()->lists('id'))
             ->sum('amount');
 
@@ -201,7 +206,7 @@ class GroupOrder extends Entity
         $time = $time ?: $this->freshTimestamp();
         $model = $query->getModel();
 
-        $query->whereNull($model->getTableField('closedAt'));
+        $query->whereNull($model->getTableField(self::CLOSED_AT));
     }
 
     /**
@@ -232,12 +237,12 @@ class GroupOrder extends Entity
      */
     public function scopeUnconfirmed(Builder $query, $sinceMinutes = null)
     {
-        $query->whereNotNull($this->getTableField('closedAt'))
-            ->whereNull($this->getTableField('confirmedAt'));
+        $query->whereNotNull($this->getTableField(self::CLOSED_AT))
+            ->whereNull($this->getTableField(self::CONFIRMED_AT));
 
         if (is_int($sinceMinutes)) {
             $query->where(
-                $this->getTableField('closedAt'),
+                $this->getTableField(self::CLOSED_AT),
                 '<',
                 $this->freshTimestamp()->subMinutes($sinceMinutes)
             );
@@ -260,8 +265,8 @@ class GroupOrder extends Entity
         $now = $model->freshTimestamp();
 
         $alreadyExisting = $model->whereNull($model->getTableField('closedAt'))
-            ->where($model->getTableField('createdAt'), '<=', $now)
-            ->where($model->getTableField('endingAt'), '>=', $now)
+            ->where($model->getTableField(self::CREATED_AT), '<=', $now)
+            ->where($model->getTableField(self::ENDING_AT), '>=', $now)
             ->where($model->getTableField('restaurantId'), $restaurant->id)
             ->count();
 
