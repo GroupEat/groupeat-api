@@ -1,18 +1,16 @@
 <?php
 namespace Groupeat\Notifications\Services;
 
+use Carbon\Carbon;
+use Closure;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Settings\Entities\Setting;
+use Groupeat\Settings\Entities\CustomerSettings;
 
 class SelectDevicesToNotify
 {
-    const NOTIFICATIONS_ENABLED = 'notificationsEnabled';
-    const DAYS_WITHOUT_NOTIFYING = 'daysWithoutNotifying';
-    const NO_NOTIFICATION_AFTER = 'noNotificationAfter';
-
     /**
      * @param GroupOrder $groupOrder
      *
@@ -38,17 +36,10 @@ class SelectDevicesToNotify
 
     private function getConcernedCustomerIds(GroupOrder $groupOrder)
     {
-        $labels = [
-            static::NOTIFICATIONS_ENABLED,
-            static::DAYS_WITHOUT_NOTIFYING,
-            static::NO_NOTIFICATION_AFTER
-        ];
+        $query = CustomerSettings::query()
+            ->where(CustomerSettings::NOTIFICATIONS_ENABLED, true)
+            ->where(CustomerSettings::NO_NOTIFICATION_AFTER, '>', Carbon::now()->toTimeString());
 
-        $defaultSettings = Setting::whereIn('label', $labels)->get();
-
-        $notificationsEnabledSetting = $defaultSettings[array_search(static::NOTIFICATIONS_ENABLED, $labels)];
-        $notificationsEnabledByDefault = $notificationsEnabledSetting->default;
-
-        return [];
+        return $query->lists('customerId')->all();
     }
 }
