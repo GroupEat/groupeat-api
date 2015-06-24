@@ -1,10 +1,10 @@
 <?php
 namespace Groupeat\Settings\Jobs;
 
+use Groupeat\Settings\Entities\CustomerSettings;
 use Groupeat\Settings\Jobs\UpdateSettings;
-use Groupeat\Settings\Entities\CustomerSetting;
 use Groupeat\Settings\Events\CustomerHasUpdatedItsSettings;
-use Groupeat\Settings\Support\SettingBag;
+use Groupeat\Support\Exceptions\BadRequest;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class UpdateSettingsHandler
@@ -19,18 +19,23 @@ class UpdateSettingsHandler
     public function handle(UpdateSettings $job)
     {
         $customer = $job->getCustomer();
+        $settings = CustomerSettings::findByCustomerOrFail($customer);
+        $settings->customer()->associate($customer);
 
         foreach ($job->getValues() as $label => $value) {
-            CustomerSetting::setByLabel($label, $customer, $value);
+            if (!in_array($label, CustomerSettings::LABELS)) {
+                throw new BadRequest(
+                    'undefinedCustomerSetting',
+                    "The customer setting with label '$label' does not exist."
+                );
+            }
+            $settings->$label = $value;
         }
 
-        $settingBag = new SettingBag($customer);
+        $settings->save();
 
-        $this->events->fire(new CustomerHasUpdatedItsSettings(
-            $job->getCustomer($customer),
-            $settingBag
-        ));
+        $this->events->fire(new CustomerHasUpdatedItsSettings($settings));
 
-        return $settingBag;
+        return $settings;
     }
 }

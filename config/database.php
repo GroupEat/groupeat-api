@@ -94,7 +94,6 @@ return [
     */
 
     'order' => [
-        \Groupeat\Settings\Migrations\SettingsMigration::class,
         \Groupeat\Customers\Migrations\CustomersMigration::class,
         \Groupeat\Auth\Migrations\UserCredentialsMigration::class,
         \Groupeat\Auth\Migrations\PasswordResetTokensMigration::class,
@@ -117,8 +116,8 @@ return [
         \Groupeat\Devices\Migrations\PlatformsMigration::class,
         \Groupeat\Devices\Migrations\DevicesMigration::class,
         \Groupeat\Devices\Migrations\StatusesMigration::class,
-        \Groupeat\Settings\Migrations\CustomerSettingMigration::class,
         \Groupeat\Notifications\Migrations\NotificationsMigration::class,
+        \Groupeat\Settings\Migrations\CustomerSettingsMigration::class,
     ],
 
     /*

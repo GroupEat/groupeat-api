@@ -2,15 +2,17 @@
 namespace Groupeat\Settings\Services;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Settings\Entities\CustomerSetting;
-use Groupeat\Settings\Entities\Setting;
+use Groupeat\Settings\Entities\CustomerSettings;
 
 class InitializeCustomerSettings
 {
     public function call(Customer $customer)
     {
-        Setting::all()->each(function (Setting $setting) use ($customer) {
-            CustomerSetting::set($setting, $customer, $setting->default);
-        });
+        $setting = new CustomerSettings;
+        $setting->customer()->associate($customer);
+        $setting->notificationsEnabled = true;
+        $setting->daysWithoutNotifying = 4;
+        $setting->noNotificationAfter = '22:00:00';
+        $setting->save();
     }
 }

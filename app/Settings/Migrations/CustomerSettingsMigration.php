@@ -2,26 +2,25 @@
 namespace Groupeat\Settings\Migrations;
 
 use Groupeat\Customers\Migrations\CustomersMigration;
+use Groupeat\Settings\Entities\CustomerSettings;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CustomerSettingMigration extends Migration
+class CustomerSettingsMigration extends Migration
 {
-    const TABLE = 'customer_setting';
+    const TABLE = 'customer_settings';
 
     public function up()
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customerId');
-            $table->unsignedInteger('settingId');
-            $table->string('value')->index();
-            $table->timestamp('createdAt');
-            $table->timestamp('updatedAt');
+            $table->boolean(CustomerSettings::NOTIFICATIONS_ENABLED)->index();
+            $table->unsignedInteger(CustomerSettings::DAYS_WITHOUT_NOTIFYING)->index();
+            $table->time(CustomerSettings::NO_NOTIFICATION_AFTER)->index();
 
             $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
-            $table->foreign('settingId')->references('id')->on(SettingsMigration::TABLE);
         });
     }
 }

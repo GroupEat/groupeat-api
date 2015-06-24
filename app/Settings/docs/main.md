@@ -9,8 +9,8 @@
 + Model
 
         {
-            "notificationsEnabled": false,
-            "daysWithoutNotifying": 3,
+            "notificationsEnabled": true,
+            "daysWithoutNotifying": 4,
             "noNotificationAfter": "22:00:00"
         }
 
@@ -32,3 +32,10 @@
 + Response 200
 
     [Settings][]
+    
++ Response 400
+
+        {
+            "errorKey": "undefinedCustomerSetting",
+            "message": "The customer setting with label 'undefinedSetting' does not exist."
+        }
