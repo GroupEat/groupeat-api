@@ -7,6 +7,7 @@ use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Illuminate\Auth\Guard;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\JWTAuth;
 
 class Auth
@@ -38,11 +39,21 @@ class Auth
      */
     public function login($token, $assertSameToken = true)
     {
-        $userCredentials = $this->jwtAuth->authenticate($token);
+        try {
+            $userCredentials = $this->jwtAuth->authenticate($token);
+        } catch (TokenInvalidException $e) {
+            throw new Unauthorized(
+                'invalidAuthenticationTokenSignature',
+                "The token signature is invalid and thus cannot be correctly decoded to an existing user.",
+                null,
+                [],
+                $e
+            );
+        }
 
         if (! $userCredentials instanceof UserCredentials) {
             throw new Unauthorized(
-                "noUserForAuthenticationToken",
+                'noUserForAuthenticationToken',
                 "The user corresponding to the authentication token does not exist."
             );
         }
@@ -51,7 +62,7 @@ class Auth
 
         if (($assertSameToken && !$this->allowDifferentToken) && ($userCredentials->token != $token)) {
             throw new Forbidden(
-                "obsoleteAuthenticationToken",
+                'obsoleteAuthenticationToken',
                 "Obsolete authentication token."
             );
         }
@@ -107,7 +118,7 @@ class Auth
     {
         if (!$this->check()) {
             throw new Unauthorized(
-                "userMustAuthenticate",
+                'userMustAuthenticate',
                 "No authenticated user."
             );
         }
@@ -152,7 +163,7 @@ class Auth
             $currentId = $this->userId();
 
             throw new Forbidden(
-                "wrongAuthenticatedUser",
+                'wrongAuthenticatedUser',
                 "Should be authenticated as {$this->toShortType($type)} $givenId instead of $currentId."
             );
         }
@@ -182,7 +193,7 @@ class Auth
 
         if ($currentType != $givenType) {
             throw new Forbidden(
-                "wrongAuthenticatedUser",
+                'wrongAuthenticatedUser',
                 "Should be authenticated as {$this->toShortType($givenType)} "
                 . "instead of {$this->toShortType($currentType)}."
             );
@@ -242,7 +253,7 @@ class Auth
 
         if ($shortType === false) {
             throw new Exception(
-                "userTypeNotAvailableForAuthentication",
+                'userTypeNotAvailableForAuthentication',
                 "Type $type has not been added to the available user types."
             );
         }
@@ -307,14 +318,14 @@ class Auth
 
         if (! $user instanceof User) {
             throw new Unauthorized(
-                "noUserWithSameCredentials",
+                'noUserWithSameCredentials',
                 "The user corresponding to these credentials does not exist."
             );
         }
 
         if ($usesSoftDelete && $user->trashed()) {
             throw new Unauthorized(
-                "userHasBeenDeleted",
+                'userHasBeenDeleted',
                 "The user corresponding to these credentials has been deleted."
             );
         }

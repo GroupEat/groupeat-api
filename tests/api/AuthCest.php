@@ -208,6 +208,12 @@ class AuthCest
         $I->seeResponseCodeIs(200);
     }
 
+    public function testThatAnInvalidTokenIsRejected(ApiTester $I)
+    {
+        $I->sendApiGetWithToken('invalidToken', 'customers/6');
+        $I->seeErrorResponse(401, 'invalidAuthenticationTokenSignature');
+    }
+
     protected function sendRegistrationRequest(
         ApiTester $I,
         $email = 'user@ensta.fr',
