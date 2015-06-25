@@ -210,7 +210,7 @@ class AuthCest
 
     public function testThatAnInvalidTokenIsRejected(ApiTester $I)
     {
-        $I->sendApiGetWithToken('invalidToken', 'customers/6');
+        $I->sendApiGetWithToken('invalidToken', 'customers/1');
         $I->seeErrorResponse(401, 'invalidAuthenticationTokenSignature');
     }
 
