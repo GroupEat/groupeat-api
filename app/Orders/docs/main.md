@@ -129,11 +129,11 @@ The request must contain all the data required to attach a delivery address to t
 
 To join an existing group order instead of creating a new one, just add the corresponding `groupOrderId` to the request.
 
-The attributes dedicated to the order itself are `foodRushDurationInMinutes` (useless when joining a group order) which must be between {{ orders::minimum_foodrush_in_minutes }} and {{ orders::maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired amount of each product format. All the product formats must of course belong to the same restaurant.
+The attributes dedicated to the order itself are `foodRushDurationInMinutes` (useless when joining a group order) which must be between {{ orders.minimum_foodrush_in_minutes }} and {{ orders.maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired amount of each product format. All the product formats must of course belong to the same restaurant.
 
-The restaurant must stay opened at least {{ restaurants::opening_duration_in_minutes }} minutes more to create a group order.
+The restaurant must stay opened at least {{ restaurants.opening_duration_in_minutes }} minutes more to create a group order.
 
-When creating a group order, the distance between the given address and the restaurant must be less than {{ restaurants::around_distance_in_kilometers }} kilometers. To join a group order, the distance between the first delivery address and the given one must be less than {{ orders::around_distance_in_kilometers }} kilometers.
+When creating a group order, the distance between the given address and the restaurant must be less than {{ restaurants.around_distance_in_kilometers }} kilometers. To join a group order, the distance between the first delivery address and the given one must be less than {{ orders.around_distance_in_kilometers }} kilometers.
 
 + Request
 
