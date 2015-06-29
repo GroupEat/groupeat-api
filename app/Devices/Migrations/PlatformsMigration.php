@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class PlatformsMigration extends Migration
 {
-    const TABLE = 'platforms';
+    const TABLE = 'device_platforms';
 
     public function up()
     {

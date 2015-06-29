@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 class StatusesMigration extends Migration
 {
-    const TABLE = 'statuses';
+    const TABLE = 'device_statuses';
 
     public function up()
     {

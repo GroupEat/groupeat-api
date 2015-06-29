@@ -2,9 +2,12 @@
 namespace Groupeat\Devices\Entities;
 
 use Groupeat\Support\Entities\Abstracts\ImmutableDatedEntity;
+use Groupeat\Support\Entities\Traits\HasPosition;
 
 class Status extends ImmutableDatedEntity
 {
+    use HasPosition;
+
     public function getRules()
     {
         return [
