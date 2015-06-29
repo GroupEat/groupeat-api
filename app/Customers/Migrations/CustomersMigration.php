@@ -14,6 +14,7 @@ class CustomersMigration extends Migration
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('isExternal')->default(false);
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
             $table->string('phoneNumber', 25)->nullable();

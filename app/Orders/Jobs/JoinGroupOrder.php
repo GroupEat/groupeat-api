@@ -2,10 +2,10 @@
 namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Orders\Jobs\Abstracts\PlaceOrder;
+use Groupeat\Orders\Jobs\Abstracts\AddCustomerOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 
-class JoinGroupOrder extends PlaceOrder
+class JoinGroupOrder extends AddCustomerOrder
 {
     private $groupOrder;
 

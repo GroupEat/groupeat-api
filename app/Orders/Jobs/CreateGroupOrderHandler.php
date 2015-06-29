@@ -8,7 +8,7 @@ use Groupeat\Orders\Jobs\CreateGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
-use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidation;
+use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidationHandler;
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
@@ -19,7 +19,7 @@ use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
 use League\Period\Period;
 
-class CreateGroupOrderHandler extends GroupOrderValidation
+class CreateGroupOrderHandler extends GroupOrderValidationHandler
 {
     private $minimumFoodRushInMinutes;
     private $maximumFoodRushInMinutes;

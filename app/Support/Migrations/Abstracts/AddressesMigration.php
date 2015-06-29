@@ -2,11 +2,14 @@
 namespace Groupeat\Support\Migrations\Abstracts;
 
 use Groupeat\Support\Database\Abstracts\Migration;
+use Groupeat\Support\Migrations\Traits\HasPositionMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 abstract class AddressesMigration extends Migration
 {
+    use HasPositionMigration;
+
     public function up()
     {
         Schema::create(static::TABLE, function (Blueprint $table) {
@@ -18,8 +21,7 @@ abstract class AddressesMigration extends Migration
             $table->string('postcode');
             $table->string('state');
             $table->string('country');
-            $table->float('latitude')->index();
-            $table->float('longitude')->index();
+            $this->addPositionFields($table);
         });
     }
 

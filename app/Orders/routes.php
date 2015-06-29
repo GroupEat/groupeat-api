@@ -1,5 +1,6 @@
 <?php
 
+use Groupeat\Orders\Http\V1\ExternalOrdersController;
 use Groupeat\Orders\Http\V1\GroupOrdersController;
 use Groupeat\Orders\Http\V1\OrdersController;
 
@@ -23,13 +24,20 @@ Route::group(['prefix' => 'api'], function () {
 
             Route::post('/', OrdersController::class.'@place');
         });
+
+        Route::group(['prefix' => 'externalOrders'], function () {
+            Route::post('/', ExternalOrdersController::class.'@push');
+        });
     });
 
-    Route::group(
-        ['prefix' => 'groupOrders/{groupOrder}', 'middleware' => ['allowDifferentToken', 'auth']],
-        function () {
+    Route::group(['prefix' => 'groupOrders/{groupOrder}'], function () {
+        Route::group(['middleware' => ['allowDifferentToken', 'auth']], function () {
             Route::get('/', GroupOrdersController::class.'@show');
             Route::post('confirm', GroupOrdersController::class.'@confirm');
-        }
-    );
+        });
+
+        Route::group(['middleware' => ['auth']], function () {
+            Route::post('orders', GroupOrdersController::class.'@join');
+        });
+    });
 });

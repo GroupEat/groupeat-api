@@ -36,11 +36,13 @@ class SendGroupOrderHasBeenConfirmedMails extends QueuedHandler
         $restaurant = $groupOrder->restaurant;
         $deliveryAddress = $order->deliveryAddress;
 
-        $this->mailer->call(
-            $order->customer->credentials,
-            'customers::orderHasBeenConfirmed',
-            'customers::orders.confirmed.subject',
-            compact('groupOrder', 'order', 'restaurant', 'deliveryAddress')
-        );
+        if (!$order->isExternal()) {
+            $this->mailer->call(
+                $order->customer->credentials,
+                'customers::orderHasBeenConfirmed',
+                'customers::orders.confirmed.subject',
+                compact('groupOrder', 'order', 'restaurant', 'deliveryAddress')
+            );
+        }
     }
 }

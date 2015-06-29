@@ -16,7 +16,7 @@ class GroupOrdersCest
 
         for ($i = $remainingCapacity; $i > 1; $i--) {
             $orderDetails['groupOrderId'] = $groupOrderId;
-            $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+            $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
             $I->seeResponseCodeIs(201);
             $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
             $I->assertSame($i - 1, $I->grabDataFromResponse('remainingCapacity'));
@@ -24,7 +24,7 @@ class GroupOrdersCest
         }
 
         $orderDetails['groupOrderId'] = $groupOrderId;
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
         $I->seeResponseCodeIs(201);
         $mail = $I->grabMailById('restaurants.groupOrderHasBeenClosed');
 
@@ -40,7 +40,7 @@ class GroupOrdersCest
         $I->assertFalse($I->grabDataFromResponse('joinable'));
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->subMinute(),
+            'preparedAt' => (string) Carbon::now()->subMinute(),
         ]);
         $I->seeErrorResponse(422, 'cannotBePreparedBeforeBeingClosed');
 
@@ -50,14 +50,14 @@ class GroupOrdersCest
         $I->seeErrorResponse(422, 'preparationTimeTooLong');
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
+            'preparedAt' => (string) Carbon::now()->addMinutes(10),
         ]);
         $I->seeResponseCodeIs(200);
 
         $I->assertSame('customers.orderHasBeenConfirmed', $I->grabFirstMailId());
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addMinutes(10),
+            'preparedAt' => (string) Carbon::now()->addMinutes(10),
         ]);
         $I->seeErrorResponse(422, 'alreadyConfirmed');
     }
@@ -108,10 +108,12 @@ class GroupOrdersCest
         $orderDetails = [
             'foodRushDurationInMinutes' => 30,
             'productFormats' => $productFormats,
-            'street' => "Allée des techniques avancées",
-            'details' => "Bâtiment A, chambre 200",
-            'latitude' => 48.716941,
-            'longitude' => 2.239171,
+            'deliveryAddress' => [
+                'street' => "Allée des techniques avancées",
+                'details' => "Bâtiment A, chambre 200",
+                'latitude' => 48.716941,
+                'longitude' => 2.239171,
+            ],
         ];
 
         if (!is_null($groupOrderId)) {

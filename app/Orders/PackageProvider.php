@@ -4,6 +4,7 @@ use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Values\AroundDistanceInKms;
 use Groupeat\Orders\Values\DeliveryAddressConstraints;
+use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
@@ -31,6 +32,11 @@ class PackageProvider extends WorkbenchPackageProvider
         $this->bindValueFromConfig(
             AroundDistanceInKms::class,
             'orders.around_distance_in_kilometers'
+        );
+
+        $this->bindValueFromConfig(
+            ExternalOrderFoodrushInMinutes::class,
+            'orders.external_order_foodrush_in_minutes'
         );
 
         $this->app['router']->model('order', Order::class);

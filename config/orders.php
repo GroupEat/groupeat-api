@@ -51,7 +51,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Maximum Preparation time in Minutes
+    | Maximum Preparation Time in Minutes
     |--------------------------------------------------------------------------
     |
     | The duration in minutes that a restaurant can take to prepare a groupOrder.
@@ -59,5 +59,17 @@ return [
     */
 
     'maximum_preparation_time_in_minutes' => 45,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Foodrush Duration in Minutes when External Order is Pushed by Restaurant
+    |--------------------------------------------------------------------------
+    |
+    | The duration in minutes of the foodrush created when a restaurant push
+    | an external order into the application.
+    |
+    */
+
+    'external_order_foodrush_in_minutes' => 10,
 
 ];

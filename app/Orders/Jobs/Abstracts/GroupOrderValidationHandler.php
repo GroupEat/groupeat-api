@@ -8,7 +8,7 @@ use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
 
-abstract class GroupOrderValidation
+abstract class GroupOrderValidationHandler
 {
     protected $events;
     protected $maximumDeliveryDistanceInKms;

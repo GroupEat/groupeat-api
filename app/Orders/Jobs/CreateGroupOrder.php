@@ -2,9 +2,9 @@
 namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Orders\Jobs\Abstracts\PlaceOrder;
+use Groupeat\Orders\Jobs\Abstracts\AddCustomerOrder;
 
-class CreateGroupOrder extends PlaceOrder
+class CreateGroupOrder extends AddCustomerOrder
 {
     private $foodRushInMinutes;
 

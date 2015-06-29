@@ -41,7 +41,12 @@ class Order extends ImmutableDatedEntity
 
     public function getDiscountedPriceAttribute()
     {
-        return $this->groupOrder->discountRate->applyTo($this->rawPrice);
+        return $this->isExternal() ? $this->rawPrice : $this->groupOrder->discountRate->applyTo($this->rawPrice);
+    }
+
+    public function isExternal()
+    {
+        return $this->customer->isExternal;
     }
 
     protected function getRawPriceAttribute()

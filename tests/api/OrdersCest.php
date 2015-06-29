@@ -96,8 +96,10 @@ class OrdersCest
         $productFormats = $this->getProductFormatsFrom($products);
         $orderDetails = $this->getOrderDetails($I, $token, [
             'productFormats' => $productFormats,
-            'latitude' => $latitude - 1,
-            'longitude' => $longitude + 1,
+            'deliveryAddress' => [
+                'latitude' => $latitude - 1,
+                'longitude' => $longitude + 1,
+            ],
         ]);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
@@ -244,7 +246,7 @@ class OrdersCest
 
         $orderDetails['groupOrderId'] = $groupOrderId;
         unset($orderDetails['foodRushDurationInMinutes']);
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
         $I->seeResponseCodeIs(201);
         $newDiscountRate = $this->computeDiscountRate(
             $I->grabDataFromResponse('discountedPrice'),
@@ -276,10 +278,10 @@ class OrdersCest
         $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
 
         $orderDetails['groupOrderId'] = $groupOrderId;
-        $orderDetails['latitude']++;
+        $orderDetails['deliveryAddress']['latitude']++;
         unset($orderDetails['foodRushDurationInMinutes']);
 
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
         $I->seeErrorResponse(422, 'deliveryDistanceTooLong');
     }
 
@@ -366,10 +368,12 @@ class OrdersCest
         $details = array_merge([
             'foodRushDurationInMinutes' => 30,
             'productFormats' => $defaultProductFormats,
-            'street' => "Allée des techniques avancées",
-            'details' => "Bâtiment A, chambre 200",
-            'latitude' => $this->getDefaultLatitude(),
-            'longitude' => $this->getDefaultLongitude(),
+            'deliveryAddress' => [
+                'street' => "Allée des techniques avancées",
+                'details' => "Bâtiment A, chambre 200",
+                'latitude' => $this->getDefaultLatitude(),
+                'longitude' => $this->getDefaultLongitude(),
+            ],
         ], $details);
 
         return $details;

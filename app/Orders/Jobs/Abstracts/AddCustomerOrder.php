@@ -2,14 +2,10 @@
 namespace Groupeat\Orders\Jobs\Abstracts;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Support\Jobs\Abstracts\Job;
 
-abstract class AddCustomerOrder extends Job
+abstract class AddCustomerOrder extends AddOrder
 {
     private $customer;
-    private $productFormats;
-    private $deliveryAddressData;
-    private $comment;
 
     public function __construct(
         Customer $customer,
@@ -17,28 +13,13 @@ abstract class AddCustomerOrder extends Job
         array $deliveryAddressData,
         $comment = null
     ) {
-        $this->productFormats = new ProductFormats($productFormats);
-        $this->deliveryAddressData = $deliveryAddressData;
-        $this->comment = $comment;
+        parent::__construct($productFormats, $deliveryAddressData, $comment);
+
+        $this->customer = $customer;
     }
 
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    public function getProductFormats()
-    {
-        return $this->productFormats;
-    }
-
-    public function getDeliveryAddressData()
-    {
-        return $this->deliveryAddressData;
-    }
-
-    public function getComment()
-    {
-        return $this->getComment();
     }
 }
