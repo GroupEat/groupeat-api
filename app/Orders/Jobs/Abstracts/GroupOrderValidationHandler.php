@@ -3,25 +3,25 @@ namespace Groupeat\Orders\Jobs\Abstracts;
 
 use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\DeliveryAddress;
-use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
+use Groupeat\Support\Values\Abstracts\Value;
 use Illuminate\Contracts\Events\Dispatcher;
 
 abstract class GroupOrderValidationHandler
 {
     protected $events;
-    protected $maximumDeliveryDistanceInKms;
     protected $deliveryAddressConstraints;
+    protected $maximumDistanceInKms;
 
     public function __construct(
         Dispatcher $events,
-        MaximumDeliveryDistanceInKms $maximumDeliveryDistanceInKms,
-        AddressConstraints $addressConstraints
+        AddressConstraints $addressConstraints,
+        Value $maximumDistanceInKms
     ) {
         $this->events = $events;
-        $this->maximumDeliveryDistanceInKms = $maximumDeliveryDistanceInKms->value();
         $this->deliveryAddressConstraints = $addressConstraints->value();
+        $this->maximumDistanceInKms = $maximumDistanceInKms->value();
     }
 
     /**
@@ -45,11 +45,11 @@ abstract class GroupOrderValidationHandler
     {
         $distanceInKms = $deliveryAddress->distanceInKmsWith($other);
 
-        if ($distanceInKms > $this->maximumDeliveryDistanceInKms) {
+        if ($distanceInKms > $this->maximumDistanceInKms) {
             throw new UnprocessableEntity(
                 'deliveryDistanceTooLong',
                 'The delivery distance should be less than '
-                .$this->maximumDeliveryDistanceInKms." kms, $distanceInKms given."
+                .$this->maximumDistanceInKms." kms, $distanceInKms given."
             );
         }
     }

@@ -27,13 +27,13 @@ class CreateGroupOrderHandler extends GroupOrderValidationHandler
 
     public function __construct(
         Dispatcher $events,
-        MaximumDeliveryDistanceInKms $maximumDeliveryDistanceInKms,
         AddressConstraints $deliveryAddressConstraints,
+        MaximumDeliveryDistanceInKms $maximumDeliveryDistanceInKms,
         MinimumFoodrushInMinutes $minimumFoodRushInMinutes,
         MaximumFoodrushInMinutes $maximumFoodRushInMinutes,
         MaximumPreparationTimeInMinutes $maximumPreparationTimeInMinutes
     ) {
-        parent::__construct($events, $maximumDeliveryDistanceInKms, $deliveryAddressConstraints);
+        parent::__construct($events, $deliveryAddressConstraints, $maximumDeliveryDistanceInKms);
 
         $this->minimumFoodRushInMinutes = $minimumFoodRushInMinutes->value();
         $this->maximumFoodRushInMinutes = $maximumFoodRushInMinutes->value();
