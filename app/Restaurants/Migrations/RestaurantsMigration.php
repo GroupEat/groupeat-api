@@ -19,6 +19,7 @@ class RestaurantsMigration extends Migration
             $table->unsignedInteger('minimumOrderPrice');
             $table->tinyInteger('deliveryCapacity');
             $table->string('discountPrices');
+            $table->string('pictureUrl');
             $table->timestamp(Restaurant::CREATED_AT);
             $table->timestamp(Restaurant::UPDATED_AT);
             $table->timestamp(Restaurant::DELETED_AT)->nullable()->index();

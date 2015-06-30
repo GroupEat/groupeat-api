@@ -35,6 +35,7 @@ class RestaurantsSeeder extends Seeder
             'minimumOrderPrice' => $this->faker->numberBetween(1000, 1100),
             'deliveryCapacity' => $this->faker->numberBetween(7, 10),
             'discountPrices' => json_encode([900, 1000, 2000, 2500, 3500, 6000]),
+            'pictureUrl' => $this->getPictureUrl(),
         ]);
 
         $userCredentials = UserCredentials::create([
@@ -73,6 +74,7 @@ class RestaurantsSeeder extends Seeder
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
             $restaurantData['minimumOrderPrice'] = 900;
             $restaurantData['discountPrices'] = json_encode([900, 1000, 2000, 2500, 3500, 6000]);
+            $restaurantData['pictureUrl'] = $this->getPictureUrl();
 
             $restaurant = Restaurant::create($restaurantData);
 
@@ -96,5 +98,16 @@ class RestaurantsSeeder extends Seeder
     private function setAuthTokenFor(UserCredentials $userCredentials)
     {
         $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
+    }
+
+    private function getPictureUrl()
+    {
+        $urls = [
+            'https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg',
+            'https://snap-photos.s3.amazonaws.com/img-thumbs/960w/RE54D4GOX0.jpg',
+            'https://snap-photos.s3.amazonaws.com/img-thumbs/960w/0HCMIT272C.jpg',
+        ];
+
+        return $urls[array_rand($urls)];
     }
 }

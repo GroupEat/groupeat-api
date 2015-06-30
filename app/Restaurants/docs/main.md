@@ -36,6 +36,7 @@
             "phoneNumber": "0689731323",
             "minimumOrderPrice": 1088,
             "deliveryCapacity": 7,
+            "pictureUrl": "https://snap-photos.s3.amazonaws.com/img-thumbs/960w/RE54D4GOX0.jpg",
             "discountPolicy": { // The key is the price and the value is the corresponding discount rate
                 "900": 0,
                 "1000": 10,
