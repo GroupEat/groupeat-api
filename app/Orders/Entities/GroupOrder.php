@@ -198,7 +198,7 @@ class GroupOrder extends Entity
      */
     public function getTotalDiscountedPriceAttribute()
     {
-        return $this->discountRate->applyTo($this->totalRawPrice);
+        return sumPrices($this->orders->pluck('discountedPrice'));
     }
 
     public function scopeJoinable(Builder $query, Carbon $time = null)

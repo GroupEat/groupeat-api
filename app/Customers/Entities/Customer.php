@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Entity implements User
 {
-    use HasCredentials, SoftDeletes;
+    use HasCredentials, SoftDeletes {
+        HasCredentials::isActivated as isActivatedThroughCredentials;
+    }
 
     protected $dates = [self::DELETED_AT];
     protected $fillable = ['firstName', 'lastName', 'phoneNumber'];
@@ -46,5 +48,10 @@ class Customer extends Entity implements User
     public function address()
     {
         return $this->hasOne(Address::class);
+    }
+
+    public function isActivated()
+    {
+        return $this->isExternal ? true : $this->isActivatedThroughCredentials();
     }
 }

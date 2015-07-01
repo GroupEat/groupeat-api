@@ -2,10 +2,14 @@
 namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
+use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\DeliveryAddress;
+use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidationHandler;
 use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
+use Groupeat\Support\Values\NullValue;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class PushExternalOrderHandler extends GroupOrderValidationHandler
 {
@@ -14,8 +18,13 @@ class PushExternalOrderHandler extends GroupOrderValidationHandler
      */
     private $foodrushInMinutes;
 
-    public function __construct(ExternalOrderFoodrushInMinutes $foodrushInMinutes)
-    {
+    public function __construct(
+        Dispatcher $events,
+        AddressConstraints $addressConstraints,
+        ExternalOrderFoodrushInMinutes $foodrushInMinutes
+    ) {
+        parent::__construct($events, $addressConstraints, new NullValue);
+
         $this->foodrushInMinutes = $foodrushInMinutes->value();
     }
 

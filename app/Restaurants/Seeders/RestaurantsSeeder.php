@@ -42,6 +42,7 @@ class RestaurantsSeeder extends Seeder
             'user' => $restaurant,
             'email' => $this->faker->email,
             'password' => $restaurant->name,
+            'activatedAt' => $restaurant->freshTimestamp(),
             'locale' => 'fr',
         ]);
 
@@ -66,8 +67,12 @@ class RestaurantsSeeder extends Seeder
             ],
             [
                 'name' => "Toujours ouvert à Paris",
-                'phoneNumber' => '0605040301',
+                'phoneNumber' => '0605040303',
             ],
+            [
+                'name' => "AlloPizza",
+                'phoneNumber' => '0605040304',
+            ]
         ];
 
         foreach ($restaurantsData as $restaurantData) {
@@ -77,11 +82,13 @@ class RestaurantsSeeder extends Seeder
             $restaurantData['pictureUrl'] = $this->getPictureUrl();
 
             $restaurant = Restaurant::create($restaurantData);
+            $email = $restaurantData['name'] == 'AlloPizza' ? 'allo@pizza.fr' : $this->faker->email;
 
             $userCredentials = UserCredentials::create([
                 'user' => $restaurant,
-                'email' => $this->faker->email,
+                'email' => $email,
                 'password' => $restaurant->name,
+                'activatedAt' => $restaurant->freshTimestamp(),
                 'locale' => 'fr',
             ]);
 

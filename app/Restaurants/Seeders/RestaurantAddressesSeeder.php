@@ -35,15 +35,17 @@ class RestaurantAddressesSeeder extends Seeder
             ]);
         }
 
-        Address::create([
-            'restaurantId' => $id + 3,
-            'street' => "8 Rue Maurice Berteaux",
-            'city' => "Palaiseau",
-            'postcode' => 91120,
-            'state' => "Essonne",
-            'country' => "France",
-            'latitude' => 48.855118,
-            'longitude' => 2.345730,
-        ]);
+        foreach ([$id + 3, $id + 4] as $currentId) {
+            Address::create([
+                'restaurantId' => $currentId,
+                'street' => "8 Rue Maurice Berteaux",
+                'city' => "Palaiseau",
+                'postcode' => 91120,
+                'state' => "Essonne",
+                'country' => "France",
+                'latitude' => 48.855118,
+                'longitude' => 2.345730,
+            ]);
+        }
     }
 }

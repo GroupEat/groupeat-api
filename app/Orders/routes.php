@@ -25,7 +25,7 @@ Route::group(['prefix' => 'api'], function () {
             Route::post('/', OrdersController::class.'@place');
         });
 
-        Route::group(['prefix' => 'externalOrders'], function () {
+        Route::group(['prefix' => 'restaurants/{restaurant}/externalOrders'], function () {
             Route::post('/', ExternalOrdersController::class.'@push');
         });
     });

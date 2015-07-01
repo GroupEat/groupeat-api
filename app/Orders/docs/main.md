@@ -261,6 +261,10 @@ The distance between the given address and the restaurant must be less than {{ r
 
 ## Join group order [/groupOrders/{id}/orders]
 
++ Parameters
+
+    + id (required, string, `123`) ... The group order ID.
+
 ### POST
 
 Only activated customers are allowed to join a group order.
@@ -280,8 +284,12 @@ To join a group order, the distance between the first delivery address and the g
             "message": "The groupOrder #6 cannot be joined anymore."
         }
 
-## Push external order [/externalOrders]
+## Push external order [/restaurants/{id}/externalOrders]
 
++ Parameters
+
+    + id (required, string, `123`) ... The restaurant ID.
+    
 ### POST
 
 Only restaurants are allowed to push an external order.
@@ -311,3 +319,10 @@ The foodrush duration is automatically set to {{ orders.external_order_foodrush_
 + Response 201
 
     [Order][]
+
++ Response 403
+ 
+        {
+            "errorKey": "wrongAuthenticatedUser",
+            "message":"Should be authenticated as restaurant 9 instead of 10."
+        }

@@ -15,6 +15,14 @@ class ApiHelper extends \Codeception\Module
         return [$token, $id];
     }
 
+    public function amAlloPizzaRestaurant()
+    {
+        $this->sendApiPut('auth/token', ['email' => 'allo@pizza.fr', 'password' => 'AlloPizza']);
+        $data = $this->grabDataFromResponse();
+
+        return [$data['token'], $data['id']];
+    }
+
     public function sendRegistrationRequest(
         $email = null,
         $password = 'password',
