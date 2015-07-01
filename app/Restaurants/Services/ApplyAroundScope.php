@@ -20,7 +20,7 @@ class ApplyAroundScope
      * @param Builder $query
      * @param float   $latitude
      * @param float   $longitude
-     * @param int     $distanceInKms Null to use the maximum delivery distance
+     * @param float   $distanceInKms Null to use the maximum delivery distance
      */
     public function call(Builder $query, $latitude, $longitude, $distanceInKms = null)
     {
