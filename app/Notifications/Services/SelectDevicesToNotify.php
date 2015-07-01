@@ -11,6 +11,7 @@ use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Values\AroundDistanceInKms;
 use Groupeat\Settings\Entities\CustomerSettings;
+use Illuminate\Support\Collection;
 
 class SelectDevicesToNotify
 {
@@ -52,7 +53,7 @@ class SelectDevicesToNotify
             $this->aroundDistanceInKms
         );
 
-        return $query->lists('customerIds');
+        return $query->lists('customerId');
     }
 
     private function getCustomersAlreadyInIds(GroupOrder $groupOrder)
@@ -62,12 +63,12 @@ class SelectDevicesToNotify
         });
     }
 
-    private function getCustomersThatCanBeNotifiedIds(GroupOrder $groupOrder, array $potentialCustomersToNotifyIds)
+    private function getCustomersThatCanBeNotifiedIds(GroupOrder $groupOrder, Collection $potentialCustomersToNotifyIds)
     {
         $query = CustomerSettings::query()
             ->where(CustomerSettings::NOTIFICATIONS_ENABLED, true)
             ->where(CustomerSettings::NO_NOTIFICATION_AFTER, '>', Carbon::now()->toTimeString())
-            ->whereIn('customerId', $potentialCustomersToNotifyIds);
+            ->whereIn('customerId', $potentialCustomersToNotifyIds->all());
 
         return $query->lists('customerId');
     }
