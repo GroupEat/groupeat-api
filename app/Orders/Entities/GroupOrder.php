@@ -89,6 +89,9 @@ class GroupOrder extends Entity
         });
     }
 
+    /**
+     * @return Order
+     */
     public function getInitiatingOrder()
     {
         return $this->orders->filter(function ($order) {

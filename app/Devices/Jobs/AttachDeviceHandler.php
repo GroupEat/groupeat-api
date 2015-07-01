@@ -32,7 +32,10 @@ class AttachDeviceHandler
             $device->UUID = $deviceUUID;
             $device->notificationToken = $job->getNotificationToken();
             $device->platform()->associate($job->getPlatform());
+            $device->platformVersion = 'N/A'; // TODO: FIXME
             $device->model = $job->getModel();
+            $device->latitude = 0; // TODO: FIXME
+            $device->longitude = 0; // TODO: FIXME
 
             $device->save();
             $this->events->fire(new DeviceHasBeenAttached($device));

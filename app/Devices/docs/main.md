@@ -30,6 +30,8 @@
             "id": "1",
             "UUID": "8556336d027b4788",
             "model": "Nexus 5",
+            "latitude": 48.875769,
+            "longitude": 2.342933,
             "createdAt": "2015-05-18 22:36:59",
             "updatedAt": "2015-05-18 22:36:59"
         }
@@ -43,6 +45,8 @@
                 "id": "1",
                 "UUID": "8556336d027b4788",
                 "model": "Nexus 5",
+                "latitude": 48.875769,
+                "longitude": 2.342933,
                 "createdAt": "2015-05-18 22:36:59",
                 "updatedAt": "2015-05-18 22:36:59"
             },
@@ -50,6 +54,8 @@
                 "id": "2",
                 "UUID": "7476Sqfsd77",
                 "model": "iPhone 6",
+                "latitude": 48.875769,
+                "longitude": 2.342933,
                 "createdAt": "2015-05-26 23:06:03",
                 "updatedAt": "2015-05-26 23:06:03"
             }

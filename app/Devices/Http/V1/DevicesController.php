@@ -41,6 +41,6 @@ class DevicesController extends Controller
 
     public function update(Device $device)
     {
-        dd($device);
+        //
     }
 }

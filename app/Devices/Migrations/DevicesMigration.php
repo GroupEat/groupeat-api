@@ -4,11 +4,14 @@ namespace Groupeat\Devices\Migrations;
 use Groupeat\Customers\Migrations\CustomersMigration;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Support\Database\Abstracts\Migration;
+use Groupeat\Support\Migrations\Traits\HasPositionMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class DevicesMigration extends Migration
 {
+    use HasPositionMigration;
+
     const TABLE = 'devices';
 
     public function up()
@@ -19,7 +22,9 @@ class DevicesMigration extends Migration
             $table->string('UUID')->unique();
             $table->string('notificationToken');
             $table->unsignedInteger('platformId');
+            $table->string('platformVersion');
             $table->string('model');
+            $this->addPositionFields($table);
             $table->timestamp(Device::CREATED_AT);
             $table->timestamp(Device::UPDATED_AT);
 

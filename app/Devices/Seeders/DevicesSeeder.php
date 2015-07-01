@@ -13,8 +13,11 @@ class DevicesSeeder extends Seeder
         $device->customerId = $id;
         $device->UUID = uniqid();
         $device->platformId = 2;
+        $device->platformVersion = "1.0";
         $device->model = "smartphone $id";
         $device->notificationToken = uniqid();
+        $device->latitude = 48.875769;
+        $device->longitude = 2.342933;
         $device->save();
     }
 
@@ -24,8 +27,11 @@ class DevicesSeeder extends Seeder
         $device->customerId = $id;
         $device->UUID = uniqid();
         $device->platformId = 1;
+        $device->platformVersion = "0.1";
         $device->model = 'NOKIA 3310';
         $device->notificationToken = uniqid();
+        $device->latitude = 48.875769;
+        $device->longitude = 2.342933;
         $device->save();
     }
 }
