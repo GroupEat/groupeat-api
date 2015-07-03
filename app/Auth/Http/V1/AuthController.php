@@ -60,6 +60,6 @@ class AuthController extends Controller
 
     private function tokenResponseFor(UserCredentials $credentials)
     {
-        return $this->itemResponse($credentials->user, new TokenTransformer);
+        return $this->itemResponse($credentials->user, new UserTransformer);
     }
 }

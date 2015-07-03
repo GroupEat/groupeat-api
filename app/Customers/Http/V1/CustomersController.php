@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Customers\Http\V1;
 
-use Groupeat\Auth\Http\V1\TokenTransformer;
+use Groupeat\Auth\Http\V1\UserTransformer;
 use Groupeat\Customers\Jobs\RegisterCustomer;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
@@ -35,7 +35,7 @@ class CustomersController extends Controller
 
         $this->statusCode = Response::HTTP_CREATED;
 
-        return $this->itemResponse($customer, new TokenTransformer);
+        return $this->itemResponse($customer, new UserTransformer);
     }
 
     public function unregister(Customer $customer)
