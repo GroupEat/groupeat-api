@@ -5,7 +5,7 @@ use Groupeat\Auth\Auth;
 use Groupeat\Auth\Entities\Interfaces\User;
 use League\Fractal\TransformerAbstract;
 
-class TokenTransformer extends TransformerAbstract
+class UserTransformer extends TransformerAbstract
 {
     public function transform(User $user)
     {
