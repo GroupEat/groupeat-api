@@ -3,6 +3,7 @@ namespace Groupeat\Orders\Jobs\Abstracts;
 
 use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Support\Jobs\Abstracts\Job;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 abstract class AddOrder extends Job
 {
@@ -16,6 +17,7 @@ abstract class AddOrder extends Job
         $comment = null
     ) {
         $this->productFormats = new ProductFormats($productFormats);
+        $deliveryAddressData['location'] = new Point($deliveryAddressData['latitude'], $deliveryAddressData['longitude']);
         $this->deliveryAddressData = $deliveryAddressData;
         $this->comment = $comment;
     }

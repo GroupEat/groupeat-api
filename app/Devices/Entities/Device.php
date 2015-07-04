@@ -3,11 +3,12 @@ namespace Groupeat\Devices\Entities;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Entities\Abstracts\Entity;
-use Groupeat\Support\Entities\Traits\HasPosition;
+use Groupeat\Support\Entities\Traits\HasLocation;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class Device extends Entity
 {
-    use HasPosition;
+    use HasLocation;
 
     public static function findByUUID($UUID)
     {
@@ -23,8 +24,7 @@ class Device extends Entity
             'platformId' => 'required',
             'platformVersion' => 'required',
             'model' => 'required',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'location' => 'required',
         ];
     }
 

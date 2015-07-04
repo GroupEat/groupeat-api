@@ -5,6 +5,7 @@ use Groupeat\Customers\Jobs\UpdateAddress;
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class UpdateAddressHandler
 {
@@ -24,6 +25,7 @@ class UpdateAddressHandler
     {
         $attributes = $job->getAddressData();
         $customer = $job->getCustomer();
+        $attributes['location'] = new Point($attributes['latitude'], $attributes['longitude']);
 
         if ($customer->address) {
             $address = $customer->address;
@@ -34,7 +36,6 @@ class UpdateAddressHandler
         }
 
         $address->fill($this->addressConstraints);
-
         $address->save();
 
         return $address;

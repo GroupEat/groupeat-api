@@ -2,14 +2,14 @@
 namespace Groupeat\Support\Entities\Abstracts;
 
 use Groupeat\Support\Entities\Abstracts\Entity;
-use Groupeat\Support\Entities\Traits\HasPosition;
+use Groupeat\Support\Entities\Traits\HasLocation;
 use Groupeat\Support\Presenters\Address as AddressPresenter;
 
 abstract class Address extends Entity
 {
-    use HasPosition;
+    use HasLocation;
 
-    protected $fillable = ['street', 'details', 'city', 'postcode', 'state', 'country', 'latitude', 'longitude'];
+    protected $fillable = ['street', 'details', 'city', 'postcode', 'state', 'country', 'location'];
 
     public function getRules()
     {
@@ -19,8 +19,7 @@ abstract class Address extends Entity
             'postcode' => 'required|digits:5',
             'state' => 'required',
             'country' => 'required',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'location' => 'required',
         ];
     }
 

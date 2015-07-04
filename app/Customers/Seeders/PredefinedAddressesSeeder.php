@@ -3,6 +3,7 @@ namespace Groupeat\Customers\Seeders;
 
 use Groupeat\Customers\Entities\PredefinedAddress;
 use Groupeat\Support\Database\Abstracts\Seeder;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class PredefinedAddressesSeeder extends Seeder
 {
@@ -15,8 +16,7 @@ class PredefinedAddressesSeeder extends Seeder
             'postcode' => 91120,
             'state' => "Essonne",
             'country' => "France",
-            'latitude' => 48.7110028,
-            'longitude' => 2.21874,
+            'location' => new Point(48.7110028, 2.21874),
         ]);
 
         PredefinedAddress::create([
@@ -26,8 +26,7 @@ class PredefinedAddressesSeeder extends Seeder
             'postcode' => 91120,
             'state' => "Essonne",
             'country' => "France",
-            'latitude' => 48.71167,
-            'longitude' => 2.2110769,
+            'location' => new Point(48.71167, 2.2110769),
         ]);
 
         PredefinedAddress::create([
@@ -37,8 +36,7 @@ class PredefinedAddressesSeeder extends Seeder
             'postcode' => 91120,
             'state' => "Essonne",
             'country' => "France",
-            'latitude' => 48.7138983,
-            'longitude' => 2.2034917,
+            'location' => new Point(48.7138983, 2.2034917),
         ]);
     }
 }

@@ -6,6 +6,7 @@ use Groupeat\Restaurants\Entities\OpeningWindow;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Illuminate\Database\Eloquent\Builder;
 use League\Period\Period;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class ApplyAroundScope
 {
@@ -18,18 +19,17 @@ class ApplyAroundScope
 
     /**
      * @param Builder $query
-     * @param float   $latitude
-     * @param float   $longitude
+     * @param Point   $location
      * @param float   $distanceInKms Null to use the maximum delivery distance
      */
-    public function call(Builder $query, $latitude, $longitude, $distanceInKms = null)
+    public function call(Builder $query, Point $location, $distanceInKms = null)
     {
         if (is_null($distanceInKms)) {
             $distanceInKms = $this->maximumDeliveryDistanceInKms;
         }
 
-        $query->whereHas('address', function (Builder $subQuery) use ($latitude, $longitude, $distanceInKms) {
-            $subQuery->aroundInKilometers($latitude, $longitude, $distanceInKms);
+        $query->whereHas('address', function (Builder $subQuery) use ($location, $distanceInKms) {
+            $subQuery->withinKilometers($location, $distanceInKms);
         });
     }
 }

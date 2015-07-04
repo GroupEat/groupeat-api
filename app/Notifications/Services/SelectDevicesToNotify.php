@@ -9,7 +9,7 @@ use Groupeat\Devices\Entities\Status;
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Orders\Values\AroundDistanceInKms;
+use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Settings\Entities\CustomerSettings;
 use Illuminate\Support\Collection;
 
@@ -18,11 +18,11 @@ class SelectDevicesToNotify
     /**
      * @var float
      */
-    private $aroundDistanceInKms;
+    private $joinableDistanceInKms;
 
-    public function __construct(AroundDistanceInKms $aroundDistanceInKms)
+    public function __construct(JoinableDistanceInKms $joinableDistanceInKms)
     {
-        $this->aroundDistanceInKms = $aroundDistanceInKms->value();
+        $this->joinableDistanceInKms = $joinableDistanceInKms->value();
     }
 
     /**
@@ -47,10 +47,9 @@ class SelectDevicesToNotify
 
     private function getCustomersAroundIds(DeliveryAddress $firsDeliveryAddress)
     {
-        $query = Device::query()->aroundInKilometers(
-            $firsDeliveryAddress->latitude,
-            $firsDeliveryAddress->longitude,
-            $this->aroundDistanceInKms
+        $query = Device::query()->withinKilometers(
+            $firsDeliveryAddress->location,
+            $this->joinableDistanceInKms
         );
 
         return $query->lists('customerId');

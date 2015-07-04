@@ -15,8 +15,8 @@ abstract class AddressTransformer extends TransformerAbstract
             'postcode' => $address->postcode,
             'state' => $address->state,
             'country' => $address->country,
-            'latitude' => $address->latitude,
-            'longitude' => $address->longitude,
+            'latitude' => $address->location->getLat(),
+            'longitude' => $address->location->getLng(),
         ];
     }
 }

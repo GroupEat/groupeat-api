@@ -12,6 +12,7 @@ use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class GroupOrder extends Entity
 {
@@ -23,7 +24,7 @@ class GroupOrder extends Entity
     /**
      * @var float
      */
-    private static $aroundDistanceInKms;
+    private static $joinableDistanceInKms;
 
     protected $dates = [self::CLOSED_AT, self::ENDING_AT, self::CONFIRMED_AT, self::PREPARED_AT];
 
@@ -40,7 +41,7 @@ class GroupOrder extends Entity
     {
         parent::boot();
 
-        static::$aroundDistanceInKms = config('orders.around_distance_in_kilometers');
+        static::$joinableDistanceInKms = config('orders.joinable_distance_in_kilometers');
     }
 
     /**
@@ -214,21 +215,20 @@ class GroupOrder extends Entity
 
     /**
      * @param Builder $query
-     * @param float   $latitude
-     * @param float   $longitude
+     * @param Point   $location
      * @param float   $distanceInKms
      */
-    public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
+    public function scopeAround(Builder $query, Point $location, $distanceInKms = null)
     {
-        $distanceInKms = $distanceInKms ?: static::$aroundDistanceInKms;
+        $distanceInKms = $distanceInKms ?: static::$joinableDistanceInKms;
 
-        $query->whereHas('orders', function (Builder $subQuery) use ($latitude, $longitude, $distanceInKms) {
+        $query->whereHas('orders', function (Builder $subQuery) use ($location, $distanceInKms) {
             $subQuery->where($subQuery->getModel()->getTableField('initiator'), true);
 
             $subQuery->whereHas(
                 'deliveryAddress',
-                function (Builder $miniQuery) use ($latitude, $longitude, $distanceInKms) {
-                    $miniQuery->aroundInKilometers($latitude, $longitude, $distanceInKms);
+                function (Builder $miniQuery) use ($location, $distanceInKms) {
+                    $miniQuery->withinKilometers($location, $distanceInKms);
                 }
             );
         });

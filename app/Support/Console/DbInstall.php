@@ -43,10 +43,24 @@ class DbInstall extends Command
 
     private function deleteAllTables()
     {
-        $tables = array_map(function ($info) {
-            $this->comment('Droping table '.$info->table_name);
-            DB::statement('DROP TABLE IF EXISTS '.$info->table_name.' CASCADE');
-        }, DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"));
+        $postGisTables = [
+            'geography_columns',
+            'geometry_columns',
+            'spatial_ref_sys',
+            'raster_columns',
+            'raster_overviews'
+        ];
+
+        $tables = DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'");
+
+        collect($tables)->map(function ($info) use ($postGisTables) {
+            $table = $info->table_name;
+
+            if (!in_array($table, $postGisTables)) {
+                $this->comment('Droping table '.$table);
+                DB::statement('DROP TABLE IF EXISTS '.$table.' CASCADE');
+            }
+        });
     }
 
     private function createMigrationsTable()

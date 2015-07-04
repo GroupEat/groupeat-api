@@ -131,6 +131,7 @@ return [
         \Illuminate\Validation\ValidationServiceProvider::class,
         \Illuminate\View\ViewServiceProvider::class,
 
+        \Phaza\LaravelPostgis\DatabaseServiceProvider::class,
         \Robbo\Presenter\PresenterServiceProvider::class,
         \Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 

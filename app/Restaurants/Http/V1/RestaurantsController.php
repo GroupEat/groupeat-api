@@ -8,6 +8,7 @@ use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 use League\Period\Period;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class RestaurantsController extends Controller
 {
@@ -20,7 +21,7 @@ class RestaurantsController extends Controller
         }
 
         if ((bool) $this->get('around')) {
-            $query->around($this->get('latitude'), $this->get('longitude'));
+            $query->around(new Point($this->get('latitude'), $this->get('longitude')));
         }
 
         return $this->collectionResponse($query->get(), new RestaurantTransformer());

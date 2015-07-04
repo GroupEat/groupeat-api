@@ -9,7 +9,7 @@ use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidationHandler;
 use Groupeat\Orders\Support\ProductFormats;
-use Groupeat\Orders\Values\AroundDistanceInKms;
+use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -18,7 +18,7 @@ class JoinGroupOrderHandler extends GroupOrderValidationHandler
     public function __construct(
         Dispatcher $events,
         AddressConstraints $deliveryAddressConstraints,
-        AroundDistanceInKms $aroundDistanceInKms
+        JoinableDistanceInKms $aroundDistanceInKms
     ) {
         parent::__construct($events, $deliveryAddressConstraints, $aroundDistanceInKms);
     }

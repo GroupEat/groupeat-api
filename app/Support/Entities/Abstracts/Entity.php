@@ -163,6 +163,16 @@ abstract class Entity extends Model implements PresentableInterface
     }
 
     /**
+     * @param string $fieldName
+     *
+     * @return string Field name preceded by the the table name both surrounded by double quotes
+     */
+    public function getRawTableField($fieldName)
+    {
+        return '"'.$this->getTable().'"."'.$fieldName.'"';
+    }
+
+    /**
      * @return string
      */
     public function toShortString()

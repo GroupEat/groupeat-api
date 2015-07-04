@@ -12,6 +12,7 @@ use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\Period\Period;
+use Phaza\LaravelPostgis\Geometries\Point;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
 
@@ -61,9 +62,9 @@ class Restaurant extends Entity implements User
         return $this->hasMany(ClosingWindow::class);
     }
 
-    public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
+    public function scopeAround(Builder $query, Point $location, $distanceInKms = null)
     {
-        app(ApplyAroundScope::class)->call($query, $latitude, $longitude, $distanceInKms);
+        app(ApplyAroundScope::class)->call($query, $location, $distanceInKms);
     }
 
     public function isOpened(Period $period = null)

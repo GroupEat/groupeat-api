@@ -7,6 +7,7 @@ use Groupeat\Devices\Entities\Device;
 use Groupeat\Devices\Services\ChangeDeviceOwner;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class AttachDeviceHandler
 {
@@ -34,8 +35,7 @@ class AttachDeviceHandler
             $device->platform()->associate($job->getPlatform());
             $device->platformVersion = 'N/A'; // TODO: FIXME
             $device->model = $job->getModel();
-            $device->latitude = 0; // TODO: FIXME
-            $device->longitude = 0; // TODO: FIXME
+            $device->location = new Point(0, 0); // TODO: FIXME
 
             $device->save();
             $this->events->fire(new DeviceHasBeenAttached($device));

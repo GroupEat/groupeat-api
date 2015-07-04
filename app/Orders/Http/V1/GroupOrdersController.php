@@ -6,6 +6,7 @@ use Groupeat\Orders\Jobs\ConfirmGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Jobs\JoinGroupOrder;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class GroupOrdersController extends Controller
 {
@@ -20,7 +21,7 @@ class GroupOrdersController extends Controller
         }
 
         if ((bool) $this->get('around')) {
-            $query->around($this->get('latitude'), $this->get('longitude'));
+            $query->around(new Point($this->get('latitude'), $this->get('longitude')));
         }
 
         return $this->collectionResponse($query->get(), new GroupOrderTransformer);

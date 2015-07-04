@@ -3,6 +3,7 @@ namespace Groupeat\Restaurants\Seeders;
 
 use Groupeat\Restaurants\Entities\Address;
 use Groupeat\Support\Database\Abstracts\Seeder;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class RestaurantAddressesSeeder extends Seeder
 {
@@ -15,8 +16,7 @@ class RestaurantAddressesSeeder extends Seeder
             'postcode' => $this->faker->postcode,
             'state' => $this->faker->departmentName,
             'country' => $this->faker->country,
-            'latitude' => $this->faker->latitude,
-            'longitude' => $this->faker->longitude,
+            'location' => new Point($this->faker->latitude, $this->faker->longitude),
         ]);
     }
 
@@ -30,8 +30,7 @@ class RestaurantAddressesSeeder extends Seeder
                 'postcode' => 91120,
                 'state' => "Essonne",
                 'country' => "France",
-                'latitude' => 48.716941,
-                'longitude' => 2.239171,
+                'location' => new Point(48.716941, 2.239171),
             ]);
         }
 
@@ -43,8 +42,7 @@ class RestaurantAddressesSeeder extends Seeder
                 'postcode' => 91120,
                 'state' => "Essonne",
                 'country' => "France",
-                'latitude' => 48.855118,
-                'longitude' => 2.345730,
+                'location' => new Point(48.855118, 2.345730),
             ]);
         }
     }

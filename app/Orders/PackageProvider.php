@@ -2,7 +2,7 @@
 
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Orders\Values\AroundDistanceInKms;
+use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Orders\Values\DeliveryAddressConstraints;
 use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
@@ -30,8 +30,8 @@ class PackageProvider extends WorkbenchPackageProvider
         );
 
         $this->bindValueFromConfig(
-            AroundDistanceInKms::class,
-            'orders.around_distance_in_kilometers'
+            JoinableDistanceInKms::class,
+            'orders.joinable_distance_in_kilometers'
         );
 
         $this->bindValueFromConfig(
