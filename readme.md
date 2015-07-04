@@ -1,3 +1,4 @@
+[![Circle CI](https://circleci.com/gh/GroupEat/groupeat-api.svg?style=shield&circle-token=5bccad853ce36f8ed516994d3abc07ac2fc7ecbd)](https://circleci.com/gh/GroupEat/groupeat-api)
 [![Build Status](https://api.shippable.com/projects/54a71363d46935d5fbc15ac1/badge?branchName=master)](https://app.shippable.com/projects/54a71363d46935d5fbc15ac1/builds/latest)
 
 # Installing
