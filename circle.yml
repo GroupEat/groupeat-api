@@ -22,7 +22,7 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/codecept
   override:
     - ./vendor/bin/phpcs
-    - ./vendor/bin/codecept run --debug --xml $CIRCLE_TEST_REPORTS/codecept/results.xml
+    - ./vendor/bin/codecept run --debug --xml $CIRCLE_TEST_REPORTS/codeception/results.xml
   post:
     - cp ~/.ssh/id_d54a6ecb67efe5f8a49a32d5c060a0bb ~/.ssh/id_rsa
     - cp ~/.ssh/id_d54a6ecb67efe5f8a49a32d5c060a0bb.pub ~/.ssh/id_rsa.pub
