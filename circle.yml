@@ -22,6 +22,9 @@ test:
   override:
     - ./vendor/bin/phpcs
     - ./vendor/bin/codecept run --debug
+  post:
+    - cp ~/.ssh/id_d54a6ecb67efe5f8a49a32d5c060a0bb ~/.ssh/id_rsa
+    - cp ~/.ssh/id_d54a6ecb67efe5f8a49a32d5c060a0bb.pub ~/.ssh/id_rsa.pub
 
 deployment:
   production:
