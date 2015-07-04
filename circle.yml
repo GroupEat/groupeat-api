@@ -4,6 +4,10 @@ machine:
   php:
     version: 5.6.5
 
+database:
+  post:
+    - psql -c "CREATE EXTENSION postgis;" -d circle_test
+
 checkout:
   post:
     - echo "APP_ENV=building" >> .env
