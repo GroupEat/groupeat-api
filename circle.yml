@@ -1,0 +1,20 @@
+machine:
+  timezone:
+    Europe/Paris
+  php:
+    version: 5.6.5
+
+checkout:
+  post:
+    - echo "APP_ENV=building" >> .env
+    - echo "PGSQL_DB=circle_test" >> .env
+    - echo "PGSQL_USER=ubuntu" >> .env
+    - echo "PGSQL_PASSWORD=" >> .env
+
+test:
+  pre:
+    - php artisan db:install --seed --entries 2
+    - ./vendor/bin/codecept build
+  override:
+    - ./vendor/bin/phpcs
+    - ./vendor/bin/codecept run --debug

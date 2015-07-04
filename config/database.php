@@ -49,7 +49,7 @@ return [
         'pgsql' => [
             'driver'   => 'pgsql',
             'host'     => '127.0.0.1',
-            'database' => 'groupeat',
+            'database' => env('PGSQL_DB', 'groupeat'),
             'username' => env('PGSQL_USER', 'groupeat'),
             'password' => env('PGSQL_PASSWORD', 'groupeat'),
             'charset'  => 'utf8',
