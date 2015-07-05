@@ -13,7 +13,7 @@ class Notification extends ImmutableDatedEntity
         return [
             'customerId' => 'required',
             'deviceId' => 'required',
-            //'groupOrderId' => 'required', TODO: uncomment when test route is not needed anymore
+            'groupOrderId' => 'required'
         ];
     }
 

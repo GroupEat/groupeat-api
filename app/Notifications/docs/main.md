@@ -1,6 +1,10 @@
 # Group Notifications
 
-## Send notification [/notifications]
+## Send notification [/groupOrders/{id}/notifications]
+
++ Parameters
+
+    + id (required, string, `123`) ... The group order ID
 
 ### POST
 
@@ -16,3 +20,5 @@ The user corresponding to the authentication token must have already attached a 
             "errorKey": "userMustAuthenticate",
             "message": "No authenticated user."
         }
+
++ Response 404
