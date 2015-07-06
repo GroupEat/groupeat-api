@@ -24,7 +24,7 @@ class SendPasswordResetLinkHandler
         $this->passwordBroker = $passwordBroker;
         $this->localeService = $localeService;
         $this->urlGenerator = $urlGenerator;
-        $this->availableLocales = $availableLocales;
+        $this->availableLocales = $availableLocales->value();
     }
 
     public function handle(SendPasswordResetLink $job)
