@@ -31,8 +31,8 @@ deployment:
   production:
     branch: master
     commands:
-      - ./deploy.sh production master
+      - php deploy.php production master
   staging:
     branch: develop
     commands:
-      - ./deploy.sh staging develop
+      - php deploy.php staging develop
