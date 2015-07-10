@@ -4,7 +4,6 @@ namespace Groupeat\Orders\Console;
 use Carbon\Carbon;
 use Groupeat\Orders\Services\CloseGroupOrdersWithElapsedFoodrush;
 use Groupeat\Support\Console\Abstracts\Command;
-use Symfony\Component\Console\Input\InputOption;
 
 class CloseGroupOrders extends Command
 {

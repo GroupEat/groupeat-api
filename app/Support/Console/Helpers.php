@@ -3,7 +3,6 @@ namespace Groupeat\Support\Console;
 
 use App;
 use Groupeat\Support\Console\Abstracts\Command;
-use Symfony\Component\Console\Input\InputOption;
 
 class Helpers extends Command
 {

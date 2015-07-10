@@ -7,7 +7,6 @@ use DB;
 use File;
 use Groupeat\Support\Console\Abstracts\Command;
 use Illuminate\Support\Facades\Schema;
-use Symfony\Component\Console\Input\InputOption;
 
 class DbInstall extends Command
 {

@@ -2,7 +2,6 @@
 namespace Groupeat\Support\Console;
 
 use Groupeat\Support\Console\Abstracts\Command;
-use Symfony\Component\Console\Input\InputOption;
 
 class Pull extends Command
 {
