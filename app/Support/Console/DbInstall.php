@@ -27,7 +27,12 @@ class DbInstall extends Command
         $this->order = Config::get('database.order');
 
         if (App::environment('production')) {
-            // $this->call('db:backup'); // TODO: Use a similar package for L5 when available
+            if (!$this->option('force')) {
+                $this->error('Aborting before its too late...');
+                exit;
+            }
+
+            $this->call('db:backup', ['--s3' => true]);
         }
 
         $this->deleteAllTables();

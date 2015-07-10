@@ -11,5 +11,9 @@ class Console extends Kernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('group-orders:close')->cron('* * * * *')->withoutOverlapping();
+
+        if (!app()->isLocal()) {
+            $schedule->command('db:backup', ['--s3' => true])->dailyAt('04:00');
+        }
     }
 }
