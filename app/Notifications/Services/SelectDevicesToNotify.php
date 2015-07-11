@@ -38,10 +38,13 @@ class SelectDevicesToNotify
         $customersAroundIds = $this->getCustomersAroundIds($groupOrder->getInitiatingOrder()->deliveryAddress);
         $customersAlreadyInIds = $this->getCustomersAlreadyInIds($groupOrder);
         $potentialCustomersToNotifyIds = $customersAroundIds->diff($customersAlreadyInIds);
-        $customersThatCanBeNotifiedIds = $this->getCustomersThatCanBeNotifiedIds(
-            $groupOrder,
-            $potentialCustomersToNotifyIds
-        );
+
+        $customersThatCanBeNotifiedIds = $potentialCustomersToNotifyIds->isEmpty() ?
+            collect([]) :
+            $this->getCustomersThatCanBeNotifiedIds(
+                $groupOrder,
+                $potentialCustomersToNotifyIds
+            );
 
         return Device::whereIn('customerId', $customersThatCanBeNotifiedIds->all())
             ->with('customer', 'platform')
@@ -72,7 +75,8 @@ class SelectDevicesToNotify
         $orderEntity = new Order;
         $customerSettingEntity = new CustomerSettings;
 
-        $sql = 'SELECT DISTINCT ON ('.$orderEntity->getRawTableField('customerId').') '.$orderEntity->getRawTableField('customerId')
+        $sql = 'SELECT DISTINCT ON ('.$orderEntity->getRawTableField('customerId').') '
+            . $orderEntity->getRawTableField('customerId')
             .' FROM '.$ordersTable
             .' LEFT JOIN '.$customerSettingsTable
             .' ON '.$orderEntity->getRawTableField('customerId').' = '.$customerSettingEntity->getRawTableField('customerId')
@@ -84,6 +88,6 @@ class SelectDevicesToNotify
                 .' >= DATE_PART(\'day\', NOW()::timestamp - '.$orderEntity->getRawTableField('createdAt').'::timestamp)'
             .' ORDER BY '.$orderEntity->getRawTableField('customerId').', '.$orderEntity->getRawTableField('createdAt').' DESC';
 
-        return collect(collect(DB::select(DB::raw($sql)))->lists('customerId'));
+        return collect(DB::select(DB::raw($sql)))->lists('customerId');
     }
 }
