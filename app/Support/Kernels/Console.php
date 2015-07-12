@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Support\Kernels;
 
+use Groupeat\Support\Values\Environment;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel;
 
@@ -10,10 +11,12 @@ class Console extends Kernel
 
     protected function schedule(Schedule $schedule)
     {
+        $env = app(Environment::class);
+
         $schedule->command('group-orders:close')->cron('* * * * *')->withoutOverlapping();
 
-        if (!app()->isLocal()) {
-            $schedule->command('db:backup', ['--s3' => true])->dailyAt('04:00');
+        if ($env->isStaging() || $env->isProduction()) {
+            $schedule->command('db:backup --s3')->dailyAt('04:00');
         }
     }
 }
