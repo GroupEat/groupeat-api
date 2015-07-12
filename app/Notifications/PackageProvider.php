@@ -5,7 +5,6 @@ use Groupeat\Notifications\Values\GcmApiKey;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Groupeat\Notifications\Listeners\SendNotificationToCustomers;
-use Groupeat\Support\Values\Environment;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
