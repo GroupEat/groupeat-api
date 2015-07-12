@@ -5,6 +5,7 @@ use Groupeat\Orders\Http\V1\Traits\CanAddOrder;
 use Groupeat\Orders\Jobs\ConfirmGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Jobs\JoinGroupOrder;
+use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Phaza\LaravelPostgis\Geometries\Point;
 
@@ -25,6 +26,13 @@ class GroupOrdersController extends Controller
         }
 
         return $this->collectionResponse($query->get(), new GroupOrderTransformer);
+    }
+
+    public function indexForRestaurant(Restaurant $restaurant)
+    {
+        $this->auth->assertSame($restaurant);
+
+        return $this->collectionResponse(GroupOrder::where('restaurantId', $restaurant->id)->get(), new GroupOrderTransformer);
     }
 
     public function show(GroupOrder $groupOrder)

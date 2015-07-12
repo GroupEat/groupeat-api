@@ -78,6 +78,21 @@ class GroupOrdersCest
         $I->assertFalse($I->grabDataFromResponse('groupOrder.data.joinable'));
     }
 
+    public function testThatARestaurantCanListItsGroupOrder(ApiTester $I)
+    {
+        list($token, $id) = $I->amAlloPizzaRestaurant();
+
+        $I->sendApiGetWithToken($token, 'restaurants/'.($id - 1).'/groupOrders');
+        $I->seeErrorResponse(403, 'wrongAuthenticatedUser');
+
+        $I->sendApiGetWithToken($token, "restaurants/$id/groupOrders");
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsData([]);
+
+        list($customerToken, $customerId) = $I->amAnActivatedCustomer();
+        $I->sendApiGetWithToken($customerToken, 'restaurants?opened=1&around=1&latitude=48.855118&longitude=2.345730');
+    }
+
     public function createGroupOrder(ApiTester $I)
     {
         list($token, $customerId) = $I->amAnActivatedCustomer();
