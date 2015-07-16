@@ -43,8 +43,6 @@ class SendPasswordResetLinkHandler
         if ($status == $broker::INVALID_USER) {
             UserCredentials::throwNotFoundByEmailException($email);
         }
-
-        $broker->getUser($credentials)->discardPasswordAndToken();
     }
 
     /**

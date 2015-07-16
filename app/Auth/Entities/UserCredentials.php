@@ -149,12 +149,6 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         $this->save();
     }
 
-    public function discardPasswordAndToken()
-    {
-        $this->hashAndSetPassword("WAITING FOR PASSWORD RESET");
-        $this->discardToken();
-    }
-
     /**
      * @param $password
      * @param $token
@@ -163,12 +157,6 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
     {
         $this->hashAndSetPassword($password);
         $this->replaceAuthenticationToken($token);
-    }
-
-    public function discardToken()
-    {
-        $this->token = null;
-        $this->save();
     }
 
     /**

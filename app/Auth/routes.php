@@ -7,7 +7,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('activationTokens', AuthController::class.'@activate');
         Route::put('token', AuthController::class.'@getToken');
         Route::post('token', AuthController::class.'@resetToken');
-        Route::delete('password', AuthController::class.'@sendPasswordResetLink');
+        Route::post('passwordResets', AuthController::class.'@sendPasswordResetLink');
         Route::post('password', AuthController::class.'@resetPassword');
         Route::put('password', AuthController::class.'@changePassword');
     });

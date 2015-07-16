@@ -95,27 +95,6 @@ Once hit, this route will make the old token obsolete: only the new one can be u
 
 Changing or reseting a password will make the current authentication token obsolete. 
 
-### Send password reset link [DELETE]
-
-+ Request
-
-        {
-            "email": "customer@ensta.fr",
-        }
-
-+ Response 200
-
-+ Response 404
-
-        {
-            "message": "No user with mangeo@ensta.fr e-mail address found.",
-            "errors": {
-                "email": {
-                    "notFound": []
-                }
-            }
-        }
-
 ### Reset password [POST]
 
 + Request
@@ -123,7 +102,7 @@ Changing or reseting a password will make the current authentication token obsol
         {
             "email": "customer@ensta.fr",
             "password": "theNewPassword",
-            "token": "12a345qsd6..." // Delivered by the DELETE route
+            "token": "12a345qsd6..." // Delivered by the POST /auth/passwordResets route
         }
 
 + Response 200
@@ -199,6 +178,29 @@ Changing or reseting a password will make the current authentication token obsol
         {
             "errorKey": "badPassword",
             "message": "The password must be at least six characters."
+        }
+        
+## Send password reset link [/auth/passwordResets]
+    
+### POST
+
++ Request
+
+        {
+            "email": "customer@ensta.fr",
+        }
+
++ Response 200
+
++ Response 404
+
+        {
+            "message": "No user with mangeo@ensta.fr e-mail address found.",
+            "errors": {
+                "email": {
+                    "notFound": []
+                }
+            }
         }
 
 ## Activate user [/auth/activationTokens]

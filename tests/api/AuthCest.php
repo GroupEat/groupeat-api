@@ -114,7 +114,7 @@ class AuthCest
     public function testThatAUserCanResetItsPassword(ApiTester $I)
     {
         $email = 'unexisting@ensta.fr';
-        $I->sendApiDelete('auth/password', compact('email'));
+        $I->sendApiPost('auth/passwordResets', compact('email'));
         $I->seeErrorResponse(404, 'validationErrors');
         $I->seeErrorsContain(['email' => ['notFound' => []]]);
 
@@ -123,7 +123,7 @@ class AuthCest
         list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $oldPassword);
         $userUrl = $this->getUserResource().'/'.$id;
 
-        $I->sendApiDelete('auth/password', compact('email'));
+        $I->sendApiPost('auth/passwordResets', compact('email'));
         $I->seeResponseCodeIs(200);
         $link = $I->grabHrefInLinkByIdInFirstMail('password-reset-link');
         $I->assertNotEmpty($link);
