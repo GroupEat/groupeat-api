@@ -271,7 +271,7 @@ Only activated customers are allowed to join a group order.
 
 Same request than the *Create group order* route except that the `foodRushDurationInMinutes` field is not needed. The possible error responses are also the same except that the `invalidFoodRushDuration` and `groupOrderAlreadyExisting` errors cannot occur.
 
-To join a group order, the distance between the first delivery address and the given one must be less than {{ orders.around_distance_in_kilometers }} kilometers.
+To join a group order, the distance between the first delivery address and the given one must be less than {{ orders.joinable_distance_in_kilometers }} kilometers.
 
 + Response 201
 

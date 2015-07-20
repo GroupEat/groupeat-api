@@ -56,7 +56,7 @@ class GenerateApiDocumentation
 
         $output->writeln('Compiling markdown to HTML');
 
-        $command = "aglio -t flatly --full-width -i $inputPath -o $outputPath";
+        $command = "aglio --theme-variables flatly --theme-full-width -i $inputPath -o $outputPath";
 
         $status = process($command, $output)->getErrorOutput();
 
