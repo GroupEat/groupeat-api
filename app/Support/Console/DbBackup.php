@@ -30,7 +30,12 @@ class DbBackup extends Command
 
         if ($this->option('s3')) {
             $this->line("Uploading backup file to Amazon S3");
-            Storage::disk('s3')->put($relativePath, fopen($absolutePath, 'r'));
+            $successful = Storage::disk('s3')->put($relativePath, fopen($absolutePath, 'r'));
+
+            if (!$successful) {
+                $this->error("The upload failed, the database has not been saved");
+                exit(1);
+            }
         }
     }
 }
