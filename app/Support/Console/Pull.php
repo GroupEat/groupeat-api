@@ -12,6 +12,6 @@ class Pull extends Command
     {
         $this->process('git pull');
         $this->process('composer install');
-        $this->process('php artisan db:install --seed');
+        $this->process('php artisan migrate:refresh --seed');
     }
 }

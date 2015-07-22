@@ -4,7 +4,7 @@
 
  - `cp example.env env`
  - Fill the missing data if any in `.env`
- - `composer install; php artisan db:install -s`
+ - `composer install && php artisan migrate:install && php artisan migrate:refresh --seed`
 
 # Updating
 
