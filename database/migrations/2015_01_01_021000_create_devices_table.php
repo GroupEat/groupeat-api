@@ -1,6 +1,5 @@
 <?php
 
-use Groupeat\Customers\Migrations\CreateCustomersTable;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Groupeat\Support\Migrations\Traits\HasLocationMigration;

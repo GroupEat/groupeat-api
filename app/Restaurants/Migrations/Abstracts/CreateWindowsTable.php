@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Restaurants\Migrations\Abstracts;
 
-use Groupeat\Restaurants\Migrations\CreateRestaurantsTable;
+use CreateRestaurantsTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

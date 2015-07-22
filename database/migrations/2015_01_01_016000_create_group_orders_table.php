@@ -1,7 +1,6 @@
 <?php
 
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Restaurants\Migrations\CreateRestaurantsTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

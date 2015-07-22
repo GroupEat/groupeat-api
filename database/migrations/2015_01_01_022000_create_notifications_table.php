@@ -1,9 +1,6 @@
 <?php
 
-use Groupeat\Customers\Migrations\CreateCustomersTable;
-use Groupeat\Devices\Migrations\CreateDevicesTable;
 use Groupeat\Notifications\Entities\Notification;
-use Groupeat\Orders\Migrations\CreateGroupOrdersTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

@@ -1,6 +1,5 @@
 <?php
 
-use Groupeat\Restaurants\Migrations\CreateProductFormatsTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

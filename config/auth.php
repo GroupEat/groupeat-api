@@ -60,7 +60,7 @@ return [
 
     'password' => [
         'email' => ['auth::resetPassword-html', 'auth::resetPassword-text'],
-        'table' => (new \Groupeat\Auth\Migrations\CreatePasswordResetTokensTable)->getTable(),
+        'table' => (new CreatePasswordResetTokensTable)->getTable(),
         'expire' => 60,
     ],
 

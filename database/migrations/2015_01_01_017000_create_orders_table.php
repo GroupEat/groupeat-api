@@ -1,6 +1,5 @@
 <?php
 
-use Groupeat\Customers\Migrations\CreateCustomersTable;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
