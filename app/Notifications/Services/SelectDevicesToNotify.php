@@ -10,10 +10,8 @@ use Groupeat\Devices\Entities\Status;
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Orders\Migrations\OrdersMigration;
 use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Settings\Entities\CustomerSettings;
-use Groupeat\Settings\Migrations\CustomerSettingsMigration;
 use Illuminate\Support\Collection;
 
 class SelectDevicesToNotify
