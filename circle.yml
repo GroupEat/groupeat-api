@@ -17,7 +17,8 @@ checkout:
 
 test:
   pre:
-    - php artisan db:install --seed --entries 2
+    - php artisan migrate:install
+    - php artisan migrate --seed
     - ./vendor/bin/codecept build
     - mkdir -p $CIRCLE_TEST_REPORTS/codecept
   override:
