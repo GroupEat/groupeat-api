@@ -13,6 +13,9 @@ if (stristr($lastCommitMessage, 'skip deploy') === false) {
 
     echo "Deploying\n";
     system("./rocketeer.phar deploy --on=$target --branch=$branch");
+
+    echo "Removing Rocketeer executable\n";
+    unlink('./rocketeer.phar');
 } else {
     echo "Deployment cancelled\n";
 }
