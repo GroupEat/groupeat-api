@@ -11,20 +11,20 @@ use Illuminate\Support\Facades\Schema;
 
 class NotificationsMigration extends Migration
 {
-    const TABLE = 'notifications';
+    protected $entity = Notification::class;
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('deviceId');
             $table->unsignedInteger('groupOrderId');
             $table->timestamp(Notification::CREATED_AT)->index();
 
-            $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
-            $table->foreign('deviceId')->references('id')->on(DevicesMigration::TABLE);
-            $table->foreign('groupOrderId')->references('id')->on(GroupOrdersMigration::TABLE);
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
+            $table->foreign('deviceId')->references('id')->on($this->getTableFor(DevicesMigration::class));
+            $table->foreign('groupOrderId')->references('id')->on($this->getTableFor(GroupOrdersMigration::class));
         });
     }
 }

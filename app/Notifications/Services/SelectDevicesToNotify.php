@@ -70,10 +70,10 @@ class SelectDevicesToNotify
 
     private function getCustomersThatCanBeNotifiedIds(GroupOrder $groupOrder, Collection $potentialCustomersToNotifyIds)
     {
-        $ordersTable = OrdersMigration::TABLE;
-        $customerSettingsTable = CustomerSettingsMigration::TABLE;
         $orderEntity = new Order;
         $customerSettingEntity = new CustomerSettings;
+        $ordersTable = $orderEntity->getTable();
+        $customerSettingsTable = $customerSettingEntity->getTable();
 
         $sql = 'SELECT DISTINCT ON ('.$orderEntity->getRawTableField('customerId').') '
             . $orderEntity->getRawTableField('customerId')

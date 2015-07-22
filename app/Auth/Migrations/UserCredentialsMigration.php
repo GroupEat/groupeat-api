@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Schema;
 
 class UserCredentialsMigration extends Migration
 {
-    const TABLE = 'user_credentials';
+    protected $entity = UserCredentials::class;
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->string('email')->unique();
             $table->unsignedInteger("userId");

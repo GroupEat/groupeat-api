@@ -2,7 +2,6 @@
 namespace Groupeat\Settings\Entities;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Settings\Migrations\CustomerSettingsMigration;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\NotFound;
 
@@ -59,10 +58,5 @@ class CustomerSettings extends Entity
     public function customer()
     {
         return $this->belongsTo(Customer::class);
-    }
-
-    protected function getRelatedMigration()
-    {
-        return new CustomerSettingsMigration;
     }
 }

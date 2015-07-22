@@ -48,6 +48,11 @@ abstract class Entity extends Model implements PresentableInterface
         return $model;
     }
 
+    public static function table()
+    {
+        return (new static)->getTable();
+    }
+
     protected static function boot()
     {
         static::saving(function (Entity $entity) {
@@ -133,24 +138,6 @@ abstract class Entity extends Model implements PresentableInterface
      * @return array Rules that the entity must match
      */
     abstract public function getRules();
-
-    /**
-     * @return string Table name of the entity
-     */
-    public static function table()
-    {
-        return (new static())->getTable();
-    }
-
-    /**
-     * @return string Table name of the entity
-     */
-    public function getTable()
-    {
-        $migration = $this->getRelatedMigration();
-
-        return $migration::TABLE;
-    }
 
     /**
      * @param string $fieldName

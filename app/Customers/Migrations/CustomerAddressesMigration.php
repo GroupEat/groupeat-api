@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CustomerAddressesMigration extends AddressesMigration
 {
-    const TABLE = 'customer_addresses';
+    protected $entity = Address::class;
 
     protected function addFields(Blueprint $table)
     {
@@ -16,6 +16,6 @@ class CustomerAddressesMigration extends AddressesMigration
         $table->timestamp(Address::CREATED_AT)->index();
         $table->timestamp(Address::UPDATED_AT)->index();
 
-        $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
+        $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
     }
 }

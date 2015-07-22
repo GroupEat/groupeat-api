@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Schema;
 
 class PasswordResetTokensMigration extends Migration
 {
-    const TABLE = 'password_reset_tokens';
+    protected $table = 'password_reset_tokens';
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->string('email')->unique();
             $table->string('token')->unique();
             $table->timestamp(Model::CREATED_AT);

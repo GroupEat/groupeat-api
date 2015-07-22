@@ -12,6 +12,6 @@ trait HasLocationMigration
 
     protected function addLocationIndex()
     {
-        \DB::statement('CREATE INDEX '.static::TABLE.'_location_gist ON '.static::TABLE.' USING GIST(location)');
+        \DB::statement('CREATE INDEX '.$this->getTable().'_location_gist ON '.$this->getTable().' USING GIST(location)');
     }
 }

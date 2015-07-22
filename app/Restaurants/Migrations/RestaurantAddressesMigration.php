@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 class RestaurantAddressesMigration extends AddressesMigration
 {
-    const TABLE = 'restaurant_addresses';
+    protected $entity = Address::class;
 
     protected function addFields(Blueprint $table)
     {
@@ -15,6 +15,6 @@ class RestaurantAddressesMigration extends AddressesMigration
         $table->timestamp(Address::CREATED_AT);
         $table->timestamp(Address::UPDATED_AT);
 
-        $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
+        $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
     }
 }

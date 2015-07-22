@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Schema;
 
 class GroupOrdersMigration extends Migration
 {
-    const TABLE = 'group_orders';
+    protected $entity = GroupOrder::class;
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('restaurantId')->index();
             $table->unsignedInteger('discountRate')->index()->default(0);
@@ -24,7 +24,7 @@ class GroupOrdersMigration extends Migration
             $table->timestamp(GroupOrder::CONFIRMED_AT)->nullable();
             $table->timestamp(GroupOrder::PREPARED_AT)->nullable();
 
-            $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
+            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
         });
     }
 }

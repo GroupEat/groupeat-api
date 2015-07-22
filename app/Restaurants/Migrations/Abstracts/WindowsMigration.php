@@ -10,12 +10,12 @@ abstract class WindowsMigration extends Migration
 {
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->integer('restaurantId')->unsigned()->index();
             $this->addFieldsTo($table);
 
-            $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
+            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
         });
     }
 

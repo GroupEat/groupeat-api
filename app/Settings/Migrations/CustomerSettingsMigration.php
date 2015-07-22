@@ -9,18 +9,18 @@ use Illuminate\Support\Facades\Schema;
 
 class CustomerSettingsMigration extends Migration
 {
-    const TABLE = 'customer_settings';
+    protected $entity = CustomerSettings::class;
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->boolean(CustomerSettings::NOTIFICATIONS_ENABLED)->index();
             $table->unsignedInteger(CustomerSettings::DAYS_WITHOUT_NOTIFYING)->index();
             $table->time(CustomerSettings::NO_NOTIFICATION_AFTER)->index();
 
-            $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
         });
     }
 }

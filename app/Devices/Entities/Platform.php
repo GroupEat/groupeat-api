@@ -10,6 +10,8 @@ class Platform extends Entity
 
     public $timestamps = false;
 
+    protected $table = 'device_platforms';
+
     public function getRules()
     {
         return [

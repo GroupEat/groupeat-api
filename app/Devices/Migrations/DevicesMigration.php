@@ -12,11 +12,11 @@ class DevicesMigration extends Migration
 {
     use HasLocationMigration;
 
-    const TABLE = 'devices';
+    protected $entity = Device::class;
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->string('UUID')->unique();
@@ -27,8 +27,8 @@ class DevicesMigration extends Migration
             $this->addLocationColumn($table);
             $table->timestamp(Device::CREATED_AT);
             $table->timestamp(Device::UPDATED_AT);
-            $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
-            $table->foreign('platformId')->references('id')->on(PlatformsMigration::TABLE);
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
+            $table->foreign('platformId')->references('id')->on($this->getTableFor(PlatformsMigration::class));
         });
 
         $this->addLocationIndex();

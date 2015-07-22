@@ -7,17 +7,17 @@ use Illuminate\Support\Facades\Schema;
 
 class CategoryRestaurantMigration extends Migration
 {
-    const TABLE = 'category_restaurant';
+    protected $table = 'category_restaurant';
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->integer('categoryId')->index();
             $table->integer('restaurantId')->index();
 
-            $table->foreign('categoryId')->references('id')->on(CategoriesMigration::TABLE);
-            $table->foreign('restaurantId')->references('id')->on(RestaurantsMigration::TABLE);
+            $table->foreign('categoryId')->references('id')->on($this->getTableFor(CategoriesMigration::class));
+            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
         });
     }
 }

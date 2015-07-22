@@ -8,18 +8,18 @@ use Illuminate\Support\Facades\Schema;
 
 class OrderProductFormatMigration extends Migration
 {
-    const TABLE = 'order_product_format';
+    protected $table = 'order_product_format';
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('orderId')->index();
             $table->unsignedInteger('productFormatId');
             $table->tinyInteger('amount');
 
-            $table->foreign('orderId')->references('id')->on(OrdersMigration::TABLE);
-            $table->foreign('productFormatId')->references('id')->on(ProductFormatsMigration::TABLE);
+            $table->foreign('orderId')->references('id')->on($this->getTableFor(OrdersMigration::class));
+            $table->foreign('productFormatId')->references('id')->on($this->getTableFor(ProductFormatsMigration::class));
         });
     }
 }

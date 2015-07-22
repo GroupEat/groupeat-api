@@ -45,7 +45,7 @@ abstract class Seeder extends LaravelSeeder
     {
         $migration = $this->getRelatedMigration();
 
-        return $migration::TABLE;
+        return $migration->getTable();
     }
 
     protected function getRelatedMigration()

@@ -2,6 +2,7 @@
   "name": "GroupEat RESTful API",
   "type": "project",
   "require": {
+    "doctrine/dbal": "2.4.*",
     "league/period": "2.5.*",
     "tymon/jwt-auth": "0.5.*",
     "pda/pheanstalk": "3.0.*",

@@ -12,7 +12,7 @@ abstract class AddressesMigration extends Migration
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $this->addFields($table);
             $table->string('street');

@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Schema;
 
 class OrdersMigration extends Migration
 {
-    const TABLE = 'orders';
+    protected $entity = Order::class;
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('customerId')->index();
             $table->unsignedInteger('groupOrderId')->index();
@@ -22,8 +22,8 @@ class OrdersMigration extends Migration
             $table->boolean('initiator')->index()->default(false);
             $table->timestamp(Order::CREATED_AT)->index();
 
-            $table->foreign('customerId')->references('id')->on(CustomersMigration::TABLE);
-            $table->foreign('groupOrderId')->references('id')->on(GroupOrdersMigration::TABLE);
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
+            $table->foreign('groupOrderId')->references('id')->on($this->getTableFor(GroupOrdersMigration::class));
         });
     }
 }

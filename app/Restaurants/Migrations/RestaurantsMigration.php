@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Schema;
 
 class RestaurantsMigration extends Migration
 {
-    const TABLE = 'restaurants';
+    protected $entity = Restaurant::class;
 
     public function up()
     {
-        Schema::create(static::TABLE, function (Blueprint $table) {
+        Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('phoneNumber', 25);
