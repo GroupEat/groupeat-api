@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Devices\Migrations;
 
 use Groupeat\Devices\Entities\Platform;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PlatformsMigration extends Migration
+class CreatePlatformsTable extends Migration
 {
     protected $entity = Platform::class;
 

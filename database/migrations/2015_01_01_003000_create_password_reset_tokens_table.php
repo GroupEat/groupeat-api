@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Auth\Migrations;
 
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PasswordResetTokensMigration extends Migration
+class CreatePasswordResetTokensTable extends Migration
 {
     protected $table = 'password_reset_tokens';
 

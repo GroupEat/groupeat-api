@@ -1,11 +1,10 @@
 <?php
-namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Restaurants\Entities\Address;
 use Groupeat\Support\Migrations\Abstracts\AddressesMigration;
 use Illuminate\Database\Schema\Blueprint;
 
-class RestaurantAddressesMigration extends AddressesMigration
+class CreateRestaurantAddressesTable extends AddressesMigration
 {
     protected $entity = Address::class;
 
@@ -15,6 +14,6 @@ class RestaurantAddressesMigration extends AddressesMigration
         $table->timestamp(Address::CREATED_AT);
         $table->timestamp(Address::UPDATED_AT);
 
-        $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
+        $table->foreign('restaurantId')->references('id')->on($this->getTableFor(CreateRestaurantsTable::class));
     }
 }

@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Auth\Migrations;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserCredentialsMigration extends Migration
+class CreateUserCredentialsTable extends Migration
 {
     protected $entity = UserCredentials::class;
 

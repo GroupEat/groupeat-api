@@ -1,12 +1,12 @@
 <?php
 namespace Groupeat\Restaurants\Migrations\Abstracts;
 
-use Groupeat\Restaurants\Migrations\RestaurantsMigration;
+use Groupeat\Restaurants\Migrations\CreateRestaurantsTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-abstract class WindowsMigration extends Migration
+abstract class CreateWindowsTable extends Migration
 {
     public function up()
     {
@@ -15,7 +15,7 @@ abstract class WindowsMigration extends Migration
             $table->integer('restaurantId')->unsigned()->index();
             $this->addFieldsTo($table);
 
-            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
+            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(CreateRestaurantsTable::class));
         });
     }
 

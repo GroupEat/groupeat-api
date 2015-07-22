@@ -1,15 +1,14 @@
 <?php
-namespace Groupeat\Notifications\Migrations;
 
-use Groupeat\Customers\Migrations\CustomersMigration;
-use Groupeat\Devices\Migrations\DevicesMigration;
+use Groupeat\Customers\Migrations\CreateCustomersTable;
+use Groupeat\Devices\Migrations\CreateDevicesTable;
 use Groupeat\Notifications\Entities\Notification;
-use Groupeat\Orders\Migrations\GroupOrdersMigration;
+use Groupeat\Orders\Migrations\CreateGroupOrdersTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class NotificationsMigration extends Migration
+class CreateNotificationsTable extends Migration
 {
     protected $entity = Notification::class;
 
@@ -22,9 +21,9 @@ class NotificationsMigration extends Migration
             $table->unsignedInteger('groupOrderId');
             $table->timestamp(Notification::CREATED_AT)->index();
 
-            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
-            $table->foreign('deviceId')->references('id')->on($this->getTableFor(DevicesMigration::class));
-            $table->foreign('groupOrderId')->references('id')->on($this->getTableFor(GroupOrdersMigration::class));
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CreateCustomersTable::class));
+            $table->foreign('deviceId')->references('id')->on($this->getTableFor(CreateDevicesTable::class));
+            $table->foreign('groupOrderId')->references('id')->on($this->getTableFor(CreateGroupOrdersTable::class));
         });
     }
 }

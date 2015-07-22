@@ -1,14 +1,13 @@
 <?php
-namespace Groupeat\Devices\Migrations;
 
-use Groupeat\Customers\Migrations\CustomersMigration;
+use Groupeat\Customers\Migrations\CreateCustomersTable;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Groupeat\Support\Migrations\Traits\HasLocationMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DevicesMigration extends Migration
+class CreateDevicesTable extends Migration
 {
     use HasLocationMigration;
 
@@ -27,8 +26,8 @@ class DevicesMigration extends Migration
             $this->addLocationColumn($table);
             $table->timestamp(Device::CREATED_AT);
             $table->timestamp(Device::UPDATED_AT);
-            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
-            $table->foreign('platformId')->references('id')->on($this->getTableFor(PlatformsMigration::class));
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CreateCustomersTable::class));
+            $table->foreign('platformId')->references('id')->on($this->getTableFor(CreatePlatformsTable::class));
         });
 
         $this->addLocationIndex();

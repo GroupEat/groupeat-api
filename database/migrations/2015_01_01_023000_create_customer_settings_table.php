@@ -1,13 +1,12 @@
 <?php
-namespace Groupeat\Settings\Migrations;
 
-use Groupeat\Customers\Migrations\CustomersMigration;
+use Groupeat\Customers\Migrations\CreateCustomersTable;
 use Groupeat\Settings\Entities\CustomerSettings;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CustomerSettingsMigration extends Migration
+class CreateCustomerSettingsTable extends Migration
 {
     protected $entity = CustomerSettings::class;
 
@@ -20,7 +19,7 @@ class CustomerSettingsMigration extends Migration
             $table->unsignedInteger(CustomerSettings::DAYS_WITHOUT_NOTIFYING)->index();
             $table->time(CustomerSettings::NO_NOTIFICATION_AFTER)->index();
 
-            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CreateCustomersTable::class));
         });
     }
 }

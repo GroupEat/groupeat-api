@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Customers\Migrations;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CustomersMigration extends Migration
+class CreateCustomersTable extends Migration
 {
     protected $entity = Customer::class;
 

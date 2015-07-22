@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ProductFormatsMigration extends Migration
+class CreateProductFormatsTable extends Migration
 {
     protected $entity = ProductFormat::class;
 
@@ -18,7 +17,7 @@ class ProductFormatsMigration extends Migration
             $table->string('name');
             $table->unsignedInteger('price');
 
-            $table->foreign('productId')->references('id')->on($this->getTableFor(ProductsMigration::class));
+            $table->foreign('productId')->references('id')->on($this->getTableFor(CreateProductsTable::class));
         });
     }
 }

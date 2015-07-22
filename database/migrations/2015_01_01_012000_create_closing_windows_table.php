@@ -1,11 +1,10 @@
 <?php
-namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Restaurants\Entities\ClosingWindow;
-use Groupeat\Restaurants\Migrations\Abstracts\WindowsMigration;
+use Groupeat\Restaurants\Migrations\Abstracts\CreateWindowsTable;
 use Illuminate\Database\Schema\Blueprint;
 
-class ClosingWindowsMigration extends WindowsMigration
+class CreateClosingWindowsTable extends CreateWindowsTable
 {
     protected $entity = ClosingWindow::class;
 

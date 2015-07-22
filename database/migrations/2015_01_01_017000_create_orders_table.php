@@ -1,13 +1,12 @@
 <?php
-namespace Groupeat\Orders\Migrations;
 
-use Groupeat\Customers\Migrations\CustomersMigration;
+use Groupeat\Customers\Migrations\CreateCustomersTable;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class OrdersMigration extends Migration
+class CreateOrdersTable extends Migration
 {
     protected $entity = Order::class;
 
@@ -22,8 +21,8 @@ class OrdersMigration extends Migration
             $table->boolean('initiator')->index()->default(false);
             $table->timestamp(Order::CREATED_AT)->index();
 
-            $table->foreign('customerId')->references('id')->on($this->getTableFor(CustomersMigration::class));
-            $table->foreign('groupOrderId')->references('id')->on($this->getTableFor(GroupOrdersMigration::class));
+            $table->foreign('customerId')->references('id')->on($this->getTableFor(CreateCustomersTable::class));
+            $table->foreign('groupOrderId')->references('id')->on($this->getTableFor(CreateGroupOrdersTable::class));
         });
     }
 }

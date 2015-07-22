@@ -1,11 +1,10 @@
 <?php
-namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CategoryRestaurantMigration extends Migration
+class CreateCategoryRestaurantTable extends Migration
 {
     protected $table = 'category_restaurant';
 
@@ -16,8 +15,8 @@ class CategoryRestaurantMigration extends Migration
             $table->integer('categoryId')->index();
             $table->integer('restaurantId')->index();
 
-            $table->foreign('categoryId')->references('id')->on($this->getTableFor(CategoriesMigration::class));
-            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
+            $table->foreign('categoryId')->references('id')->on($this->getTableFor(CreateCategoriesTable::class));
+            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(CreateRestaurantsTable::class));
         });
     }
 }

@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Orders\Migrations;
 
-use Groupeat\Restaurants\Migrations\ProductFormatsMigration;
+use Groupeat\Restaurants\Migrations\CreateProductFormatsTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class OrderProductFormatMigration extends Migration
+class CreateOrderProductFormatTable extends Migration
 {
     protected $table = 'order_product_format';
 
@@ -18,8 +17,8 @@ class OrderProductFormatMigration extends Migration
             $table->unsignedInteger('productFormatId');
             $table->tinyInteger('amount');
 
-            $table->foreign('orderId')->references('id')->on($this->getTableFor(OrdersMigration::class));
-            $table->foreign('productFormatId')->references('id')->on($this->getTableFor(ProductFormatsMigration::class));
+            $table->foreign('orderId')->references('id')->on($this->getTableFor(CreateOrdersTable::class));
+            $table->foreign('productFormatId')->references('id')->on($this->getTableFor(CreateProductFormatsTable::class));
         });
     }
 }

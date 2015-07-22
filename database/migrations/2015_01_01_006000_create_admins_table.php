@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Admin\Migrations;
 
 use Groupeat\Admin\Entities\Admin;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AdminsMigration extends Migration
+class CreateAdminsTable extends Migration
 {
     protected $entity = Admin::class;
 

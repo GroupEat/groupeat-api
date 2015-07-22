@@ -1,13 +1,12 @@
 <?php
-namespace Groupeat\Orders\Migrations;
 
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Restaurants\Migrations\RestaurantsMigration;
+use Groupeat\Restaurants\Migrations\CreateRestaurantsTable;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class GroupOrdersMigration extends Migration
+class CreateGroupOrdersTable extends Migration
 {
     protected $entity = GroupOrder::class;
 
@@ -24,7 +23,7 @@ class GroupOrdersMigration extends Migration
             $table->timestamp(GroupOrder::CONFIRMED_AT)->nullable();
             $table->timestamp(GroupOrder::PREPARED_AT)->nullable();
 
-            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
+            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(CreateRestaurantsTable::class));
         });
     }
 }

@@ -1,14 +1,13 @@
 <?php
-namespace Groupeat\Restaurants\Migrations;
 
-use Groupeat\Restaurants\Entities\FoodType;
+use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FoodTypesMigration extends Migration
+class CreateCategoriesTable extends Migration
 {
-    protected $entity = FoodType::class;
+    protected $entity = Category::class;
 
     public function up()
     {

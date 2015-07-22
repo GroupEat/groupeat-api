@@ -1,12 +1,11 @@
 <?php
-namespace Groupeat\Restaurants\Migrations;
 
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Support\Database\Abstracts\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ProductsMigration extends Migration
+class CreateProductsTable extends Migration
 {
     protected $entity = Product::class;
 
@@ -19,8 +18,8 @@ class ProductsMigration extends Migration
             $table->string('name');
             $table->string('description');
 
-            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(RestaurantsMigration::class));
-            $table->foreign('typeId')->references('id')->on($this->getTableFor(FoodTypesMigration::class));
+            $table->foreign('restaurantId')->references('id')->on($this->getTableFor(CreateRestaurantsTable::class));
+            $table->foreign('typeId')->references('id')->on($this->getTableFor(CreateFoodTypesTable::class));
         });
     }
 }
