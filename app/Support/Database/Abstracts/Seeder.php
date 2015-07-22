@@ -28,7 +28,6 @@ abstract class Seeder extends LaravelSeeder
     public function run()
     {
         $id = 1;
-        $this->cleanTable();
 
         if (method_exists($this, 'makeEntry')) {
             for ($id = 1; $id <= $this->entries; $id++) {
@@ -39,24 +38,5 @@ abstract class Seeder extends LaravelSeeder
         if (method_exists($this, 'insertAdditionalEntries')) {
             $this->insertAdditionalEntries($id);
         }
-    }
-
-    protected function getTable()
-    {
-        $migration = $this->getRelatedMigration();
-
-        return $migration->getTable();
-    }
-
-    protected function getRelatedMigration()
-    {
-        $migrationClass = str_replace('Seeder', 'Migration', class_basename(static::class));
-
-        return new $migrationClass;
-    }
-
-    protected function cleanTable()
-    {
-        DB::table($this->getTable())->delete();
     }
 }
