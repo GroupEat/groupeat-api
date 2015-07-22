@@ -27,6 +27,9 @@ test:
   post:
     - cp ~/.ssh/id_d54a6ecb67efe5f8a49a32d5c060a0bb ~/.ssh/id_rsa
     - cp ~/.ssh/id_d54a6ecb67efe5f8a49a32d5c060a0bb.pub ~/.ssh/id_rsa.pub
+    - wget http://rocketeer.autopergamene.eu/versions/rocketeer.phar
+    - chmod +x rocketeer.phar
+    - mv rocketeer.phar /usr/local/bin/rocketeer
 
 deployment:
   production:
