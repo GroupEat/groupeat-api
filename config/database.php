@@ -86,41 +86,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Migration Order
-    |--------------------------------------------------------------------------
-    |
-    | The order in which the migrations have to be run to create the database.
-    |
-    */
-
-    'order' => [
-        \Groupeat\Customers\Migrations\CreateCustomersTable::class,
-        \Groupeat\Auth\Migrations\CreateUserCredentialsTable::class,
-        \Groupeat\Auth\Migrations\CreatePasswordResetTokensTable::class,
-        \Groupeat\Customers\Migrations\CreateCustomerAddressesTable::class,
-        \Groupeat\Customers\Migrations\CreatePredefinedAddressesTable::class,
-        \Groupeat\Admin\Migrations\CreateAdminsTable::class,
-        \Groupeat\Restaurants\Migrations\CreateCategoriesTable::class,
-        \Groupeat\Restaurants\Migrations\CreateRestaurantsTable::class,
-        \Groupeat\Restaurants\Migrations\CreateCategoryRestaurantTable::class,
-        \Groupeat\Restaurants\Migrations\CreateRestaurantAddressesTable::class,
-        \Groupeat\Restaurants\Migrations\CreateOpeningWindowsTable::class,
-        \Groupeat\Restaurants\Migrations\CreateClosingWindowsTable::class,
-        \Groupeat\Restaurants\Migrations\CreateFoodTypesTable::class,
-        \Groupeat\Restaurants\Migrations\CreateProductsTable::class,
-        \Groupeat\Restaurants\Migrations\CreateProductFormatsTable::class,
-        \Groupeat\Orders\Migrations\CreateGroupOrdersTable::class,
-        \Groupeat\Orders\Migrations\CreateOrdersTable::class,
-        \Groupeat\Orders\Migrations\CreateOrderProductFormatTable::class,
-        \Groupeat\Orders\Migrations\CreateDeliveryAddressesTable::class,
-        \Groupeat\Devices\Migrations\CreatePlatformsTable::class,
-        \Groupeat\Devices\Migrations\CreateDevicesTable::class,
-        \Groupeat\Notifications\Migrations\CreateNotificationsTable::class,
-        \Groupeat\Settings\Migrations\CreateCustomerSettingsTable::class,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Redis Databases
     |--------------------------------------------------------------------------
     |
