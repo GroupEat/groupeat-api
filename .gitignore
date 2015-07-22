@@ -2,9 +2,10 @@
 .DS_Store
 Thumbs.db
 .env
-APNS.pem
+.apns.pem
 .phpstorm.meta.php
 _ide_helper.php
 _ide_helper_models.php
+.rocketeer.phar
 .rocketeer/logs
 /vendor
