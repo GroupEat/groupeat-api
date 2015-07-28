@@ -19,6 +19,7 @@ test:
   pre:
     - php artisan migrate:install
     - php artisan migrate --seed
+    - php artisan migrate:refresh --seed # Ensure that the migrations work as expected
     - ./vendor/bin/codecept build
     - mkdir -p $CIRCLE_TEST_REPORTS/codecept
   override:
