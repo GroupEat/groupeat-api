@@ -31,7 +31,7 @@ return [
     // user uploaded data, file-based databases, etc.
     'shared'         => [
         '.env',
-        'APNS.pem',
+        '.apns.pem',
         'storage/logs',
     ],
 
