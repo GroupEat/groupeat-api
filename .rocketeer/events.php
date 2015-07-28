@@ -13,7 +13,7 @@ Rocketeer::listenTo('deploy.before-symlink', function ($task) {
         'db:backup --s3',
     ];
 
-    array_map(function($command) use ($task) {
+    array_map(function ($command) use ($task) {
         $task->runForCurrentRelease("php artisan $command");
 
         if (!$task->status()) {

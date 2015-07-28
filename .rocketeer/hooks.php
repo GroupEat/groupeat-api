@@ -33,7 +33,7 @@ return [
             },
         ],
         'deploy'  => [
-            function($task) {
+            function ($task) {
                 $task->runForCurrentRelease('php artisan migrate --force');
             }
         ],
