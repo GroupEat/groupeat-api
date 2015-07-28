@@ -32,7 +32,11 @@ return [
                 }
             },
         ],
-        'deploy'  => [],
+        'deploy'  => [
+            function($task) {
+                $task->runForCurrentRelease('php artisan migrate --force');
+            }
+        ],
         'cleanup' => [],
     ],
 

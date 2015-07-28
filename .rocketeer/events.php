@@ -3,9 +3,22 @@
 use Rocketeer\Facades\Rocketeer;
 
 Rocketeer::listenTo('deploy.before-symlink', function ($task) {
-    $path = $task->releasesManager->getCurrentReleasePath();
+    $commands = [
+        'optimize',
+        'route:cache',
+        'config:cache',
+        'opcache:clear',
+        'docs',
+        'adminer',
+        'db:backup --s3',
+    ];
 
-    foreach (['optimize', 'route:cache', 'config:cache', 'opcache:clear', 'docs', 'adminer'] as $command) {
-        $task->run("cd $path; php artisan $command");
-    }
+    array_map(function($command) use ($task) {
+        $task->runForCurrentRelease("php artisan $command");
+
+        if (!$task->status()) {
+            $task->explainer->error("Cancelling release because command '$command' failed");
+            exit(1);
+        }
+    }, $commands);
 });
