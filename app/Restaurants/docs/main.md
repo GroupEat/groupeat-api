@@ -91,7 +91,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
 + Parameters
 
     + id (required, string, `123`) ... The restaurant ID.
-    + include (optional, string, `formats`) ... [formats].
+    + include (optional, string, `formats`) ... [formats, type, tags].
 
 + Response 200
 

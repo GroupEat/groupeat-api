@@ -6,7 +6,7 @@ use League\Fractal\TransformerAbstract;
 
 class ProductTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['formats'];
+    protected $availableIncludes = ['formats', 'type', 'tags'];
 
     public function transform(Product $product)
     {
@@ -19,6 +19,16 @@ class ProductTransformer extends TransformerAbstract
 
     public function includeFormats(Product $product)
     {
-        return $this->collection($product->formats, new ProductFormatTransformer());
+        return $this->collection($product->formats, new ProductFormatTransformer);
+    }
+
+    public function includeType(Product $product)
+    {
+        return $this->item($product->type, new FoodTypeTransformer);
+    }
+
+    public function includeTags(Product $product)
+    {
+        return $this->collection($product->tags, new FoodTagTransformer);
     }
 }

@@ -29,6 +29,11 @@ class Product extends Entity
         return $this->hasMany(ProductFormat::class);
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(FoodTag::class);
+    }
+
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class);
