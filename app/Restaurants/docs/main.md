@@ -1,26 +1,5 @@
 # Group Restaurants
 
-## List restaurant categories [/restaurantCategories]
-
-### GET
-
-+ Response 200
-
-        [
-            {
-                "id": "1",
-                "label": "pizzeria"
-            },
-            {
-                "id": "2",
-                "label": "japanese"
-            },
-            {
-                "id": "3",
-                "label": "chinese"
-            }
-        ]
-
 ## Restaurant [/restaurants/{id}/{?include}]
 
 + Parameters
@@ -82,27 +61,6 @@ Returns the list of restaurants sorted by name in alphabetical order.
             }
         ]
 
-## List food types [/foodTypes]
-
-### GET
-
-+ Response 200
-
-        [
-            {
-                "id": "1",
-                "label": "pizza"
-            },
-            {
-                "id": "2",
-                "label": "kebab"
-            },
-            {
-                "id": "3",
-                "label": "salad"
-            }
-        ]
-
 ## Get restaurant address  [/restaurants/{id}/address]
 
 ### GET
@@ -140,25 +98,21 @@ Returns the list of restaurants sorted by name in alphabetical order.
         [
             {
                 "id": "4",
-                "typeId": "1",
                 "name": "napolitaine",
                 "description": "Tomate, mozzarella, anchois, câpres et olives."
             },
             {
                 "id": "3",
-                "typeId": "1",
                 "name": "classica",
                 "description": "Tomate, mozzarella et origan."
             },
             {
                 "id": "2",
-                "typeId": "1",
                 "name": "paysanne",
                 "description": "Tomate, mozzarella, poitrine fumée et œuf."
             },
             {
                 "id": "1",
-                "typeId": "1",
                 "name": "paysanne",
                 "description": "Mozzarella, basilic frais et tomates."
             }

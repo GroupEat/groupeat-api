@@ -27,22 +27,6 @@ class RestaurantsController extends Controller
         return $this->collectionResponse($query->get(), new RestaurantTransformer());
     }
 
-    public function categoriesIndex()
-    {
-        return $this->collectionResponse(
-            Category::all(),
-            new CategoryTransformer
-        );
-    }
-
-    public function foodTypesIndex()
-    {
-        return $this->collectionResponse(
-            FoodType::all(),
-            new FoodTypeTransformer
-        );
-    }
-
     public function productsIndex(Restaurant $restaurant)
     {
         return $this->collectionResponse(
