@@ -12,7 +12,7 @@ class CreateOrderProductFormatTable extends Migration
     {
         Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('orderId')->index();
+            $table->unsignedInteger('orderId');
             $table->unsignedInteger('productFormatId');
             $table->tinyInteger('amount');
 
