@@ -21,7 +21,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
     public function register()
     {
         $this->bindConfigValuesIfNeeded();
-        $this->bindRouteModelsIfNeeded();
+        $this->bindRouteEntitiesIfNeeded();
 
         $this->registerPackage();
     }
