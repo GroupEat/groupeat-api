@@ -2,8 +2,9 @@
 namespace Groupeat\Notifications\Events;
 
 use Groupeat\Notifications\Entities\Notification;
+use Groupeat\Support\Events\Abstracts\Event;
 
-class NotificationWouldHaveBeenSent
+class NotificationWouldHaveBeenSent extends Event
 {
     private $notification;
 
