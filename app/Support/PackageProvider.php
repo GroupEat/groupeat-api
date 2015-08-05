@@ -21,13 +21,12 @@ use Swift_Mailer;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
+    protected $configValues = [
+        AvailableLocales::class => 'app.available_locales',
+    ];
+
     protected function registerPackage()
     {
-        $this->bindValueFromConfig(
-            AvailableLocales::class,
-            'app.available_locales'
-        );
-
         $this->bindValue(
             Environment::class,
             $this->app->environment()

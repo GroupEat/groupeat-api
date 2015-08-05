@@ -12,34 +12,16 @@ use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected function registerPackage()
-    {
-        $this->bindValueFromConfig(
-            MinimumFoodrushInMinutes::class,
-            'orders.minimum_foodrush_in_minutes'
-        );
+    protected $configValues = [
+        MinimumFoodrushInMinutes::class => 'orders.minimum_foodrush_in_minutes',
+        MaximumFoodrushInMinutes::class => 'orders.maximum_foodrush_in_minutes',
+        MaximumPreparationTimeInMinutes::class => 'orders.maximum_preparation_time_in_minutes',
+        JoinableDistanceInKms::class => 'orders.joinable_distance_in_kilometers',
+        ExternalOrderFoodrushInMinutes::class => 'orders.external_order_foodrush_in_minutes',
+    ];
 
-        $this->bindValueFromConfig(
-            MaximumFoodrushInMinutes::class,
-            'orders.maximum_foodrush_in_minutes'
-        );
-
-        $this->bindValueFromConfig(
-            MaximumPreparationTimeInMinutes::class,
-            'orders.maximum_preparation_time_in_minutes'
-        );
-
-        $this->bindValueFromConfig(
-            JoinableDistanceInKms::class,
-            'orders.joinable_distance_in_kilometers'
-        );
-
-        $this->bindValueFromConfig(
-            ExternalOrderFoodrushInMinutes::class,
-            'orders.external_order_foodrush_in_minutes'
-        );
-
-        $this->app['router']->model('order', Order::class);
-        $this->app['router']->model('groupOrder', GroupOrder::class);
-    }
+    protected $routeEntities = [
+        Order::class => 'order',
+        GroupOrder::class => 'groupOrder',
+    ];
 }

@@ -11,18 +11,19 @@ use Psr\Log\LoggerInterface;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
+    protected $configValues = [
+        TokenDurationInMinutes::class => 'jwt.ttl',
+    ];
+
+    protected $routeEntities = [
+        UserCredentials::class => 'user',
+    ];
+
     protected function registerPackage()
     {
-        $this->bindValueFromConfig(
-            TokenDurationInMinutes::class,
-            'jwt.ttl'
-        );
-
         $this->app->singleton(Auth::class, function ($app) {
             return new Auth($app['tymon.jwt.auth'], $app['auth.driver']);
         });
-
-        $this->app['router']->model('user', UserCredentials::class);
     }
 
     protected function bootPackage()

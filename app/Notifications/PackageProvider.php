@@ -8,13 +8,12 @@ use Groupeat\Notifications\Listeners\SendNotificationToCustomers;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
+    protected $configValues = [
+        GcmKey::class => 'notifications.gcmKey',
+    ];
+
     protected function registerPackage()
     {
-        $this->bindValueFromConfig(
-            GcmKey::class,
-            'notifications.gcmKey'
-        );
-
         $this->app->instance(
             ApnsCertificate::class,
             new ApnsCertificate(

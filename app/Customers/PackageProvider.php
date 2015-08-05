@@ -10,15 +10,13 @@ use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected function registerPackage()
-    {
-        $this->bindValueFromConfig(
-            AddressConstraints::class,
-            'customers.address_constraints'
-        );
+    protected $configValues = [
+        AddressConstraints::class => 'customers.address_constraints',
+    ];
 
-        $this->app['router']->model('customer', Customer::class);
-    }
+    protected $routeEntities = [
+        Customer::class => 'customer',
+    ];
 
     protected function bootPackage()
     {

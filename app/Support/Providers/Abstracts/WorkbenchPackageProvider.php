@@ -10,8 +10,19 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
 {
     protected $defer = false;
 
+    protected $configValues = [
+        // Associative array defined by inheritance
+    ];
+
+    protected $routeEntities = [
+        // Associative array defined by inheritance
+    ];
+
     public function register()
     {
+        $this->bindConfigValuesIfNeeded();
+        $this->bindRouteModelsIfNeeded();
+
         $this->registerPackage();
     }
 
@@ -38,11 +49,29 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         // Implemented by inheritance
     }
 
+    protected function bindConfigValuesIfNeeded()
+    {
+        if (!empty($this->configValues)) {
+            foreach ($this->configValues as $valueClass => $configKey) {
+                $this->bindConfigValue($valueClass, $configKey);
+            }
+        }
+    }
+
+    protected function bindRouteEntitiesIfNeeded()
+    {
+        if (!empty($this->routeEntities)) {
+            foreach ($this->routeEntities as $entityClass => $routeSegment) {
+                $this->app['router']->model($routeSegment, $entityClass);
+            }
+        }
+    }
+
     /**
      * @param string $valueClass
      * @param string $configKey
      */
-    protected function bindValueFromConfig($valueClass, $configKey)
+    protected function bindConfigValue($valueClass, $configKey)
     {
         $this->bindValue($valueClass, $this->app['config']->get($configKey));
     }

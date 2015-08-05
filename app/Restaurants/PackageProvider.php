@@ -19,20 +19,21 @@ use Illuminate\Config\Repository;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
+    protected $configValues = [
+        MaximumDeliveryDistanceInKms::class => 'restaurants.around_distance_in_kilometers',
+    ];
+
+    protected $routeEntities = [
+        Restaurant::class => 'restaurant',
+        Product::class => 'product',
+    ];
+
     protected function registerPackage()
     {
-        $this->bindValueFromConfig(
-            MaximumDeliveryDistanceInKms::class,
-            'restaurants.around_distance_in_kilometers'
-        );
-
         $this->bindValue(
             ConfirmationTokenDurationInMinutes::class,
             2 * $this->app['config']->get('orders.maximum_preparation_time_in_minutes')
         );
-
-        $this->app['router']->model('restaurant', Restaurant::class);
-        $this->app['router']->model('product', Product::class);
     }
 
     protected function bootPackage()
