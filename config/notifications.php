@@ -2,7 +2,7 @@
 
 return [
 
-    'gcmApiKey' => env('GCM_API_KEY', 'MISSING_GCM_API_KEY'),
+    'gcmKey' => env('GCM_KEY', 'MISSING_GCM_API_KEY'),
 
     'apnsCertificatePath' => base_path('.apns.pem'),
 

@@ -1,7 +1,7 @@
 <?php namespace Groupeat\Notifications;
 
 use Groupeat\Notifications\Values\ApnsCertificate;
-use Groupeat\Notifications\Values\GcmApiKey;
+use Groupeat\Notifications\Values\GcmKey;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Groupeat\Notifications\Listeners\SendNotificationToCustomers;
@@ -11,8 +11,8 @@ class PackageProvider extends WorkbenchPackageProvider
     protected function registerPackage()
     {
         $this->bindValueFromConfig(
-            GcmApiKey::class,
-            'notifications.gcmApiKey'
+            GcmKey::class,
+            'notifications.gcmKey'
         );
 
         $this->app->instance(
