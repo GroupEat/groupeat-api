@@ -4,7 +4,7 @@ namespace Groupeat\Support\Listeners\Abstracts;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-abstract class QueuedHandler implements ShouldQueue
+abstract class QueuedListener implements ShouldQueue
 {
     use InteractsWithQueue;
 }

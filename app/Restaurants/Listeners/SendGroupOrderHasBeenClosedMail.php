@@ -5,11 +5,11 @@ use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
-use Groupeat\Support\Listeners\Abstracts\QueuedHandler;
+use Groupeat\Support\Listeners\Abstracts\QueuedListener;
 use Groupeat\Support\Services\SendMail;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
-class SendGroupOrderHasBeenClosedMail extends QueuedHandler
+class SendGroupOrderHasBeenClosedMail extends QueuedListener
 {
     private $mailer;
     private $urlGenerator;

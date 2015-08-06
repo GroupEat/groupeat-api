@@ -8,10 +8,10 @@ use Groupeat\Notifications\Services\SendNotification;
 use Groupeat\Notifications\Services\SelectDevicesToNotify;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Exceptions\Exception;
-use Groupeat\Support\Listeners\Abstracts\QueuedHandler;
+use Groupeat\Support\Listeners\Abstracts\QueuedListener;
 use Psr\Log\LoggerInterface;
 
-class SendNotificationToCustomers extends QueuedHandler
+class SendNotificationToCustomers extends QueuedListener
 {
     private $logger;
     private $selectDevicesToNotify;

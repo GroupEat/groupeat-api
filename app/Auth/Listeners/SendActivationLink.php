@@ -4,11 +4,11 @@ namespace Groupeat\Auth\Listeners;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Support\Exceptions\Exception;
-use Groupeat\Support\Listeners\Abstracts\QueuedHandler;
+use Groupeat\Support\Listeners\Abstracts\QueuedListener;
 use Groupeat\Support\Services\SendMail;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
-class SendActivationLink extends QueuedHandler
+class SendActivationLink extends QueuedListener
 {
     private $mailer;
     private $urlGenerator;

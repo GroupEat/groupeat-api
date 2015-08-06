@@ -4,10 +4,10 @@ namespace Groupeat\Restaurants\Listeners;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
-use Groupeat\Support\Listeners\Abstracts\QueuedHandler;
+use Groupeat\Support\Listeners\Abstracts\QueuedListener;
 use Groupeat\Support\Services\SendMail;
 
-class SendOrderHasBeenPlacedMail extends QueuedHandler
+class SendOrderHasBeenPlacedMail extends QueuedListener
 {
     private $mailer;
 
