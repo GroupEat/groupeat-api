@@ -4,7 +4,7 @@ namespace Groupeat\Customers\Presenters;
 use Groupeat\Auth\Presenters\Traits\HasCredentials;
 use Groupeat\Support\Presenters\Presenter;
 
-class Customer extends Presenter
+class CustomerPresenter extends Presenter
 {
     use HasCredentials;
 

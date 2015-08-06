@@ -3,7 +3,7 @@ namespace Groupeat\Restaurants\Presenters;
 
 use Groupeat\Support\Presenters\Presenter;
 
-class ProductFormat extends Presenter
+class ProductFormatPresenter extends Presenter
 {
     public function presentPrice()
     {

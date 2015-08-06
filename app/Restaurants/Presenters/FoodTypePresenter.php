@@ -3,7 +3,7 @@ namespace Groupeat\Restaurants\Presenters;
 
 use Groupeat\Support\Presenters\Presenter;
 
-class FoodType extends Presenter
+class FoodTypePresenter extends Presenter
 {
     /**
      * @var array

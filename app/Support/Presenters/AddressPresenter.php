@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Support\Presenters;
 
-class Address extends Presenter
+class AddressPresenter extends Presenter
 {
     public function __toString()
     {

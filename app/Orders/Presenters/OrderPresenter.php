@@ -4,7 +4,7 @@ namespace Groupeat\Orders\Presenters;
 use Groupeat\Support\Presenters\Presenter;
 use HtmlObject\Table;
 
-class Order extends Presenter
+class OrderPresenter extends Presenter
 {
     public function presentProductsTable($withRawPrice = true)
     {

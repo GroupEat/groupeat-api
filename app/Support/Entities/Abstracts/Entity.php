@@ -180,7 +180,7 @@ abstract class Entity extends Model implements PresentableInterface
      */
     public function getPresenter()
     {
-        $class = str_replace('Entities', 'Presenters', static::class);
+        $class = str_replace('Entities', 'Presenters', static::class) . 'Presenter';
 
         if (class_exists($class)) {
             return new $class($this);

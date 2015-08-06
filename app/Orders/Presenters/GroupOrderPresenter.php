@@ -4,7 +4,7 @@ namespace Groupeat\Orders\Presenters;
 use Groupeat\Support\Presenters\Presenter;
 use HtmlObject\Table;
 
-class GroupOrder extends Presenter
+class GroupOrderPresenter extends Presenter
 {
     public function presentCreationTime()
     {
