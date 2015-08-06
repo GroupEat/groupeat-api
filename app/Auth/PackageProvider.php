@@ -20,7 +20,7 @@ class PackageProvider extends WorkbenchPackageProvider
     ];
 
     protected $listeners = [
-        UserHasRegistered::class => SendActivationLink::class,
+        SendActivationLink::class => UserHasRegistered::class,
     ];
 
     protected function registerPackage()

@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 class PackageProvider extends WorkbenchPackageProvider
 {
     protected $listeners = [
-        UserHasRetrievedItsToken::class => KeepDeviceOwnerUpToDate::class,
+        KeepDeviceOwnerUpToDate::class => UserHasRetrievedItsToken::class,
     ];
 
     protected function bootPackage()

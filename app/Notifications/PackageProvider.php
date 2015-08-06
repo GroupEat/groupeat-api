@@ -13,7 +13,7 @@ class PackageProvider extends WorkbenchPackageProvider
     ];
 
     protected $listeners = [
-        GroupOrderHasBeenCreated::class => SendNotificationToCustomers::class,
+        SendNotificationToCustomers::class => GroupOrderHasBeenCreated::class,
     ];
 
     protected function registerPackage()

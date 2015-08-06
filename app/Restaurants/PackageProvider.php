@@ -30,10 +30,10 @@ class PackageProvider extends WorkbenchPackageProvider
     ];
 
     protected $listeners = [
-        GroupOrderHasBeenCreated::class => SendOrderHasBeenPlacedMail::class.'@created',
-        GroupOrderHasBeenCreated::class => SendGroupOrderHasBeenCreatedSms::class,
-        GroupOrderHasBeenJoined::class => SendOrderHasBeenPlacedMail::class.'@joined',
-        GroupOrderHasBeenClosed::class => SendGroupOrderHasBeenClosedMail::class,
+        SendOrderHasBeenPlacedMail::class.'@created' => GroupOrderHasBeenCreated::class,
+        SendGroupOrderHasBeenCreatedSms::class => GroupOrderHasBeenCreated::class,
+        SendOrderHasBeenPlacedMail::class.'@joined' => GroupOrderHasBeenJoined::class,
+        SendGroupOrderHasBeenClosedMail::class => GroupOrderHasBeenClosed::class,
     ];
 
     protected function registerPackage()

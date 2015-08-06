@@ -3,7 +3,7 @@ namespace Groupeat\Support\Entities\Abstracts;
 
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasLocation;
-use Groupeat\Support\Presenters\Address as AddressPresenter;
+use Groupeat\Support\Presenters\AddressPresenter;
 
 abstract class Address extends Entity
 {

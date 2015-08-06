@@ -19,7 +19,7 @@ class PackageProvider extends WorkbenchPackageProvider
     ];
 
     protected $listeners = [
-        GroupOrderHasBeenConfirmed::class => SendGroupOrderHasBeenConfirmedMails::class,
+        SendGroupOrderHasBeenConfirmedMails::class => GroupOrderHasBeenConfirmed::class,
     ];
 
     protected function bootPackage()

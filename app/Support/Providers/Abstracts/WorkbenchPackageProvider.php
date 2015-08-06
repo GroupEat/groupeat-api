@@ -84,7 +84,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
     protected function bindListenersIfNeeded()
     {
         if (!empty($this->listeners)) {
-            foreach ($this->listeners as $eventClass => $listenerClassWithMethod) {
+            foreach ($this->listeners as $listenerClassWithMethod => $eventClass) {
                 if (!str_contains($listenerClassWithMethod, '@')) {
                     $listenerClassWithMethod .= '@handle';
                 }
