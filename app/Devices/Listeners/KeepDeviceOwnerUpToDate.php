@@ -16,8 +16,11 @@ class KeepDeviceOwnerUpToDate
     private $logger;
     private $changeDeviceOwner;
 
-    public function __construct(Request $request, LoggerInterface $logger, ChangeDeviceOwner $changeDeviceOwner)
-    {
+    public function __construct(
+        Request $request,
+        LoggerInterface $logger,
+        ChangeDeviceOwner $changeDeviceOwner
+    ) {
         $this->deviceUUID = $request->header('X-Device-Id');
         $this->logger = $logger;
         $this->changeDeviceOwner = $changeDeviceOwner;

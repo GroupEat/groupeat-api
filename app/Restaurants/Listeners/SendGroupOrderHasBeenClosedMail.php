@@ -28,9 +28,9 @@ class SendGroupOrderHasBeenClosedMail extends QueuedListener
         $this->tokenDurationInMinutes = $tokenDurationInMinutes->value();
     }
 
-    public function handle(GroupOrderHasBeenClosed $groupOrderHasBeenClosed)
+    public function handle(GroupOrderHasBeenClosed $event)
     {
-        $groupOrder = $groupOrderHasBeenClosed->getGroupOrder();
+        $groupOrder = $event->getGroupOrder();
         $groupOrder->load('orders.productFormats.product.type');
         $orders = $groupOrder->orders;
         $totalDiscountedPrice = formatPrice($groupOrder->totalDiscountedPrice);

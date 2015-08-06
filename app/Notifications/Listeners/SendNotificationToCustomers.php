@@ -27,9 +27,9 @@ class SendNotificationToCustomers extends QueuedListener
         $this->sendNotification = $sendNotification;
     }
 
-    public function handle(GroupOrderHasBeenCreated $groupOrderHasBeenCreated)
+    public function handle(GroupOrderHasBeenCreated $event)
     {
-        $groupOrder = $groupOrderHasBeenCreated->getOrder()->groupOrder;
+        $groupOrder = $event->getOrder()->groupOrder;
 
         $this->selectDevicesToNotify->call($groupOrder)
             ->each(function (Device $device) use ($groupOrder) {

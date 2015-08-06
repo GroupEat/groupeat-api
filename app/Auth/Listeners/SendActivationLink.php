@@ -19,9 +19,9 @@ class SendActivationLink extends QueuedListener
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function handle(UserHasRegistered $userHasRegistered)
+    public function handle(UserHasRegistered $event)
     {
-        $userCredentials = $userHasRegistered->getUser();
+        $userCredentials = $event->getUser();
         $token = $this->generateActivationToken($userCredentials);
         $url = $this->urlGenerator->to("auth/activate?token=$token");
 

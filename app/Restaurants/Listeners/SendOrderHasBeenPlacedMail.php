@@ -16,14 +16,14 @@ class SendOrderHasBeenPlacedMail extends QueuedListener
         $this->mailer = $mailer;
     }
 
-    public function created(GroupOrderHasBeenCreated $groupOrderHasBeenCreated)
+    public function created(GroupOrderHasBeenCreated $event)
     {
-        $this->call($groupOrderHasBeenCreated->getOrder(), 'created');
+        $this->call($event->getOrder(), 'created');
     }
 
-    public function joined(GroupOrderHasBeenJoined $groupOrderHasBeenJoined)
+    public function joined(GroupOrderHasBeenJoined $event)
     {
-        $this->call($groupOrderHasBeenJoined->getOrder(), 'joined');
+        $this->call($event->getOrder(), 'joined');
     }
 
     private function call(Order $order, $action)

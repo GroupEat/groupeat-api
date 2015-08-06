@@ -16,9 +16,9 @@ class SendGroupOrderHasBeenConfirmedMails extends QueuedListener
         $this->mailer = $mailer;
     }
 
-    public function handle(GroupOrderHasBeenConfirmed $groupOrderHasBeenConfirmed)
+    public function handle(GroupOrderHasBeenConfirmed $event)
     {
-        $groupOrder = $groupOrderHasBeenConfirmed->getGroupOrder();
+        $groupOrder = $event->getGroupOrder();
 
         $groupOrder->load([
             'orders.productFormats.product.type',

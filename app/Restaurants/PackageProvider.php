@@ -9,6 +9,7 @@ use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenClosedMail;
+use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenCreatedSms;
 use Groupeat\Restaurants\Listeners\SendOrderHasBeenPlacedMail;
 use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Restaurants\Values\DefaultOpeningDurationInMinutes;
@@ -30,6 +31,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
     protected $listeners = [
         GroupOrderHasBeenCreated::class => SendOrderHasBeenPlacedMail::class.'@created',
+        GroupOrderHasBeenCreated::class => SendGroupOrderHasBeenCreatedSms::class,
         GroupOrderHasBeenJoined::class => SendOrderHasBeenPlacedMail::class.'@joined',
         GroupOrderHasBeenClosed::class => SendGroupOrderHasBeenClosedMail::class,
     ];
