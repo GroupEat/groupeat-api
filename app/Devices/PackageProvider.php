@@ -8,10 +8,12 @@ use Psr\Log\LoggerInterface;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
+    protected $listeners = [
+        UserHasRetrievedItsToken::class => KeepDeviceOwnerUpToDate::class,
+    ];
+
     protected function bootPackage()
     {
-        $this->listen(UserHasRetrievedItsToken::class, KeepDeviceOwnerUpToDate::class);
-
         $this->addDeviceInLogContext();
 
         $this->app['router']->bind('device', function ($UUID) {

@@ -28,6 +28,12 @@ class PackageProvider extends WorkbenchPackageProvider
         Product::class => 'product',
     ];
 
+    protected $listeners = [
+        GroupOrderHasBeenCreated::class => SendOrderHasBeenPlacedMail::class.'@created',
+        GroupOrderHasBeenJoined::class => SendOrderHasBeenPlacedMail::class.'@joined',
+        GroupOrderHasBeenClosed::class => SendGroupOrderHasBeenClosedMail::class,
+    ];
+
     protected function registerPackage()
     {
         $this->bindValue(
@@ -39,9 +45,5 @@ class PackageProvider extends WorkbenchPackageProvider
     protected function bootPackage()
     {
         $this->app[Auth::class]->addUserType(new Restaurant);
-
-        $this->listen(GroupOrderHasBeenCreated::class, SendOrderHasBeenPlacedMail::class, 'created');
-        $this->listen(GroupOrderHasBeenJoined::class, SendOrderHasBeenPlacedMail::class, 'joined');
-        $this->listen(GroupOrderHasBeenClosed::class, SendGroupOrderHasBeenClosedMail::class);
     }
 }

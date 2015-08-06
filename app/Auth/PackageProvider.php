@@ -19,6 +19,10 @@ class PackageProvider extends WorkbenchPackageProvider
         UserCredentials::class => 'user',
     ];
 
+    protected $listeners = [
+        UserHasRegistered::class => SendActivationLink::class,
+    ];
+
     protected function registerPackage()
     {
         $this->app->singleton(Auth::class, function ($app) {
@@ -28,8 +32,6 @@ class PackageProvider extends WorkbenchPackageProvider
 
     protected function bootPackage()
     {
-        $this->listen(UserHasRegistered::class, SendActivationLink::class);
-
         $this->addUserInLogContext();
     }
 

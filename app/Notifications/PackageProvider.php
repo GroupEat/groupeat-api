@@ -12,6 +12,10 @@ class PackageProvider extends WorkbenchPackageProvider
         GcmKey::class => 'notifications.gcmKey',
     ];
 
+    protected $listeners = [
+        GroupOrderHasBeenCreated::class => SendNotificationToCustomers::class,
+    ];
+
     protected function registerPackage()
     {
         $this->app->instance(
@@ -21,10 +25,5 @@ class PackageProvider extends WorkbenchPackageProvider
                 $this->app['config']->get('notifications.apnsCertificatePassphrase')
             )
         );
-    }
-
-    protected function bootPackage()
-    {
-        $this->listen(GroupOrderHasBeenCreated::class, SendNotificationToCustomers::class);
     }
 }

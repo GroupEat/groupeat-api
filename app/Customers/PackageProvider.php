@@ -18,10 +18,12 @@ class PackageProvider extends WorkbenchPackageProvider
         Customer::class => 'customer',
     ];
 
+    protected $listeners = [
+        GroupOrderHasBeenConfirmed::class => SendGroupOrderHasBeenConfirmedMails::class,
+    ];
+
     protected function bootPackage()
     {
         $this->app[Auth::class]->addUserType(new Customer);
-
-        $this->listen(GroupOrderHasBeenConfirmed::class, SendGroupOrderHasBeenConfirmedMails::class);
     }
 }

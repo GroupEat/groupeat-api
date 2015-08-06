@@ -18,6 +18,10 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         // Associative array defined by inheritance
     ];
 
+    protected $listeners = [
+        // Associative array defined by inheritance
+    ];
+
     public function register()
     {
         $this->bindConfigValuesIfNeeded();
@@ -35,6 +39,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $this->includeRoutes();
         $this->registerConsoleCommands();
         $this->registerJobsMapping();
+        $this->bindListenersIfNeeded();
 
         $this->bootPackage();
     }
@@ -74,6 +79,19 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
     protected function bindConfigValue($valueClass, $configKey)
     {
         $this->bindValue($valueClass, $this->app['config']->get($configKey));
+    }
+
+    protected function bindListenersIfNeeded()
+    {
+        if (!empty($this->listeners)) {
+            foreach ($this->listeners as $eventClass => $listenerClassWithMethod) {
+                if (!str_contains($listenerClassWithMethod, '@')) {
+                    $listenerClassWithMethod .= '@handle';
+                }
+
+                $this->app['events']->listen($eventClass, $listenerClassWithMethod);
+            }
+        }
     }
 
     /**
