@@ -81,6 +81,6 @@ class SendSms
 
     private function needToSend()
     {
-        return !$this->environment->isLocal();
+        return $this->environment->isProduction();
     }
 }
