@@ -40,12 +40,14 @@ class SendSms
     public function call(Sms $sms, $force = false)
     {
         if ($force || $this->needToSend()) {
+            $text = static::FROM . "\n" . $sms->getText();
+
             $json = [
                 'api_key' => 'wrong',
                 'api_secret' => $this->secret,
                 'from' => static::FROM,
                 'to' => $sms->getPhoneNumber(),
-                'text' => $sms->getText(),
+                'text' => $text,
             ];
 
             $headers = [
