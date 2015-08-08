@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Notifications\Entities;
 
+use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Orders\Entities\GroupOrder;
@@ -30,5 +31,12 @@ class Notification extends ImmutableDatedEntity
     public function groupOrder()
     {
         return $this->belongsTo(GroupOrder::class);
+    }
+
+    public function getTimeToLiveInSeconds(Carbon $from = null)
+    {
+        $from = $from ?: Carbon::now();
+
+        return $this->groupOrder->endingAt->diffInSeconds($from, true);
     }
 }

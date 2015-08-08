@@ -42,8 +42,9 @@ class SendGcmNotification extends NotificationSender
         try {
             $response = $this->client->post(static::URL, [
                 'json' => [
-                    'registration_ids' => [$notificationToken],
+                    'to' => $notificationToken,
                     'data' => $data,
+                    'time_to_live' => $notification->getTimeToLiveInSeconds(),
                 ],
                 'headers' => [
                     'Authorization' => "key={$this->key}",

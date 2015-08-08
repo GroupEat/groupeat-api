@@ -54,6 +54,7 @@ class SendApnsNotification extends NotificationSender
                 'alert' => $this->translateFor('joinGroupOrder', $customer->credentials),
             ],
             'groupOrderId' => $groupOrder->id,
+            'pn_ttl' => $notification->getTimeToLiveInSeconds(),
         ];
 
         $message = $this->getBinaryMessage($device->notificationToken, $data);
