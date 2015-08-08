@@ -21,17 +21,21 @@ class SendGroupOrderHasBeenCreatedSms extends QueuedListener
 
     public function handle(GroupOrderHasBeenCreated $event)
     {
-        $groupOrder = $event->getOrder()->groupOrder;
-        $restaurant = $groupOrder->restaurant;
+        $order = $event->getOrder();
 
-        $this->locale->executeWithUserLocale(function () use ($groupOrder, $restaurant) {
-            $phoneNumber = $restaurant->phoneNumber;
-            $text = $this->locale->getTranslator()->get(
-                'restaurants::groupOrders.created.smsText',
-                ['creationTime' => $groupOrder->getPresenter()->creationTime]
-            );
+        if (!$order->isExternal()) {
+            $groupOrder = $order->groupOrder;
+            $restaurant = $groupOrder->restaurant;
 
-            $this->sendSms->call(new Sms($phoneNumber, $text));
-        }, $restaurant->locale);
+            $this->locale->executeWithUserLocale(function () use ($groupOrder, $restaurant) {
+                $phoneNumber = $restaurant->phoneNumber;
+                $text = $this->locale->getTranslator()->get(
+                    'restaurants::groupOrders.created.smsText',
+                    ['creationTime' => $groupOrder->getPresenter()->creationTime]
+                );
+
+                $this->sendSms->call(new Sms($phoneNumber, $text));
+            }, $restaurant->locale);
+        }
     }
 }

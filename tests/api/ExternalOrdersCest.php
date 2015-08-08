@@ -14,6 +14,9 @@ class ExternalOrdersCest
         $products = $I->grabDataFromResponse();
         $productFormatId = $products[0]['formats']['data'][0]['id'];
 
+        $firstName = 'Jean';
+        $lastName = 'Michel';
+
         $orderData = [
             'productFormats' => [$productFormatId => 3],
             'deliveryAddress' => [
@@ -22,9 +25,9 @@ class ExternalOrdersCest
                 'latitude' => 48.711042,
                 'longitude' => 2.219278
             ],
-            'custome' => [
-                'firstName' => 'Jean',
-                'lastName' => 'Michel',
+            'customer' => [
+                'firstName' => $firstName,
+                'lastName' => $lastName,
                 'phoneNumber' => '0605040306'
             ],
             'comment' => "J'aurais dû passer via l'app GroupEat...",
@@ -41,6 +44,10 @@ class ExternalOrdersCest
         $mails = $I->grabMails();
         $I->assertEquals(1, $mails->count());
         $I->assertEquals('restaurants.orderHasBeenPlaced', $I->grabMailId($mails->first()));
+        $I->assertFirstMailContains($firstName);
+        $I->assertFirstMailContains($lastName);
+
+        $I->checkNoSmsWasSent();
 
         $I->assertEquals($data['rawPrice'], $data['discountedPrice']);
         $I->sendApiGetWithToken($token, 'orders/' . $data['id'] . '?include=groupOrder');

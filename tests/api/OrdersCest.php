@@ -15,7 +15,7 @@ class OrdersCest
         $I->seeResponseCodeIs(201);
     }
 
-    public function testThatTheRestaurantReceiveAnEmailWhenAnOrderIsPlaced(ApiTester $I)
+    public function testThatTheRestaurantReceiveAnEmailAndASmsWhenAnOrderIsPlaced(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
         $orderDetails = $this->getOrderDetails($I, $token);
@@ -24,6 +24,7 @@ class OrdersCest
         $restaurantEmail = $this->getRestaurantEmailFromProductFormat($productFormatId);
         $I->assertSame('restaurants.orderHasBeenPlaced', $I->grabFirstMailId());
         $I->assertSame($restaurantEmail, $I->grabFirstMailRecipient());
+        $I->grabFirstSms();
     }
 
     public function testThatTheFoodRushDurationMustBeValid(ApiTester $I)

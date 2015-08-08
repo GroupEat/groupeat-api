@@ -38,4 +38,9 @@ class Sms implements JsonSerializable
             'text' => $this->text,
         ];
     }
+
+    public function __toString()
+    {
+        return 'To: ' . $this->phoneNumber . ', text: "' . $this->text . '"';
+    }
 }
