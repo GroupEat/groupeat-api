@@ -6,6 +6,7 @@ use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Database\Abstracts\Seeder;
+use Groupeat\Support\Values\PhoneNumber;
 
 class RestaurantsSeeder extends Seeder
 {
@@ -31,7 +32,7 @@ class RestaurantsSeeder extends Seeder
     {
         $restaurant = Restaurant::create([
             'name' => $this->faker->company,
-            'phoneNumber' => $this->faker->phoneNumber,
+            'phoneNumber' => PhoneNumber::from($this->faker->phoneNumber),
             'minimumOrderPrice' => $this->faker->numberBetween(1000, 1100),
             'deliveryCapacity' => $this->faker->numberBetween(7, 10),
             'discountPrices' => json_encode([900, 1000, 2000, 2500, 3500, 6000]),
@@ -80,6 +81,7 @@ class RestaurantsSeeder extends Seeder
             $restaurantData['minimumOrderPrice'] = 900;
             $restaurantData['discountPrices'] = json_encode([900, 1000, 2000, 2500, 3500, 6000]);
             $restaurantData['pictureUrl'] = $this->getPictureUrl();
+            $restaurantData['phoneNumber'] = PhoneNumber::from($restaurantData['phoneNumber']);
 
             $restaurant = Restaurant::create($restaurantData);
             $email = $restaurantData['name'] == 'AlloPizza' ? 'allo@pizza.fr' : $this->faker->email;

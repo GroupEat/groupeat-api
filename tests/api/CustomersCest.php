@@ -45,7 +45,7 @@ class CustomersCest
         $data = [
             'firstName' => 'First Name',
             'lastName' => 'Last Name',
-            'phoneNumber' => '06 06 06 06 06',
+            'phoneNumber' => '33606060606',
         ];
 
         $I->sendApiPutWithToken($token, "customers/$id", $data);
@@ -54,6 +54,27 @@ class CustomersCest
         foreach ($data as $key => $value) {
             $I->assertSame($value, $I->grabDataFromResponse($key));
         }
+    }
+
+    public function testThatPhoneNumberWithBadFormatAreRejected(ApiTester $I)
+    {
+        list($token, $id) = $this->sendRegistrationRequest($I);
+
+        $phoneNumber = '+33605040302';
+        $I->sendApiPutWithToken($token, "customers/$id", compact('phoneNumber'));
+        $I->seeErrorResponse(400, 'badPhoneNumberFormat');
+
+        $phoneNumber = '06 05 04 03 02';
+        $I->sendApiPutWithToken($token, "customers/$id", compact('phoneNumber'));
+        $I->seeErrorResponse(400, 'badPhoneNumberFormat');
+
+        $phoneNumber = '0605040302';
+        $I->sendApiPutWithToken($token, "customers/$id", compact('phoneNumber'));
+        $I->seeErrorResponse(400, 'badPhoneNumberFormat');
+
+        $phoneNumber = '06-05-04-03-02';
+        $I->sendApiPutWithToken($token, "customers/$id", compact('phoneNumber'));
+        $I->seeErrorResponse(400, 'badPhoneNumberFormat');
     }
 
     protected function sendRegistrationRequest(

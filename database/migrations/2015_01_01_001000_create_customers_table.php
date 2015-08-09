@@ -16,7 +16,7 @@ class CreateCustomersTable extends Migration
             $table->boolean('isExternal')->default(false);
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
-            $table->string('phoneNumber', 25)->nullable();
+            $table->string('phoneNumber', 15)->nullable();
             $table->timestamp(Customer::CREATED_AT);
             $table->timestamp(Customer::UPDATED_AT);
             $table->timestamp(Customer::DELETED_AT)->nullable()->index();

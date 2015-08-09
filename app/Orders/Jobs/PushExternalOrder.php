@@ -3,12 +3,17 @@ namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Orders\Jobs\Abstracts\AddOrder;
 use Groupeat\Restaurants\Entities\Restaurant;
+use Groupeat\Support\Values\PhoneNumber;
 
 class PushExternalOrder extends AddOrder
 {
     private $restaurant;
     private $customerFirstName;
     private $customerLastName;
+
+    /**
+     * @var PhoneNumber|null
+     */
     private $customerPhoneNumber;
 
     /**
@@ -34,7 +39,7 @@ class PushExternalOrder extends AddOrder
         $this->restaurant = $restaurant;
         $this->customerFirstName = $customerFirstName;
         $this->customerLastName = $customerLastName;
-        $this->customerPhoneNumber = $customerPhoneNumber;
+        $this->customerPhoneNumber = $customerPhoneNumber ? new PhoneNumber($customerPhoneNumber) : null;
     }
 
     public function getRestaurant()

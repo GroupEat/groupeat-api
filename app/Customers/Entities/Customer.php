@@ -6,11 +6,13 @@ use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Entities\Abstracts\Entity;
+use Groupeat\Support\Entities\Traits\HasPhoneNumber;
+use Groupeat\Support\Values\PhoneNumber;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Entity implements User
 {
-    use HasCredentials, SoftDeletes {
+    use HasCredentials, HasPhoneNumber, SoftDeletes {
         HasCredentials::isActivated as isActivatedThroughCredentials;
     }
 
@@ -22,18 +24,17 @@ class Customer extends Entity implements User
         return [
             'firstName' => 'min:1',
             'lastName' => 'min:1',
-            'phoneNumber' => ['regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/'],
         ];
     }
 
     /**
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $phoneNumber
+     * @param string      $firstName
+     * @param string      $lastName
+     * @param PhoneNumber $phoneNumber
      *
      * @return static
      */
-    public static function addExternalCustomer($firstName, $lastName, $phoneNumber)
+    public static function addExternalCustomer($firstName, $lastName, PhoneNumber $phoneNumber = null)
     {
         $customer = new static;
         $customer->isExternal = true;

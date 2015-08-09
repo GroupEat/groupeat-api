@@ -60,7 +60,7 @@ An e-mail will be sent to the given address with an activation link that must be
             "email": "contact@mangeo.fr",
             "firstName": "Jean-Nathanaël",
             "lastName": "Hérault",
-            "phoneNumber": "06 05 04 03 02",
+            "phoneNumber": "33605040302",
             "locale": "fr",
             "activated": true
         }
@@ -89,7 +89,7 @@ Replace the customer data with the one passed in the request. However, a custome
         {
             "firstName": "Jean-Nathanaël",
             "lastName": "Hérault",
-            "phoneNumber": "06 05 04 03 02"
+            "phoneNumber": "33605040302"
         }
 
 + Response 200
@@ -103,17 +103,11 @@ Replace the customer data with the one passed in the request. However, a custome
             "message": "Should be authenticated as customer 1 instead of 5."
         }
 
-+ Response 422
++ Response 400
             
         {
-            "message": "Cannot save customer #6.",
-            "errors": {
-                "phoneNumber": {
-                    "regex": [
-                        "/^0[0-9]([ .-]?[0-9]{2}){4}$/"
-                    ]
-                }
-            }
+            "errorKey": "badPhoneNumberFormat",
+            "message": "The phone number must match /^33(\\d)(\\d{2})(\\d{2})(\\d{2})(\\d{2})$/, \"+33605040302\" given.",
         }
 
 ### Unregister customer [DELETE]

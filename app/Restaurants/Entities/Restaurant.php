@@ -8,6 +8,7 @@ use Groupeat\Restaurants\Services\ApplyAroundScope;
 use Groupeat\Restaurants\Services\ApplyOpenedScope;
 use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
+use Groupeat\Support\Entities\Traits\HasPhoneNumber;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +19,7 @@ use SebastianBergmann\Money\Money;
 
 class Restaurant extends Entity implements User
 {
-    use HasCredentials, SoftDeletes;
+    use HasCredentials, HasPhoneNumber, SoftDeletes;
 
     protected $fillable = ['name', 'phoneNumber'];
 
@@ -26,7 +27,7 @@ class Restaurant extends Entity implements User
     {
         return [
             'name' => 'required',
-            'phoneNumber' => ['required', 'regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/'],
+            'phoneNumber' => 'required',
             'minimumOrderPrice' => 'required|integer',
             'deliveryCapacity' => 'required|integer',
         ];

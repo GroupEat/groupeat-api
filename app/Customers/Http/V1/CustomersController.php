@@ -5,6 +5,7 @@ use Groupeat\Auth\Http\V1\UserTransformer;
 use Groupeat\Customers\Jobs\RegisterCustomer;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use Groupeat\Support\Values\PhoneNumber;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomersController extends Controller
@@ -20,7 +21,13 @@ class CustomersController extends Controller
     {
         $this->auth->assertSame($customer);
 
-        $customer->update($this->json()->all());
+        $data = $this->json()->all();
+
+        if (!empty($data['phoneNumber'])) {
+            $data['phoneNumber'] = new PhoneNumber($data['phoneNumber']);
+        }
+
+        $customer->update($data);
 
         return $this->itemResponse($customer);
     }

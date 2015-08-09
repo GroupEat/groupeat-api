@@ -28,7 +28,7 @@ class ExternalOrdersCest
             'customer' => [
                 'firstName' => $firstName,
                 'lastName' => $lastName,
-                'phoneNumber' => '0605040306'
+                'phoneNumber' => '33605040306'
             ],
             'comment' => "J'aurais dû passer via l'app GroupEat...",
         ];

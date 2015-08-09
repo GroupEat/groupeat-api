@@ -14,7 +14,7 @@ class CreateRestaurantsTable extends Migration
         Schema::create($this->getTable(), function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('phoneNumber', 25);
+            $table->string('phoneNumber', 15);
             $table->unsignedInteger('minimumOrderPrice');
             $table->tinyInteger('deliveryCapacity');
             $table->string('discountPrices');

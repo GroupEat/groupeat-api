@@ -1,12 +1,13 @@
 <?php
 namespace Groupeat\Messaging\Values;
 
+use Groupeat\Support\Values\PhoneNumber;
 use JsonSerializable;
 
 class Sms implements JsonSerializable
 {
     /**
-     * @var int
+     * @var PhoneNumber
      */
     private $phoneNumber;
 
@@ -15,7 +16,7 @@ class Sms implements JsonSerializable
      */
     private $text;
 
-    public function __construct($phoneNumber, $text)
+    public function __construct(PhoneNumber $phoneNumber, $text)
     {
         $this->phoneNumber = $phoneNumber;
         $this->text = $text;

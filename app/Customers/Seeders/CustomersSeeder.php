@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Database\Abstracts\Seeder;
+use Groupeat\Support\Values\PhoneNumber;
 
 class CustomersSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class CustomersSeeder extends Seeder
         $customer = Customer::create([
             'firstName' => $this->faker->firstName,
             'lastName' => $this->faker->lastName,
-            'phoneNumber' => $this->faker->phoneNumber,
+            'phoneNumber' => PhoneNumber::from($this->faker->phoneNumber),
         ]);
 
         UserCredentials::create([
@@ -29,7 +30,7 @@ class CustomersSeeder extends Seeder
         $customer = Customer::create([
             'firstName' => 'Groupeat',
             'lastName' => 'User',
-            'phoneNumber' => '0605040302',
+            'phoneNumber' => PhoneNumber::from('0605040302'),
         ]);
 
         UserCredentials::create([
