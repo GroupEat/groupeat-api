@@ -14,6 +14,7 @@ class Console extends Kernel
         $env = app(Environment::class);
 
         $schedule->command('group-orders:close')->cron('* * * * *')->withoutOverlapping();
+        $schedule->command('group-orders:detect-uncomfirmed')->cron('* * * * *')->withoutOverlapping();
 
         if ($env->isStaging() || $env->isProduction()) {
             $schedule->command('db:backup --s3')->dailyAt('04:00');

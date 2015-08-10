@@ -16,6 +16,11 @@ class GroupOrderPresenter extends Presenter
         return $this->formatTime($this->endingAt);
     }
 
+    public function presentClosedAtTime()
+    {
+        return $this->formatTime($this->closedAt);
+    }
+
     public function presentPreparedAtTime()
     {
         return $this->formatTime($this->preparedAt);
