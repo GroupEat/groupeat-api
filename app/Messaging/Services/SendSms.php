@@ -9,7 +9,7 @@ use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Values\Environment;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use Symfony\Component\HttpFoundation\Response;
 
 class SendSms

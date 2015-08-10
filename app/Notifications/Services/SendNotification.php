@@ -7,7 +7,7 @@ use Groupeat\Notifications\Services\SendGcmNotification;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Values\Environment;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 use RuntimeException;
 
 class SendNotification
