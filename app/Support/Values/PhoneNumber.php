@@ -16,24 +16,6 @@ class PhoneNumber extends Value
     }
 
     /**
-     * @param string $string
-     *
-     * @return static
-     */
-    public static function from($string)
-    {
-        $string = preg_replace('/\D/', '', $string);
-
-        if (starts_with($string, '0')) {
-            $string = '33' . ltrim($string, '0');
-        } elseif (starts_with($string, '330')) {
-            $string = '33' . ltrim($string, '330');
-        }
-
-        return new static($string);
-    }
-
-    /**
      * @return string
      */
     public function __toString()
