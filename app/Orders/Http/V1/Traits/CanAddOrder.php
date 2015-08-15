@@ -14,8 +14,7 @@ trait CanAddOrder
 
         $command = $getCommandCallback($productFormats, $deliveryAddressData, $comment);
         $order = $this->dispatch($command);
-        $this->statusCode = Response::HTTP_CREATED;
 
-        return $this->itemResponse($order);
+        return $this->itemResponse($order)->setStatusCode(Response::HTTP_CREATED);
     }
 }

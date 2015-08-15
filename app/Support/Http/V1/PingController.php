@@ -13,6 +13,6 @@ class PingController extends Controller
 
         app(LoggerInterface::class)->debug(json_encode(['ping' => $json]));
 
-        return $this->arrayResponse(['data' => $json]);
+        return $this->arrayResponse($json);
     }
 }

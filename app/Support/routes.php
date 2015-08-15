@@ -2,6 +2,6 @@
 
 use Groupeat\Support\Http\V1\PingController;
 
-Route::group(['prefix' => 'api'], function () {
-    Route::post('ping', PingController::class.'@ping');
+$api->version('v1', function ($api) {
+    $api->post('ping', PingController::class.'@ping');
 });

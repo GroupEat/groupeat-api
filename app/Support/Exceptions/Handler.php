@@ -1,34 +1,46 @@
 <?php
 namespace Groupeat\Support\Exceptions;
 
+use App;
+use Config;
+use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Exception as BaseException;
 use Groupeat\Support\Exceptions\Exception as GroupeatException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class Handler extends ExceptionHandler
+class Handler extends DingoExceptionHandler
 {
+    private $logger;
+
     /**
      * A list of the exception types that should not be reported.
      *
      * @var array
      */
-    protected $dontReport = [
-        'Symfony\Component\HttpKernel\Exception\HttpException'
+    private $dontReport = [
+        \Symfony\Component\HttpKernel\Exception\HttpException::class
     ];
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Report or log an exception.
-     *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  BaseException  $e
+     * @param BaseException $e
      *
      * @return void
      */
     public function report(BaseException $e)
     {
-        return parent::report($e);
+        if ($this->shouldReport($e)) {
+            $this->log->error($e);
+        }
     }
 
     /**
@@ -41,7 +53,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, BaseException $e)
     {
-        $isDebug = \Config::get('app.debug');
+        $isDebug = Config::get('app.debug');
         $debugInfo = [
             'line' => $e->getLine(),
             'file' => $e->getFile(),
@@ -63,7 +75,7 @@ class Handler extends ExceptionHandler
             if ($e->getStatusCode() == 404) {
                 $json = [
                     'errorKey' => 'notFound',
-                    'message' => "The route ".$request->method()." ".$request->fullUrl()." does not exist.",
+                    'message' => "The current route does not exist.",
                 ];
 
                 if ($isDebug) {
@@ -92,11 +104,40 @@ class Handler extends ExceptionHandler
         if ($isDebug) {
             $data['debug'] = $debugInfo;
 
-            if (\App::runningInConsole()) {
+            if (App::runningInConsole()) {
                 unset($data['debug']['trace']);
             }
         }
 
         return response()->json(compact('data'), $statusCode);
+    }
+
+    public function handle(BaseException $exception)
+    {
+        return $this->render(null, $exception);
+    }
+
+    /**
+     * Render an exception to the console.
+     *
+     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param  BaseException                                     $e
+     *
+     * @return void
+     */
+    public function renderForConsole($output, BaseException $e)
+    {
+        (new ConsoleApplication)->renderException($e, $output);
+    }
+
+    private function shouldReport(Exception $e)
+    {
+        foreach ($this->dontReport as $type) {
+            if ($e instanceof $type) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

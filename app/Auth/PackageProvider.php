@@ -26,12 +26,16 @@ class PackageProvider extends WorkbenchPackageProvider
     protected function registerPackage()
     {
         $this->app->singleton(Auth::class, function ($app) {
-            return new Auth($app['tymon.jwt.auth'], $app['auth.driver']);
+            return new Auth($app['tymon.jwt.auth'], $app['auth.driver'], $app['api.auth']);
         });
     }
 
     protected function bootPackage()
     {
+        $this->app[\Dingo\Api\Auth\Auth::class]->extend('custom', function ($app) {
+            return $app[Auth::class];
+        });
+
         $this->addUserInLogContext();
     }
 

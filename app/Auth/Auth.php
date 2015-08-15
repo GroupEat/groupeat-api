@@ -1,16 +1,21 @@
 <?php
 namespace Groupeat\Auth;
 
+use Exception as BaseException;
+use Dingo\Api\Auth\Auth as DingoAuth;
+use Dingo\Api\Contract\Auth\Provider;
+use Dingo\Api\Routing\Route;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
 use Illuminate\Auth\Guard;
+use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\JWTAuth;
 
-class Auth
+class Auth implements Provider
 {
     /**
      * @var array
@@ -24,11 +29,39 @@ class Auth
 
     private $jwtAuth;
     private $illuminateAuth;
+    private $dingoAuth;
 
-    public function __construct(JWTAuth $jwtAuth, Guard $illuminateAuth)
+    public function __construct(JWTAuth $jwtAuth, Guard $illuminateAuth, DingoAuth $dingoAuth)
     {
         $this->jwtAuth = $jwtAuth;
         $this->illuminateAuth = $illuminateAuth;
+        $this->dingoAuth = $dingoAuth;
+    }
+
+    /**
+     * Authenticate the request and return the authenticated user instance.
+     *
+     * @param Request $request
+     * @param Route   $route
+     *
+     * @return mixed
+     */
+    public function authenticate(Request $request, Route $route)
+    {
+        $authorizationHeader = $request->header('authorization');
+
+        if (!empty($authorizationHeader)) {
+            try {
+                // Remove the 'Bearer ' part of the header
+                list(, $token) = explode(' ', $authorizationHeader);
+            } catch (BaseException $e) {
+                $this->throwBadTokenSignatureException($e);
+            }
+
+            $this->login($token);
+        }
+
+        return $this->credentials();
     }
 
     /**
@@ -42,13 +75,7 @@ class Auth
         try {
             $userCredentials = $this->jwtAuth->authenticate($token);
         } catch (TokenInvalidException $e) {
-            throw new Unauthorized(
-                'invalidAuthenticationTokenSignature',
-                "The token signature is invalid and thus cannot be correctly decoded to an existing user.",
-                null,
-                [],
-                $e
-            );
+            $this->throwBadTokenSignatureException($e);
         }
 
         if (! $userCredentials instanceof UserCredentials) {
@@ -94,6 +121,7 @@ class Auth
     public function logout()
     {
         $this->illuminateAuth->logout();
+        $this->dingoAuth->setUser(null);
     }
 
     public function allowDifferentToken()
@@ -341,5 +369,16 @@ class Auth
     private function toShortType($userType)
     {
         return strtolower(class_basename($userType));
+    }
+
+    private function throwBadTokenSignatureException(BaseException $e = null)
+    {
+        throw new Unauthorized(
+            'invalidAuthenticationTokenSignature',
+            "The token signature is invalid and thus cannot be correctly decoded to an existing user.",
+            null,
+            [],
+            $e
+        );
     }
 }

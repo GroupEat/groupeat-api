@@ -2,11 +2,11 @@
 
 use Groupeat\Settings\Http\V1\SettingsController;
 
-Route::group(['prefix' => 'api'], function () {
-    Route::group(['middleware' => 'auth'], function () {
-        Route::group(['prefix' => 'customers/{customer}/settings'], function () {
-            Route::get('/', SettingsController::class.'@index');
-            Route::put('/', SettingsController::class.'@update');
+$api->version('v1', function ($api) {
+    $api->group(['middleware' => 'api.auth'], function ($api) {
+        $api->group(['prefix' => 'customers/{customer}/settings'], function ($api) {
+            $api->get('/', SettingsController::class.'@index');
+            $api->put('/', SettingsController::class.'@update');
         });
     });
 });

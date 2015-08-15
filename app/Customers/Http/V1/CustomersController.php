@@ -40,9 +40,8 @@ class CustomersController extends Controller
             $this->json('locale')
         ));
 
-        $this->statusCode = Response::HTTP_CREATED;
-
-        return $this->itemResponse($customer, new UserTransformer);
+        return $this->itemResponse($customer, new UserTransformer)
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function unregister(Customer $customer)

@@ -8,7 +8,7 @@ HOST: {{ app.url }}
 To make requests to the API, the desired version must be specified through the `Accept` header. For the current version, it will be:
 
 ```http
-Accept: application/vnd.groupeat.v1+json
+Accept: application/vnd.{{ api.vendor }}.{{ api.version }}+{{ api.defaultFormat }}
 ```
 
 All of the paths below must be prefixed by `{{ app.url }}` to have the full and correct URL.

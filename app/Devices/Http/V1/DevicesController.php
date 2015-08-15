@@ -27,9 +27,7 @@ class DevicesController extends Controller
             $this->json('model')
         ));
 
-        $this->statusCode = Response::HTTP_CREATED;
-
-        return $this->itemResponse($device);
+        return $this->itemResponse($device)->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function index(Customer $customer)

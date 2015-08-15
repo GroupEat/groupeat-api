@@ -10,6 +10,7 @@ use Groupeat\Support\Services\LogDomainActivity;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Bus\Dispatcher as JobDispatcher;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Mail\MailServiceProvider;
@@ -32,6 +33,7 @@ class PackageProvider extends WorkbenchPackageProvider
             $this->app->environment()
         );
 
+        $this->replaceApiExceptionHandler();
         $this->registerLocalPackages();
         $this->registerPapertrailLogger();
         $this->replaceSwiftMailer(); // TODO: check if it can be deferred
@@ -46,6 +48,13 @@ class PackageProvider extends WorkbenchPackageProvider
             LogDomainActivity::class,
             ExecuteJobInDbTransaction::class,
         ]);
+    }
+
+    private function replaceApiExceptionHandler()
+    {
+        $this->app->singleton('api.exception', function ($app) {
+            return $app[ExceptionHandler::class];
+        });
     }
 
     private function registerLocalPackages()

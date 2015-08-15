@@ -2,6 +2,7 @@
 namespace Groupeat\Support\Providers\Abstracts;
 
 use Closure;
+use Dingo\Api\Routing\Router;
 use File;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
@@ -131,6 +132,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $routesPath = $this->getPackagePath('routes.php');
 
         if (file_exists($routesPath)) {
+            $api = app(Router::class);
             include $routesPath;
         }
     }

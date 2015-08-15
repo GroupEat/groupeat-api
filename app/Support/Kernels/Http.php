@@ -2,7 +2,6 @@
 namespace Groupeat\Support\Kernels;
 
 use Groupeat\Auth\Http\Middleware\AllowDifferentToken;
-use Groupeat\Auth\Http\Middleware\Authenticate;
 use Groupeat\Auth\Http\Middleware\ForbidTokenInQueryString;
 use Groupeat\Support\Http\Middleware\Api;
 use Groupeat\Support\Http\Middleware\ForbidQueryStringForNonIdempotentMethods;
@@ -19,6 +18,5 @@ class Http extends Kernel
 
     protected $routeMiddleware = [
         'allowDifferentToken' => AllowDifferentToken::class,
-        'auth' => Authenticate::class,
     ];
 }

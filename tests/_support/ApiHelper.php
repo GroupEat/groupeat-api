@@ -144,8 +144,10 @@ class ApiHelper extends \Codeception\Module
 
     public function sendApiWithToken($token, $verb, $path, $params = [])
     {
-        $this->getModule('REST')->amBearerAuthenticated($token);
+        $restModule = $this->getModule('REST');
+        $restModule->amBearerAuthenticated($token);
         $this->sendApi($verb, $path, $params);
+        unset($restModule->headers['Authorization']);
     }
 
     public function sendApi($verb, $path, $params = [])
