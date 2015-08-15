@@ -5,15 +5,18 @@ use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Database\Abstracts\Seeder;
+use Groupeat\Support\Database\Traits\GeneratePhoneNumber;
 
 class CustomersSeeder extends Seeder
 {
+    use GeneratePhoneNumber;
+
     protected function makeEntry($id, $max)
     {
         $customer = Customer::create([
             'firstName' => $this->faker->firstName,
             'lastName' => $this->faker->lastName,
-            'phoneNumber' => '33' . $this->faker->randomNumber(9),
+            'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 
         UserCredentials::create([
@@ -29,7 +32,7 @@ class CustomersSeeder extends Seeder
         $customer = Customer::create([
             'firstName' => 'Groupeat',
             'lastName' => 'User',
-            'phoneNumber' => '33' . $this->faker->randomNumber(9),
+            'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 
         UserCredentials::create([
