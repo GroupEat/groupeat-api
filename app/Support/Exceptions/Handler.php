@@ -39,7 +39,7 @@ class Handler extends DingoExceptionHandler
     public function report(BaseException $e)
     {
         if ($this->shouldReport($e)) {
-            $this->log->error($e);
+            $this->logger->error($e);
         }
     }
 
@@ -130,7 +130,7 @@ class Handler extends DingoExceptionHandler
         (new ConsoleApplication)->renderException($e, $output);
     }
 
-    private function shouldReport(Exception $e)
+    private function shouldReport(BaseException $e)
     {
         foreach ($this->dontReport as $type) {
             if ($e instanceof $type) {
