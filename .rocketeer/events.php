@@ -5,7 +5,7 @@ use Rocketeer\Facades\Rocketeer;
 Rocketeer::listenTo('deploy.before-symlink', function ($task) {
     $commands = [
         'optimize',
-        'route:cache',
+        'api:cache',
         'config:cache',
         'opcache:clear',
         'docs',
