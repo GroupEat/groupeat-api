@@ -23,11 +23,16 @@ class Restaurant extends Entity implements User
 
     protected $fillable = ['name', 'phoneNumber'];
 
+    protected $casts = [
+        'discountPolicy' => 'json',
+    ];
+
     public function getRules()
     {
         return [
             'name' => 'required',
             'phoneNumber' => 'required',
+            'discountPolicy' => 'required',
             'minimumOrderPrice' => 'required|integer',
             'deliveryCapacity' => 'required|integer',
         ];
@@ -94,19 +99,31 @@ class Restaurant extends Entity implements User
     /**
      * @param Money $rawPrice
      *
+     * The discount policy of a restaurant is saved in the database as a
+     * JSON object. The keys represent the price to reach to unlock the specific discount rate
+     * stored in the value.
+     *
+     * Example: if the JSON object is {900: 0, 1000: 10, 2000: 20, 2500: 30, 3500: 40, 6000: 50},
+     * it means that for 10e there will be a 10% discount, for 20e 20%, for 25e 30%,
+     * for 35e 40% and for 60e 50%. From 0e to 9e there won't be any discount.
+     * Between the given points, the discount rate increase linearly.
+     *
      * @return DiscountRate
      */
     public function getDiscountRateFor(Money $rawPrice)
     {
-        $percentages = DiscountRate::PERCENTAGES;
+        $policy = $this->discountPolicy;
+        ksort($policy);
+        $prices = array_keys($policy);
+        $percentages = array_values($policy);
 
-        foreach ($this->discountPrices as $index => $amount) {
+        foreach ($prices as $index => $amount) {
             if ($rawPrice->getAmount() <= $amount) {
                 if ($index == 0) {
                     return new DiscountRate($percentages[$index]);
                 } else {
                     $slope = ((float) ($percentages[$index] - $percentages[$index - 1]))
-                        / ($amount - $this->discountPrices[$index - 1]);
+                        / ($amount - $prices[$index - 1]);
 
                     $offset = $percentages[$index] - $slope * $amount;
 
@@ -118,11 +135,6 @@ class Restaurant extends Entity implements User
         return new DiscountRate(end($percentages));
     }
 
-    protected function getDiscountPricesAttribute()
-    {
-        return json_decode($this->attributes['discountPrices'], true);
-    }
-
     protected function getMinimumOrderPriceAttribute()
     {
         return new EUR($this->attributes['minimumOrderPrice']);
@@ -131,10 +143,5 @@ class Restaurant extends Entity implements User
     protected function getDeliveryCapacityAttribute()
     {
         return (int) $this->attributes['deliveryCapacity'];
-    }
-
-    protected function getDiscountPolicyAttribute()
-    {
-        return array_combine($this->discountPrices, DiscountRate::PERCENTAGES);
     }
 }

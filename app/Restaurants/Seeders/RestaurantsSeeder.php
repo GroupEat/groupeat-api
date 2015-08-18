@@ -22,6 +22,18 @@ class RestaurantsSeeder extends Seeder
      */
     private $pizzeriaCategory;
 
+    /**
+     * @var array
+     */
+    private $discountPolicy = [
+        900 => 0,
+        1000 => 10,
+        2000 => 20,
+        2500 => 30,
+        3500 => 40,
+        6000 => 50,
+    ];
+
     public function __construct(GenerateToken $generateToken)
     {
         parent::__construct();
@@ -37,7 +49,7 @@ class RestaurantsSeeder extends Seeder
             'phoneNumber' => $this->generatePhoneNumber(),
             'minimumOrderPrice' => $this->faker->numberBetween(1000, 1100),
             'deliveryCapacity' => $this->faker->numberBetween(7, 10),
-            'discountPrices' => json_encode([900, 1000, 2000, 2500, 3500, 6000]),
+            'discountPolicy' => $this->discountPolicy,
             'pictureUrl' => $this->getPictureUrl(),
         ]);
 
@@ -81,7 +93,7 @@ class RestaurantsSeeder extends Seeder
         foreach ($restaurantsData as $restaurantData) {
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
             $restaurantData['minimumOrderPrice'] = 900;
-            $restaurantData['discountPrices'] = json_encode([900, 1000, 2000, 2500, 3500, 6000]);
+            $restaurantData['discountPolicy'] = $this->discountPolicy;
             $restaurantData['pictureUrl'] = $this->getPictureUrl();
             $restaurantData['phoneNumber'] = $this->generatePhoneNumber();
 
