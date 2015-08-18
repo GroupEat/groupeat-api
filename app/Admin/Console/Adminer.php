@@ -8,6 +8,8 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 class Adminer extends Command
 {
     const THEME = 'pappu687';
+    const RED = '#ff4e50';
+    const GREEN = '#23AF50';
 
     protected $signature = 'adminer';
     protected $description = "Generate the Adminer files to manage the DB";
@@ -51,8 +53,8 @@ class Adminer extends Command
 
         $this->line("Applying GroupEat theme");
 
-        $css = str_replace('#34495e', '#e74c3c', $css);
-        $css = str_replace(['#48A5BF', '#65ADC3', 'rgb(85, 112, 139)', '#2980b9'], '#e67e22', $css);
+        $css = str_replace('#34495e', static::RED, $css);
+        $css = str_replace(['#48A5BF', '#65ADC3', 'rgb(85, 112, 139)', '#2980b9'], static::GREEN, $css);
 
         $this->line("Saving CSS file");
 
