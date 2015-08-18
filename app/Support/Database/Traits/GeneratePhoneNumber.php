@@ -7,12 +7,8 @@ trait GeneratePhoneNumber
 {
     protected function generatePhoneNumber()
     {
-        $number = $this->faker->randomNumber(9);
+        $number = '33' . str_pad($this->faker->randomNumber(9), 9, '6', STR_PAD_LEFT);
 
-        if ($number < 100000000) {
-            $number *= 10;
-        }
-
-        return new PhoneNumber('33' . $number);
+        return new PhoneNumber($number);
     }
 }
