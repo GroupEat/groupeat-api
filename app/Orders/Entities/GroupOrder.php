@@ -70,11 +70,15 @@ class GroupOrder extends Entity
     }
 
     /**
+     * @param Carbon $time
+     *
      * @return bool
      */
-    public function isJoinable()
+    public function isJoinable(Carbon $time = null)
     {
-        return empty($this->closedAt);
+        $time = $time ?: $this->freshTimestamp();
+
+        return empty($this->closedAt) && $this->endingAt->gt($time);
     }
 
     public function productFormatsQuery()
@@ -210,7 +214,8 @@ class GroupOrder extends Entity
         $time = $time ?: $this->freshTimestamp();
         $model = $query->getModel();
 
-        $query->whereNull($model->getTableField(self::CLOSED_AT));
+        $query->whereNull($model->getTableField(self::CLOSED_AT))
+            ->where($model->getTableField(self::ENDING_AT), '>', $time);
     }
 
     /**

@@ -8,7 +8,7 @@ use Groupeat\Support\Console\Abstracts\Command;
 class CloseGroupOrders extends Command
 {
     protected $signature = 'group-orders:close
-        {--minutes= : The minutes to add to the current time (for test purpose)}';
+        {--minutes= : The minutes to add to the current time (for test purpose only)}';
 
     protected $description = "Closes the joinable group orders with elapsed foodrush";
 
