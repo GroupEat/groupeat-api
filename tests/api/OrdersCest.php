@@ -43,10 +43,18 @@ class OrdersCest
     public function testThatTheOrderCannotBeEmpty(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
-        $orderDetails = $this->getOrderDetails($I, $token, ['productFormats' => []]);
 
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'noProductFormats');
+        $variants = [
+            ['productFormats' => []],
+            ['productFormats' => [1 => 0]],
+        ];
+
+        foreach ($variants as $variant) {
+            $orderDetails = $this->getOrderDetails($I, $token, $variant);
+
+            $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+            $I->seeErrorResponse(422, 'noProductFormats');
+        }
     }
 
     public function testThatTheProductFormatsMustExist(ApiTester $I)

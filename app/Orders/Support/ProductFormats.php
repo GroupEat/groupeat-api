@@ -44,6 +44,10 @@ class ProductFormats
      */
     public function __construct(array $amounts, Collection $models = null, Restaurant $restaurant = null)
     {
+        $amounts = array_filter($amounts, function ($quantity) {
+            return $quantity > 0;
+        });
+
         if (empty($amounts) || (array_sum($amounts) == 0)) {
             throw new UnprocessableEntity(
                 'noProductFormats',
