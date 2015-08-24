@@ -12,6 +12,7 @@
         {
             "id": "1",
             "name": "Pizza di Genova",
+            "rating": 3.5, // From 0 to 5 with 0.5 steps
             "phoneNumber": "0689731323",
             "minimumOrderPrice": 1088,
             "deliveryCapacity": 7,

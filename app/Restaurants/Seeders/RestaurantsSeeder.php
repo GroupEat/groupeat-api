@@ -46,6 +46,7 @@ class RestaurantsSeeder extends Seeder
     {
         $restaurant = Restaurant::create([
             'name' => $this->faker->company,
+            'rating' => $this->faker->randomDigitNotNull(),
             'phoneNumber' => $this->generatePhoneNumber(),
             'minimumOrderPrice' => $this->faker->numberBetween(1000, 1100),
             'deliveryCapacity' => $this->faker->numberBetween(7, 10),
@@ -91,6 +92,7 @@ class RestaurantsSeeder extends Seeder
         ];
 
         foreach ($restaurantsData as $restaurantData) {
+            $restaurantData['rating'] = $this->faker->randomDigitNotNull();
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
             $restaurantData['minimumOrderPrice'] = 900;
             $restaurantData['discountPolicy'] = $this->discountPolicy;
