@@ -35,7 +35,7 @@ class Restaurant extends Entity implements User
             'discountPolicy' => 'required',
             'minimumOrderPrice' => 'required|integer',
             'deliveryCapacity' => 'required|integer',
-            'rating' => 'required|integer',
+            'rating' => 'required|integer|max:10',
         ];
     }
 
