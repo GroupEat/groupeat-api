@@ -43,26 +43,26 @@ class GroupOrderPresenter extends Presenter
 
     protected function getProductsTable()
     {
-        $keys = ['amount', 'foodType', 'product', 'format'];
+        $keys = ['quantity', 'foodType', 'product', 'format'];
         $headers = $this->translate($keys, trans('restaurants::products.attributes'), true);
 
-        $amounts = [];
+        $quantities = [];
         $productFormats = [];
 
         foreach ($this->orders as $order) {
             foreach ($order->productFormats as $productFormat) {
                 if (empty($productFormats[$productFormat->id])) {
                     $productFormats[$productFormat->id] = $productFormat;
-                    $amounts[$productFormat->id] = 0;
+                    $quantities[$productFormat->id] = 0;
                 }
 
-                $amounts[$productFormat->id] += $productFormat->pivot->amount;
+                $quantities[$productFormat->id] += $productFormat->pivot->quantity;
             }
         }
 
         foreach ($productFormats as $id => $productFormat) {
             $rows[] = [
-                $amounts[$id],
+                $quantities[$id],
                 $productFormat->product->type->label,
                 $productFormat->product->name,
                 $productFormat->name,

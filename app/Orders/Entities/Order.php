@@ -31,7 +31,7 @@ class Order extends ImmutableDatedEntity
 
     public function productFormats()
     {
-        return $this->belongsToMany(ProductFormat::class)->withPivot('amount');
+        return $this->belongsToMany(ProductFormat::class)->withPivot('quantity');
     }
 
     public function deliveryAddress()

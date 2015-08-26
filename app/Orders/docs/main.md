@@ -72,7 +72,7 @@ Only activated customers are allowed to create a group order.
 
 The request must contain all the data required to attach a delivery address to the order.
 
-The attributes dedicated to the order itself are `foodRushDurationInMinutes` which must be between {{ orders.minimum_foodrush_in_minutes }} and {{ orders.maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired amount of each product format. All the product formats must of course belong to the same restaurant.
+The attributes dedicated to the order itself are `foodRushDurationInMinutes` which must be between {{ orders.minimum_foodrush_in_minutes }} and {{ orders.maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired quantity of each product format. All the product formats must of course belong to the same restaurant.
 
 The restaurant must stay opened at least {{ restaurants.opening_duration_in_minutes }} minutes more to create a group order.
 

@@ -188,7 +188,7 @@ class GroupOrder extends Entity
     {
         $nbProductFormats = DB::table((new Order)->productFormats()->getTable())
             ->whereIn('orderId', $this->orders()->lists('id'))
-            ->sum('amount');
+            ->sum('quantity');
 
         return $this->restaurant->deliveryCapacity - $nbProductFormats;
     }

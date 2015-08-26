@@ -3,7 +3,7 @@
 return [
 
     'attributes' => [
-        'amount' => 'quantité',
+        'quantity' => 'quantité',
         'foodType' => 'catégorie',
         'product' => 'produit',
         'format' => 'format',

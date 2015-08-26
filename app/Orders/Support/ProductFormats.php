@@ -15,7 +15,7 @@ class ProductFormats
     /**
      * @var array
      */
-    private $amounts;
+    private $quantities;
 
     /**
      * @var Collection
@@ -38,24 +38,24 @@ class ProductFormats
     private $totalPrice;
 
     /**
-     * @param array      $amounts
+     * @param array      $quantities
      * @param Collection $models
      * @param Restaurant $restaurant
      */
-    public function __construct(array $amounts, Collection $models = null, Restaurant $restaurant = null)
+    public function __construct(array $quantities, Collection $models = null, Restaurant $restaurant = null)
     {
-        $amounts = array_filter($amounts, function ($quantity) {
+        $quantities = array_filter($quantities, function ($quantity) {
             return $quantity > 0;
         });
 
-        if (empty($amounts) || (array_sum($amounts) == 0)) {
+        if (empty($quantities) || (array_sum($quantities) == 0)) {
             throw new UnprocessableEntity(
                 'noProductFormats',
                 "There must be at least one product format."
             );
         }
 
-        $this->amounts = $amounts;
+        $this->quantities = $quantities;
 
         $askedIds = $this->getIds();
 
@@ -89,21 +89,21 @@ class ProductFormats
             $this->restaurant = $restaurant;
         }
 
-        $this->totalNumberOfProductFormats = array_sum($this->amounts);
+        $this->totalNumberOfProductFormats = array_sum($this->quantities);
 
         $this->totalPrice = sumPrices($this->models->map(function (ProductFormat $productFormat) {
-            return $productFormat->price->multiply($this->amounts[$productFormat->id]);
+            return $productFormat->price->multiply($this->quantities[$productFormat->id]);
         }));
     }
 
-    public function getAmounts()
+    public function getQuantities()
     {
-        return $this->amounts;
+        return $this->quantities;
     }
 
     public function getIds()
     {
-        return array_keys($this->amounts);
+        return array_keys($this->quantities);
     }
 
     public function getModels()
@@ -140,8 +140,8 @@ class ProductFormats
 
         $syncData = [];
 
-        foreach ($this->amounts as $id => $amount) {
-            $syncData[(int) $id] = ['amount' => (int) $amount];
+        foreach ($this->quantities as $id => $quantity) {
+            $syncData[(int) $id] = ['quantity' => (int) $quantity];
         }
 
         $order->productFormats()->sync($syncData);
@@ -153,25 +153,25 @@ class ProductFormats
             $this->throwNotSameRestaurantException();
         }
 
-        $amounts = $this->getAmounts();
+        $quantities = $this->getQuantities();
         $models = $this->getModels();
         $groupOrder->load('orders.productFormats');
 
         foreach ($groupOrder->orders as $order) {
             foreach ($order->productFormats as $productFormat) {
                 $formatId = $productFormat->id;
-                $amount = $productFormat->pivot->amount;
+                $quantity = $productFormat->pivot->quantity;
 
                 if ($models->contains($formatId)) {
-                    $amounts[$formatId] += $amount;
+                    $quantities[$formatId] += $quantity;
                 } else {
                     $models->add($productFormat);
-                    $amounts[$formatId] = $amount;
+                    $quantities[$formatId] = $quantity;
                 }
             }
         }
 
-        return new static($amounts, $models, $groupOrder->restaurant);
+        return new static($quantities, $models, $groupOrder->restaurant);
     }
 
     private function throwNotSameRestaurantException()

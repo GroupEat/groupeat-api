@@ -42,7 +42,7 @@ class OrderTransformer extends TransformerAbstract
         return $this->collection($order->productFormats, function ($productFormat) {
             $data = (new ProductFormatTransformer)->transform($productFormat);
 
-            $data['amount'] = $productFormat->pivot->amount;
+            $data['quantity'] = $productFormat->pivot->quantity;
 
             return $data;
         });

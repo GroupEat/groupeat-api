@@ -28,7 +28,7 @@ class OrderPresenter extends Presenter
                 $str .= '('.$productFormat->price.') ';
             }
 
-            $str .= '-> '.$productFormat->pivot->amount.', ';
+            $str .= '-> '.$productFormat->pivot->quantity.', ';
         }
 
         return trim($str, ', ');
@@ -101,7 +101,7 @@ class OrderPresenter extends Presenter
 
     private function getProductsTable($withRawPrice = true)
     {
-        $keys = ['amount', 'foodType', 'product', 'format'];
+        $keys = ['quantity', 'foodType', 'product', 'format'];
 
         if ($withRawPrice) {
             $keys[] = 'rawPrice';
@@ -111,7 +111,7 @@ class OrderPresenter extends Presenter
 
         foreach ($this->productFormats as $productFormat) {
             $details = [
-                $productFormat->pivot->amount,
+                $productFormat->pivot->quantity,
                 $productFormat->product->type->label,
                 $productFormat->product->name,
                 $productFormat->name,

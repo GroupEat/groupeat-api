@@ -187,13 +187,13 @@ class OrdersCest
             return $restaurants[0]['id'];
         });
 
-        $amount = 0;
+        $quantity = 0;
         $productFormats = [];
 
         foreach ($products as $product) {
             foreach ($product['formats']['data'] as $format) {
-                if ($amount <= $deliveryCapacity) {
-                    $amount++;
+                if ($quantity <= $deliveryCapacity) {
+                    $quantity++;
                     $productFormats[$format['id']] = 1;
                 }
             }
