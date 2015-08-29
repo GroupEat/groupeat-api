@@ -12,7 +12,7 @@ use League\Fractal\TransformerAbstract;
 
 class OrderTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['customer', 'groupOrder', 'deliveryAddress', 'products'];
+    protected $availableIncludes = ['customer', 'groupOrder', 'deliveryAddress', 'productFormats'];
 
     public function transform(Order $order)
     {
@@ -40,7 +40,7 @@ class OrderTransformer extends TransformerAbstract
         return $this->item($order->deliveryAddress, new DeliveryAddressTransformer);
     }
 
-    public function includeProducts(Order $order)
+    public function includeProductFormats(Order $order)
     {
         $productFormats = $order->productFormats;
         $productIds = array_unique($productFormats->map(function (ProductFormat $format) {
