@@ -33,7 +33,7 @@ class Restaurant extends Entity implements User
             'name' => 'required',
             'phoneNumber' => 'required',
             'discountPolicy' => 'required',
-            'minimumOrderPrice' => 'required|integer',
+            'minimumGroupOrderPrice' => 'required|integer',
             'deliveryCapacity' => 'required|integer',
             'rating' => 'required|integer|max:10',
         ];
@@ -136,9 +136,9 @@ class Restaurant extends Entity implements User
         return new DiscountRate(end($percentages));
     }
 
-    protected function getMinimumOrderPriceAttribute()
+    protected function getMinimumGroupOrderPriceAttribute()
     {
-        return new EUR($this->attributes['minimumOrderPrice']);
+        return new EUR($this->attributes['minimumGroupOrderPrice']);
     }
 
     protected function getDeliveryCapacityAttribute()

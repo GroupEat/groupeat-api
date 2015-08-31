@@ -14,7 +14,7 @@
             "name": "Pizza di Genova",
             "rating": 7, // Integer values from 0 to 10
             "phoneNumber": "0689731323",
-            "minimumOrderPrice": 1088,
+            "minimumGroupOrderPrice": 1088,
             "deliveryCapacity": 7,
             "pictureUrl": "https://snap-photos.s3.amazonaws.com/img-thumbs/960w/RE54D4GOX0.jpg",
             "discountPolicy": { // The key is the price and the value is the corresponding discount rate

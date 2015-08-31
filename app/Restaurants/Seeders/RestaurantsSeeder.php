@@ -48,7 +48,7 @@ class RestaurantsSeeder extends Seeder
             'name' => $this->faker->company,
             'rating' => $this->faker->randomDigitNotNull(),
             'phoneNumber' => $this->generatePhoneNumber(),
-            'minimumOrderPrice' => $this->faker->numberBetween(1000, 1100),
+            'minimumGroupOrderPrice' => $this->faker->numberBetween(1000, 1100),
             'deliveryCapacity' => $this->faker->numberBetween(7, 10),
             'discountPolicy' => $this->discountPolicy,
             'pictureUrl' => $this->getPictureUrl(),
@@ -94,7 +94,7 @@ class RestaurantsSeeder extends Seeder
         foreach ($restaurantsData as $restaurantData) {
             $restaurantData['rating'] = $this->faker->randomDigitNotNull();
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
-            $restaurantData['minimumOrderPrice'] = 900;
+            $restaurantData['minimumGroupOrderPrice'] = 900;
             $restaurantData['discountPolicy'] = $this->discountPolicy;
             $restaurantData['pictureUrl'] = $this->getPictureUrl();
             $restaurantData['phoneNumber'] = $this->generatePhoneNumber();

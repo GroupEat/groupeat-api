@@ -15,7 +15,7 @@ class RestaurantTransformer extends TransformerAbstract
             'name' => $restaurant->name,
             'rating' => $restaurant->rating,
             'phoneNumber' => $restaurant->phoneNumber,
-            'minimumOrderPrice' => $restaurant->minimumOrderPrice->getAmount(),
+            'minimumGroupOrderPrice' => $restaurant->minimumGroupOrderPrice->getAmount(),
             'deliveryCapacity' => $restaurant->deliveryCapacity,
             'pictureUrl' => $restaurant->pictureUrl,
             'discountPolicy' => $restaurant->discountPolicy,

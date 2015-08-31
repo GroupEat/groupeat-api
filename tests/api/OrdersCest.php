@@ -146,14 +146,14 @@ class OrdersCest
         $I->seeErrorResponse(422, 'productFormatsFromDifferentRestaurants');
     }
 
-    public function testThatTheOrderMustExceedTheMinimumPrice(ApiTester $I)
+    public function testThatTheGroupOrderMustExceedTheMinimumPrice(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();
         $options = ['around' => true, 'opened' => true];
         $minimumPrice = 0;
 
         $products = $this->getProducts($I, $token, $options, function ($restaurants) use (&$minimumPrice) {
-            $minimumPrice = $restaurants[0]['minimumOrderPrice'];
+            $minimumPrice = $restaurants[0]['minimumGroupOrderPrice'];
 
             return $restaurants[0]['id'];
         });
@@ -172,7 +172,7 @@ class OrdersCest
 
         $orderDetails = $this->getOrderDetails($I, $token, compact('productFormats'));
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'minimumOrderPriceNotReached');
+        $I->seeErrorResponse(422, 'minimumGroupOrderPriceNotReached');
     }
 
     public function testThatTheOrderShouldNotExceedRestaurantDeliveryCapacity(ApiTester $I)

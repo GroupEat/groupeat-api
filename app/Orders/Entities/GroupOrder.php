@@ -62,6 +62,7 @@ class GroupOrder extends Entity
     ) {
         $restaurant = $productFormats->getRestaurant();
         static::assertNotExistingFor($restaurant);
+        static::assertMinimumGroupOrderPriceReached($restaurant, $productFormats);
         $groupOrder = new static;
         $groupOrder->restaurant()->associate($restaurant);
         $groupOrder->setFoodRushDurationInMinutes($foodRushDurationInMinutes);
@@ -129,7 +130,6 @@ class GroupOrder extends Entity
         $comment = null
     ) {
         $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
-        $this->assertMinimumOrderPriceReached($productFormats);
         list($nbProductFormats, $totalRawPrice) = $this->getNbProductFormatsAndRawPriceWith($productFormats);
         $this->assertMaximumCapacityNotExceeded($nbProductFormats);
         $this->discountRate = $productFormats->getRestaurant()->getDiscountRateFor($totalRawPrice);
@@ -286,6 +286,17 @@ class GroupOrder extends Entity
         }
     }
 
+    private static function assertMinimumGroupOrderPriceReached(Restaurant $restaurant, ProductFormats $productFormats)
+    {
+        if ($productFormats->totalPrice()->lessThan($restaurant->minimumGroupOrderPrice)) {
+            throw new UnprocessableEntity(
+                'minimumGroupOrderPriceNotReached',
+                "This order price is {$productFormats->totalPrice()->getAmount()} "
+                . "but must be greater than {$restaurant->minimumGroupOrderPrice->getAmount()}."
+            );
+        }
+    }
+
     private function setFoodRushDurationInMinutes($minutes)
     {
         if (!$this->exists) {
@@ -312,17 +323,6 @@ class GroupOrder extends Entity
                 "The {$this->restaurant->toShortString()} cannot deliver more than "
                 . "{$this->restaurant->deliveryCapacity} items in the same group order, "
                 . "{$nbProductFormats} items asked."
-            );
-        }
-    }
-
-    private function assertMinimumOrderPriceReached(ProductFormats $productFormats)
-    {
-        if ($productFormats->totalPrice()->lessThan($this->restaurant->minimumOrderPrice)) {
-            throw new UnprocessableEntity(
-                'minimumOrderPriceNotReached',
-                "The order price is {$productFormats->totalPrice()->getAmount()} "
-                . "but must be greater than {$this->restaurant->minimumOrderPrice->getAmount()}."
             );
         }
     }

@@ -148,7 +148,7 @@ The distance between the given address and the restaurant must be less than {{ r
 + Response 422
 
         {
-            "errorKey": "minimumOrderPriceNotReached",
+            "errorKey": "minimumGroupOrderPriceNotReached",
             "message": "The order price is 810 but must be greater than 1100."
         }
 
