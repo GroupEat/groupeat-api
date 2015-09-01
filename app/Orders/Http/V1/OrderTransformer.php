@@ -51,7 +51,7 @@ class OrderTransformer extends TransformerAbstract
         return $this->collection($products, function (Product $product) use ($productFormats) {
             $productData = (new ProductTransformer)->transform($product);
 
-            $productData['formats'] = $productFormats
+            $productData['formats'] = ['data' => $productFormats
                 ->filter(function (ProductFormat $format) use ($product) {
                     return $format->productId == $product->id;
                 })
@@ -60,7 +60,7 @@ class OrderTransformer extends TransformerAbstract
                     $formatData['quantity'] = $format->pivot->quantity;
 
                     return $formatData;
-                });
+                })];
 
             return $productData;
         });
