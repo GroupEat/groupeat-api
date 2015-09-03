@@ -2,6 +2,7 @@
 namespace Groupeat\Support\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Support\Values\Environment;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
 use Illuminate\View\Factory;
@@ -56,7 +57,7 @@ class SendMail
                 }
             );
 
-            $this->logger->info("The email [$viewName] has been sent for {$user->user->toShortString()}.");
+            $this->logger->info("The email [$viewName] has been sent to {$user->user->toShortString()}.");
         }, $user->locale);
     }
 }

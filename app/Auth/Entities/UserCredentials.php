@@ -16,9 +16,11 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 {
     use CanResetPasswordTrait;
 
+    const ACTIVATED_AT = 'activatedAt';
+
     public $timestamps = false;
 
-    protected $dates = ['activatedAt'];
+    protected $dates = [self::ACTIVATED_AT];
     protected $hidden = ['password', 'token', 'activationToken'];
 
     public function getRules()
@@ -147,12 +149,6 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         $this->save();
     }
 
-    public function discardPasswordAndToken()
-    {
-        $this->hashAndSetPassword("WAITING FOR PASSWORD RESET");
-        $this->discardToken();
-    }
-
     /**
      * @param $password
      * @param $token
@@ -161,12 +157,6 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
     {
         $this->hashAndSetPassword($password);
         $this->replaceAuthenticationToken($token);
-    }
-
-    public function discardToken()
-    {
-        $this->token = null;
-        $this->save();
     }
 
     /**

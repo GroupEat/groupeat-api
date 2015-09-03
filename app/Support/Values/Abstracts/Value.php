@@ -1,7 +1,9 @@
 <?php
 namespace Groupeat\Support\Values\Abstracts;
 
-abstract class Value
+use JsonSerializable;
+
+abstract class Value implements JsonSerializable
 {
     /**
      * @var mixed
@@ -30,5 +32,13 @@ abstract class Value
     public function __toString()
     {
         return (string) $this->value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function jsonSerialize()
+    {
+        return $this->value;
     }
 }

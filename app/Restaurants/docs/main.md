@@ -1,26 +1,5 @@
 # Group Restaurants
 
-## List restaurant categories [/restaurantCategories]
-
-### GET
-
-+ Response 200
-
-        [
-            {
-                "id": "1",
-                "label": "pizzeria"
-            },
-            {
-                "id": "2",
-                "label": "japanese"
-            },
-            {
-                "id": "3",
-                "label": "chinese"
-            }
-        ]
-
 ## Restaurant [/restaurants/{id}/{?include}]
 
 + Parameters
@@ -33,9 +12,11 @@
         {
             "id": "1",
             "name": "Pizza di Genova",
+            "rating": 7, // Integer values from 0 to 10
             "phoneNumber": "0689731323",
-            "minimumOrderPrice": 1088,
+            "minimumGroupOrderPrice": 1088,
             "deliveryCapacity": 7,
+            "pictureUrl": "https://snap-photos.s3.amazonaws.com/img-thumbs/960w/RE54D4GOX0.jpg",
             "discountPolicy": { // The key is the price and the value is the corresponding discount rate
                 "900": 0,
                 "1000": 10,
@@ -81,27 +62,6 @@ Returns the list of restaurants sorted by name in alphabetical order.
             }
         ]
 
-## List food types [/foodTypes]
-
-### GET
-
-+ Response 200
-
-        [
-            {
-                "id": "1",
-                "label": "pizza"
-            },
-            {
-                "id": "2",
-                "label": "kebab"
-            },
-            {
-                "id": "3",
-                "label": "salad"
-            }
-        ]
-
 ## Get restaurant address  [/restaurants/{id}/address]
 
 ### GET
@@ -132,32 +92,28 @@ Returns the list of restaurants sorted by name in alphabetical order.
 + Parameters
 
     + id (required, string, `123`) ... The restaurant ID.
-    + include (optional, string, `formats`) ... [formats].
+    + include (optional, string, `formats`) ... [formats, type, tags].
 
 + Response 200
 
         [
             {
                 "id": "4",
-                "typeId": "1",
                 "name": "napolitaine",
                 "description": "Tomate, mozzarella, anchois, câpres et olives."
             },
             {
                 "id": "3",
-                "typeId": "1",
                 "name": "classica",
                 "description": "Tomate, mozzarella et origan."
             },
             {
                 "id": "2",
-                "typeId": "1",
                 "name": "paysanne",
                 "description": "Tomate, mozzarella, poitrine fumée et œuf."
             },
             {
                 "id": "1",
-                "typeId": "1",
                 "name": "paysanne",
                 "description": "Mozzarella, basilic frais et tomates."
             }

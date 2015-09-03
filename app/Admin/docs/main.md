@@ -1,6 +1,9 @@
 # Group Admin
 
+::: warning
+<i class="fa fa-unlock-alt"></i>
 An authentication token corresponding to an administrator account is required to access this zone.
+:::
 
 ## Get the API docs  [/admin/docs]
 

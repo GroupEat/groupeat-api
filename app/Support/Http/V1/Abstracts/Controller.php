@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Support\Http\V1\Abstracts;
 
+use Dingo\Api\Routing\Helpers;
 use Groupeat\Auth\Auth;
-use Groupeat\Support\Commands\Abstracts\Command;
-use Groupeat\Support\Http\Output;
+use Groupeat\Support\Jobs\Abstracts\Job;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as IlluminateController;
@@ -13,27 +13,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller extends IlluminateController
 {
-    /**
-     * @var int
-     */
-    protected $statusCode = Response::HTTP_OK;
+    use Helpers;
 
     protected $request;
     protected $auth;
-    private $output;
     private $dispatcher;
 
     /**
      * @param Request    $request
      * @param Auth       $auth
-     * @param Output     $output
      * @param Dispatcher $dispatcher
      */
-    public function __construct(Request $request, Auth $auth, Output $output, Dispatcher $dispatcher)
+    public function __construct(Request $request, Auth $auth, Dispatcher $dispatcher)
     {
         $this->request = $request;
         $this->auth = $auth;
-        $this->output = $output;
         $this->dispatcher = $dispatcher;
     }
 
@@ -77,16 +71,14 @@ abstract class Controller extends IlluminateController
     protected function itemResponse($item, TransformerAbstract $transformer = null)
     {
         if (empty($item)) {
-            return $this->arrayResponse(['data' => null])->setStatusCode($this->statusCode);
+            return $this->response()->noContent();
         }
 
         if (is_null($transformer)) {
             $transformer = $this->getTransformerFor($item);
         }
 
-        $out = $this->output->asItemArray($item, $transformer);
-
-        return $this->arrayResponse($out)->setStatusCode($this->statusCode);
+        return $this->response()->item($item, $transformer);
     }
 
     /**
@@ -99,15 +91,13 @@ abstract class Controller extends IlluminateController
     {
         if (is_null($transfomer)) {
             if ($collection->isEmpty()) {
-                return $this->arrayResponse(['data' => []])->setStatusCode($this->statusCode);
+                return $this->arrayResponse([]);
             }
 
             $transfomer = $this->getTransformerFor($collection->first());
         }
 
-        $out = $this->output->asCollectionArray($collection, $transfomer);
-
-        return $this->arrayResponse($out)->setStatusCode($this->statusCode);
+        return $this->response()->collection($collection, $transfomer);
     }
 
     /**
@@ -117,12 +107,7 @@ abstract class Controller extends IlluminateController
      */
     protected function arrayResponse(array $data)
     {
-        return response()->json($data, $this->statusCode);
-    }
-
-    protected function noContentResponse()
-    {
-        return response('', $this->statusCode);
+        return $this->response()->array(compact('data'));
     }
 
     /**
@@ -151,12 +136,12 @@ abstract class Controller extends IlluminateController
     }
 
     /**
-     * @param Command $command
+     * @param Job $job
      *
      * @return mixed
      */
-    protected function dispatch(Command $command)
+    protected function dispatch(Job $job)
     {
-        return $this->dispatcher->dispatch($command);
+        return $this->dispatcher->dispatch($job);
     }
 }

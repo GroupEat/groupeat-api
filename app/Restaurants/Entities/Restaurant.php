@@ -8,26 +8,34 @@ use Groupeat\Restaurants\Services\ApplyAroundScope;
 use Groupeat\Restaurants\Services\ApplyOpenedScope;
 use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
+use Groupeat\Support\Entities\Traits\HasPhoneNumber;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\Period\Period;
+use Phaza\LaravelPostgis\Geometries\Point;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
 
 class Restaurant extends Entity implements User
 {
-    use HasCredentials, SoftDeletes;
+    use HasCredentials, HasPhoneNumber, SoftDeletes;
 
     protected $fillable = ['name', 'phoneNumber'];
+
+    protected $casts = [
+        'discountPolicy' => 'json',
+    ];
 
     public function getRules()
     {
         return [
             'name' => 'required',
-            'phoneNumber' => ['required', 'regex:/^0[0-9]([ .-]?[0-9]{2}){4}$/'],
-            'minimumOrderPrice' => 'required|integer',
+            'phoneNumber' => 'required',
+            'discountPolicy' => 'required',
+            'minimumGroupOrderPrice' => 'required|integer',
             'deliveryCapacity' => 'required|integer',
+            'rating' => 'required|integer|max:10',
         ];
     }
 
@@ -61,9 +69,9 @@ class Restaurant extends Entity implements User
         return $this->hasMany(ClosingWindow::class);
     }
 
-    public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
+    public function scopeAround(Builder $query, Point $location, $distanceInKms = null)
     {
-        app(ApplyAroundScope::class)->call($query, $latitude, $longitude, $distanceInKms);
+        app(ApplyAroundScope::class)->call($query, $location, $distanceInKms);
     }
 
     public function isOpened(Period $period = null)
@@ -92,19 +100,31 @@ class Restaurant extends Entity implements User
     /**
      * @param Money $rawPrice
      *
+     * The discount policy of a restaurant is saved in the database as a
+     * JSON object. The keys represent the price to reach to unlock the specific discount rate
+     * stored in the value.
+     *
+     * Example: if the JSON object is {900: 0, 1000: 10, 2000: 20, 2500: 30, 3500: 40, 6000: 50},
+     * it means that for 10e there will be a 10% discount, for 20e 20%, for 25e 30%,
+     * for 35e 40% and for 60e 50%. From 0e to 9e there won't be any discount.
+     * Between the given points, the discount rate increase linearly.
+     *
      * @return DiscountRate
      */
     public function getDiscountRateFor(Money $rawPrice)
     {
-        $percentages = DiscountRate::PERCENTAGES;
+        $policy = $this->discountPolicy;
+        ksort($policy);
+        $prices = array_keys($policy);
+        $percentages = array_values($policy);
 
-        foreach ($this->discountPrices as $index => $amount) {
+        foreach ($prices as $index => $amount) {
             if ($rawPrice->getAmount() <= $amount) {
                 if ($index == 0) {
                     return new DiscountRate($percentages[$index]);
                 } else {
                     $slope = ((float) ($percentages[$index] - $percentages[$index - 1]))
-                        / ($amount - $this->discountPrices[$index - 1]);
+                        / ($amount - $prices[$index - 1]);
 
                     $offset = $percentages[$index] - $slope * $amount;
 
@@ -116,23 +136,13 @@ class Restaurant extends Entity implements User
         return new DiscountRate(end($percentages));
     }
 
-    protected function getDiscountPricesAttribute()
+    protected function getMinimumGroupOrderPriceAttribute()
     {
-        return json_decode($this->attributes['discountPrices'], true);
-    }
-
-    protected function getMinimumOrderPriceAttribute()
-    {
-        return new EUR($this->attributes['minimumOrderPrice']);
+        return new EUR($this->attributes['minimumGroupOrderPrice']);
     }
 
     protected function getDeliveryCapacityAttribute()
     {
         return (int) $this->attributes['deliveryCapacity'];
-    }
-
-    protected function getDiscountPolicyAttribute()
-    {
-        return array_combine($this->discountPrices, DiscountRate::PERCENTAGES);
     }
 }

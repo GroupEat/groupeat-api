@@ -3,6 +3,7 @@ namespace Groupeat\Customers\Seeders;
 
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Support\Database\Abstracts\Seeder;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class CustomerAddressesSeeder extends Seeder
 {
@@ -16,8 +17,7 @@ class CustomerAddressesSeeder extends Seeder
             'postcode' => $this->faker->postcode,
             'state' => $this->faker->departmentName,
             'country' => $this->faker->country,
-            'longitude' => $this->faker->longitude,
-            'latitude' => $this->faker->latitude,
+            'location' => new Point($this->faker->latitude, $this->faker->longitude),
         ]);
     }
 
@@ -31,8 +31,7 @@ class CustomerAddressesSeeder extends Seeder
             'postcode' => 91120,
             'state' => "IdF",
             'country' => "France",
-            'latitude' => 48.712219,
-            'longitude' => 2.217853,
+            'location' => new Point(48.712219, 2.217853),
         ]);
     }
 }

@@ -1,28 +1,20 @@
 <?php
 namespace Groupeat\Settings\Events;
 
-use Groupeat\Customers\Entities\Customer;
-use Groupeat\Settings\Support\SettingBag;
+use Groupeat\Settings\Entities\CustomerSettings;
 use Groupeat\Support\Events\Abstracts\Event;
 
 class CustomerHasUpdatedItsSettings extends Event
 {
-    private $customer;
-    private $settingBag;
+    private $settings;
 
-    public function __construct(Customer $customer, SettingBag $settingBag)
+    public function __construct(CustomerSettings $settings)
     {
-        $this->customer = $customer;
-        $this->settingBag = $settingBag;
+        $this->$settings = $settings;
     }
 
-    public function getCustomer()
+    public function getSettings()
     {
-        return $this->customer;
-    }
-
-    public function getSettingBag()
-    {
-        return $this->settingBag;
+        return $this->settings;
     }
 }

@@ -6,7 +6,7 @@ use Groupeat\Support\Console\Abstracts\Command;
 
 class ApiDocumentation extends Command
 {
-    protected $name = 'docs';
+    protected $signature = 'docs';
     protected $description = "Generate the API documentation";
 
     private $generateApiDocumentation;
@@ -18,7 +18,7 @@ class ApiDocumentation extends Command
         $this->generateApiDocumentation = $generateApiDocumentation;
     }
 
-    public function fire()
+    public function handle()
     {
         $this->generateApiDocumentation->call($this->output);
 

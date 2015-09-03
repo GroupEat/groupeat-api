@@ -13,22 +13,6 @@ class RestaurantsCest
         $I->seeResponseCodeIs(200);
     }
 
-    public function testThatTheCategoriesCanBeListed(ApiTester $I)
-    {
-        list($token) = $I->amAnActivatedCustomer();
-
-        $I->sendApiGetWithToken($token, 'restaurantCategories');
-        $I->seeResponseCodeIs(200);
-    }
-
-    public function testThatTheFoodTypesCanBeListed(ApiTester $I)
-    {
-        list($token) = $I->amAnActivatedCustomer();
-
-        $I->sendApiGetWithToken($token, 'foodTypes');
-        $I->seeResponseCodeIs(200);
-    }
-
     public function testThatTheProductsOfARestaurantCanBeListed(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomer();

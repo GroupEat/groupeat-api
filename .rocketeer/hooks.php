@@ -27,12 +27,16 @@ return [
             function ($task) {
                 $sharedFolder = $task->paths->getFolder('shared');
 
-                foreach (['.env', 'APNS.pem'] as $file) {
+                foreach (['.env', '.apns.pem'] as $file) {
                     $task->run("ln -s ~vagrant/$file $sharedFolder/$file");
                 }
             },
         ],
-        'deploy'  => [],
+        'deploy'  => [
+            function ($task) {
+                $task->runForCurrentRelease('php artisan migrate --force');
+            }
+        ],
         'cleanup' => [],
     ],
 

@@ -2,6 +2,6 @@
 
 use Groupeat\Deploy\Http\V1\OpCacheController;
 
-Route::group(['prefix' => 'api'], function () {
-    Route::delete('deploy/opcache', OpCacheController::class.'@clear');
+$api->version('v1', function ($api) {
+    $api->delete('deploy/opcache', OpCacheController::class.'@clear');
 });

@@ -30,17 +30,17 @@ class SettingsCest
         $I->assertSame(false, $I->grabDataFromResponse('notificationsEnabled'));
     }
 
-    public function testThatACustomerCannotUpadateAnUnexistingSetting(ApiTester $I)
+    public function testThatACustomerCannotUpdateAnUnexistingSetting(ApiTester $I)
     {
         list($token, $id) = $I->amAnActivatedCustomer();
 
         $I->sendApiPutWithToken($token, "customers/$id/settings", [
-            'unexistingSetting' => true
+            'unexistingLabel' => true
         ]);
-        $I->seeErrorResponse(404, 'unexistingLabel');
+        $I->seeErrorResponse(400, 'undefinedCustomerSetting');
     }
 
-    public function testThatACustomerCannotEditTheSettingOfSomeoneElse(ApiTester $I)
+    public function testThatACustomerCannotEditTheSettingsOfSomeoneElse(ApiTester $I)
     {
         list(, $strangerId) = $I->sendRegistrationRequest('stranger@ensta.fr');
         list($token, $id) = $I->amAnActivatedCustomer();

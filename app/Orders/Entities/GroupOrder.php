@@ -12,22 +12,28 @@ use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class GroupOrder extends Entity
 {
+    const CLOSED_AT = 'closedAt';
+    const ENDING_AT = 'endingAt';
+    const CONFIRMED_AT = 'confirmedAt';
+    const PREPARED_AT = 'preparedAt';
+
     /**
      * @var float
      */
-    private static $aroundDistanceInKms;
+    private static $joinableDistanceInKms;
 
-    protected $dates = ['closedAt', 'endingAt', 'confirmedAt', 'preparedAt'];
+    protected $dates = [self::CLOSED_AT, self::ENDING_AT, self::CONFIRMED_AT, self::PREPARED_AT];
 
     public function getRules()
     {
         return [
             'restaurantId' => 'required',
             'discountRate' => 'required|integer',
-            'endingAt' => 'required',
+            self::ENDING_AT => 'required',
         ];
     }
 
@@ -35,7 +41,7 @@ class GroupOrder extends Entity
     {
         parent::boot();
 
-        static::$aroundDistanceInKms = config('orders.around_distance_in_kilometers');
+        static::$joinableDistanceInKms = config('orders.joinable_distance_in_kilometers');
     }
 
     /**
@@ -56,6 +62,7 @@ class GroupOrder extends Entity
     ) {
         $restaurant = $productFormats->getRestaurant();
         static::assertNotExistingFor($restaurant);
+        static::assertMinimumGroupOrderPriceReached($restaurant, $productFormats);
         $groupOrder = new static;
         $groupOrder->restaurant()->associate($restaurant);
         $groupOrder->setFoodRushDurationInMinutes($foodRushDurationInMinutes);
@@ -64,11 +71,15 @@ class GroupOrder extends Entity
     }
 
     /**
+     * @param Carbon $time
+     *
      * @return bool
      */
-    public function isJoinable()
+    public function isJoinable(Carbon $time = null)
     {
-        return empty($this->closedAt);
+        $time = $time ?: $this->freshTimestamp();
+
+        return empty($this->closedAt) && $this->endingAt->gt($time);
     }
 
     public function productFormatsQuery()
@@ -84,6 +95,9 @@ class GroupOrder extends Entity
         });
     }
 
+    /**
+     * @return Order
+     */
     public function getInitiatingOrder()
     {
         return $this->orders->filter(function ($order) {
@@ -116,12 +130,12 @@ class GroupOrder extends Entity
         $comment = null
     ) {
         $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
-        $this->assertMinimumOrderPriceReached($productFormats);
+        $customer->assertNoMissingInformation();
         list($nbProductFormats, $totalRawPrice) = $this->getNbProductFormatsAndRawPriceWith($productFormats);
         $this->assertMaximumCapacityNotExceeded($nbProductFormats);
         $this->discountRate = $productFormats->getRestaurant()->getDiscountRateFor($totalRawPrice);
 
-        $order = new Order();
+        $order = new Order;
 
         $order->comment = $comment;
         $order->rawPrice = $productFormats->totalPrice();
@@ -173,9 +187,9 @@ class GroupOrder extends Entity
      */
     public function computeRemainingCapacity()
     {
-        $nbProductFormats = DB::table((new Order())->productFormats()->getTable())
+        $nbProductFormats = DB::table((new Order)->productFormats()->getTable())
             ->whereIn('orderId', $this->orders()->lists('id'))
-            ->sum('amount');
+            ->sum('quantity');
 
         return $this->restaurant->deliveryCapacity - $nbProductFormats;
     }
@@ -185,7 +199,7 @@ class GroupOrder extends Entity
      */
     public function getTotalRawPriceAttribute()
     {
-        return sumPrices(collect($this->orders->lists('rawPrice')));
+        return sumPrices($this->orders->pluck('rawPrice'));
     }
 
     /**
@@ -193,7 +207,7 @@ class GroupOrder extends Entity
      */
     public function getTotalDiscountedPriceAttribute()
     {
-        return $this->discountRate->applyTo($this->totalRawPrice);
+        return sumPrices($this->orders->pluck('discountedPrice'));
     }
 
     public function scopeJoinable(Builder $query, Carbon $time = null)
@@ -201,26 +215,26 @@ class GroupOrder extends Entity
         $time = $time ?: $this->freshTimestamp();
         $model = $query->getModel();
 
-        $query->whereNull($model->getTableField('closedAt'));
+        $query->whereNull($model->getTableField(self::CLOSED_AT))
+            ->where($model->getTableField(self::ENDING_AT), '>', $time);
     }
 
     /**
      * @param Builder $query
-     * @param float   $latitude
-     * @param float   $longitude
+     * @param Point   $location
      * @param float   $distanceInKms
      */
-    public function scopeAround(Builder $query, $latitude, $longitude, $distanceInKms = null)
+    public function scopeAround(Builder $query, Point $location, $distanceInKms = null)
     {
-        $distanceInKms = $distanceInKms ?: static::$aroundDistanceInKms;
+        $distanceInKms = $distanceInKms ?: static::$joinableDistanceInKms;
 
-        $query->whereHas('orders', function (Builder $subQuery) use ($latitude, $longitude, $distanceInKms) {
+        $query->whereHas('orders', function (Builder $subQuery) use ($location, $distanceInKms) {
             $subQuery->where($subQuery->getModel()->getTableField('initiator'), true);
 
             $subQuery->whereHas(
                 'deliveryAddress',
-                function (Builder $miniQuery) use ($latitude, $longitude, $distanceInKms) {
-                    $miniQuery->aroundInKilometers($latitude, $longitude, $distanceInKms);
+                function (Builder $miniQuery) use ($location, $distanceInKms) {
+                    $miniQuery->withinKilometers($location, $distanceInKms);
                 }
             );
         });
@@ -232,12 +246,12 @@ class GroupOrder extends Entity
      */
     public function scopeUnconfirmed(Builder $query, $sinceMinutes = null)
     {
-        $query->whereNotNull($this->getTableField('closedAt'))
-            ->whereNull($this->getTableField('confirmedAt'));
+        $query->whereNotNull($this->getTableField(self::CLOSED_AT))
+            ->whereNull($this->getTableField(self::CONFIRMED_AT));
 
         if (is_int($sinceMinutes)) {
             $query->where(
-                $this->getTableField('closedAt'),
+                $this->getTableField(self::CLOSED_AT),
                 '<',
                 $this->freshTimestamp()->subMinutes($sinceMinutes)
             );
@@ -260,8 +274,8 @@ class GroupOrder extends Entity
         $now = $model->freshTimestamp();
 
         $alreadyExisting = $model->whereNull($model->getTableField('closedAt'))
-            ->where($model->getTableField('createdAt'), '<=', $now)
-            ->where($model->getTableField('endingAt'), '>=', $now)
+            ->where($model->getTableField(self::CREATED_AT), '<=', $now)
+            ->where($model->getTableField(self::ENDING_AT), '>=', $now)
             ->where($model->getTableField('restaurantId'), $restaurant->id)
             ->count();
 
@@ -273,9 +287,20 @@ class GroupOrder extends Entity
         }
     }
 
+    private static function assertMinimumGroupOrderPriceReached(Restaurant $restaurant, ProductFormats $productFormats)
+    {
+        if ($productFormats->totalPrice()->lessThan($restaurant->minimumGroupOrderPrice)) {
+            throw new UnprocessableEntity(
+                'minimumGroupOrderPriceNotReached',
+                "This order price is {$productFormats->totalPrice()->getAmount()} "
+                . "but must be greater than {$restaurant->minimumGroupOrderPrice->getAmount()}."
+            );
+        }
+    }
+
     private function setFoodRushDurationInMinutes($minutes)
     {
-        if (!$this->createdAt) {
+        if (!$this->exists) {
             $this->createdAt = $this->freshTimestamp();
         }
 
@@ -299,17 +324,6 @@ class GroupOrder extends Entity
                 "The {$this->restaurant->toShortString()} cannot deliver more than "
                 . "{$this->restaurant->deliveryCapacity} items in the same group order, "
                 . "{$nbProductFormats} items asked."
-            );
-        }
-    }
-
-    private function assertMinimumOrderPriceReached(ProductFormats $productFormats)
-    {
-        if ($productFormats->totalPrice()->lessThan($this->restaurant->minimumOrderPrice)) {
-            throw new UnprocessableEntity(
-                'minimumOrderPriceNotReached',
-                "The order price is {$productFormats->totalPrice()->getAmount()} "
-                . "but must be greater than {$this->restaurant->minimumOrderPrice->getAmount()}."
             );
         }
     }

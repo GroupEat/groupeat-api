@@ -1,65 +1,11 @@
 # Group Orders
-
-## Group order [/groupOrders/{id}/{?include}]
-
-+ Parameters
-
-    + id (required, string, `123`) ... The group order ID.
-    + include (optional, string, `restaurant`) ... [restaurant].
-    
-+ Model
-
-        {
-            "id": "20",
-            "joinable": false,
-            "discountRate": 28, // Percentage
-            "createdAt": "2015-01-30 16:09:26",
-            "remainingCapacity": 5, // The number of product formats that can still be added
-            "completedAt": "2015-01-30 16:19:26",
-            "endingAt": "2015-01-30 16:39:26",
-            "confirmed": true, // The restaurant must confirm the ended group order to attest that he will deliver it
-            "preparedAt": "2015-01-30 17:09:26" // Indicates approximately the beginning of the delivery round
-        }
-
-### Get group order [GET]
-
-+ Response 200
-
-    [Group order][]
-    
-+ Response 404
-
-## List group orders [/groupOrders/{?joinable,around,latitude,longitude,include}]
-
-### GET
-
-+ Parameters
-
-    + joinable (optional, boolean, `1`) ... Retrieve group orders that can currently be joined only.
-    + around (optional, boolean, `1`) ... Retrieve group orders around only. Needs latitude and longitude parameters.
-    + latitude (optional, float, `2.21928`) ... Client latitude.
-    + longitude (optional, float, `48.711`) ... Client longitude.
-    + include (optional, string, `restaurant`) ... [restaurant]
-    
-+ Response 200
-
-        [
-            {
-                "id": "10",
-                ... // Same data as the GET /groupOrders/{id} response
-            },
-            {
-                "id": "12",
-                ...
-            }
-        ]
         
 ## Order [/orders/{id}/{?include}]
 
 + Parameters
 
     + id (required, string, `123`) ... The order ID
-    + include (optional, string, `customer`) ... [customer, groupOrder, restaurant, deliveryAddress]
+    + include (optional, string, `customer`) ... [customer, groupOrder, deliveryAddress, productFormats]
     
 + Model
 
@@ -118,37 +64,51 @@ Only the customer who created it or the corresponding restaurant can see the ord
 
 + Response 404
 
-## Place order [/orders]
+## Create group order [/orders]
 
 ### POST
 
-Only activated customers are allowed to place an order.
+Only activated customers are allowed to create a group order.
 
 The request must contain all the data required to attach a delivery address to the order.
 
-To join an existing group order instead of creating a new one, just add the corresponding `groupOrderId` to the request.
+The attributes dedicated to the order itself are `foodRushDurationInMinutes` which must be between {{ orders.minimum_foodrush_in_minutes }} and {{ orders.maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired quantity of each product format. All the product formats must of course belong to the same restaurant.
 
-The attributes dedicated to the order itself are `foodRushDurationInMinutes` (useless when joining a group order) which must be between {{ orders::minimum_foodrush_in_minutes }} and {{ orders::maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired amount of each product format. All the product formats must of course belong to the same restaurant.
+The restaurant must stay opened at least {{ restaurants.opening_duration_in_minutes }} minutes more to create a group order.
 
-The restaurant must stay opened at least {{ restaurants::opening_duration_in_minutes }} minutes more to create a group order.
-
-When creating a group order, the distance between the given address and the restaurant must be less than {{ restaurants::around_distance_in_kilometers }} kilometers. To join a group order, the distance between the first delivery address and the given one must be less than {{ orders::around_distance_in_kilometers }} kilometers.
+The distance between the given address and the restaurant must be less than {{ restaurants.around_distance_in_kilometers }} kilometers.
 
 + Request
 
         {
             "foodRushDurationInMinutes": 30,
             "productFormats": {"1": 2, "2": 3},
-            "street": "Allée des techniques avancées",
-            "details": "Bâtiment A, chambre 200",
-            "latitude": 48.711042,
-            "longitude": 2.219278,
+            "deliveryAddress": {
+                "street": "Allée des techniques avancées",
+                "details": "Bâtiment A, chambre 200",
+                "latitude": 48.711042,
+                "longitude": 2.219278,
+            },
             "comment": "Please add some meat to my vegan pizza..." // optional, limited to 1000 characters
         }
 
 + Response 201
 
     [Order][]
+    
++ Response 400
+
+        {
+            "errorKey": "missingProductFormats",
+            "message": "The product formats object is required to place an order"
+        }
+        
++ Response 400
+
+        {
+            "errorKey": "missingDeliveryAddress",
+            "message": "The delivery address object is required to place an order"
+        }
 
 + Response 403
 
@@ -156,6 +116,13 @@ When creating a group order, the distance between the given address and the rest
             "errorKey": "userShouldBeActivated",
             "message": "The customer #26 should be activated to place an order."
         }
+        
+ + Response 403
+ 
+         {
+             "errorKey": "missingCustomerInformation",
+             "message": "The attributes [firstName, lastName, phoneNumber] are missing for customer customer #35"
+         }
 
 + Response 404
 
@@ -202,7 +169,7 @@ When creating a group order, the distance between the given address and the rest
 + Response 422
 
         {
-            "errorKey": "minimumOrderPriceNotReached",
+            "errorKey": "minimumGroupOrderPriceNotReached",
             "message": "The order price is 810 but must be greater than 1100."
         }
 
@@ -211,13 +178,6 @@ When creating a group order, the distance between the given address and the rest
         {
             "errorKey": "groupOrderAlreadyExisting",
             "message": "A group order already exists for the restaurant #6."
-        }
-
-+ Response 422
-
-        {
-            "errorKey": "groupOrderCannotBeJoined",
-            "message": "The groupOrder #6 cannot be joined anymore."
         }
 
 ## List customer's orders  [/customers/{id}/orders/{?include}]
@@ -264,3 +224,126 @@ When creating a group order, the distance between the given address and the rest
                 ...
             }
         ]
+
+## Group order [/groupOrders/{id}/{?include}]
+
++ Parameters
+
+    + id (required, string, `123`) ... The group order ID.
+    + include (optional, string, `restaurant`) ... [restaurant].
+    
++ Model
+
+        {
+            "id": "20",
+            "joinable": false,
+            "totalRawPrice": 2966,
+            "discountRate": 28, // Percentage
+            "createdAt": "2015-01-30 16:09:26",
+            "remainingCapacity": 5, // The number of product formats that can still be added
+            "closedAt": "2015-01-30 16:19:26",
+            "endingAt": "2015-01-30 16:39:26",
+            "confirmed": true, // The restaurant must confirm the ended group order to attest that he will deliver it
+            "preparedAt": "2015-01-30 17:09:26" // Indicates approximately the beginning of the delivery round
+        }
+
+### Get group order [GET]
+
++ Response 200
+
+    [Group order][]
+    
++ Response 404
+
+## List group orders [/groupOrders/{?joinable,around,latitude,longitude,include}]
+
+### GET
+
++ Parameters
+
+    + joinable (optional, boolean, `1`) ... Retrieve group orders that can currently be joined only.
+    + around (optional, boolean, `1`) ... Retrieve group orders around only. Needs latitude and longitude parameters.
+    + latitude (optional, float, `2.21928`) ... Client latitude.
+    + longitude (optional, float, `48.711`) ... Client longitude.
+    + include (optional, string, `restaurant`) ... [restaurant]
+    
++ Response 200
+
+        [
+            {
+                "id": "10",
+                ... // Same data as the GET /groupOrders/{id} response
+            },
+            {
+                "id": "12",
+                ...
+            }
+        ]
+
+## Join group order [/groupOrders/{id}/orders]
+
++ Parameters
+
+    + id (required, string, `123`) ... The group order ID.
+
+### POST
+
+Only activated customers are allowed to join a group order.
+
+Same request than the *Create group order* route except that the `foodRushDurationInMinutes` field is not needed. The possible error responses are also the same except that the `invalidFoodRushDuration` and `groupOrderAlreadyExisting` errors cannot occur.
+
+To join a group order, the distance between the first delivery address and the given one must be less than {{ orders.joinable_distance_in_kilometers }} kilometers.
+
++ Response 201
+
+    [Order][]
+    
++ Response 422
+
+        {
+            "errorKey": "groupOrderCannotBeJoined",
+            "message": "The groupOrder #6 cannot be joined anymore."
+        }
+
+## Push external order [/restaurants/{id}/externalOrders]
+
++ Parameters
+
+    + id (required, string, `123`) ... The restaurant ID.
+    
+### POST
+
+Only restaurants are allowed to push an external order.
+
+The possible error responses are the same than the *Create group order* route except that the `userShouldBeActivated`, `invalidFoodRushDuration` and `deliveryDistanceTooLong` errors cannot occur.
+
+The foodrush duration is automatically set to {{ orders.external_order_foodrush_in_minutes }} minutes.
+
++ Request
+
+        {
+            "productFormats": {"1": 2, "2": 3},
+            "deliveryAddress": {
+                "street": "Allée des techniques avancées",
+                "details": "Bâtiment A, chambre 200",
+                "latitude": 48.711042,
+                "longitude": 2.219278,
+            },
+            "customer": {
+                "firstName": "Jean",
+                "lastName": "Michel",
+                "phoneNumber": "0605040302"
+            },
+            "comment": "Please add some meat to my vegan pizza..." // optional, limited to 1000 characters
+        }
+
++ Response 201
+
+    [Order][]
+
++ Response 403
+ 
+        {
+            "errorKey": "wrongAuthenticatedUser",
+            "message":"Should be authenticated as restaurant 9 instead of 10."
+        }

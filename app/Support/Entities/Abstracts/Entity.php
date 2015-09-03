@@ -35,7 +35,7 @@ abstract class Entity extends Model implements PresentableInterface
 
     public static function findOrFail($id, $columns = ['*'])
     {
-        $model = static::find($id, $columns);
+        $model = static::query()->find($id, $columns);
         $shortClassName = class_basename(static::CLASS);
 
         if (is_null($model)) {
@@ -46,6 +46,11 @@ abstract class Entity extends Model implements PresentableInterface
         }
 
         return $model;
+    }
+
+    public static function table()
+    {
+        return (new static)->getTable();
     }
 
     protected static function boot()
@@ -135,24 +140,6 @@ abstract class Entity extends Model implements PresentableInterface
     abstract public function getRules();
 
     /**
-     * @return string Table name of the entity
-     */
-    public static function table()
-    {
-        return (new static())->getTable();
-    }
-
-    /**
-     * @return string Table name of the entity
-     */
-    public function getTable()
-    {
-        $migration = $this->getRelatedMigration();
-
-        return $migration::TABLE;
-    }
-
-    /**
      * @param string $fieldName
      *
      * @return string Field name preceded by the the table name
@@ -160,6 +147,16 @@ abstract class Entity extends Model implements PresentableInterface
     public function getTableField($fieldName)
     {
         return $this->getTable().'.'.$fieldName;
+    }
+
+    /**
+     * @param string $fieldName
+     *
+     * @return string Field name preceded by the the table name both surrounded by double quotes
+     */
+    public function getRawTableField($fieldName)
+    {
+        return '"'.$this->getTable().'"."'.$fieldName.'"';
     }
 
     /**
@@ -183,7 +180,7 @@ abstract class Entity extends Model implements PresentableInterface
      */
     public function getPresenter()
     {
-        $class = str_replace('Entities', 'Presenters', static::class);
+        $class = str_replace('Entities', 'Presenters', static::class) . 'Presenter';
 
         if (class_exists($class)) {
             return new $class($this);

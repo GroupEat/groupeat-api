@@ -125,7 +125,7 @@ class MailWatcher extends \Codeception\Module
     public function grabMails()
     {
         if ($this->mails->isEmpty()) {
-            \PHPUnit_Framework_Assert::fail("No mail was sent.");
+            \PHPUnit_Framework_Assert::fail('No mail was sent.');
         }
 
         return $this->mails;
@@ -137,7 +137,7 @@ class MailWatcher extends \Codeception\Module
     public function grabFirstMail()
     {
         if (empty($this->mails->first())) {
-            \PHPUnit_Framework_Assert::fail("No mail was sent.");
+            \PHPUnit_Framework_Assert::fail('No mail was sent.');
         }
 
         return $this->mails->first();

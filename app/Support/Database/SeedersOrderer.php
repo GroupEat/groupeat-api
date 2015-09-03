@@ -22,7 +22,8 @@ class SeedersOrderer
                 foreach (File::files($seedersDirectory) as $file) {
                     $filename = pathinfo($file, PATHINFO_FILENAME);
                     $class = 'Groupeat\\'.ucfirst($package).'\\Seeders\\'.$filename;
-                    $seeders[static::getTimestamp($filename)] = $class;
+                    $table = str_replace('seeder', '', strtolower(snake_case($filename)));
+                    $seeders[static::getTimestamp($table)] = $class;
                 }
             }
         }
@@ -32,10 +33,9 @@ class SeedersOrderer
         return $seeders;
     }
 
-    private static function getTimestamp($seederName)
+    private static function getTimestamp($table)
     {
-        $ending = '_'.str_replace('Seeder', 'Migration.php', $seederName);
-
+        $ending = "_create_${table}table.php";
         $files = File::glob(base_path("database/migrations/*$ending"));
 
         if (count($files) == 1) {

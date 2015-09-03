@@ -17,4 +17,12 @@ class GroupOrderHasBeenCreated extends Event
     {
         return $this->order;
     }
+
+    public function __toString()
+    {
+        $customerPresenter = $this->order->customer->getPresenter();
+        $groupOrder = $this->order->groupOrder;
+
+        return $customerPresenter->fullNameWithPhoneNumber . ' has created the ' . $groupOrder->toShortString();
+    }
 }

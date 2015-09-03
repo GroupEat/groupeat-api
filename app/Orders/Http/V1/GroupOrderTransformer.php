@@ -7,7 +7,7 @@ use League\Fractal\TransformerAbstract;
 
 class GroupOrderTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['restaurant'];
+    protected $availableIncludes = ['restaurant', 'orders'];
 
     public function transform(GroupOrder $groupOrder)
     {
@@ -16,6 +16,7 @@ class GroupOrderTransformer extends TransformerAbstract
         return [
             'id' => $groupOrder->id,
             'joinable' => $groupOrder->isJoinable(),
+            'totalRawPrice' => $groupOrder->totalRawPrice->getAmount(),
             'discountRate' => $groupOrder->discountRate->toPercentage(),
             'createdAt' => (string) $groupOrder->createdAt,
             'remainingCapacity' => $groupOrder->computeRemainingCapacity(),
@@ -29,5 +30,10 @@ class GroupOrderTransformer extends TransformerAbstract
     public function includeRestaurant(GroupOrder $groupOrder)
     {
         return $this->item($groupOrder->restaurant, new RestaurantTransformer);
+    }
+
+    public function includeOrders(GroupOrder $groupOrder)
+    {
+        return $this->collection($groupOrder->orders, new OrderTransformer);
     }
 }

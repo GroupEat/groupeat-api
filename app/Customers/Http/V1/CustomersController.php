@@ -1,10 +1,11 @@
 <?php
 namespace Groupeat\Customers\Http\V1;
 
-use Groupeat\Auth\Http\V1\TokenTransformer;
-use Groupeat\Customers\Commands\RegisterCustomer;
+use Groupeat\Auth\Http\V1\UserTransformer;
+use Groupeat\Customers\Jobs\RegisterCustomer;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use Groupeat\Support\Values\PhoneNumber;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomersController extends Controller
@@ -20,7 +21,13 @@ class CustomersController extends Controller
     {
         $this->auth->assertSame($customer);
 
-        $customer->update($this->json()->all());
+        $data = $this->json()->all();
+
+        if (!empty($data['phoneNumber'])) {
+            $data['phoneNumber'] = new PhoneNumber($data['phoneNumber']);
+        }
+
+        $customer->update($data);
 
         return $this->itemResponse($customer);
     }
@@ -33,9 +40,8 @@ class CustomersController extends Controller
             $this->json('locale')
         ));
 
-        $this->statusCode = Response::HTTP_CREATED;
-
-        return $this->itemResponse($customer, new TokenTransformer);
+        return $this->itemResponse($customer, new UserTransformer)
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function unregister(Customer $customer)

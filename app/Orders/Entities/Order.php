@@ -4,15 +4,12 @@ namespace Groupeat\Orders\Entities;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Support\Entities\Abstracts\Entity;
+use Groupeat\Support\Entities\Abstracts\ImmutableDatedEntity;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
 
-class Order extends Entity
+class Order extends ImmutableDatedEntity
 {
-    public $timestamps = false;
-
-    protected $dates = ['createdAt'];
-
     public function getRules()
     {
         return [
@@ -34,7 +31,7 @@ class Order extends Entity
 
     public function productFormats()
     {
-        return $this->belongsToMany(ProductFormat::class)->withPivot('amount');
+        return $this->belongsToMany(ProductFormat::class)->withPivot('quantity');
     }
 
     public function deliveryAddress()
@@ -44,7 +41,12 @@ class Order extends Entity
 
     public function getDiscountedPriceAttribute()
     {
-        return $this->groupOrder->discountRate->applyTo($this->rawPrice);
+        return $this->isExternal() ? $this->rawPrice : $this->groupOrder->discountRate->applyTo($this->rawPrice);
+    }
+
+    public function isExternal()
+    {
+        return $this->customer->isExternal;
     }
 
     protected function getRawPriceAttribute()

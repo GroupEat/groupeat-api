@@ -3,7 +3,7 @@ namespace Groupeat\Auth;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
-use Groupeat\Auth\Handlers\Events\SendActivationLink;
+use Groupeat\Auth\Listeners\SendActivationLink;
 use Groupeat\Auth\Values\TokenDurationInMinutes;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Illuminate\Http\Request;
@@ -11,23 +11,30 @@ use Psr\Log\LoggerInterface;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
+    protected $configValues = [
+        TokenDurationInMinutes::class => 'jwt.ttl',
+    ];
+
+    protected $routeEntities = [
+        UserCredentials::class => 'user',
+    ];
+
+    protected $listeners = [
+        SendActivationLink::class => UserHasRegistered::class,
+    ];
+
     protected function registerPackage()
     {
-        $this->bindValueFromConfig(
-            TokenDurationInMinutes::class,
-            'jwt.ttl'
-        );
-
         $this->app->singleton(Auth::class, function ($app) {
-            return new Auth($app['tymon.jwt.auth'], $app['auth.driver']);
+            return new Auth($app['tymon.jwt.auth'], $app['auth.driver'], $app['api.auth']);
         });
-
-        $this->app['router']->model('user', UserCredentials::class);
     }
 
     protected function bootPackage()
     {
-        $this->listen(UserHasRegistered::class, SendActivationLink::class);
+        $this->app[\Dingo\Api\Auth\Auth::class]->extend('custom', function ($app) {
+            return $app[Auth::class];
+        });
 
         $this->addUserInLogContext();
     }

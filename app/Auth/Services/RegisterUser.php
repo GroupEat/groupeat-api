@@ -56,7 +56,7 @@ class RegisterUser
         $credentials = compact('email', 'password');
 
         $rules = [
-            'email' => 'email|required|unique:'.UserCredentials::table(),
+            'email' => 'email|required|unique:'.(new UserCredentials)->getTable(),
             'password' => 'required|min:6',
         ];
 

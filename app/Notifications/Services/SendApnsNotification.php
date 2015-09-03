@@ -54,25 +54,20 @@ class SendApnsNotification extends NotificationSender
                 'alert' => $this->translateFor('joinGroupOrder', $customer->credentials),
             ],
             'groupOrderId' => $groupOrder->id,
+            'pn_ttl' => $notification->getTimeToLiveInSeconds(),
         ];
 
         $message = $this->getBinaryMessage($device->notificationToken, $data);
 
         $status = fwrite($ApnsConnection, $message, strlen($message));
+        fclose($ApnsConnection);
 
-        if (!$message) {
+        if ($status === false) {
             throw new UnprocessableEntity(
                 'apnsError',
                 "Failed to send the request to APNS."
             );
-        } else {
-            $this->logger->info(
-                "APNS notification has been sent to {$customer->toShortString()} with data: "
-                . json_encode($data).'.'
-            );
         }
-
-        fclose($ApnsConnection);
     }
 
     private function getBinaryMessage($notificationToken, $data)

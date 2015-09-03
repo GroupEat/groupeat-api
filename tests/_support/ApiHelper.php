@@ -15,6 +15,26 @@ class ApiHelper extends \Codeception\Module
         return [$token, $id];
     }
 
+    public function amAnActivatedCustomerWithNoMissingInformation()
+    {
+        list($token, $id) = $this->amAnActivatedCustomer();
+        $this->sendApiPutWithToken($token, "customers/$id", [
+            'firstName' => 'Jean',
+            'lastName' => 'Jacques',
+            'phoneNumber' => '33605040302',
+        ]);
+
+        return [$token, $id];
+    }
+
+    public function amAlloPizzaRestaurant()
+    {
+        $this->sendApiPut('auth/token', ['email' => 'allo@pizza.fr', 'password' => 'AlloPizza']);
+        $data = $this->grabDataFromResponse();
+
+        return [$data['token'], $data['id']];
+    }
+
     public function sendRegistrationRequest(
         $email = null,
         $password = 'password',
@@ -35,22 +55,25 @@ class ApiHelper extends \Codeception\Module
 
     public function createGroupOrder()
     {
-        list($token, $customerId) = $this->amAnActivatedCustomer();
+        list($token, $customerId) = $this->amAnActivatedCustomerWithNoMissingInformation();
 
         $this->sendApiGetWithToken(
             $token,
             'groupOrders?joinable=1&around=1&latitude=48.716941&longitude=2.239171&include=restaurant'
         );
+
         $groupOrders = $this->grabDataFromResponse('');
 
         if (!empty($groupOrders)) {
             $groupOrderId = $groupOrders[0]['id'];
             $restaurantId = $groupOrders[0]['restaurant']['data']['id'];
+            $url = "groupOrders/$groupOrderId/orders";
         } else {
             $groupOrderId = null;
             $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.716941&longitude=2.239171');
             $restaurants = $this->grabDataFromResponse();
             $restaurantId = $restaurants[0]['id'];
+            $url = 'orders';
         }
 
         $this->sendApiGetWithToken($token, "restaurants/$restaurantId");
@@ -63,17 +86,19 @@ class ApiHelper extends \Codeception\Module
         $orderDetails = [
             'foodRushDurationInMinutes' => 30,
             'productFormats' => $productFormats,
-            'street' => "Allée des techniques avancées",
-            'details' => "Bâtiment A, chambre 200",
-            'latitude' => 48.716941,
-            'longitude' => 2.239171,
+            'deliveryAddress' => [
+                'street' => "Allée des techniques avancées",
+                'details' => "Bâtiment A, chambre 200",
+                'latitude' => 48.716941,
+                'longitude' => 2.239171,
+            ],
         ];
 
         if (!is_null($groupOrderId)) {
             $orderDetails['groupOrderId'] = $groupOrderId;
         }
 
-        $this->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $this->sendApiPostWithToken($token, $url, $orderDetails);
         $orderId = $this->grabDataFromResponse('id');
 
         return [$token, $orderId, $restaurantCapacity, $orderDetails, $customerId];
@@ -131,8 +156,10 @@ class ApiHelper extends \Codeception\Module
 
     public function sendApiWithToken($token, $verb, $path, $params = [])
     {
-        $this->getModule('REST')->amBearerAuthenticated($token);
+        $restModule = $this->getModule('REST');
+        $restModule->amBearerAuthenticated($token);
         $this->sendApi($verb, $path, $params);
+        unset($restModule->headers['Authorization']);
     }
 
     public function sendApi($verb, $path, $params = [])

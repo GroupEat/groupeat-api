@@ -2,7 +2,7 @@
 
 class OrdersCest
 {
-    public function testThatACustomerShouldBeActivatedToPlaceAnOrder(ApiTester $I)
+    public function testThatACustomerShouldBeActivatedAndHaveNoMissingInformationToPlaceAnOrder(ApiTester $I)
     {
         list($token) = $I->sendRegistrationRequest();
         $orderDetails = $this->getOrderDetails($I, $token);
@@ -12,23 +12,31 @@ class OrdersCest
 
         list($token) = $I->amAnActivatedCustomer();
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(403, 'missingCustomerInformation');
+
+        list($token, $customerId) = $I->amAnActivatedCustomerWithNoMissingInformation();
+        $I->sendApiPutWithToken($token, "customers/$customerId", [
+            'firstName' => 'Jean',
+            'lastName' => 'Jacques',
+            'phoneNumber' => '33605040302',
+        ]);
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
     }
 
-    public function testThatTheRestaurantReceiveAnEmailWhenAnOrderIsPlaced(ApiTester $I)
+    public function testThatTheRestaurantReceiveAnEmailAndASmsWhenAnOrderIsPlaced(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
-        $orderDetails = $this->getOrderDetails($I, $token);
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        list($token, $orderId, $restaurantCapacity, $orderDetails, $customerId) = $I->createGroupOrder();
         $productFormatId = array_keys($orderDetails['productFormats'])[0];
         $restaurantEmail = $this->getRestaurantEmailFromProductFormat($productFormatId);
         $I->assertSame('restaurants.orderHasBeenPlaced', $I->grabFirstMailId());
         $I->assertSame($restaurantEmail, $I->grabFirstMailRecipient());
+        $I->grabFirstSms();
     }
 
     public function testThatTheFoodRushDurationMustBeValid(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $orderDetails = $this->getOrderDetails($I, $token, ['foodRushDurationInMinutes' => 70]);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
@@ -41,16 +49,20 @@ class OrdersCest
 
     public function testThatTheOrderCannotBeEmpty(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
-        $orderDetails = $this->getOrderDetails($I, $token, ['productFormats' => []]);
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
 
+        $orderDetails = $this->getOrderDetails($I, $token, ['productFormats' => []]);
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(400, 'missingProductFormats');
+
+        $orderDetails = $this->getOrderDetails($I, $token, ['productFormats' => [1 => 0]]);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeErrorResponse(422, 'noProductFormats');
     }
 
     public function testThatTheProductFormatsMustExist(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $orderDetails = $this->getOrderDetails($I, $token, ['productFormats' => [66666 => 1]]);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
@@ -59,7 +71,7 @@ class OrdersCest
 
     public function testThatTheAnOrderCannotBePlacedOnAClosedRestaurant(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $products = $this->getProducts($I, $token, ['around' => true, 'opened' => false], function ($restaurants) {
             foreach ($restaurants as $restaurant) {
                 if ($restaurant['name'] == 'Toujours fermé') {
@@ -76,7 +88,7 @@ class OrdersCest
 
     public function testThatTheRestaurantMustBeCloseEnough(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
 
         $latitude = 0;
         $longitude = 0;
@@ -96,8 +108,10 @@ class OrdersCest
         $productFormats = $this->getProductFormatsFrom($products);
         $orderDetails = $this->getOrderDetails($I, $token, [
             'productFormats' => $productFormats,
-            'latitude' => $latitude - 1,
-            'longitude' => $longitude + 1,
+            'deliveryAddress' => [
+                'latitude' => $latitude - 1,
+                'longitude' => $longitude + 1,
+            ],
         ]);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
@@ -106,7 +120,7 @@ class OrdersCest
 
     public function testThatTheProductFormatsMustBelongToTheSameRestaurant(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $I->sendApiGetWithToken($token, 'restaurants');
 
         foreach ($I->grabDataFromResponse() as $restaurant) {
@@ -135,14 +149,14 @@ class OrdersCest
         $I->seeErrorResponse(422, 'productFormatsFromDifferentRestaurants');
     }
 
-    public function testThatTheOrderMustExceedTheMinimumPrice(ApiTester $I)
+    public function testThatTheGroupOrderMustExceedTheMinimumPrice(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $options = ['around' => true, 'opened' => true];
         $minimumPrice = 0;
 
         $products = $this->getProducts($I, $token, $options, function ($restaurants) use (&$minimumPrice) {
-            $minimumPrice = $restaurants[0]['minimumOrderPrice'];
+            $minimumPrice = $restaurants[0]['minimumGroupOrderPrice'];
 
             return $restaurants[0]['id'];
         });
@@ -161,12 +175,12 @@ class OrdersCest
 
         $orderDetails = $this->getOrderDetails($I, $token, compact('productFormats'));
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'minimumOrderPriceNotReached');
+        $I->seeErrorResponse(422, 'minimumGroupOrderPriceNotReached');
     }
 
     public function testThatTheOrderShouldNotExceedRestaurantDeliveryCapacity(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $options = ['around' => true, 'opened' => true];
         $deliveryCapacity = 0;
 
@@ -176,13 +190,13 @@ class OrdersCest
             return $restaurants[0]['id'];
         });
 
-        $amount = 0;
+        $quantity = 0;
         $productFormats = [];
 
         foreach ($products as $product) {
             foreach ($product['formats']['data'] as $format) {
-                if ($amount <= $deliveryCapacity) {
-                    $amount++;
+                if ($quantity <= $deliveryCapacity) {
+                    $quantity++;
                     $productFormats[$format['id']] = 1;
                 }
             }
@@ -195,7 +209,7 @@ class OrdersCest
 
     public function testThatARestaurantCanHaveOnlyOneGroupOrderAtTheSameTime(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $orderDetails = $this->getOrderDetails($I, $token);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
@@ -207,14 +221,14 @@ class OrdersCest
 
     public function testThatGroupOrdersCanBeListed(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $I->sendApiGetWithToken($token, 'groupOrders');
         $I->seeResponseCodeIs(200);
     }
 
     public function testThatAnOrderCanBeShownByTheCustomerWhoPlacedItOnly(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $orderId = $I->grabDataFromResponse('id');
@@ -222,14 +236,14 @@ class OrdersCest
         $I->seeResponseCodeIs(200);
         $I->assertSame($orderId, $I->grabDataFromResponse('id'));
 
-        list($token2) = $I->amAnActivatedCustomer();
+        list($token2) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $I->sendApiGetWithToken($token2, "orders/$orderId");
         $I->seeErrorResponse(403, 'wrongAuthenticatedUser');
     }
 
     public function testThatTheDiscountRateIncreaseWhenAGroupOrderIsJoined(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $orderId = $I->grabDataFromResponse('id');
@@ -244,7 +258,7 @@ class OrdersCest
 
         $orderDetails['groupOrderId'] = $groupOrderId;
         unset($orderDetails['foodRushDurationInMinutes']);
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
         $I->seeResponseCodeIs(201);
         $newDiscountRate = $this->computeDiscountRate(
             $I->grabDataFromResponse('discountedPrice'),
@@ -268,7 +282,7 @@ class OrdersCest
 
     public function testThatTheDeliveryAddressMustBeCloseEnoughToJoinAGroupOrder(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $orderId = $I->grabDataFromResponse('id');
@@ -276,16 +290,16 @@ class OrdersCest
         $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
 
         $orderDetails['groupOrderId'] = $groupOrderId;
-        $orderDetails['latitude']++;
+        $orderDetails['deliveryAddress']['latitude']++;
         unset($orderDetails['foodRushDurationInMinutes']);
 
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
         $I->seeErrorResponse(422, 'deliveryDistanceTooLong');
     }
 
     public function testThatTheRestaurantCanSeeIfTheCustomerAttachedACommentToItsOrder(ApiTester $I)
     {
-        list($token) = $I->amAnActivatedCustomer();
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $orderDetails = $this->getOrderDetails($I, $token);
         $comment = "Please add some meat to my vegan pizza...";
         $orderDetails['comment'] = $comment;
@@ -366,10 +380,12 @@ class OrdersCest
         $details = array_merge([
             'foodRushDurationInMinutes' => 30,
             'productFormats' => $defaultProductFormats,
-            'street' => "Allée des techniques avancées",
-            'details' => "Bâtiment A, chambre 200",
-            'latitude' => $this->getDefaultLatitude(),
-            'longitude' => $this->getDefaultLongitude(),
+            'deliveryAddress' => [
+                'street' => "Allée des techniques avancées",
+                'details' => "Bâtiment A, chambre 200",
+                'latitude' => $this->getDefaultLatitude(),
+                'longitude' => $this->getDefaultLongitude(),
+            ],
         ], $details);
 
         return $details;

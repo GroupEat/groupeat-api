@@ -1,11 +1,12 @@
 <?php
 namespace Groupeat\Customers\Entities;
 
-use Groupeat\Customers\Migrations\CustomerAddressesMigration;
 use Groupeat\Support\Entities\Abstracts\Address as AbstractAddress;
 
 class Address extends AbstractAddress
 {
+    protected $table = 'customer_addresses';
+
     public function getRules()
     {
         $rules = parent::getRules();
@@ -18,10 +19,5 @@ class Address extends AbstractAddress
     public function customer()
     {
         return $this->belongsTo(Customer::class);
-    }
-
-    protected function getRelatedMigration()
-    {
-        return new CustomerAddressesMigration;
     }
 }

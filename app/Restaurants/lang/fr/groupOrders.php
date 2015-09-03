@@ -16,6 +16,8 @@ return [
 
         'whoAndWhen' => ":customerFullName a créé une commande groupée :groupOrderRef à :creationTime terminant au plus tard à :endingTime.",
 
+        'smsText' => "Une nouvelle commande groupée vient d'être créée à :creationTime.",
+
     ],
 
     'joined' => [

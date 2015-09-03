@@ -4,11 +4,12 @@ namespace Groupeat\Orders\Console;
 use Carbon\Carbon;
 use Groupeat\Orders\Services\CloseGroupOrdersWithElapsedFoodrush;
 use Groupeat\Support\Console\Abstracts\Command;
-use Symfony\Component\Console\Input\InputOption;
 
 class CloseGroupOrders extends Command
 {
-    protected $name = 'group-orders:close';
+    protected $signature = 'group-orders:close
+        {--minutes= : The minutes to add to the current time (for test purpose only)}';
+
     protected $description = "Closes the joinable group orders with elapsed foodrush";
 
     private $closeGroupOrdersWithElapsedFoodrush;
@@ -20,7 +21,7 @@ class CloseGroupOrders extends Command
         $this->closeGroupOrdersWithElapsedFoodrush = $closeGroupOrdersWithElapsedFoodrush;
     }
 
-    public function fire()
+    public function handle()
     {
         if ($this->option('minutes')) {
             Carbon::setTestNow(Carbon::now()->addMinutes($this->option('minutes')));
@@ -29,12 +30,5 @@ class CloseGroupOrders extends Command
         $nb = $this->closeGroupOrdersWithElapsedFoodrush->call($this->getOutput());
 
         Carbon::setTestNow(null);
-    }
-
-    protected function getOptions()
-    {
-        return [
-            ['minutes', 'm', InputOption::VALUE_REQUIRED, 'The minutes to add to the current time (for test purpose)'],
-        ];
     }
 }

@@ -49,7 +49,7 @@ return [
         'pgsql' => [
             'driver'   => 'pgsql',
             'host'     => '127.0.0.1',
-            'database' => 'groupeat',
+            'database' => env('PGSQL_DB', 'groupeat'),
             'username' => env('PGSQL_USER', 'groupeat'),
             'password' => env('PGSQL_PASSWORD', 'groupeat'),
             'charset'  => 'utf8',
@@ -83,42 +83,6 @@ return [
     */
 
     'migrations' => 'migrations',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Migration Order
-    |--------------------------------------------------------------------------
-    |
-    | The order in which the migrations have to be run to create the database.
-    |
-    */
-
-    'order' => [
-        \Groupeat\Customers\Migrations\CustomersMigration::class,
-        \Groupeat\Auth\Migrations\UserCredentialsMigration::class,
-        \Groupeat\Auth\Migrations\PasswordResetTokensMigration::class,
-        \Groupeat\Customers\Migrations\CustomerAddressesMigration::class,
-        \Groupeat\Customers\Migrations\PredefinedAddressesMigration::class,
-        \Groupeat\Admin\Migrations\AdminsMigration::class,
-        \Groupeat\Restaurants\Migrations\CategoriesMigration::class,
-        \Groupeat\Restaurants\Migrations\RestaurantsMigration::class,
-        \Groupeat\Restaurants\Migrations\CategoryRestaurantMigration::class,
-        \Groupeat\Restaurants\Migrations\RestaurantAddressesMigration::class,
-        \Groupeat\Restaurants\Migrations\OpeningWindowsMigration::class,
-        \Groupeat\Restaurants\Migrations\ClosingWindowsMigration::class,
-        \Groupeat\Restaurants\Migrations\FoodTypesMigration::class,
-        \Groupeat\Restaurants\Migrations\ProductsMigration::class,
-        \Groupeat\Restaurants\Migrations\ProductFormatsMigration::class,
-        \Groupeat\Orders\Migrations\GroupOrdersMigration::class,
-        \Groupeat\Orders\Migrations\OrdersMigration::class,
-        \Groupeat\Orders\Migrations\OrderProductFormatMigration::class,
-        \Groupeat\Orders\Migrations\DeliveryAddressesMigration::class,
-        \Groupeat\Devices\Migrations\PlatformsMigration::class,
-        \Groupeat\Devices\Migrations\DevicesMigration::class,
-        \Groupeat\Settings\Migrations\SettingsMigration::class,
-        \Groupeat\Settings\Migrations\CustomerSettingMigration::class,
-        \Groupeat\Notifications\Migrations\NotificationsMigration::class,
-    ],
 
     /*
     |--------------------------------------------------------------------------

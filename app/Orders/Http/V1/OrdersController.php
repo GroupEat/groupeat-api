@@ -2,16 +2,16 @@
 namespace Groupeat\Orders\Http\V1;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Orders\Commands\CreateGroupOrder;
-use Groupeat\Orders\Commands\JoinGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
+use Groupeat\Orders\Http\V1\Traits\CanAddOrder;
+use Groupeat\Orders\Jobs\CreateGroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 class OrdersController extends Controller
 {
+    use CanAddOrder;
+
     public function indexForCustomer(Customer $customer)
     {
         $this->auth->assertSame($customer);
@@ -46,32 +46,15 @@ class OrdersController extends Controller
 
     public function place()
     {
-        $customer = $this->auth->customer();
-        $productFormats = $this->json('productFormats');
-        $deliveryAddressData = $this->json()->all();
-        $comment = $this->json('comment');
-
-        if ($this->json('groupOrderId')) {
-            $order = $this->dispatch(new JoinGroupOrder(
-                GroupOrder::findOrFail($this->json('groupOrderId')),
-                $customer,
-                $productFormats,
-                $deliveryAddressData,
-                $comment
-            ));
-        } else {
-            $order = $this->dispatch(new CreateGroupOrder(
+        return $this->addOrder(function ($productFormats, $deliveryAddressData, $comment) {
+            return new CreateGroupOrder(
                 $this->json()->getInt('foodRushDurationInMinutes'),
-                $customer,
+                $this->auth->customer(),
                 $productFormats,
                 $deliveryAddressData,
                 $comment
-            ));
-        }
-
-        $this->statusCode = Response::HTTP_CREATED;
-
-        return $this->itemResponse($order);
+            );
+        });
     }
 
     private function assertCanBeSeen(Order $order)

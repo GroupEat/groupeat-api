@@ -3,7 +3,7 @@ namespace Groupeat\Notifications\Services;
 
 use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Notifications\Services\Abstracts\NotificationSender;
-use Groupeat\Notifications\Values\GcmApiKey;
+use Groupeat\Notifications\Values\GcmKey;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
 use GuzzleHttp\Client;
@@ -16,14 +16,14 @@ class SendGcmNotification extends NotificationSender
     const URL = 'https://android.googleapis.com/gcm/send';
 
     private $client;
-    private $apiKey;
+    private $key;
 
-    public function __construct(Locale $locale, LoggerInterface $logger, GcmApiKey $apiKey)
+    public function __construct(Locale $locale, LoggerInterface $logger, GcmKey $key)
     {
         parent::__construct($locale, $logger);
 
         $this->client = new Client;
-        $this->apiKey = $apiKey;
+        $this->key = $key;
     }
 
     public function call(Notification $notification)
@@ -42,11 +42,12 @@ class SendGcmNotification extends NotificationSender
         try {
             $response = $this->client->post(static::URL, [
                 'json' => [
-                    'registration_ids' => [$notificationToken],
+                    'to' => $notificationToken,
                     'data' => $data,
+                    'time_to_live' => $notification->getTimeToLiveInSeconds(),
                 ],
                 'headers' => [
-                    'Authorization' => "key={$this->apiKey}",
+                    'Authorization' => "key={$this->key}",
                     'Content-type' => 'application/json',
                 ],
             ]);
@@ -58,7 +59,6 @@ class SendGcmNotification extends NotificationSender
         }
 
         if ($response->getStatusCode() == Response::HTTP_OK) {
-            $notification->createdAt = $notification->freshTimestamp();
             $notification->save();
 
             $this->logger->info(

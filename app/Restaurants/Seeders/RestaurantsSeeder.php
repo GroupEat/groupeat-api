@@ -6,9 +6,12 @@ use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Database\Abstracts\Seeder;
+use Groupeat\Support\Database\Traits\GeneratePhoneNumber;
 
 class RestaurantsSeeder extends Seeder
 {
+    use GeneratePhoneNumber;
+
     /**
      * @var GenerateToken
      */
@@ -18,6 +21,18 @@ class RestaurantsSeeder extends Seeder
      * @var Category
      */
     private $pizzeriaCategory;
+
+    /**
+     * @var array
+     */
+    private $discountPolicy = [
+        900 => 0,
+        1000 => 10,
+        2000 => 20,
+        2500 => 30,
+        3500 => 40,
+        6000 => 50,
+    ];
 
     public function __construct(GenerateToken $generateToken)
     {
@@ -31,16 +46,19 @@ class RestaurantsSeeder extends Seeder
     {
         $restaurant = Restaurant::create([
             'name' => $this->faker->company,
-            'phoneNumber' => $this->faker->phoneNumber,
-            'minimumOrderPrice' => $this->faker->numberBetween(1000, 1100),
+            'rating' => $this->faker->randomDigitNotNull(),
+            'phoneNumber' => $this->generatePhoneNumber(),
+            'minimumGroupOrderPrice' => $this->faker->numberBetween(1000, 1100),
             'deliveryCapacity' => $this->faker->numberBetween(7, 10),
-            'discountPrices' => json_encode([900, 1000, 2000, 2500, 3500, 6000]),
+            'discountPolicy' => $this->discountPolicy,
+            'pictureUrl' => $this->getPictureUrl(),
         ]);
 
         $userCredentials = UserCredentials::create([
             'user' => $restaurant,
             'email' => $this->faker->email,
             'password' => $restaurant->name,
+            'activatedAt' => $restaurant->freshTimestamp(),
             'locale' => 'fr',
         ]);
 
@@ -65,21 +83,30 @@ class RestaurantsSeeder extends Seeder
             ],
             [
                 'name' => "Toujours ouvert à Paris",
-                'phoneNumber' => '0605040301',
+                'phoneNumber' => '0605040303',
             ],
+            [
+                'name' => "AlloPizza",
+                'phoneNumber' => '0605040304',
+            ]
         ];
 
         foreach ($restaurantsData as $restaurantData) {
+            $restaurantData['rating'] = $this->faker->randomDigitNotNull();
             $restaurantData['deliveryCapacity'] = $this->faker->numberBetween(7, 10);
-            $restaurantData['minimumOrderPrice'] = 900;
-            $restaurantData['discountPrices'] = json_encode([900, 1000, 2000, 2500, 3500, 6000]);
+            $restaurantData['minimumGroupOrderPrice'] = 900;
+            $restaurantData['discountPolicy'] = $this->discountPolicy;
+            $restaurantData['pictureUrl'] = $this->getPictureUrl();
+            $restaurantData['phoneNumber'] = $this->generatePhoneNumber();
 
             $restaurant = Restaurant::create($restaurantData);
+            $email = $restaurantData['name'] == 'AlloPizza' ? 'allo@pizza.fr' : $this->faker->email;
 
             $userCredentials = UserCredentials::create([
                 'user' => $restaurant,
-                'email' => $this->faker->email,
+                'email' => $email,
                 'password' => $restaurant->name,
+                'activatedAt' => $restaurant->freshTimestamp(),
                 'locale' => 'fr',
             ]);
 
@@ -96,5 +123,16 @@ class RestaurantsSeeder extends Seeder
     private function setAuthTokenFor(UserCredentials $userCredentials)
     {
         $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
+    }
+
+    private function getPictureUrl()
+    {
+        $urls = [
+            'https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg',
+            'https://snap-photos.s3.amazonaws.com/img-thumbs/960w/RE54D4GOX0.jpg',
+            'https://snap-photos.s3.amazonaws.com/img-thumbs/960w/0HCMIT272C.jpg',
+        ];
+
+        return $urls[array_rand($urls)];
     }
 }

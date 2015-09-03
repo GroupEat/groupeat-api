@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'mail.gandi.net'),
+    'host' => env('MAIL_HOST', 'mailtrap.io'),
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME', 'service@groupeat.fr'),
+    'username' => env('MAIL_USERNAME', '380744cd0e6c50986'),
 
     /*
     |--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ return [
     |
     */
 
-    'password' => env('MAIL_PASSWORD', 'FOR_PRODUCTION_ONLY'),
+    'password' => env('MAIL_PASSWORD', '9d83d5efa56ae0'),
 
     /*
     |--------------------------------------------------------------------------

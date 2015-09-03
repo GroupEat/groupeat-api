@@ -131,6 +131,8 @@ return [
         \Illuminate\Validation\ValidationServiceProvider::class,
         \Illuminate\View\ViewServiceProvider::class,
 
+        \Dingo\Api\Provider\LaravelServiceProvider::class,
+        \Phaza\LaravelPostgis\DatabaseServiceProvider::class,
         \Robbo\Presenter\PresenterServiceProvider::class,
         \Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
@@ -142,6 +144,7 @@ return [
         \Groupeat\Deploy\PackageProvider::class,
         \Groupeat\Devices\PackageProvider::class,
         \Groupeat\Documentation\PackageProvider::class,
+        \Groupeat\Messaging\PackageProvider::class,
         \Groupeat\Notifications\PackageProvider::class,
         \Groupeat\Orders\PackageProvider::class,
         \Groupeat\Restaurants\PackageProvider::class,

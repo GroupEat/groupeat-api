@@ -10,6 +10,8 @@ class Category extends Entity
 
     public $timestamps = false;
 
+    protected $table = 'restaurant_categories';
+
     public function getRules()
     {
         return [

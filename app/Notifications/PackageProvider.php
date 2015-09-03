@@ -1,21 +1,23 @@
 <?php namespace Groupeat\Notifications;
 
 use Groupeat\Notifications\Values\ApnsCertificate;
-use Groupeat\Notifications\Values\GcmApiKey;
+use Groupeat\Notifications\Values\GcmKey;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
-use Groupeat\Notifications\Handlers\Events\SendNotificationToCustomers;
-use Groupeat\Support\Values\Environment;
+use Groupeat\Notifications\Listeners\SendNotificationToCustomers;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
+    protected $configValues = [
+        GcmKey::class => 'notifications.gcmKey',
+    ];
+
+    protected $listeners = [
+        SendNotificationToCustomers::class => GroupOrderHasBeenCreated::class,
+    ];
+
     protected function registerPackage()
     {
-        $this->bindValueFromConfig(
-            GcmApiKey::class,
-            'notifications.gcmApiKey'
-        );
-
         $this->app->instance(
             ApnsCertificate::class,
             new ApnsCertificate(
@@ -23,10 +25,5 @@ class PackageProvider extends WorkbenchPackageProvider
                 $this->app['config']->get('notifications.apnsCertificatePassphrase')
             )
         );
-    }
-
-    protected function bootPackage()
-    {
-        $this->listen(GroupOrderHasBeenCreated::class, SendNotificationToCustomers::class);
     }
 }

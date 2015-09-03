@@ -2,6 +2,5 @@
 
 use Groupeat\Support\Http\V1\PingController;
 
-Route::group(['prefix' => 'api'], function () {
-    Route::get('ping', PingController::class.'@ping');
-});
+// There need to be at least one regular route to be able to use to cache the other API routes.
+Route::post('/api/ping', PingController::class.'@ping');

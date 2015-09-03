@@ -113,12 +113,17 @@ class AuthCest
 
     public function testThatAUserCanResetItsPassword(ApiTester $I)
     {
+        $email = 'unexisting@ensta.fr';
+        $I->sendApiPost('auth/passwordResets', compact('email'));
+        $I->seeErrorResponse(404, 'validationErrors');
+        $I->seeErrorsContain(['email' => ['notFound' => []]]);
+
         $email = 'user@ensta.fr';
         $oldPassword = 'password';
         list($oldToken, $id) = $this->sendRegistrationRequest($I, $email, $oldPassword);
         $userUrl = $this->getUserResource().'/'.$id;
 
-        $I->sendApiDelete('auth/password', compact('email'));
+        $I->sendApiPost('auth/passwordResets', compact('email'));
         $I->seeResponseCodeIs(200);
         $link = $I->grabHrefInLinkByIdInFirstMail('password-reset-link');
         $I->assertNotEmpty($link);
@@ -206,6 +211,12 @@ class AuthCest
 
         $I->sendApiGetWithToken($newToken, $userUrl);
         $I->seeResponseCodeIs(200);
+    }
+
+    public function testThatAnInvalidTokenIsRejected(ApiTester $I)
+    {
+        $I->sendApiGetWithToken('invalidToken', 'customers/1');
+        $I->seeErrorResponse(401, 'invalidAuthenticationTokenSignature');
     }
 
     protected function sendRegistrationRequest(

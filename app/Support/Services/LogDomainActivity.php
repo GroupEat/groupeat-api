@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Support\Services;
 
-use Groupeat\Support\Commands\Abstracts\Command;
+use Groupeat\Support\Jobs\Abstracts\Job;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Events\Abstracts\Event;
 use Psr\Log\LoggerInterface;
@@ -24,11 +24,11 @@ class LogDomainActivity
         }
     }
 
-    public function handle(Command $command, $next)
+    public function handle(Job $job, $next)
     {
-        $this->log($command);
+        $this->log($job);
 
-        return $next($command);
+        return $next($job);
     }
 
     private function log($activity)

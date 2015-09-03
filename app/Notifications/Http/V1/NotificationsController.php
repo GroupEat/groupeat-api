@@ -10,24 +10,20 @@ use Groupeat\Support\Http\V1\Abstracts\Controller;
 
 class NotificationsController extends Controller
 {
-    public function send(SendNotification $sendNotification)
+    public function send(GroupOrder $groupOrder, SendNotification $sendNotification)
     {
         $customer = $this->auth->customer();
 
         $devices = Device::where('customerId', $customer->id)->get();
 
         foreach ($devices as $device) {
-            $groupOrder = new GroupOrder;
-            $groupOrder->id = null;
-
             $notification = new Notification;
             $notification->customer()->associate($device->customer);
             $notification->device()->associate($device);
             $notification->groupOrder()->associate($groupOrder);
-            $notification->longitude = $device->longitude;
-            $notification->latitude = $device->latitude;
 
-            $sendNotification->call($notification);
+            $forceOnDev = true;
+            $sendNotification->call($notification, $forceOnDev);
         }
     }
 }

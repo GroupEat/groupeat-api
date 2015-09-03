@@ -2,13 +2,13 @@
 
 use Groupeat\Auth\Http\V1\AuthController;
 
-Route::group(['prefix' => 'api'], function () {
-    Route::group(['prefix' => 'auth'], function () {
-        Route::post('activationTokens', AuthController::class.'@activate');
-        Route::put('token', AuthController::class.'@getToken');
-        Route::post('token', AuthController::class.'@resetToken');
-        Route::delete('password', AuthController::class.'@sendPasswordResetLink');
-        Route::post('password', AuthController::class.'@resetPassword');
-        Route::put('password', AuthController::class.'@changePassword');
+$api->version('v1', function ($api) {
+    $api->group(['prefix' => 'auth'], function ($api) {
+        $api->post('activationTokens', AuthController::class.'@activate');
+        $api->put('token', AuthController::class.'@getToken');
+        $api->post('token', AuthController::class.'@resetToken');
+        $api->post('passwordResets', AuthController::class.'@sendPasswordResetLink');
+        $api->post('password', AuthController::class.'@resetPassword');
+        $api->put('password', AuthController::class.'@changePassword');
     });
 });
