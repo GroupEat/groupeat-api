@@ -15,6 +15,18 @@ class ApiHelper extends \Codeception\Module
         return [$token, $id];
     }
 
+    public function amAnActivatedCustomerWithNoMissingInformation()
+    {
+        list($token, $id) = $this->amAnActivatedCustomer();
+        $this->sendApiPutWithToken($token, "customers/$id", [
+            'firstName' => 'Jean',
+            'lastName' => 'Jacques',
+            'phoneNumber' => '33605040302',
+        ]);
+
+        return [$token, $id];
+    }
+
     public function amAlloPizzaRestaurant()
     {
         $this->sendApiPut('auth/token', ['email' => 'allo@pizza.fr', 'password' => 'AlloPizza']);
@@ -43,7 +55,7 @@ class ApiHelper extends \Codeception\Module
 
     public function createGroupOrder()
     {
-        list($token, $customerId) = $this->amAnActivatedCustomer();
+        list($token, $customerId) = $this->amAnActivatedCustomerWithNoMissingInformation();
 
         $this->sendApiGetWithToken(
             $token,

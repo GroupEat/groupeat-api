@@ -95,6 +95,20 @@ The distance between the given address and the restaurant must be less than {{ r
 + Response 201
 
     [Order][]
+    
++ Response 400
+
+        {
+            "errorKey": "missingProductFormats",
+            "message": "The product formats object is required to place an order"
+        }
+        
++ Response 400
+
+        {
+            "errorKey": "missingDeliveryAddress",
+            "message": "The delivery address object is required to place an order"
+        }
 
 + Response 403
 
@@ -102,6 +116,13 @@ The distance between the given address and the restaurant must be less than {{ r
             "errorKey": "userShouldBeActivated",
             "message": "The customer #26 should be activated to place an order."
         }
+        
+ + Response 403
+ 
+         {
+             "errorKey": "missingCustomerInformation",
+             "message": "The attributes [firstName, lastName, phoneNumber] are missing for customer customer #35"
+         }
 
 + Response 404
 

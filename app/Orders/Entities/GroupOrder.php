@@ -130,6 +130,7 @@ class GroupOrder extends Entity
         $comment = null
     ) {
         $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
+        $customer->assertNoMissingInformation();
         list($nbProductFormats, $totalRawPrice) = $this->getNbProductFormatsAndRawPriceWith($productFormats);
         $this->assertMaximumCapacityNotExceeded($nbProductFormats);
         $this->discountRate = $productFormats->getRestaurant()->getDiscountRateFor($totalRawPrice);
