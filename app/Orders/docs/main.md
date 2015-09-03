@@ -117,7 +117,7 @@ The distance between the given address and the restaurant must be less than {{ r
             "message": "The customer #26 should be activated to place an order."
         }
         
- + Response 403
++ Response 403
  
          {
              "errorKey": "missingCustomerInformation",
