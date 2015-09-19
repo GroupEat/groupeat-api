@@ -8,7 +8,7 @@ return [
 
     'deliveryAddress' => "L'adresse de livraison est :",
 
-    'customerCanBeReached' => "Vous pouvez joindre ce client par téléphone au :phoneNumber.",
+    'customerCanBeReached' => "Ce client est joignable par téléphone au :phoneNumber.",
 
     'created' => [
 
