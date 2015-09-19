@@ -13,6 +13,7 @@ class RestaurantTransformer extends TransformerAbstract
         return [
             'id' => $restaurant->id,
             'name' => $restaurant->name,
+            'email' => $restaurant->email,
             'rating' => $restaurant->rating,
             'phoneNumber' => $restaurant->phoneNumber,
             'minimumGroupOrderPrice' => $restaurant->minimumGroupOrderPrice->getAmount(),
