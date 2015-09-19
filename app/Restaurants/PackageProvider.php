@@ -11,7 +11,6 @@ use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenClosedMail;
 use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenCreatedSms;
 use Groupeat\Restaurants\Listeners\SendOrderHasBeenPlacedMail;
-use Groupeat\Restaurants\Values\ConfirmationTokenDurationInMinutes;
 use Groupeat\Restaurants\Values\DefaultOpeningDurationInMinutes;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Restaurants\Values\MinimumOpeningDurationInMinutes;
@@ -35,14 +34,6 @@ class PackageProvider extends WorkbenchPackageProvider
         SendOrderHasBeenPlacedMail::class.'@joined' => GroupOrderHasBeenJoined::class,
         SendGroupOrderHasBeenClosedMail::class => GroupOrderHasBeenClosed::class,
     ];
-
-    protected function registerPackage()
-    {
-        $this->bindValue(
-            ConfirmationTokenDurationInMinutes::class,
-            2 * $this->app['config']->get('orders.maximum_preparation_time_in_minutes')
-        );
-    }
 
     protected function bootPackage()
     {

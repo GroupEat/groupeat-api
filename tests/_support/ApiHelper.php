@@ -101,7 +101,7 @@ class ApiHelper extends \Codeception\Module
         $this->sendApiPostWithToken($token, $url, $orderDetails);
         $orderId = $this->grabDataFromResponse('id');
 
-        return [$token, $orderId, $restaurantCapacity, $orderDetails, $customerId];
+        return [$token, $orderId, $restaurantCapacity, $orderDetails, $customerId, $restaurantId];
     }
 
     public function sendApiGetWithToken($token, $path, $params = [])

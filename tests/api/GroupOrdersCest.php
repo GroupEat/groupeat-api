@@ -6,7 +6,7 @@ class GroupOrdersCest
 {
     public function testThatACustomerReceiveAMailWhenAGroupOrderIsConfirmed(ApiTester $I)
     {
-        list($token, $orderId, $restaurantCapacity, $orderDetails) = $I->createGroupOrder();
+        list($token, $orderId, $restaurantCapacity, $orderDetails, $customerId, $restaurantId) = $I->createGroupOrder();
 
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
@@ -28,13 +28,12 @@ class GroupOrdersCest
         $I->seeResponseCodeIs(201);
         $mail = $I->grabMailById('restaurants.groupOrderHasBeenClosed');
 
-        list(, $restaurantToken) = explode(
-            'token=',
-            $I->grabHrefInLinkByIdInMail($mail, 'confirm-group-order-link')
-        );
-
         $confirmUrl = "groupOrders/$groupOrderId/confirm";
-
+        $I->sendApiGetWithToken($token, "restaurants/$restaurantId");
+        $email = $I->grabDataFromResponse('email');
+        $password = $I->grabDataFromResponse('name'); // For test purpose, the password of a restaurant is its name.
+        $I->sendApiPost('auth/token', compact('email', 'password'));
+        $restaurantToken = $I->grabDataFromResponse('token');
         $I->sendApiGetWithToken($restaurantToken, "groupOrders/$groupOrderId");
         $I->assertSame(0, $I->grabDataFromResponse('remainingCapacity'));
         $I->assertFalse($I->grabDataFromResponse('joinable'));
