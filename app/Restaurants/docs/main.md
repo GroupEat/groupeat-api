@@ -12,6 +12,7 @@
         {
             "id": "1",
             "name": "Pizza di Genova",
+            "email": "pizza@genova.com",
             "rating": 7, // Integer values from 0 to 10
             "phoneNumber": "0689731323",
             "minimumGroupOrderPrice": 1088,

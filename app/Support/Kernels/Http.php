@@ -15,8 +15,4 @@ class Http extends Kernel
         ForbidTokenInQueryString::class,
         ForbidQueryStringForNonIdempotentMethods::class,
     ];
-
-    protected $routeMiddleware = [
-        'allowDifferentToken' => AllowDifferentToken::class,
-    ];
 }

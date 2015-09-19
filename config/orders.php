@@ -58,7 +58,7 @@ return [
     |
     */
 
-    'maximum_preparation_time_in_minutes' => 45,
+    'maximum_preparation_time_in_minutes' => 35,
 
     /*
     |--------------------------------------------------------------------------

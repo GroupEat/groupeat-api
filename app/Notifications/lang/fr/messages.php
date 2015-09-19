@@ -2,6 +2,6 @@
 
 return [
 
-    'joinGroupOrder' => "A new group order has been created. Join it now!",
+    'joinGroupOrder' => "Une commande groupée a été lancée. Rejoins la !",
 
 ];

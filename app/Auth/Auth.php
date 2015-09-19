@@ -22,11 +22,6 @@ class Auth implements Provider
      */
     private $userTypes = [];
 
-    /**
-     * @var bool
-     */
-    private $allowDifferentToken = false;
-
     private $jwtAuth;
     private $illuminateAuth;
     private $dingoAuth;
@@ -66,11 +61,10 @@ class Auth implements Provider
 
     /**
      * @param string $token
-     * @param bool   $assertSameToken
      *
      * @return UserCredentials
      */
-    public function login($token, $assertSameToken = true)
+    public function login($token)
     {
         try {
             $userCredentials = $this->jwtAuth->authenticate($token);
@@ -87,7 +81,7 @@ class Auth implements Provider
 
         $this->assertCorrespondingUserExists($userCredentials);
 
-        if (($assertSameToken && !$this->allowDifferentToken) && ($userCredentials->token != $token)) {
+        if ($userCredentials->token != $token) {
             throw new Forbidden(
                 'obsoleteAuthenticationToken',
                 "Obsolete authentication token."
@@ -122,16 +116,6 @@ class Auth implements Provider
     {
         $this->illuminateAuth->logout();
         $this->dingoAuth->setUser(null);
-    }
-
-    public function allowDifferentToken()
-    {
-        $this->allowDifferentToken = true;
-    }
-
-    public function denyDifferentToken()
-    {
-        $this->allowDifferentToken = false;
     }
 
     /**

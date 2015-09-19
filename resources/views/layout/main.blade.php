@@ -16,7 +16,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile2" bgcolor="#e84c3d" style="border-top-left-radius: 5px; border-top-right-radius: 5px; background-color: rgb(232, 76, 61);" object="drag-module-small">
+                                <table width="600" border="0" cellpadding="0" cellspacing="0" align="center" class="mobile2" bgcolor="#ff4e50" style="border-top-left-radius: 5px; border-top-right-radius: 5px; background-color: rgb(255, 78, 80);" object="drag-module-small">
                                     <tbody>
                                     <tr>
                                         <td width="600" valign="middle" align="center" class="logo">

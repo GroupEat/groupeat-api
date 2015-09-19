@@ -32,7 +32,7 @@ $api->version('v1', function ($api) {
     });
 
     $api->group(['prefix' => 'groupOrders/{groupOrder}'], function ($api) {
-        $api->group(['middleware' => ['allowDifferentToken', 'api.auth']], function ($api) {
+        $api->group(['middleware' => ['api.auth']], function ($api) {
             $api->get('/', GroupOrdersController::class.'@show');
             $api->post('confirm', GroupOrdersController::class.'@confirm');
         });
