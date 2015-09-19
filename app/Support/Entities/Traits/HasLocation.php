@@ -24,7 +24,6 @@ trait HasLocation
      */
     public function distanceInKmsWith(Entity $other)
     {
-        $other->location->setLng(2.239221);
         $thisLocation = $this->toGeography($this->location);
         $otherLocation = $this->toGeography($other->location);
 
