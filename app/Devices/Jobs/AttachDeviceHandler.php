@@ -33,7 +33,7 @@ class AttachDeviceHandler
             $device->UUID = $deviceUUID;
             $device->notificationToken = $job->getNotificationToken();
             $device->platform()->associate($job->getPlatform());
-            $device->platformVersion = 'N/A'; // TODO: FIXME
+            $device->platformVersion = $job->getPlatformVersion();
             $device->model = $job->getModel();
             $device->location = new Point(0, 0); // TODO: FIXME
 

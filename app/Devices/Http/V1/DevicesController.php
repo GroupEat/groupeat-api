@@ -24,6 +24,7 @@ class DevicesController extends Controller
             $this->json('UUID'),
             $this->json('notificationToken'),
             Platform::findByLabelOrFail($this->json('platform')),
+            $this->json('platformVersion'),
             $this->json('model')
         ));
 
