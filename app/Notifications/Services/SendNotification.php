@@ -55,6 +55,6 @@ class SendNotification
 
     private function needToSend()
     {
-        return !$this->environment->isLocal();
+        return $this->environment->isOnGroupeatServer();
     }
 }

@@ -10,6 +10,11 @@ class Environment extends SingleValue
         return $this->is('local');
     }
 
+    public function isOnGroupeatServer()
+    {
+        return $this->isStaging() || $this->isProduction();
+    }
+
     public function isStaging()
     {
         return $this->is('staging');
