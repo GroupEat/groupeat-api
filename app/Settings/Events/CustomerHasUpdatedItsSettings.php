@@ -10,7 +10,7 @@ class CustomerHasUpdatedItsSettings extends Event
 
     public function __construct(CustomerSettings $settings)
     {
-        $this->$settings = $settings;
+        $this->settings = $settings;
     }
 
     public function getSettings()
