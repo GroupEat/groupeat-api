@@ -21,4 +21,6 @@
     'totalDiscountedPrice' => $totalDiscountedPrice,
 ])
 
+@lang('restaurants::payment.bringCreditCardMachine')
+
 {{ $confirmationUrl }}
