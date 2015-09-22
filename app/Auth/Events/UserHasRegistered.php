@@ -20,6 +20,6 @@ class UserHasRegistered extends Event
 
     public function __toString()
     {
-        return (string) $this->user->user->toShortString();
+        return $this->user->user->toShortString() . ' has registered';
     }
 }
