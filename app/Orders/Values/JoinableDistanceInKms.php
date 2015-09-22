@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Orders\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class JoinableDistanceInKms extends Value
+class JoinableDistanceInKms extends SingleValue
 {
     //
 }

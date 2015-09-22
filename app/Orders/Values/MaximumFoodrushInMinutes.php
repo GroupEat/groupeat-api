@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Orders\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class MaximumFoodrushInMinutes extends Value
+class MaximumFoodrushInMinutes extends SingleValue
 {
     //
 }

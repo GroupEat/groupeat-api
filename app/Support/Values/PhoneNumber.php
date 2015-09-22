@@ -2,9 +2,9 @@
 namespace Groupeat\Support\Values;
 
 use Groupeat\Support\Exceptions\BadRequest;
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class PhoneNumber extends Value
+class PhoneNumber extends SingleValue
 {
     const REGEX = '/^33(\d)(\d{2})(\d{2})(\d{2})(\d{2})$/';
 

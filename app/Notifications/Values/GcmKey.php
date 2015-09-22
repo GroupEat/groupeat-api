@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Notifications\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class GcmKey extends Value
+class GcmKey extends SingleValue
 {
     //
 }

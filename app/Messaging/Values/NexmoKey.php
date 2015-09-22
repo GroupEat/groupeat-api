@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Messaging\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class NexmoKey extends Value
+class NexmoKey extends SingleValue
 {
     //
 }

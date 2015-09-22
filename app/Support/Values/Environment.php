@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Support\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class Environment extends Value
+class Environment extends SingleValue
 {
     public function isLocal()
     {

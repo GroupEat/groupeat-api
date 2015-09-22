@@ -2,8 +2,7 @@
 namespace Groupeat\Messaging\Services;
 
 use Groupeat\Messaging\Events\SmsHasBeenSent;
-use Groupeat\Messaging\Values\NexmoKey;
-use Groupeat\Messaging\Values\NexmoSecret;
+use Groupeat\Messaging\Values\NexmoCredentials;
 use Groupeat\Messaging\Values\Sms;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Values\Environment;
@@ -19,20 +18,17 @@ class SendSms
 
     private $environment;
     private $events;
-    private $key;
-    private $secret;
+    private $credentials;
     private $client;
 
     public function __construct(
         Environment $environment,
         Dispatcher $events,
-        NexmoKey $key,
-        NexmoSecret $secret
+        NexmoCredentials $credentials
     ) {
         $this->environment = $environment;
         $this->events = $events;
-        $this->key = $key->value();
-        $this->secret = $secret->value();
+        $this->credentials = $credentials;
 
         $this->client = new Client;
     }
@@ -43,8 +39,8 @@ class SendSms
             $text = static::FROM . "\n" . $sms->getText();
 
             $json = [
-                'api_key' => 'wrong',
-                'api_secret' => $this->secret,
+                'api_key' => $this->credentials->getKey(),
+                'api_secret' => $this->credentials->getSecret(),
                 'from' => static::FROM,
                 'to' => $sms->getPhoneNumber(),
                 'text' => $text,
