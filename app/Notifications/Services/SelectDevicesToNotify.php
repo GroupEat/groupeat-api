@@ -13,16 +13,20 @@ use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Settings\Entities\CustomerSettings;
 use Illuminate\Support\Collection;
+use Psr\Log\LoggerInterface;
 
 class SelectDevicesToNotify
 {
+    private $logger;
+
     /**
      * @var float
      */
     private $joinableDistanceInKms;
 
-    public function __construct(JoinableDistanceInKms $joinableDistanceInKms)
+    public function __construct(LoggerInterface $logger, JoinableDistanceInKms $joinableDistanceInKms)
     {
+        $this->logger = $logger;
         $this->joinableDistanceInKms = $joinableDistanceInKms->value();
     }
 
@@ -34,58 +38,105 @@ class SelectDevicesToNotify
     public function call(GroupOrder $groupOrder)
     {
         $customersAroundIds = $this->getCustomersAroundIds($groupOrder->getInitiatingOrder()->deliveryAddress);
+        $this->log($groupOrder, compact('customersAroundIds'));
+        if ($customersAroundIds->isEmpty()) {
+            return collect([]);
+        }
+
         $customersAlreadyInIds = $this->getCustomersAlreadyInIds($groupOrder);
-        $potentialCustomersToNotifyIds = $customersAroundIds->diff($customersAlreadyInIds);
+        $this->log($groupOrder, compact('customersAlreadyInIds'));
 
-        $customersThatCanBeNotifiedIds = $potentialCustomersToNotifyIds->isEmpty() ?
-            collect([]) :
-            $this->getCustomersThatCanBeNotifiedIds(
-                $groupOrder,
-                $potentialCustomersToNotifyIds
-            );
+        $potentialCustomersToNotifyIds = $customersAroundIds->diff($customersAlreadyInIds)->values();
+        $this->log($groupOrder, compact('potentialCustomersToNotifyIds'));
+        if ($potentialCustomersToNotifyIds->isEmpty()) {
+            return collect([]);
+        }
 
-        return Device::whereIn('customerId', $customersThatCanBeNotifiedIds->all())
+        $customersThatCanBeNotifiedIds = $this->getCustomersThatCanBeNotifiedIds(
+            $groupOrder,
+            $potentialCustomersToNotifyIds
+        );
+        $this->log($groupOrder, compact('customersThatCanBeNotifiedIds'));
+        if ($customersThatCanBeNotifiedIds->isEmpty()) {
+            return collect([]);
+        }
+
+        $devices = Device::whereIn('customerId', $customersThatCanBeNotifiedIds->all())
             ->with('customer', 'platform')
             ->get();
+        $this->log($groupOrder, ['devicesToNotifyIds' => $devices->lists('id')]);
+
+        return $devices;
     }
 
     private function getCustomersAroundIds(DeliveryAddress $firsDeliveryAddress)
     {
-        $query = Device::query()->withinKilometers(
-            $firsDeliveryAddress->location,
-            $this->joinableDistanceInKms
-        );
-
-        return $query->lists('customerId');
+        // TODO: use geolocation to return customers really around
+        return Customer::lists('id');
     }
 
     private function getCustomersAlreadyInIds(GroupOrder $groupOrder)
     {
-        return $groupOrder->orders->map(function (Order $order) {
-            return $order->customer->id;
-        });
+        return collect($groupOrder->orders->map(function (Order $order) {
+            return $order->customerId;
+        }));
     }
 
     private function getCustomersThatCanBeNotifiedIds(GroupOrder $groupOrder, Collection $potentialCustomersToNotifyIds)
     {
+        $customersThatCanBeNotifiedAtThisTimeSettings =
+            CustomerSettings::whereIn('customerId', $potentialCustomersToNotifyIds->all())
+            ->where(CustomerSettings::NOTIFICATIONS_ENABLED, true)
+            ->where(CustomerSettings::NO_NOTIFICATION_AFTER, '>', Carbon::now()->toTimeString())
+            ->get();
+
+        $customersThatCanBeNotifiedAtThisTimeIds = collect(
+            $customersThatCanBeNotifiedAtThisTimeSettings->lists('customerId')
+        );
+        $this->log($groupOrder, compact('customersThatCanBeNotifiedAtThisTimeIds'));
+        if ($customersThatCanBeNotifiedAtThisTimeIds->isEmpty()) {
+            return collect([]);
+        }
+
+        $customerIdToDaysWithoutNotifying = [];
+        $customersThatCanBeNotifiedAtThisTimeSettings
+            ->each(function (CustomerSettings $settings) use (&$customerIdToDaysWithoutNotifying) {
+                $customerIdToDaysWithoutNotifying[$settings->customerId] = $settings->daysWithoutNotifying;
+            });
+        $this->log($groupOrder, compact('customerIdToDaysWithoutNotifying'));
+
         $orderEntity = new Order;
         $customerSettingEntity = new CustomerSettings;
         $ordersTable = $orderEntity->getTable();
         $customerSettingsTable = $customerSettingEntity->getTable();
 
-        $sql = 'SELECT DISTINCT ON ('.$orderEntity->getRawTableField('customerId').') '
-            . $orderEntity->getRawTableField('customerId')
+        $customersLastOrderDatesSql = 'SELECT DISTINCT ON ('.$orderEntity->getRawTableField('customerId').') '
+            .$orderEntity->getRawTableField('customerId')
+            .', '.$orderEntity->getRawTableField(Order::CREATED_AT)
             .' FROM '.$ordersTable
-            .' LEFT JOIN '.$customerSettingsTable
-            .' ON '.$orderEntity->getRawTableField('customerId').' = '.$customerSettingEntity->getRawTableField('customerId')
-            .' WHERE '.$orderEntity->getRawTableField('customerId').' IN ('.implode(',', $potentialCustomersToNotifyIds->all()).')'
-            .' AND '.$customerSettingEntity->getRawTableField(CustomerSettings::NOTIFICATIONS_ENABLED).' = true'
-            .' AND '.$customerSettingEntity->getRawTableField(CustomerSettings::NO_NOTIFICATION_AFTER)
-                ." > '".Carbon::now()->toTimeString()."'"
-            .' AND '.$customerSettingEntity->getRawTableField(CustomerSettings::DAYS_WITHOUT_NOTIFYING)
-                .' >= DATE_PART(\'day\', NOW()::timestamp - '.$orderEntity->getRawTableField('createdAt').'::timestamp)'
-            .' ORDER BY '.$orderEntity->getRawTableField('customerId').', '.$orderEntity->getRawTableField('createdAt').' DESC';
+            .' WHERE '.$orderEntity->getRawTableField('customerId').' IN ('
+                .implode(',', $customersThatCanBeNotifiedAtThisTimeIds->all())
+            .')'
+            .' ORDER BY '.$orderEntity->getRawTableField('customerId')
+                .', '.$orderEntity->getRawTableField(Order::CREATED_AT).' DESC';
+        $customersLastOrderDates = collect(DB::select(DB::raw($customersLastOrderDatesSql)));
+        $this->log($groupOrder, compact('customersLastOrderDates'));
 
-        return collect(DB::select(DB::raw($sql)))->lists('customerId');
+        $customersThatOrderedTooRecentlyIds = $customersLastOrderDates
+            ->filter(function ($record) use ($customerIdToDaysWithoutNotifying) {
+                $lastOrderDate = new Carbon($record->createdAt);
+                $daysWithoutNotifying = $customerIdToDaysWithoutNotifying[$record->customerId];
+
+                return $lastOrderDate->diffInDays(Carbon::now(), true) < $daysWithoutNotifying;
+            })
+            ->lists('customerId');
+        $this->log($groupOrder, compact('customersThatOrderedTooRecentlyIds'));
+
+        return $customersThatCanBeNotifiedAtThisTimeIds->diff($customersThatOrderedTooRecentlyIds);
+    }
+
+    private function log(GroupOrder $groupOrder, $data)
+    {
+        $this->logger->debug('SelectDevicesToNotify: ' . json_encode($data), ['groupOrderId' => $groupOrder->id]);
     }
 }

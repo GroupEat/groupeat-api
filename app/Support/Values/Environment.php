@@ -1,13 +1,18 @@
 <?php
 namespace Groupeat\Support\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class Environment extends Value
+class Environment extends SingleValue
 {
     public function isLocal()
     {
         return $this->is('local');
+    }
+
+    public function isOnGroupeatServer()
+    {
+        return $this->isStaging() || $this->isProduction();
     }
 
     public function isStaging()

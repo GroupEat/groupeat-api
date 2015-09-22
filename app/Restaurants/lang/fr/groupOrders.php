@@ -32,7 +32,7 @@ return [
 
         'subject' => "Une commande GroupEat vient de se finir",
 
-        'indication' => "La commande groupée :groupOrderRef commencée à :creationTime est complète.",
+        'indication' => "La commande groupée :groupOrderRef commencée à :creationTime est terminée.",
 
         'discountAndPrice' => "La réduction finale est de :discountRate ce qui donne un prix total de :totalDiscountedPrice.",
 

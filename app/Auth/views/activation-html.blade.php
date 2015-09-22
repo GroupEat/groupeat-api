@@ -13,7 +13,7 @@
 @section('buttonId'){{ 'activation-link' }}@stop
 
 @section('buttonUrl')
-    {{ $url }}
+    {!! $url !!}
 @stop
 
 @section('button')

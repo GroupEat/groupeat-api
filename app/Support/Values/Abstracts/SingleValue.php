@@ -3,7 +3,7 @@ namespace Groupeat\Support\Values\Abstracts;
 
 use JsonSerializable;
 
-abstract class Value implements JsonSerializable
+abstract class SingleValue implements JsonSerializable
 {
     /**
      * @var mixed

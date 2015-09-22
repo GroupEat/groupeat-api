@@ -5,7 +5,7 @@ use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 use Illuminate\Contracts\Events\Dispatcher;
 
 abstract class GroupOrderValidationHandler
@@ -17,7 +17,7 @@ abstract class GroupOrderValidationHandler
     public function __construct(
         Dispatcher $events,
         AddressConstraints $addressConstraints,
-        Value $maximumDistanceInKms
+        SingleValue $maximumDistanceInKms
     ) {
         $this->events = $events;
         $this->deliveryAddressConstraints = $addressConstraints->value();

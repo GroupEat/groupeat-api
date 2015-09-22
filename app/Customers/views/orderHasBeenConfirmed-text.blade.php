@@ -4,11 +4,11 @@
     'preparedAtTime' => $groupOrder->preparedAtTime,
  ])
 
-{{ $order->presentDetailsTableForCustomerAsPlainText() }}.
+{!! $order->presentDetailsTableForCustomerAsPlainText() !!}.
 
 @lang('customers::orders.confirmed.summary')
 
-{{ $order->presentProductsListAsPlainText(false) }}.
+{!! $order->presentProductsListAsPlainText(false) !!}.
 
 @include('orders::partials.comment-text')
 

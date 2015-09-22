@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Restaurants\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class MaximumDeliveryDistanceInKms extends Value
+class MaximumDeliveryDistanceInKms extends SingleValue
 {
     //
 }

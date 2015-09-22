@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Support\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class AvailableLocales extends Value
+class AvailableLocales extends SingleValue
 {
     //
 }

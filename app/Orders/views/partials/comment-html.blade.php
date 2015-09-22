@@ -2,6 +2,6 @@
     <p>
         @lang('orders::orders.attachedComment')
         <br>
-        <i>{{ $order->comment }}</i>
+        <i>{!! strip_tags($order->comment) !!}</i>
     </p>
 @endif

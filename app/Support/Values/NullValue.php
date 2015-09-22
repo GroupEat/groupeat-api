@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Support\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class NullValue extends Value
+class NullValue extends SingleValue
 {
     public function __construct()
     {

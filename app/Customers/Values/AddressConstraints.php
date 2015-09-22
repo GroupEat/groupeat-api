@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Customers\Values;
 
-use Groupeat\Support\Values\Abstracts\Value;
+use Groupeat\Support\Values\Abstracts\SingleValue;
 
-class AddressConstraints extends Value
+class AddressConstraints extends SingleValue
 {
     //
 }

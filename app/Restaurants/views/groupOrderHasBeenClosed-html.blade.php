@@ -38,12 +38,14 @@
         ])
         </b>
     </p>
+
+    <p><i>@lang('restaurants::payment.bringCreditCardMachine')</i></p>
 @stop
 
 @section('buttonId'){{ 'confirm-group-order-link' }}@stop
 
 @section('buttonUrl')
-    {{ $confirmationUrl }}
+    {!! $confirmationUrl !!}
 @stop
 
 @section('button')

@@ -7,7 +7,7 @@
 
 @lang('restaurants::groupOrders.orderedProducts', ['orderRef' => $order->reference])
 
-{{ $order->productsListAsPlainText }}.
+{!! $order->productsListAsPlainText !!}.
 
 @include('orders::partials.comment-text')
 
@@ -15,6 +15,6 @@
 
 @lang('restaurants::groupOrders.deliveryAddress')
 
-{{ $deliveryAddress }}
+{!! strip_tags($deliveryAddress) !!}
 
 @lang('restaurants::groupOrders.customerCanBeReached', ['phoneNumber' => $customer->phoneNumber ])
