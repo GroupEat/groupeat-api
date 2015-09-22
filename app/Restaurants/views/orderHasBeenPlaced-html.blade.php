@@ -23,7 +23,7 @@
     <p>
         @lang('restaurants::groupOrders.deliveryAddress')
         <br>
-        {{ $deliveryAddress }}
+        {!! strip_tags($deliveryAddress) !!}
     </p>
 
     <p>@lang('restaurants::groupOrders.customerCanBeReached', ['phoneNumber' => $customer->phoneNumber ])</p>

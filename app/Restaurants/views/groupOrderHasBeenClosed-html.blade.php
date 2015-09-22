@@ -45,7 +45,7 @@
 @section('buttonId'){{ 'confirm-group-order-link' }}@stop
 
 @section('buttonUrl')
-    {{ $confirmationUrl }}
+    {!! $confirmationUrl !!}
 @stop
 
 @section('button')

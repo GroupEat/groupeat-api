@@ -6,14 +6,14 @@
 @choice('restaurants::groupOrders.ended.composedOf', $orders->count())
 
 @foreach($orders as $order)
-    {{ $order->summaryAsPlainText }}
+    {!! $order->summaryAsPlainText !!}
     @include('orders::partials.comment-text')
 @endforeach
 
 @lang('orders::groupOrders.summary')
 
 @if ($orders->count() > 1)
-    {{ $groupOrder->productsTableForMail }}
+    {!! $groupOrder->productsTableForMail !!}
 @endif
 
 @lang('restaurants::groupOrders.ended.discountAndPrice', [
@@ -23,4 +23,4 @@
 
 @lang('restaurants::payment.bringCreditCardMachine')
 
-{{ $confirmationUrl }}
+{!! $confirmationUrl !!}

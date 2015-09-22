@@ -1,4 +1,4 @@
 @if($order->comment)
     @lang('orders::orders.attachedComment')
-    {{ $order->comment }}.
+    {!! strip_tags($order->comment) !!}.
 @endif

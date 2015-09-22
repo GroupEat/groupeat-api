@@ -2,4 +2,4 @@
 
 @lang('auth::activation.indication')
 
-{{ $url }}
+{!! $url !!}
