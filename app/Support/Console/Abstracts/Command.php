@@ -14,4 +14,9 @@ abstract class Command extends IlluminateCommand
     {
         return process($command, $this->output, null, $timeout);
     }
+
+    protected function fail($code = 1)
+    {
+        return $code;
+    }
 }

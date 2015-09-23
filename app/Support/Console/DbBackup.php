@@ -34,7 +34,7 @@ class DbBackup extends Command
 
             if (!$successful) {
                 $this->error("The upload failed, the database has not been saved");
-                exit(1);
+                return $this->fail();
             }
         }
     }
