@@ -15,14 +15,14 @@ class OpeningWindow extends Window
         return $rules;
     }
 
-    protected function getFromAttribute()
+    protected function getStartAttribute()
     {
-        return $this->createCarbonFromTime('from');
+        return $this->createCarbonFromTime('start');
     }
 
-    protected function getToAttribute()
+    protected function getEndAttribute()
     {
-        return $this->createCarbonFromTime('to');
+        return $this->createCarbonFromTime('end');
     }
 
     protected function createCarbonFromTime($attribute)

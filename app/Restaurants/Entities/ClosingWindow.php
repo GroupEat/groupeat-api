@@ -5,5 +5,5 @@ use Groupeat\Restaurants\Entities\Abstracts\Window;
 
 class ClosingWindow extends Window
 {
-    protected $dates = ['from', 'to'];
+    protected $dates = ['start', 'end'];
 }

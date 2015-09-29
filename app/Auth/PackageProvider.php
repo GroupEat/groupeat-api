@@ -46,7 +46,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
             if ($auth->check()) {
                 $user = $auth->user();
-                $record['context'][$auth->shortTypeOf($user)] = $user->id;
+                $record['context'][$auth->shortTypeOf($user).'Id'] = $user->id;
             }
 
             $record['context']['IP'] = $this->app[Request::class]->ip();
