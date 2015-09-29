@@ -2,7 +2,6 @@
 namespace Groupeat\Notifications\Services;
 
 use Groupeat\Notifications\Entities\Notification;
-use Groupeat\Notifications\Events\NotificationWouldHaveBeenSent;
 use Groupeat\Notifications\Services\SendGcmNotification;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
@@ -44,10 +43,8 @@ class SendNotification
                     break;
 
                 default:
-                    throw new RuntimeException("Cannot send notification to platfrom $platformLabel");
+                    throw new RuntimeException("Cannot send notification to platform $platformLabel");
             }
-        } else {
-            $this->events->fire(new NotificationWouldHaveBeenSent($notification));
         }
 
         $notification->save();

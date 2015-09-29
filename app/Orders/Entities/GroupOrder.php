@@ -161,6 +161,13 @@ class GroupOrder extends Entity
 
     public function close()
     {
+        if ($this->closedAt) {
+            throw new UnprocessableEntity(
+                'groupOrderAlreadyClosed',
+                'The ' . $this->toShortString() . ' has already been closed'
+            );
+        }
+
         $this->closedAt = $this->freshTimestamp();
         $this->save();
 

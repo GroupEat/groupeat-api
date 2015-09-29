@@ -8,7 +8,6 @@ use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class SendGcmNotification extends NotificationSender
@@ -18,9 +17,9 @@ class SendGcmNotification extends NotificationSender
     private $client;
     private $key;
 
-    public function __construct(Locale $locale, LoggerInterface $logger, GcmKey $key)
+    public function __construct(Locale $locale, GcmKey $key)
     {
-        parent::__construct($locale, $logger);
+        parent::__construct($locale);
 
         $this->client = new Client;
         $this->key = $key;
@@ -58,14 +57,7 @@ class SendGcmNotification extends NotificationSender
             );
         }
 
-        if ($response->getStatusCode() == Response::HTTP_OK) {
-            $notification->save();
-
-            $this->logger->info(
-                "GCM notification has been sent to {$customer->toShortString()} with data: "
-                . json_encode($data).'.'
-            );
-        } else {
+        if ($response->getStatusCode() != Response::HTTP_OK) {
             throw new UnprocessableEntity(
                 'gcmError',
                 (string) $response->getBody()

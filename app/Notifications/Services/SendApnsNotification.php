@@ -6,7 +6,6 @@ use Groupeat\Notifications\Services\Abstracts\NotificationSender;
 use Groupeat\Notifications\Values\ApnsCertificate;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
-use Psr\Log\LoggerInterface;
 
 class SendApnsNotification extends NotificationSender
 {
@@ -15,9 +14,9 @@ class SendApnsNotification extends NotificationSender
 
     private $certificate;
 
-    public function __construct(Locale $locale, LoggerInterface $logger, ApnsCertificate $certificate)
+    public function __construct(Locale $locale, ApnsCertificate $certificate)
     {
-        parent::__construct($locale, $logger);
+        parent::__construct($locale);
 
         $this->certificate = $certificate;
     }
