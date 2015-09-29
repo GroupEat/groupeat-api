@@ -4,17 +4,14 @@ namespace Groupeat\Notifications\Services\Abstracts;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Services\Locale;
 use Groupeat\Support\Values\Environment;
-use Psr\Log\LoggerInterface;
 
 abstract class NotificationSender
 {
     protected $locale;
-    protected $logger;
 
-    public function __construct(Locale $locale, LoggerInterface $logger)
+    public function __construct(Locale $locale)
     {
         $this->locale = $locale;
-        $this->logger = $logger;
     }
 
     protected function translateFor($messageKey, UserCredentials $user)
