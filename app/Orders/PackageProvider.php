@@ -2,12 +2,15 @@
 
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
+use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
+use Groupeat\Orders\Jobs\CloseGroupOrderAfterFoodrush;
 use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Orders\Values\DeliveryAddressConstraints;
 use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
+use Groupeat\Support\Jobs\DelayedJob;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
@@ -24,4 +27,16 @@ class PackageProvider extends WorkbenchPackageProvider
         Order::class => 'order',
         GroupOrder::class => 'groupOrder',
     ];
+
+    protected function bootPackage()
+    {
+        $this->delayJobOn(GroupOrderHasBeenCreated::class, function (GroupOrderHasBeenCreated $event) {
+            $groupOrder = $event->getOrder()->groupOrder;
+
+            return new DelayedJob(
+                new CloseGroupOrderAfterFoodrush($groupOrder),
+                $groupOrder->endingAt
+            );
+        });
+    }
 }

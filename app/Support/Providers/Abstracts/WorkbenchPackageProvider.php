@@ -1,11 +1,16 @@
 <?php
 namespace Groupeat\Support\Providers\Abstracts;
 
+use Carbon\Carbon;
 use Closure;
 use Dingo\Api\Routing\Router;
 use File;
+use Groupeat\Support\Events\Abstracts\Event;
+use Groupeat\Support\Exceptions\Exception;
+use Groupeat\Support\Jobs\DelayedJob;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
+use Psr\Log\LoggerInterface;
 
 abstract class WorkbenchPackageProvider extends ServiceProvider
 {
@@ -125,6 +130,27 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
     protected function listen($eventClass, $handlerClass, $method = 'handle')
     {
         $this->app['events']->listen($eventClass, "$handlerClass@$method");
+    }
+
+    protected function delayJobOn($eventClass, Closure $getDelayedJob)
+    {
+        $this->app['events']->listen($eventClass, function (Event $event) use ($getDelayedJob) {
+            $job = $getDelayedJob($event);
+
+            if (!($job instanceof DelayedJob)) {
+                throw new Exception(
+                    'shouldHaveReturnedDelayedJob',
+                    'An instance of delayed job should have been returned. ' . get_class($job) . ' given instead.'
+                );
+            }
+
+            $this->app[Dispatcher::class]->dispatch($job);
+            $this->app[LoggerInterface::class]->info(
+                'Job ' . get_class($job->getJob()) . ' has been delayed to ' . Carbon::now()->addSeconds($job->delay)
+            );
+        });
+
+        return $this;
     }
 
     private function includeRoutes()

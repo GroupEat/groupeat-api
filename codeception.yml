@@ -10,5 +10,4 @@ coverage:
         - app/*
 settings:
     bootstrap: ./_bootstrap.php
-    suite_class: Groupeat\Tests\Support\TestCase
     colors: true

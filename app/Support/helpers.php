@@ -12,10 +12,9 @@ if (!function_exists('artisan')) {
      */
     function artisan($command, array $parameters = [], $verbosity = null)
     {
-        $output = new \Symfony\Component\Console\Output\BufferedOutput($verbosity);
-        Artisan::call($command, $parameters, $output);
+        Artisan::call($command, $parameters);
 
-        return $output->fetch();
+        return trim(Artisan::output());
     }
 }
 

@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Admin\Services;
+namespace Groupeat\Admin\Listeners;
 
 use Groupeat\Admin\Events\GroupOrderHasNotBeenConfirmed;
 use Groupeat\Auth\Events\UserHasRegistered;
@@ -17,13 +17,6 @@ class ShareNoteworthyEventsOnSlack extends QueuedListener
 {
     const URL = 'https://hooks.slack.com/services/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';
 
-    const EVENT_CLASSES = [
-        UserHasRegistered::class,
-        GroupOrderHasBeenCreated::class,
-        GroupOrderHasBeenJoined::class,
-        GroupOrderHasNotBeenConfirmed::class,
-    ];
-
     private $client;
     private $environment;
     private $logger;
@@ -35,22 +28,18 @@ class ShareNoteworthyEventsOnSlack extends QueuedListener
         $this->logger = $logger;
     }
 
-    public function share($event)
+    public function handle(Event $event)
     {
-        foreach (static::EVENT_CLASSES as $eventClass) {
-            if ($event instanceof $eventClass) {
-                if ($this->environment->isProduction()) {
-                    $json = ['text' => (string) $event];
+        if ($this->environment->isProduction()) {
+            $json = ['text' => (string) $event];
 
-                    try {
-                        $response = $this->client->post(static::URL, compact('json'));
-                    } catch (ClientException $e) {
-                        $this->logger->error("Could not share event [$event] on Slack.");
-                    }
-                } else {
-                    $this->logger->debug("Event [$event] would have been shared on Slack.");
-                }
+            try {
+                $response = $this->client->post(static::URL, compact('json'));
+            } catch (ClientException $e) {
+                $this->logger->error("Could not share event [$event] on Slack.");
             }
+        } else {
+            $this->logger->debug("Event [$event] would have been shared on Slack.");
         }
     }
 }

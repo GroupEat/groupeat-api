@@ -6,6 +6,7 @@ use Clockwork\Support\Laravel\ClockworkServiceProvider;
 use Groupeat\Support\Mail\TransportManager;
 use Groupeat\Support\Pipeline\ExecuteJobInDbTransaction;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
+use Groupeat\Support\Queue\DatabaseConnector;
 use Groupeat\Support\Services\LogDomainActivity;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
@@ -36,6 +37,7 @@ class PackageProvider extends WorkbenchPackageProvider
         $this->replaceApiExceptionHandler();
         $this->registerLocalPackages();
         $this->registerPapertrailLogger();
+        $this->replaceDatabaseQueueConnectorIfNeeded();
         $this->replaceSwiftMailer(); // TODO: check if it can be deferred
     }
 
@@ -76,15 +78,28 @@ class PackageProvider extends WorkbenchPackageProvider
         }
     }
 
+    private function replaceDatabaseQueueConnectorIfNeeded()
+    {
+        if (ends_with($_SERVER['SCRIPT_FILENAME'], 'codecept')) {
+            $this->app['config']->set('queue.default', 'database');
+            $this->app->register(QueueServiceProvider::class);
+
+            $this->app['queue']->addConnector('database', function () {
+                return new DatabaseConnector($this->app['db']);
+            });
+        }
+    }
+
     private function replaceSwiftMailer()
     {
-        $this->app->register(QueueServiceProvider::class);
-        $this->app->register(MailServiceProvider::class);
+        if ($this->app[Environment::class]->isLocal()) {
+            $this->app->register(MailServiceProvider::class);
 
-        $this->app['mailer']->setSwiftMailer(
-            new Swift_Mailer(
-                (new TransportManager($this->app))->driver()
-            )
-        );
+            $this->app['mailer']->setSwiftMailer(
+                new Swift_Mailer(
+                    (new TransportManager($this->app))->driver()
+                )
+            );
+        }
     }
 }
