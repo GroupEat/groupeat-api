@@ -1,6 +1,9 @@
 <?php
 namespace Codeception\Module;
 
+use Carbon\Carbon;
+use Closure;
+use DB;
 use Groupeat\Auth\Auth;
 
 class ApiHelper extends \Codeception\Module
@@ -200,6 +203,7 @@ class ApiHelper extends \Codeception\Module
 
         $this->debugSection("Headers", $client->getInternalResponse()->getHeaders());
         $this->debugSection("Status", $client->getInternalResponse()->getStatus());
+        $this->runQueues();
     }
 
     public function getApiUrl($path)
@@ -242,10 +246,26 @@ class ApiHelper extends \Codeception\Module
         $this->getModule('REST')->haveHttpHeader('Accept', 'application/vnd.groupeat.v1+json');
     }
 
-    public function runArtisan($command, array $parameters = [])
+    protected function runQueues()
     {
-        $output = artisan($command, $parameters);
+        foreach (DB::table('jobs')->where('available_at', '<=', Carbon::now()->timestamp)->get() as $job) {
+            $this->debugSection('Queue', artisan('queue:work'));
+        }
+    }
 
-        $this->debugSection("Artisan $command", $output);
+    public function amInTheFuture(Carbon $date, Closure $callback)
+    {
+        assert(Carbon::now() <= $date, 'future is not the past');
+
+        try {
+            $this->debugSection('In the future', $date->diffForHumans());
+            Carbon::setTestNow($date);
+
+            $this->runQueues();
+            $callback();
+        } finally {
+            $this->debugSection('Back to present', '');
+            Carbon::setTestNow();
+        }
     }
 }

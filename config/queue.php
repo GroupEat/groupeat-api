@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_DRIVER', 'sync'),
+    'default' => env('QUEUE_DRIVER', 'beanstalkd'),
 
     /*
     |--------------------------------------------------------------------------
@@ -40,6 +40,13 @@ return [
             'host'   => 'localhost',
             'queue'  => 'default',
             'ttr'    => 60,
+        ],
+
+        'database' => [
+            'driver' => 'database',
+            'table'  => 'jobs',
+            'queue'  => 'default',
+            'expire' => 60,
         ],
 
     ],

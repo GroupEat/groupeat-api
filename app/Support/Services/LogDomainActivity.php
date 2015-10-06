@@ -4,6 +4,7 @@ namespace Groupeat\Support\Services;
 use Groupeat\Support\Jobs\Abstracts\Job;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Events\Abstracts\Event;
+use Groupeat\Support\Jobs\DelayedJob;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionMethod;
@@ -26,7 +27,9 @@ class LogDomainActivity
 
     public function handle(Job $job, $next)
     {
-        $this->log($job);
+        if (!($job instanceof DelayedJob)) {
+            $this->log($job);
+        }
 
         return $next($job);
     }

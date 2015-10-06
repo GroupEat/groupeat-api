@@ -63,18 +63,23 @@ class GroupOrdersCest
 
     public function testThatAGroupOrderClosesAutomaticallyWhenFoodrushIsOver(ApiTester $I)
     {
-        list($token, $orderId) = $I->createGroupOrder();
+        list($token, $orderId, $restaurantCapacity, $orderDetails) = $I->createGroupOrder();
+        $foodRushDuration = $orderDetails['foodRushDurationInMinutes'];
 
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
 
-        $I->runArtisan('group-orders:close');
-        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
-        $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
+        foreach ([0, round($foodRushDuration / 2)] as $minutes) {
+            $I->amInTheFuture(Carbon::now()->addMinutes($minutes), function () use ($I, $token, $orderId) {
+                $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+                $I->assertTrue($I->grabDataFromResponse('groupOrder.data.joinable'));
+            });
+        }
 
-        $I->runArtisan('group-orders:close', ['--minutes' => 31]);
-        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
-        $I->assertFalse($I->grabDataFromResponse('groupOrder.data.joinable'));
+        $I->amInTheFuture(Carbon::now()->addMinutes($foodRushDuration), function () use ($I, $token, $orderId) {
+            $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+            $I->assertFalse($I->grabDataFromResponse('groupOrder.data.joinable'));
+        });
     }
 
     public function testThatARestaurantCanListItsGroupOrder(ApiTester $I)

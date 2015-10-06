@@ -2,9 +2,16 @@
 namespace Groupeat\Admin;
 
 use Groupeat\Admin\Entities\Admin;
-use Groupeat\Admin\Services\ShareNoteworthyEventsOnSlack;
+use Groupeat\Admin\Events\GroupOrderHasNotBeenConfirmed;
+use Groupeat\Admin\Jobs\CheckGroupOrderConfirmation;
+use Groupeat\Admin\Listeners\ShareNoteworthyEventsOnSlack;
 use Groupeat\Admin\Values\MaxConfirmationDurationInMinutes;
 use Groupeat\Auth\Auth;
+use Groupeat\Auth\Events\UserHasRegistered;
+use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
+use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
+use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
+use Groupeat\Support\Jobs\DelayedJob;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 
 class PackageProvider extends WorkbenchPackageProvider
@@ -17,8 +24,24 @@ class PackageProvider extends WorkbenchPackageProvider
     {
         $this->app[Auth::class]->addUserType(new Admin);
 
-        foreach (ShareNoteworthyEventsOnSlack::EVENT_CLASSES as $eventClass) {
-            $this->listen($eventClass, ShareNoteworthyEventsOnSlack::class, 'share');
-        }
+        $this->listen(
+            [
+                UserHasRegistered::class,
+                GroupOrderHasBeenCreated::class,
+                GroupOrderHasBeenJoined::class,
+                GroupOrderHasNotBeenConfirmed::class,
+            ],
+            ShareNoteworthyEventsOnSlack::class
+        );
+
+        $this->delayJobOn(GroupOrderHasBeenClosed::class, function (GroupOrderHasBeenClosed $event) {
+            $groupOrder = $event->getGroupOrder();
+            $maxConfirmationDurationInMinutes = $this->app[MaxConfirmationDurationInMinutes::class]->value();
+
+            return new DelayedJob(
+                new CheckGroupOrderConfirmation($groupOrder),
+                $groupOrder->closedAt->copy()->addMinutes($maxConfirmationDurationInMinutes)
+            );
+        });
     }
 }

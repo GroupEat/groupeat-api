@@ -35,6 +35,7 @@ return [
         'deploy'  => [
             function ($task) {
                 $task->runForCurrentRelease('php artisan migrate --force');
+                $task->runForCurrentRelease('sudo supervisorctl restart groupeat');
             }
         ],
         'cleanup' => [],
