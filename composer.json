@@ -1,12 +1,11 @@
-
 {
   "name": "GroupEat RESTful API",
   "type": "project",
   "require": {
+    "predis/predis": "1.0.*",
     "doctrine/dbal": "2.4.*",
     "league/period": "2.5.*",
     "tymon/jwt-auth": "0.5.*",
-    "pda/pheanstalk": "3.0.*",
     "dingo/api": "1.0.0-beta1",
     "sebastian/money": "1.5.*",
     "league/fractal": "0.12.*",
