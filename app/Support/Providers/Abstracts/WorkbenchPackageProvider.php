@@ -11,6 +11,7 @@ use Groupeat\Support\Jobs\DelayedJob;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
+use ReflectionFunction;
 
 abstract class WorkbenchPackageProvider extends ServiceProvider
 {
@@ -132,8 +133,10 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $this->app['events']->listen($eventClass, "$handlerClass@$method");
     }
 
-    protected function delayJobOn($eventClass, Closure $getDelayedJob)
+    protected function delayJobOn(Closure $getDelayedJob)
     {
+        $eventClass = $this->getFirstArgumentType($getDelayedJob);
+
         $this->app['events']->listen($eventClass, function (Event $event) use ($getDelayedJob) {
             $job = $getDelayedJob($event);
 
@@ -211,5 +214,10 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $parts = explode('\\', static::class);
 
         return $parts[1];
+    }
+
+    private function getFirstArgumentType(Closure $closure)
+    {
+        return (new ReflectionFunction($closure))->getParameters()[0]->getClass()->name;
     }
 }

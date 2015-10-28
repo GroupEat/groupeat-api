@@ -34,7 +34,7 @@ class PackageProvider extends WorkbenchPackageProvider
             ShareNoteworthyEventsOnSlack::class
         );
 
-        $this->delayJobOn(GroupOrderHasBeenClosed::class, function (GroupOrderHasBeenClosed $event) {
+        $this->delayJobOn(function (GroupOrderHasBeenClosed $event) {
             $groupOrder = $event->getGroupOrder();
             $maxConfirmationDurationInMinutes = $this->app[MaxConfirmationDurationInMinutes::class]->value();
 
