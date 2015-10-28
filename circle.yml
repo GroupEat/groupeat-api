@@ -31,10 +31,10 @@ test:
 
 deployment:
   production:
-    branch: master
+    branch: production
     commands:
-      - php deploy.php production master
+      - php deploy.php production
   staging:
-    branch: develop
+    branch: staging
     commands:
-      - php deploy.php staging develop
+      - php deploy.php staging

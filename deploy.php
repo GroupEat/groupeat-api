@@ -1,7 +1,6 @@
 <?php
 
 $target = $argv[1];
-$branch = $argv[2];
 
 $lastCommitMessage = exec('git log -1 HEAD --pretty=format:%s');
 
@@ -12,7 +11,7 @@ if (stristr($lastCommitMessage, 'skip deploy') === false) {
     chmod('rocketeer.phar', 0755);
 
     echo "Deploying\n";
-    system("./rocketeer.phar deploy --on=$target --branch=$branch");
+    system("./rocketeer.phar deploy --on=$target --branch=$target");
 
     echo "Removing Rocketeer executable\n";
     unlink('./rocketeer.phar');
