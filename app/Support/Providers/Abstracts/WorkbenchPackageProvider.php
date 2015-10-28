@@ -164,12 +164,12 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
 
         $this->app['events']->listen($eventClass, function (Event $event) use ($getRecipients) {
             $recipients = collect($getRecipients($event));
-            $channels = $recipients->map(function (User $user) {
-                return str_replace(' ', '', $user->toShortString());
+            $rooms = $recipients->map(function (User $user) {
+                return (string) $user->credentials->id;
             })->all();
             $eventName = class_basename($event);
             $data = $event->toArray();
-            $this->app[Broadcaster::class]->broadcast($channels, $eventName, $data);
+            $this->app[Broadcaster::class]->broadcast($rooms, $eventName, $data);
         });
 
         return $this;
