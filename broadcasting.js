@@ -1,17 +1,34 @@
 const port = 3000;
 
+const moment = require('moment');
+const now = () => `[${moment().format('YYYY-MM-DD HH:mm:ss')}]`;
+
 require('dotenv').load();
 const pgsql = require('pg');
 const pgsqlPassword = process.env.PGSQL_PASSWORD || 'groupeat';
 const pgsqlUrl = `postgres://groupeat:${pgsqlPassword}@127.0.0.1/groupeat`;
-const moment = require('moment');
 
-const now = () => `[${moment().format('YYYY-MM-DD HH:mm:ss')}]`;
-
-const app = require('http').createServer((req, res) => {
+function handler(req, res) {
     res.writeHead(200);
     res.end('');
-});
+};
+
+var app;
+
+try {
+    const fs = require('fs');
+    const sslOptions = {
+        key: fs.readFileSync('/etc/nginx/ssl/nginx.key'),
+        cert: fs.readFileSync('/etc/nginx/ssl/nginx.crt')
+    };
+
+    app = require('https').createServer(sslOptions, handler);
+    console.log(now(), 'server using https');
+} catch (e) {
+    app = require('http').createServer(handler);
+    console.log(now(), 'server using http');
+}
+
 const io = require('socket.io')(app);
 
 app.listen(port, () => { console.log(now(), `server running on port ${port}`); });
