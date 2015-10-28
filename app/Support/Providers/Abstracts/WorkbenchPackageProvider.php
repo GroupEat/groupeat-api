@@ -5,9 +5,11 @@ use Carbon\Carbon;
 use Closure;
 use Dingo\Api\Routing\Router;
 use File;
+use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Events\Abstracts\Event;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Jobs\DelayedJob;
+use Illuminate\Contracts\Broadcasting\Broadcaster;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
@@ -151,6 +153,23 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
             $this->app[LoggerInterface::class]->info(
                 'Job ' . get_class($job->getJob()) . ' has been delayed to ' . Carbon::now()->addSeconds($job->delay)
             );
+        });
+
+        return $this;
+    }
+
+    protected function broadcastTo(Closure $getRecipients)
+    {
+        $eventClass = $this->getFirstArgumentType($getRecipients);
+
+        $this->app['events']->listen($eventClass, function (Event $event) use ($getRecipients) {
+            $recipients = collect($getRecipients($event));
+            $channels = $recipients->map(function (User $user) {
+                return str_replace(' ', '', $user->toShortString());
+            })->all();
+            $eventName = class_basename($event);
+            $data = $event->toArray();
+            $this->app[Broadcaster::class]->broadcast($channels, $eventName, $data);
         });
 
         return $this;

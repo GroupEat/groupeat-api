@@ -38,5 +38,9 @@ class PackageProvider extends WorkbenchPackageProvider
     protected function bootPackage()
     {
         $this->app[Auth::class]->addUserType(new Restaurant);
+
+        $this->broadcastTo(function (GroupOrderHasBeenCreated $event) {
+            return [$event->getOrder()->groupOrder->restaurant];
+        });
     }
 }
