@@ -7,7 +7,7 @@ use Groupeat\Support\Mail\TransportManager;
 use Groupeat\Support\Pipeline\ExecuteJobInDbTransaction;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Groupeat\Support\Queue\DatabaseConnector;
-use Groupeat\Support\Services\LogDomainActivity;
+use Groupeat\Support\Services\LogActivity;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Bus\Dispatcher as JobDispatcher;
@@ -45,9 +45,9 @@ class PackageProvider extends WorkbenchPackageProvider
     {
         include $this->getPackagePath('helpers.php');
 
-        $this->app[EventDispatcher::class]->listen('*', LogDomainActivity::class.'@logEvent');
+        $this->app[EventDispatcher::class]->listen('*', LogActivity::class.'@logEvent');
         $this->app[JobDispatcher::class]->pipeThrough([
-            LogDomainActivity::class,
+            LogActivity::class,
             ExecuteJobInDbTransaction::class,
         ]);
     }
