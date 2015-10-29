@@ -1,10 +1,10 @@
 <?php
 namespace Groupeat\Restaurants\Listeners;
 
+use Groupeat\Mailing\Services\SendMail;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Support\Listeners\Abstracts\QueuedListener;
-use Groupeat\Support\Services\SendMail;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 class SendGroupOrderHasBeenClosedMail extends QueuedListener

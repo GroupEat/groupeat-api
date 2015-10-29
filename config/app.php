@@ -145,6 +145,7 @@ return [
         \Groupeat\Deploy\PackageProvider::class,
         \Groupeat\Devices\PackageProvider::class,
         \Groupeat\Documentation\PackageProvider::class,
+        \Groupeat\Mailing\PackageProvider::class,
         \Groupeat\Messaging\PackageProvider::class,
         \Groupeat\Notifications\PackageProvider::class,
         \Groupeat\Orders\PackageProvider::class,

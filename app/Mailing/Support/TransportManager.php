@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Support\Mail;
+namespace Groupeat\Mailing\Support;
 
 use Illuminate\Mail\TransportManager as IlluminateTransportManager;
 use Psr\Log\LoggerInterface;
