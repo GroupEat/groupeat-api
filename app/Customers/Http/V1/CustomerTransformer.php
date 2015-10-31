@@ -8,14 +8,20 @@ class CustomerTransformer extends TransformerAbstract
 {
     public function transform(Customer $customer)
     {
-        return [
+        $data = [
             'id' => $customer->id,
-            'email' => $customer->credentials->email,
+            'isExternal' => $customer->isExternal,
             'firstName' => $customer->firstName,
             'lastName' => $customer->lastName,
             'phoneNumber' => $customer->phoneNumber,
-            'locale' => $customer->credentials->locale,
-            'activated' => $customer->isActivated(),
         ];
+
+        if (!$customer->isExternal) {
+            $data['email'] = $customer->credentials->email;
+            $data['locale'] = $customer->credentials->locale;
+            $data['activated'] = $customer->isActivated();
+        }
+
+        return $data;
     }
 }
