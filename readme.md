@@ -1,4 +1,4 @@
-[![Circle CI](https://circleci.com/gh/GroupEat/groupeat-api.svg?style=shield&circle-token=5bccad853ce36f8ed516994d3abc07ac2fc7ecbd)](https://circleci.com/gh/GroupEat/groupeat-api)
+[![Circle CI](https://circleci.com/gh/GroupEat/groupeat-api/tree/staging.svg?style=svg&circle-token=5bccad853ce36f8ed516994d3abc07ac2fc7ecbd)](https://circleci.com/gh/GroupEat/groupeat-api/tree/staging)
 
 # Installing
 
