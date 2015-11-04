@@ -2,27 +2,28 @@
 namespace Groupeat\Notifications\Services;
 
 use Groupeat\Notifications\Entities\Notification;
+use Groupeat\Notifications\Events\NotificationHasBeenSent;
 use Groupeat\Notifications\Services\SendGcmNotification;
+use Groupeat\Notifications\Values\NotificationsEnabled;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Events\Dispatcher;
 use RuntimeException;
 
 class SendNotification
 {
-    private $environment;
     private $events;
+    private $enabled;
     private $gcm;
     private $apns;
 
     public function __construct(
-        Environment $environment,
+        NotificationsEnabled $enabled,
         Dispatcher $events,
         SendGcmNotification $gcm,
         SendApnsNotification $apns
     ) {
-        $this->environment = $environment;
+        $this->enabled = $enabled->value();
         $this->events = $events;
         $this->gcm = $gcm;
         $this->apns = $apns;
@@ -30,7 +31,7 @@ class SendNotification
 
     public function call(Notification $notification, $force = false)
     {
-        if ($force || $this->needToSend()) {
+        if ($this->enabled || $force) {
             $platformLabel = $notification->device->platform->label;
 
             switch ($platformLabel) {
@@ -48,10 +49,7 @@ class SendNotification
         }
 
         $notification->save();
-    }
 
-    private function needToSend()
-    {
-        return $this->environment->isOnGroupeatServer();
+        $this->events->fire(new NotificationHasBeenSent($notification));
     }
 }

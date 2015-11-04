@@ -29,4 +29,6 @@ return [
 
     'max_confirmation_duration_in_minutes' => 5,
 
+    'slack_broadcasting_enabled' => env('SLACK_BROADCASTING_ENABLED', false),
+
 ];

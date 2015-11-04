@@ -110,6 +110,7 @@ return [
 
         \Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
         \Illuminate\Auth\AuthServiceProvider::class,
+        \Illuminate\Broadcasting\BroadcastServiceProvider::class,
         \Illuminate\Bus\BusServiceProvider::class,
         \Illuminate\Cache\CacheServiceProvider::class,
         \Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
@@ -144,6 +145,7 @@ return [
         \Groupeat\Deploy\PackageProvider::class,
         \Groupeat\Devices\PackageProvider::class,
         \Groupeat\Documentation\PackageProvider::class,
+        \Groupeat\Mailing\PackageProvider::class,
         \Groupeat\Messaging\PackageProvider::class,
         \Groupeat\Notifications\PackageProvider::class,
         \Groupeat\Orders\PackageProvider::class,

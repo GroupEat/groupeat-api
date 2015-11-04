@@ -1,6 +1,7 @@
 <?php namespace Groupeat\Restaurants;
 
 use Groupeat\Auth\Auth;
+use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
@@ -38,5 +39,21 @@ class PackageProvider extends WorkbenchPackageProvider
     protected function bootPackage()
     {
         $this->app[Auth::class]->addUserType(new Restaurant);
+
+        $this->broadcastTo(function (GroupOrderHasBeenClosed $event) {
+            return [$event->getGroupOrder()->restaurant];
+        });
+
+        $this->broadcastTo(function (GroupOrderHasBeenConfirmed $event) {
+            return [$event->getGroupOrder()->restaurant];
+        });
+
+        $this->broadcastTo(function (GroupOrderHasBeenCreated $event) {
+            return [$event->getOrder()->groupOrder->restaurant];
+        });
+
+        $this->broadcastTo(function (GroupOrderHasBeenJoined $event) {
+            return [$event->getOrder()->groupOrder->restaurant];
+        });
     }
 }

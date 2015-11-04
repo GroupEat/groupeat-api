@@ -60,7 +60,7 @@ class OrderTransformer extends TransformerAbstract
                     $formatData['quantity'] = $format->pivot->quantity;
 
                     return $formatData;
-                })];
+                })->values()];
 
             return $productData;
         });

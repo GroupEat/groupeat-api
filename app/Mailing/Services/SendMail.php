@@ -1,13 +1,11 @@
 <?php
-namespace Groupeat\Support\Services;
+namespace Groupeat\Mailing\Services;
 
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Support\Values\Environment;
+use Groupeat\Support\Services\Locale;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
-use Illuminate\View\Factory;
 use Psr\Log\LoggerInterface;
-use Robbo\Presenter\Decorator;
 
 class SendMail
 {

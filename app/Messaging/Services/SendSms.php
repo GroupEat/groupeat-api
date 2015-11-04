@@ -2,10 +2,10 @@
 namespace Groupeat\Messaging\Services;
 
 use Groupeat\Messaging\Events\SmsHasBeenSent;
+use Groupeat\Messaging\Values\MessagingEnabled;
 use Groupeat\Messaging\Values\NexmoCredentials;
 use Groupeat\Messaging\Values\Sms;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Groupeat\Support\Values\Environment;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -16,18 +16,15 @@ class SendSms
     const URL = 'https://rest.nexmo.com/sms/json';
     const FROM = 'GroupEat';
 
-    private $environment;
     private $events;
+    private $enabled;
     private $credentials;
     private $client;
 
-    public function __construct(
-        Environment $environment,
-        Dispatcher $events,
-        NexmoCredentials $credentials
-    ) {
-        $this->environment = $environment;
+    public function __construct(Dispatcher $events, MessagingEnabled $enabled, NexmoCredentials $credentials)
+    {
         $this->events = $events;
+        $this->enabled = $enabled->value();
         $this->credentials = $credentials;
 
         $this->client = new Client;
@@ -35,7 +32,7 @@ class SendSms
 
     public function call(Sms $sms, $force = false)
     {
-        if ($force || $this->needToSend()) {
+        if ($this->enabled || $force) {
             $text = static::FROM . "\n" . $sms->getText();
 
             $json = [
@@ -73,10 +70,5 @@ class SendSms
         } else {
             $this->events->fire(new SmsHasBeenSent($sms));
         }
-    }
-
-    private function needToSend()
-    {
-        return $this->environment->isProduction();
     }
 }

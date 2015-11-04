@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_DRIVER', 'beanstalkd'),
+    'default' => env('QUEUE_DRIVER', 'redis'),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,11 +35,11 @@ return [
             'driver' => 'sync',
         ],
 
-        'beanstalkd' => [
-            'driver' => 'beanstalkd',
-            'host'   => 'localhost',
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
             'queue'  => 'default',
-            'ttr'    => 60,
+            'expire' => 60,
         ],
 
         'database' => [

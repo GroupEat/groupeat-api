@@ -30,7 +30,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
     protected function bootPackage()
     {
-        $this->delayJobOn(GroupOrderHasBeenCreated::class, function (GroupOrderHasBeenCreated $event) {
+        $this->delayJobOn(function (GroupOrderHasBeenCreated $event) {
             $groupOrder = $event->getOrder()->groupOrder;
 
             return new DelayedJob(

@@ -1,5 +1,5 @@
 <?php
-namespace Groupeat\Support\Mail;
+namespace Groupeat\Mailing\Support;
 
 use Illuminate\Mail\Transport\LogTransport as IlluminateLogTransport;
 use Swift_Mime_MimeEntity;

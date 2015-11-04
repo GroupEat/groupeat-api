@@ -5,12 +5,15 @@ use Carbon\Carbon;
 use Closure;
 use Dingo\Api\Routing\Router;
 use File;
+use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Support\Events\Abstracts\Event;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Jobs\DelayedJob;
+use Illuminate\Contracts\Broadcasting\Broadcaster;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
+use ReflectionFunction;
 
 abstract class WorkbenchPackageProvider extends ServiceProvider
 {
@@ -132,8 +135,10 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $this->app['events']->listen($eventClass, "$handlerClass@$method");
     }
 
-    protected function delayJobOn($eventClass, Closure $getDelayedJob)
+    protected function delayJobOn(Closure $getDelayedJob)
     {
+        $eventClass = $this->getFirstArgumentType($getDelayedJob);
+
         $this->app['events']->listen($eventClass, function (Event $event) use ($getDelayedJob) {
             $job = $getDelayedJob($event);
 
@@ -148,6 +153,23 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
             $this->app[LoggerInterface::class]->info(
                 'Job ' . get_class($job->getJob()) . ' has been delayed to ' . Carbon::now()->addSeconds($job->delay)
             );
+        });
+
+        return $this;
+    }
+
+    protected function broadcastTo(Closure $getRecipients)
+    {
+        $eventClass = $this->getFirstArgumentType($getRecipients);
+
+        $this->app['events']->listen($eventClass, function (Event $event) use ($getRecipients) {
+            $recipients = collect($getRecipients($event));
+            $rooms = $recipients->map(function (User $user) {
+                return (string) $user->credentials->id;
+            })->all();
+            $eventName = class_basename($event);
+            $data = $event->toArray();
+            $this->app[Broadcaster::class]->broadcast($rooms, $eventName, $data);
         });
 
         return $this;
@@ -211,5 +233,10 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         $parts = explode('\\', static::class);
 
         return $parts[1];
+    }
+
+    private function getFirstArgumentType(Closure $closure)
+    {
+        return (new ReflectionFunction($closure))->getParameters()[0]->getClass()->name;
     }
 }

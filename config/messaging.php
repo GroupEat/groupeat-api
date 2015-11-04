@@ -2,6 +2,8 @@
 
 return [
 
+    'enabled' => env('MESSAGING_ENABLED', false),
+
     /*
     |--------------------------------------------------------------------------
     | Nexmo API Config

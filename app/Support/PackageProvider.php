@@ -3,23 +3,20 @@
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Clockwork\Support\Laravel\ClockworkMiddleware;
 use Clockwork\Support\Laravel\ClockworkServiceProvider;
-use Groupeat\Support\Mail\TransportManager;
 use Groupeat\Support\Pipeline\ExecuteJobInDbTransaction;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Groupeat\Support\Queue\DatabaseConnector;
-use Groupeat\Support\Services\LogDomainActivity;
+use Groupeat\Support\Services\LogActivity;
 use Groupeat\Support\Values\AvailableLocales;
 use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Bus\Dispatcher as JobDispatcher;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Queue\QueueServiceProvider;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\SyslogHandler;
 use Psr\Log\LoggerInterface;
-use Swift_Mailer;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
@@ -38,16 +35,15 @@ class PackageProvider extends WorkbenchPackageProvider
         $this->registerLocalPackages();
         $this->registerPapertrailLogger();
         $this->replaceDatabaseQueueConnectorIfNeeded();
-        $this->replaceSwiftMailer(); // TODO: check if it can be deferred
     }
 
     protected function bootPackage()
     {
         include $this->getPackagePath('helpers.php');
 
-        $this->app[EventDispatcher::class]->listen('*', LogDomainActivity::class.'@logEvent');
+        $this->app[EventDispatcher::class]->listen('*', LogActivity::class.'@logEvent');
         $this->app[JobDispatcher::class]->pipeThrough([
-            LogDomainActivity::class,
+            LogActivity::class,
             ExecuteJobInDbTransaction::class,
         ]);
     }
@@ -87,19 +83,6 @@ class PackageProvider extends WorkbenchPackageProvider
             $this->app['queue']->addConnector('database', function () {
                 return new DatabaseConnector($this->app['db']);
             });
-        }
-    }
-
-    private function replaceSwiftMailer()
-    {
-        if ($this->app[Environment::class]->isLocal()) {
-            $this->app->register(MailServiceProvider::class);
-
-            $this->app['mailer']->setSwiftMailer(
-                new Swift_Mailer(
-                    (new TransportManager($this->app))->driver()
-                )
-            );
         }
     }
 }

@@ -3,7 +3,6 @@ namespace Groupeat\Notifications\Services\Abstracts;
 
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Services\Locale;
-use Groupeat\Support\Values\Environment;
 
 abstract class NotificationSender
 {

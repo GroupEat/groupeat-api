@@ -1,11 +1,11 @@
 <?php
 namespace Groupeat\Restaurants\Listeners;
 
+use Groupeat\Mailing\Services\SendMail;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Support\Listeners\Abstracts\QueuedListener;
-use Groupeat\Support\Services\SendMail;
 
 class SendOrderHasBeenPlacedMail extends QueuedListener
 {
