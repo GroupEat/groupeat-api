@@ -79,7 +79,7 @@ class Restaurant extends Entity implements User
         return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
 
-    public function assertOpened(Period $period = null)
+    public function assertOpened(Period $period)
     {
         if (!$this->isOpened($period)) {
             $start = Carbon::instance($period->getStartDate());
