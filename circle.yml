@@ -15,6 +15,10 @@ checkout:
     - echo "PGSQL_USER=ubuntu" >> .env
     - echo "PGSQL_PASSWORD=" >> .env
 
+dependencies:
+  cache_directories:
+    - "vendor"
+
 test:
   pre:
     - php artisan migrate:install
