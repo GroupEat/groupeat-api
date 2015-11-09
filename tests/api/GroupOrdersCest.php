@@ -31,7 +31,7 @@ class GroupOrdersCest
         $confirmUrl = "groupOrders/$groupOrderId/confirm";
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId");
         $email = $I->grabDataFromResponse('email');
-        $password = $I->grabDataFromResponse('name'); // For test purpose, the password of a restaurant is its name.
+        $password = 'groupeat';
         $I->sendApiPost('auth/token', compact('email', 'password'));
         $restaurantToken = $I->grabDataFromResponse('token');
         $I->sendApiGetWithToken($restaurantToken, "groupOrders/$groupOrderId");

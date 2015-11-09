@@ -32,7 +32,7 @@ class ApiHelper extends \Codeception\Module
 
     public function amAlloPizzaRestaurant()
     {
-        $this->sendApiPut('auth/token', ['email' => 'allo@pizza.fr', 'password' => 'AlloPizza']);
+        $this->sendApiPut('auth/token', ['email' => 'allo@pizza.fr', 'password' => 'groupeat']);
         $data = $this->grabDataFromResponse();
 
         return [$data['token'], $data['id']];
