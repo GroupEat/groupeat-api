@@ -145,4 +145,12 @@ class Restaurant extends Entity implements User
     {
         return (int) $this->attributes['deliveryCapacity'];
     }
+
+    protected function getMaximumDiscountRateAttribute()
+    {
+        $discounts = array_values($this->discountPolicy);
+        sort($discounts);
+
+        return end($discounts);
+    }
 }

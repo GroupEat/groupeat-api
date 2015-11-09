@@ -25,7 +25,8 @@
                 "2500": 30,
                 "3500": 40,
                 "6000": 50
-            }
+            },
+            "maximumDiscountRate": 50
         }
 
 ### Get restaurant [GET]

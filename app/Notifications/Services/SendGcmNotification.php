@@ -22,7 +22,7 @@ class SendGcmNotification extends NotificationSender
         parent::__construct($locale);
 
         $this->client = new Client;
-        $this->key = $key;
+        $this->key = $key->value();
     }
 
     public function call(Notification $notification)
@@ -30,11 +30,14 @@ class SendGcmNotification extends NotificationSender
         $customer = $notification->customer;
         $device = $notification->device;
         $groupOrder = $notification->groupOrder;
+        $maximumDiscountRate = $groupOrder->restaurant->maximumDiscountRate;
+
 
         $notificationToken = $device->notificationToken;
 
         $data = [
-            'message' => $this->translateFor('joinGroupOrder', $customer->credentials),
+            'title' => $this->translateFor('title', $customer->credentials),
+            'message' => $this->translateFor('message', $customer->credentials, compact('maximumDiscountRate')),
             'groupOrderId' => $groupOrder->id,
         ];
 

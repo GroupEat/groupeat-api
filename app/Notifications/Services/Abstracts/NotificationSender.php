@@ -13,10 +13,10 @@ abstract class NotificationSender
         $this->locale = $locale;
     }
 
-    protected function translateFor($messageKey, UserCredentials $user)
+    protected function translateFor($messageKey, UserCredentials $user, array $params = [])
     {
-        return $this->locale->executeWithUserLocale(function () use ($messageKey) {
-            return $this->locale->getTranslator()->get("notifications::messages.$messageKey");
+        return $this->locale->executeWithUserLocale(function () use ($messageKey, $params) {
+            return $this->locale->getTranslator()->get("notifications::messages.$messageKey", $params);
         }, $user->locale);
     }
 }

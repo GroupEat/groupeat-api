@@ -20,6 +20,7 @@ class RestaurantTransformer extends TransformerAbstract
             'deliveryCapacity' => $restaurant->deliveryCapacity,
             'pictureUrl' => $restaurant->pictureUrl,
             'discountPolicy' => $restaurant->discountPolicy,
+            'maximumDiscountRate' => $restaurant->maximumDiscountRate
         ];
     }
 

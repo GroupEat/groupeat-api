@@ -50,7 +50,7 @@ class SendApnsNotification extends NotificationSender
 
         $data = [
             'aps' => [
-                'alert' => $this->translateFor('joinGroupOrder', $customer->credentials),
+                'alert' => $this->translateFor('title', $customer->credentials),
             ],
             'groupOrderId' => $groupOrder->id,
             'pn_ttl' => $notification->getTimeToLiveInSeconds(),
