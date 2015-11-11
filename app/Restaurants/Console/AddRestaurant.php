@@ -14,7 +14,6 @@ use Groupeat\Support\Console\Abstracts\Command;
 use Groupeat\Support\Values\PhoneNumber;
 use Illuminate\Database\DatabaseManager;
 use Phaza\LaravelPostgis\Geometries\Point;
-use Symfony\Component\DomCrawler\Form;
 
 class AddRestaurant extends Command
 {

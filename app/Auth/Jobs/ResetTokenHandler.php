@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
-use Groupeat\Auth\Jobs\ResetToken;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\GenerateToken;
 use Tymon\JWTAuth\JWTAuth;

@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Customers\Jobs;
 
-use Groupeat\Customers\Jobs\UpdateAddress;
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;

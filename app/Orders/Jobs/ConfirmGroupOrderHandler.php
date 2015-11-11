@@ -2,7 +2,6 @@
 namespace Groupeat\Orders\Jobs;
 
 use Carbon\Carbon;
-use Groupeat\Orders\Jobs\ConfirmGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;

@@ -11,8 +11,6 @@ class GroupOrderTransformer extends TransformerAbstract
 
     public function transform(GroupOrder $groupOrder)
     {
-        $restaurant = $groupOrder->restaurant;
-
         return [
             'id' => $groupOrder->id,
             'joinable' => $groupOrder->isJoinable(),

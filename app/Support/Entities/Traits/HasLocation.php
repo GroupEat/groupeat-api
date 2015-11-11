@@ -6,7 +6,6 @@ use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Phaza\LaravelPostgis\Eloquent\Builder as PostgisBuilder;
 use Phaza\LaravelPostgis\Geometries\Geometry;
-use Phaza\LaravelPostgis\Geometries\GeometryInterface;
 use Phaza\LaravelPostgis\Geometries\Point;
 use Treffynnon\Navigator;
 

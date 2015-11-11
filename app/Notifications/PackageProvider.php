@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Notifications;
 
-use Groupeat\Notifications\Values\ApnsCertificate;
 use Groupeat\Notifications\Values\ApnsCertificatePassphrase;
 use Groupeat\Notifications\Values\ApnsCertificatePath;
 use Groupeat\Notifications\Values\GcmKey;

@@ -3,7 +3,6 @@ namespace Groupeat\Support\Services;
 
 use Groupeat\Support\Events\Abstracts\Event;
 use Groupeat\Support\Jobs\Abstracts\Job;
-use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Jobs\DelayedJob;
 use Groupeat\Support\Values\Abstracts\Activity;
 use Psr\Log\LoggerInterface;

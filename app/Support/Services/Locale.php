@@ -53,7 +53,7 @@ class Locale
     }
 
     /**
-     * @param callable $callback
+     * @param Closure $callback
      * @param string   $locale
      *
      * @return mixed

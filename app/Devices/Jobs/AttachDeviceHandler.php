@@ -2,10 +2,8 @@
 namespace Groupeat\Devices\Jobs;
 
 use Groupeat\Devices\Events\DeviceHasBeenAttached;
-use Groupeat\Devices\Jobs\AttachDevice;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Devices\Services\ChangeDeviceOwner;
-use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
 use Phaza\LaravelPostgis\Geometries\Point;
 

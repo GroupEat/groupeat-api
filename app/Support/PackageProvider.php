@@ -10,7 +10,6 @@ use Groupeat\Support\Values\Environment;
 use Illuminate\Contracts\Bus\Dispatcher as JobDispatcher;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Queue\QueueServiceProvider;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\SyslogHandler;

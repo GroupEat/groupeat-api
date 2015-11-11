@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Support\Entities\Abstracts;
 
-use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Presenters\Presenter;
@@ -86,7 +85,7 @@ abstract class Entity extends Model implements PresentableInterface
     {
         parent::__construct($attributes);
 
-        $this->validationErrors = new MessageBag();
+        $this->validationErrors = new MessageBag;
     }
 
     /**

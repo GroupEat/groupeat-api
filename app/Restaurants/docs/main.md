@@ -6,7 +6,7 @@
 
     + id (required, string, `123`) ... The restaurant ID.
     + include (optional, string, `address`) ... [address, categories].
-    
+
 + Model
 
         {
@@ -35,7 +35,7 @@
 + Response 200
 
     [Restaurant][]
-    
+
 + Response 404
 
 ## List restaurants [/restaurants/{?opened,around,latitude,longitude,include}]
@@ -72,7 +72,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
 + Parameters
 
     + id (required, string, `123`) ... The restaurant ID.
-    
+
 + Response 200
 
         {

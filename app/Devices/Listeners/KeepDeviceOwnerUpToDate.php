@@ -4,9 +4,7 @@ namespace Groupeat\Devices\Listeners;
 use Groupeat\Auth\Events\UserHasRetrievedItsToken;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
-use Groupeat\Devices\Events\DeviceOwnerHasChanged;
 use Groupeat\Devices\Services\ChangeDeviceOwner;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 
@@ -34,7 +32,7 @@ class KeepDeviceOwnerUpToDate
             if (!is_null($device)) {
                 $this->changeDeviceOwner->call($device, $event->getUser());
             } else {
-                $this->logger->warning('The device #' + $this->deviceUUID + ' should exist');
+                $this->logger->warning('The device #' . $this->deviceUUID . ' should exist');
             }
         }
     }

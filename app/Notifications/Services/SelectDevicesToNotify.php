@@ -2,7 +2,6 @@
 namespace Groupeat\Notifications\Services;
 
 use Carbon\Carbon;
-use Closure;
 use DB;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;

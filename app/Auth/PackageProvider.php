@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Auth;
 
+use Dingo\Api\Auth\Auth as DingoAuth;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Auth\Listeners\SendActivationLink;
@@ -32,7 +33,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
     protected function bootPackage()
     {
-        $this->app[\Dingo\Api\Auth\Auth::class]->extend('custom', function ($app) {
+        $this->app[DingoAuth::class]->extend('custom', function ($app) {
             return $app[Auth::class];
         });
 

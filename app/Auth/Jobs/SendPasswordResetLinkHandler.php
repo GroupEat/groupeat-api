@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
-use Groupeat\Auth\Jobs\SendPasswordResetLink;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Services\Locale;
 use Groupeat\Support\Values\AvailableLocales;

@@ -14,11 +14,12 @@ class AdminsSeeder extends Seeder
             'lastName' => 'App',
         ]);
 
-        UserCredentials::create([
-            'user' => $admin,
+        $credentials = new UserCredentials([
             'email' => 'admin@groupeat.fr',
             'password' => config('admin.default_admin_password'),
             'locale' => 'fr',
         ]);
+        $credentials->user()->associate($admin);
+        $credentials->save();
     }
 }

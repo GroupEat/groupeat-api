@@ -4,7 +4,6 @@ namespace Groupeat\Devices\Entities;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasLocation;
-use Phaza\LaravelPostgis\Geometries\Point;
 
 class Device extends Entity
 {

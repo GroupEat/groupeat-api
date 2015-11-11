@@ -3,10 +3,7 @@ namespace Groupeat\Notifications\Services;
 
 use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Notifications\Events\NotificationHasBeenSent;
-use Groupeat\Notifications\Services\SendGcmNotification;
 use Groupeat\Notifications\Values\NotificationsEnabled;
-use Groupeat\Support\Exceptions\Exception;
-use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
 use RuntimeException;
 

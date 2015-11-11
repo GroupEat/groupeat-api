@@ -5,18 +5,14 @@ use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
-use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
-use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenClosedMail;
 use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenCreatedSms;
 use Groupeat\Restaurants\Listeners\SendOrderHasBeenPlacedMail;
-use Groupeat\Restaurants\Values\DefaultOpeningDurationInMinutes;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Restaurants\Values\MinimumOpeningDurationInMinutes;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
-use Illuminate\Config\Repository;
 
 class PackageProvider extends WorkbenchPackageProvider
 {

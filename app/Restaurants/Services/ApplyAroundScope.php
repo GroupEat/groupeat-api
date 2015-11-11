@@ -1,11 +1,9 @@
 <?php
 namespace Groupeat\Restaurants\Services;
 
-use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\OpeningWindow;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Illuminate\Database\Eloquent\Builder;
-use League\Period\Period;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class ApplyAroundScope

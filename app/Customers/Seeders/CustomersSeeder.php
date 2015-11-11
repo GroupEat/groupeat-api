@@ -19,12 +19,13 @@ class CustomersSeeder extends Seeder
             'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 
-        UserCredentials::create([
-            'user' => $customer,
+        $credentials = new UserCredentials([
             'email' => $this->faker->email,
             'password' => $customer->lastName,
             'locale' => 'fr',
         ]);
+        $credentials->user()->associate($customer);
+        $credentials->save();
     }
 
     protected function insertAdditionalEntries($id)
@@ -35,15 +36,14 @@ class CustomersSeeder extends Seeder
             'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 
-        UserCredentials::create([
-            'user' => $customer,
+        $credentials = new UserCredentials([
             'email' => 'groupeat@ensta.fr',
             'password' => 'groupeat',
             'activatedAt' => Carbon::now(),
             'locale' => 'fr',
-            // @codingStandardsIgnoreStart
             'token' => 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2IiwiaXNzIjoiaHR0cDpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwiaWF0IjoiMTQzNTk2MTE1NSIsImV4cCI6IjIwNjY2ODExNTUiLCJuYmYiOiIxNDM1OTYxMTU1IiwianRpIjoiNWE4Y2Y5OThmNmFiNzI1NzAwOWNjYTBmMmVkOTI2NDYifQ.KlVyE_7LRc164GaQo8anxzwtrkIiBl06J_w-IadaABg',
-            // @codingStandardsIgnoreEnd
         ]);
+        $credentials->user()->associate($customer);
+        $credentials->save();
     }
 }

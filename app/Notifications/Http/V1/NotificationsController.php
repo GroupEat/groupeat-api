@@ -5,7 +5,6 @@ use Groupeat\Devices\Entities\Device;
 use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Notifications\Services\SendNotification;
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 
 class NotificationsController extends Controller

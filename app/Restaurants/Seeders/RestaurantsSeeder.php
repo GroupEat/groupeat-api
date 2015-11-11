@@ -55,16 +55,17 @@ class RestaurantsSeeder extends Seeder
             'pictureUrl' => $this->getPictureUrl(),
         ]);
 
-        $userCredentials = UserCredentials::create([
-            'user' => $restaurant,
+        $credentials = new UserCredentials([
             'email' => $this->faker->email,
             'password' => $restaurant->name,
             'activatedAt' => $restaurant->freshTimestamp(),
             'locale' => 'fr',
         ]);
+        $credentials->user()->associate($restaurant);
+        $credentials->save();
 
         $this->setPizzeriaCategoryFor($restaurant);
-        $this->setAuthTokenFor($userCredentials);
+        $this->setAuthTokenFor($credentials);
     }
 
     protected function insertAdditionalEntries($id)
@@ -107,16 +108,17 @@ class RestaurantsSeeder extends Seeder
 
             $restaurant = Restaurant::create(Arr::except($restaurantData, 'email'));
 
-            $userCredentials = UserCredentials::create([
-                'user' => $restaurant,
+            $credentials = new UserCredentials([
                 'email' => $restaurantData['email'],
                 'password' => 'groupeat',
                 'activatedAt' => $restaurant->freshTimestamp(),
                 'locale' => 'fr',
             ]);
+            $credentials->user()->associate($restaurant);
+            $credentials->save();
 
             $this->setPizzeriaCategoryFor($restaurant);
-            $this->setAuthTokenFor($userCredentials);
+            $this->setAuthTokenFor($credentials);
         }
     }
 
@@ -125,9 +127,9 @@ class RestaurantsSeeder extends Seeder
         $restaurant->categories()->sync([$this->pizzeriaCategory->id]);
     }
 
-    private function setAuthTokenFor(UserCredentials $userCredentials)
+    private function setAuthTokenFor(UserCredentials $credentials)
     {
-        $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
+        $credentials->replaceAuthenticationToken($this->generateToken->call($credentials));
     }
 
     private function getPictureUrl()

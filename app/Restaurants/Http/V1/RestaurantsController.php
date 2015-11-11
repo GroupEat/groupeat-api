@@ -1,13 +1,11 @@
 <?php
 namespace Groupeat\Restaurants\Http\V1;
 
-use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\FoodType;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use League\Period\Period;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class RestaurantsController extends Controller

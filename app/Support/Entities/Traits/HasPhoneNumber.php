@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Support\Entities\Traits;
 
-use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Values\PhoneNumber;
 
 trait HasPhoneNumber

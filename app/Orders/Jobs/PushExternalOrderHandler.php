@@ -3,7 +3,6 @@ namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;
-use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidationHandler;

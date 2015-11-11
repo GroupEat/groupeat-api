@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
-use Groupeat\Auth\Jobs\ChangePassword;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Support\Exceptions\BadRequest;

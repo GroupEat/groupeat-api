@@ -3,12 +3,10 @@ namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;
-use Groupeat\Orders\Jobs\JoinGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidationHandler;
-use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
