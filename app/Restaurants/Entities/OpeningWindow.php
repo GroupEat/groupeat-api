@@ -15,6 +15,16 @@ class OpeningWindow extends Window
         return $rules;
     }
 
+    public function getRawStartAttribute()
+    {
+        return $this->attributes['start'];
+    }
+
+    public function getRawEndAttribute()
+    {
+        return $this->attributes['end'];
+    }
+
     protected function getStartAttribute()
     {
         return $this->createCarbonFromTime('start');

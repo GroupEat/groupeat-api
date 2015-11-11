@@ -24,7 +24,9 @@ class RestaurantsController extends Controller
             $query->around(new Point($this->get('latitude'), $this->get('longitude')));
         }
 
-        return $this->collectionResponse($query->get(), new RestaurantTransformer());
+        $restaurants = $query->get()->load('openingWindows', 'closingWindows', 'credentials');
+
+        return $this->collectionResponse($restaurants, new RestaurantTransformer());
     }
 
     public function productsIndex(Restaurant $restaurant)
@@ -45,6 +47,8 @@ class RestaurantsController extends Controller
 
     public function show(Restaurant $restaurant)
     {
+        $restaurant->load('openingWindows', 'closingWindows');
+
         return $this->itemResponse($restaurant);
     }
 
