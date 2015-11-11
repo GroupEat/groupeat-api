@@ -56,7 +56,7 @@ class AddRestaurant extends Command
 
             $credentialsData = $restaurantData->credentials;
             $credentials = new UserCredentials;
-            $credentials->user = $restaurant;
+            $credentials->user()->associate($restaurant);
             $credentials->email = $credentialsData->email;
             $credentials->locale = $credentialsData->locale;
             $credentials->password = '';

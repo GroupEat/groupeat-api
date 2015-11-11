@@ -233,30 +233,4 @@ abstract class Entity extends Model implements PresentableInterface
     {
         return isset($this->attributes['id']) ? (string) $this->attributes['id'] : null;
     }
-
-    /**
-     * @param string $name          Name of the relation
-     * @param Entity $relatedEntity
-     *
-     * @return $this
-     */
-    protected function setPolymorphicAttribute($name, Entity $relatedEntity)
-    {
-        $id = $relatedEntity->getKey();
-
-        if (empty($id)) {
-            $message = 'Cannot set polymorphic relation '
-                . $relatedEntity->toShortString().' on '
-                . $this->toShortString().'.';
-
-            throw new Exception(
-                'polymorphicRelationCannotBeSet',
-                $message
-            );
-        }
-
-        $this->$name()->associate($relatedEntity);
-
-        return $this;
-    }
 }
