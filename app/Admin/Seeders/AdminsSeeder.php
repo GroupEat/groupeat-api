@@ -19,6 +19,7 @@ class AdminsSeeder extends Seeder
             'password' => config('admin.default_admin_password'),
             'locale' => 'fr',
         ]);
+
         $credentials->user()->associate($admin);
         $credentials->save();
     }

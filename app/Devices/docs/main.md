@@ -16,7 +16,7 @@
                 "label": "ios"
             }
         ]
-        
+
 ## Device [/customers/{id}/devices{?include}]
 
 + Parameters
@@ -62,7 +62,7 @@
         ]
 
 + Response 403
-    
+
         {
             "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as customer 5 instead of 6."

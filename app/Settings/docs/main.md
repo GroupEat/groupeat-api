@@ -32,7 +32,7 @@
 + Response 200
 
     [Settings][]
-    
+
 + Response 400
 
         {

@@ -23,6 +23,7 @@ return [
         'Devices',
         'Notifications',
         'Settings',
+        'Support'
     ],
 
 ];
