@@ -132,6 +132,7 @@ return [
         \Illuminate\Validation\ValidationServiceProvider::class,
         \Illuminate\View\ViewServiceProvider::class,
 
+        \Clockwork\Support\Laravel\ClockworkServiceProvider::class,
         \Dingo\Api\Provider\LaravelServiceProvider::class,
         \Phaza\LaravelPostgis\DatabaseServiceProvider::class,
         \Robbo\Presenter\PresenterServiceProvider::class,

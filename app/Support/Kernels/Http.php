@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Support\Kernels;
 
+use Clockwork\Support\Laravel\ClockworkMiddleware;
 use Groupeat\Auth\Http\Middleware\AllowDifferentToken;
 use Groupeat\Auth\Http\Middleware\ForbidTokenInQueryString;
 use Groupeat\Support\Http\Middleware\Api;
@@ -14,5 +15,6 @@ class Http extends Kernel
         CheckForMaintenanceMode::class,
         ForbidTokenInQueryString::class,
         ForbidQueryStringForNonIdempotentMethods::class,
+        ClockworkMiddleware::class,
     ];
 }

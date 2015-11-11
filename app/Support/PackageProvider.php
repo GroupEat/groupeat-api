@@ -1,8 +1,6 @@
 <?php namespace Groupeat\Support;
 
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
-use Clockwork\Support\Laravel\ClockworkMiddleware;
-use Clockwork\Support\Laravel\ClockworkServiceProvider;
 use Groupeat\Support\Pipeline\ExecuteJobInDbTransaction;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Groupeat\Support\Queue\DatabaseConnector;
@@ -59,8 +57,6 @@ class PackageProvider extends WorkbenchPackageProvider
     {
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
-            $this->app->register(ClockworkServiceProvider::class);
-            $this->app[Kernel::class]->pushMiddleware(ClockworkMiddleware::class);
         }
     }
 
