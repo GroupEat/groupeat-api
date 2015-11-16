@@ -24,14 +24,14 @@ class RestaurantsController extends Controller
 
         $restaurants = $query->get()->load('openingWindows', 'closingWindows', 'credentials');
 
-        return $this->collectionResponse($restaurants, new RestaurantTransformer());
+        return $this->collectionResponse($restaurants, new RestaurantTransformer);
     }
 
     public function productsIndex(Restaurant $restaurant)
     {
         return $this->collectionResponse(
             $restaurant->products,
-            new ProductTransformer()
+            new ProductTransformer
         );
     }
 
@@ -39,7 +39,7 @@ class RestaurantsController extends Controller
     {
         return $this->collectionResponse(
             $product->formats,
-            new ProductFormatTransformer()
+            new ProductFormatTransformer
         );
     }
 

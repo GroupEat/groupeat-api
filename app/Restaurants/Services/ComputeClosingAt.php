@@ -46,7 +46,7 @@ class ComputeClosingAt
         $interruptingClosingWindow = $closings->first(function ($key, ClosingWindow $closing) use ($currentOpeningPeriod) {
             $closingPeriod = new Period($closing->start, $closing->end);
 
-            return $closingPeriod->intersect($currentOpeningPeriod);
+            return $closingPeriod->overlaps($currentOpeningPeriod);
         });
 
         if (!$interruptingClosingWindow) {

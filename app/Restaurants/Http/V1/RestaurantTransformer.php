@@ -27,11 +27,11 @@ class RestaurantTransformer extends TransformerAbstract
 
     public function includeAddress(Restaurant $restaurant)
     {
-        return $this->item($restaurant->address, new AddressTransformer());
+        return $this->item($restaurant->address, new AddressTransformer);
     }
 
     public function includeCategories(Restaurant $restaurant)
     {
-        return $this->collection($restaurant->categories, new CategoryTransformer());
+        return $this->collection($restaurant->categories, new CategoryTransformer);
     }
 }

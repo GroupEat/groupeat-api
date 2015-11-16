@@ -6,7 +6,7 @@ class ExternalOrdersCest
     {
         list($token, $id) = $I->amAlloPizzaRestaurant();
 
-        $I->sendApiGetWithToken($token, 'groupOrders');
+        $I->sendApiGetWithToken($token, "restaurants/$id/groupOrders");
         $data = $I->grabDataFromResponse();
         $I->assertEmpty($data);
 
