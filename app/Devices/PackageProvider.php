@@ -17,7 +17,7 @@ class PackageProvider extends WorkbenchPackageProvider
         $this->addDeviceInLogContext();
 
         $this->app['router']->bind('device', function ($UUID) {
-            return Device::findByUUID($UUID);
+            return Device::findByUUIDorFail($UUID);
         });
     }
 

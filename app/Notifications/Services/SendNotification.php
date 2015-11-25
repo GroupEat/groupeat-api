@@ -1,8 +1,8 @@
 <?php
 namespace Groupeat\Notifications\Services;
 
-use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Notifications\Events\NotificationHasBeenSent;
+use Groupeat\Notifications\Values\Notification;
 use Groupeat\Notifications\Values\NotificationsEnabled;
 use Illuminate\Contracts\Events\Dispatcher;
 use RuntimeException;
@@ -29,15 +29,15 @@ class SendNotification
     public function call(Notification $notification, $force = false)
     {
         if ($this->enabled || $force) {
-            $platformLabel = $notification->device->platform->label;
+            $platformLabel = $notification->getDevice()->platform->label;
 
             switch ($platformLabel) {
                 case 'android':
-                    $this->gcm->call($notification);
+                    $response = $this->gcm->call($notification);
                     break;
 
                 case 'ios':
-                    $this->apns->call($notification);
+                    $response = $this->apns->call($notification);
                     break;
 
                 default:
@@ -45,8 +45,8 @@ class SendNotification
             }
         }
 
-        $notification->save();
-
         $this->events->fire(new NotificationHasBeenSent($notification));
+
+        return $response;
     }
 }

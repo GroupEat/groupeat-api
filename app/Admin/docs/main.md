@@ -19,3 +19,25 @@ Retrieve the HTML code of the API documentation.
             "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as admin instead of customer."
         }
+
+## Send notification [/devices/{uuid}/notifications]
+
++ Parameters
+
+    + uuid (required, string, `123`) ... The device UUID
+
+### POST
+
++ Request
+
+        {
+            "title": "A short title",
+            "message": "A message that gives more details",
+            "timeToLiveInSeconds": 60,
+            "additionalData": {
+                "keyNotReservedByApns": 1,
+                "keyNotReservedByGcm": 2
+            }
+        }
+
++ Response 200

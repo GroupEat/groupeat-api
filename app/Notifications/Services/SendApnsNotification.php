@@ -1,32 +1,25 @@
 <?php
 namespace Groupeat\Notifications\Services;
 
-use Groupeat\Notifications\Entities\Notification;
-use Groupeat\Notifications\Services\Abstracts\NotificationSender;
 use Groupeat\Notifications\Values\ApnsCertificate;
+use Groupeat\Notifications\Values\Notification;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
 
-class SendApnsNotification extends NotificationSender
+class SendApnsNotification
 {
     const URL = 'ssl://gateway.sandbox.push.apple.com:2195';
     const TIMEOUT_IN_SECONDS = 60.0;
 
     private $certificate;
 
-    public function __construct(Locale $locale, ApnsCertificate $certificate)
+    public function __construct(ApnsCertificate $certificate)
     {
-        parent::__construct($locale);
-
         $this->certificate = $certificate;
     }
 
     public function call(Notification $notification)
     {
-        $customer = $notification->customer;
-        $device = $notification->device;
-        $groupOrder = $notification->groupOrder;
-
         $streamContext = stream_context_create();
         stream_context_set_option($streamContext, 'ssl', 'local_cert', $this->certificate->getPath());
         stream_context_set_option($streamContext, 'ssl', 'passphrase', $this->certificate->getPassphrase());
@@ -50,13 +43,16 @@ class SendApnsNotification extends NotificationSender
 
         $data = [
             'aps' => [
-                'alert' => $this->translateFor('title', $customer->credentials),
+                'alert' => $notification->getTitle(),
             ],
-            'groupOrderId' => $groupOrder->id,
             'pn_ttl' => $notification->getTimeToLiveInSeconds(),
         ];
 
-        $message = $this->getBinaryMessage($device->notificationToken, $data);
+        foreach ($notification->getAdditionalData() as $key => $value) {
+            $data[$key] = $value;
+        }
+
+        $message = $this->getBinaryMessage($notification->getDevice()->notificationToken, $data);
 
         $status = fwrite($ApnsConnection, $message, strlen($message));
         fclose($ApnsConnection);
@@ -64,9 +60,11 @@ class SendApnsNotification extends NotificationSender
         if ($status === false) {
             throw new UnprocessableEntity(
                 'apnsError',
-                "Failed to send the request to APNS."
+                "Failed to send the request to APNS. Status: $status"
             );
         }
+
+        return $status;
     }
 
     private function getBinaryMessage($notificationToken, $data)
