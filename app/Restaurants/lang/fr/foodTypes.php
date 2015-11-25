@@ -2,6 +2,6 @@
 
 return [
 
-    'pizza' => 'pizza',
+    'pizza' => "pizza",
 
 ];
