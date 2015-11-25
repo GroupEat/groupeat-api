@@ -12,9 +12,9 @@ class PackageProvider extends WorkbenchPackageProvider
 {
     protected $configValues = [
         NotificationsEnabled::class => 'notifications.enabled',
-        GcmKey::class => 'notifications.gcmKey',
-        ApnsCertificatePath::class => 'notifications.apnsCertificatePath',
-        ApnsCertificatePassphrase::class => 'notifications.apnsCertificatePassphrase',
+        GcmKey::class => 'notifications.gcm.key',
+        ApnsCertificatePath::class => 'notifications.apns.certificatePath',
+        ApnsCertificatePassphrase::class => 'notifications.apns.certificatePassphrase',
     ];
 
     protected $listeners = [
