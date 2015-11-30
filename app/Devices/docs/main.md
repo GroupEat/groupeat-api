@@ -22,7 +22,6 @@
 + Parameters
 
     + id (required, string, `123`) ... The customer ID
-    + include (optional, string, `platform`) ... [platform]
 
 + Model
 
@@ -37,6 +36,11 @@
         }
 
 ### List customer devices [GET]
+
+
++ Parameters
+
+    + include (optional, string, `platform`) ... [platform]
 
 + Response 200
 
