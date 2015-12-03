@@ -27,12 +27,9 @@ class Adminer extends Command
 
     public function handle()
     {
-        // TODO: use latest version (use git history)
-        $latestVersion = '4.2.2';
-
         $this->line("Downloading PHP file");
 
-        $this->client->get("http://downloads.sourceforge.net/adminer/adminer-$latestVersion-en.php", [
+        $this->client->get('https://www.adminer.org/latest-en.php', [
             'save_to' => storage_path('app/adminer.php'),
         ]);
 
