@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SendGcmNotification
 {
     const URL = 'https://android.googleapis.com/gcm/send';
+    const LED_COLOR_ARGB = [0, 255, 78, 80];
 
     private $client;
     private $key;
@@ -24,27 +25,35 @@ class SendGcmNotification
 
     public function call(Notification $notification)
     {
-        $data = [
-            'title' => $notification->getTitle(),
-            'message' => $notification->getMessage(),
-        ];
+        $data = [];
+
+        if (!$notification->isSilent()) {
+            $data['ledColor'] = LED_COLOR_ARGB;
+            $data['title'] = $notification->getTitle();
+            $data['message'] = $notification->getMessage();
+        }
 
         foreach ($notification->getAdditionalData() as $key => $value) {
             $data[$key] = $value;
         }
 
+        $payload = [
+            'json' => [
+                'to' => $notification->getDevice()->notificationToken,
+                'data' => $data,
+            ],
+            'headers' => [
+                'Authorization' => "key={$this->key}",
+                'Content-type' => 'application/json',
+            ],
+        ];
+
+        if ($notification->getTimeToLiveInSeconds()) {
+            $payload['json']['time_to_live'] = $notification->getTimeToLiveInSeconds();
+        }
+
         try {
-            $response = $this->client->post(static::URL, [
-                'json' => [
-                    'to' => $notification->getDevice()->notificationToken,
-                    'data' => $data,
-                    'time_to_live' => $notification->getTimeToLiveInSeconds(),
-                ],
-                'headers' => [
-                    'Authorization' => "key={$this->key}",
-                    'Content-type' => 'application/json',
-                ],
-            ]);
+            $response = $this->client->post(static::URL, $payload);
         } catch (ClientException $e) {
             throw new UnprocessableEntity(
                 'gcmError',

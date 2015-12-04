@@ -74,8 +74,11 @@ class ApiHelper extends \Codeception\Module
         } else {
             $groupOrderId = null;
             $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.716941&longitude=2.239171');
-            $restaurants = $this->grabDataFromResponse();
-            $restaurantId = $restaurants[0]['id'];
+            $restaurantId = collect($this->grabDataFromResponse())
+                ->sortBy(function ($restaurant) {
+                    return new Carbon($restaurant['closingAt']);
+                })
+                ->last()['id'];
             $url = 'orders';
         }
 

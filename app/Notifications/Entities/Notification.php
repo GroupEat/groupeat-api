@@ -9,9 +9,14 @@ use Groupeat\Support\Entities\Abstracts\ImmutableDatedEntity;
 
 class Notification extends ImmutableDatedEntity
 {
+    const RECEIVED_AT = 'receivedAt';
+
+    protected $dates = [self::RECEIVED_AT];
+
     public function getRules()
     {
         return [
+            'silent' => 'required|boolean',
             'customerId' => 'required',
             'deviceId' => 'required',
             'groupOrderId' => 'required'

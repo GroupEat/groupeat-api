@@ -6,7 +6,7 @@ use Groupeat\Devices\Entities\Device;
 use Groupeat\Devices\Events\DeviceOwnerHasChanged;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class ChangeDeviceOwner
+class MaintainCorrectDeviceOwner
 {
     private $events;
 

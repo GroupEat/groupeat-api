@@ -2,16 +2,11 @@
 
 use Groupeat\Auth\Events\UserHasRetrievedItsToken;
 use Groupeat\Devices\Entities\Device;
-use Groupeat\Devices\Listeners\KeepDeviceOwnerUpToDate;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Psr\Log\LoggerInterface;
 
 class PackageProvider extends WorkbenchPackageProvider
 {
-    protected $listeners = [
-        KeepDeviceOwnerUpToDate::class => UserHasRetrievedItsToken::class,
-    ];
-
     protected function bootPackage()
     {
         $this->addDeviceInLogContext();

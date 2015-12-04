@@ -28,12 +28,14 @@ Retrieve the HTML code of the API documentation.
 
 ### POST
 
+Send a push notification to the device with the given UUID. To send a *silent push*, omit the message and title fields.
+
 + Request
 
         {
             "title": "A short title",
             "message": "A message that gives more details",
-            "timeToLiveInSeconds": 60,
+            "timeToLiveInSeconds": 60, // optional
             "additionalData": {
                 "keyNotReservedByApns": 1,
                 "keyNotReservedByGcm": 2

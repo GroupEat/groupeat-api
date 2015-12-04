@@ -1,5 +1,7 @@
 <?php namespace Groupeat\Notifications;
 
+use Groupeat\Notifications\Events\NotificationHasBeenReceived;
+use Groupeat\Notifications\Listeners\SaveNotificationReception;
 use Groupeat\Notifications\Values\ApnsCertificatePassphrase;
 use Groupeat\Notifications\Values\ApnsCertificatePath;
 use Groupeat\Notifications\Values\GcmKey;
@@ -19,5 +21,6 @@ class PackageProvider extends WorkbenchPackageProvider
 
     protected $listeners = [
         SendNotificationToCustomers::class => GroupOrderHasBeenCreated::class,
+        SaveNotificationReception::class => NotificationHasBeenReceived::class
     ];
 }

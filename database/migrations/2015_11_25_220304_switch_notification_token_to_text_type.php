@@ -10,15 +10,11 @@ class SwitchNotificationTokenToTextType extends Migration
 
     public function up()
     {
-        Schema::table($this->getTable(), function (Blueprint $table) {
-            DB::statement('ALTER TABLE '.$this->getTable().' ALTER COLUMN "notificationToken" TYPE TEXT');
-        });
+        DB::statement('ALTER TABLE '.$this->getTable().' ALTER COLUMN "notificationToken" TYPE TEXT');
     }
 
     public function down()
     {
-        Schema::table($this->getTable(), function (Blueprint $table) {
-            DB::statement('ALTER TABLE '.$this->getTable().' ALTER COLUMN "notificationToken" TYPE VARCHAR(255)');
-        });
+        DB::statement('ALTER TABLE '.$this->getTable().' ALTER COLUMN "notificationToken" TYPE VARCHAR(255)');
     }
 }

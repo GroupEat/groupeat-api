@@ -1,21 +1,21 @@
 <?php
 namespace Groupeat\Devices\Jobs;
 
+use Groupeat\Devices\Entities\DeviceLocation;
 use Groupeat\Devices\Events\DeviceHasBeenAttached;
 use Groupeat\Devices\Entities\Device;
-use Groupeat\Devices\Services\ChangeDeviceOwner;
+use Groupeat\Devices\Services\MaintainCorrectDeviceOwner;
 use Illuminate\Contracts\Events\Dispatcher;
-use Phaza\LaravelPostgis\Geometries\Point;
 
 class AttachDeviceHandler
 {
     private $events;
-    private $changeDeviceOwner;
+    private $maintainCorrectDeviceOwner;
 
-    public function __construct(Dispatcher $events, ChangeDeviceOwner $changeDeviceOwner)
+    public function __construct(Dispatcher $events, MaintainCorrectDeviceOwner $maintainCorrectDeviceOwner)
     {
         $this->events = $events;
-        $this->changeDeviceOwner = $changeDeviceOwner;
+        $this->maintainCorrectDeviceOwner = $maintainCorrectDeviceOwner;
     }
 
     public function handle(AttachDevice $job)
@@ -24,7 +24,7 @@ class AttachDeviceHandler
         $device = Device::where('UUID', $deviceUUID)->first();
 
         if (!is_null($device)) {
-            $this->changeDeviceOwner->call($device, $job->getCustomer());
+            $this->maintainCorrectDeviceOwner->call($device, $job->getCustomer());
         } else {
             $device = new Device;
             $device->customer()->associate($job->getCustomer());
@@ -33,10 +33,13 @@ class AttachDeviceHandler
             $device->platform()->associate($job->getPlatform());
             $device->platformVersion = $job->getPlatformVersion();
             $device->model = $job->getModel();
-            $device->location = new Point(0, 0); // TODO: FIXME
 
             $device->save();
             $this->events->fire(new DeviceHasBeenAttached($device));
+        }
+
+        if ($job->getLocation()) {
+            DeviceLocation::createFromDeviceAndLocationArray($device, $job->getLocation());
         }
 
         return $device;

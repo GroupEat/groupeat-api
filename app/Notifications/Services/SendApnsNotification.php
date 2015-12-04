@@ -45,8 +45,15 @@ class SendApnsNotification
             'aps' => [
                 'alert' => $notification->getTitle(),
             ],
-            'pn_ttl' => $notification->getTimeToLiveInSeconds(),
         ];
+
+        if ($notification->getTimeToLiveInSeconds()) {
+            $data['pn_ttl'] = $notification->getTimeToLiveInSeconds();
+        }
+
+        if ($notification->isSilent()) {
+            $data['aps']['content-available'] = 1;
+        }
 
         foreach ($notification->getAdditionalData() as $key => $value) {
             $data[$key] = $value;

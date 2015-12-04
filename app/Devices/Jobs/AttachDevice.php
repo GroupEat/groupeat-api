@@ -13,6 +13,7 @@ class AttachDevice extends Job
     private $platform;
     private $platformVersion;
     private $model;
+    private $location;
 
     /**
      * @param Customer        $customer
@@ -21,6 +22,7 @@ class AttachDevice extends Job
      * @param Platform        $platform
      * @param string          $platformVersion
      * @param string          $model
+     * @param array|null  $location
      */
     public function __construct(
         Customer $customer,
@@ -28,7 +30,8 @@ class AttachDevice extends Job
         $notificationToken,
         Platform $platform,
         $platformVersion,
-        $model
+        $model,
+        $location
     ) {
         $this->customer = $customer;
         $this->UUID = $UUID;
@@ -36,6 +39,7 @@ class AttachDevice extends Job
         $this->platform = $platform;
         $this->platformVersion = $platformVersion;
         $this->model = $model;
+        $this->location = $location;
     }
 
     public function getCustomer()
@@ -66,5 +70,10 @@ class AttachDevice extends Job
     public function getModel()
     {
         return $this->model;
+    }
+
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

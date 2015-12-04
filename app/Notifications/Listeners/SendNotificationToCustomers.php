@@ -8,6 +8,7 @@ use Groupeat\Notifications\Entities\Notification as NotificationEntity;
 use Groupeat\Notifications\Services\SendNotification;
 use Groupeat\Notifications\Services\SelectDevicesToNotify;
 use Groupeat\Notifications\Values\Notification as NotificationValue;
+use Groupeat\Notifications\Values\SilentNotification;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Listeners\Abstracts\QueuedListener;
@@ -40,15 +41,18 @@ class SendNotificationToCustomers extends QueuedListener
         $this->selectDevicesToNotify->call($groupOrder)
             ->each(function (Device $device) use ($groupOrder) {
                 $entity = new NotificationEntity;
+                $entity->silent = false;
                 $entity->customer()->associate($device->customer);
                 $entity->device()->associate($device);
                 $entity->groupOrder()->associate($groupOrder);
+                $entity->save();
                 $value = $this->getValueFromEntity($entity);
 
                 try {
                     $this->sendNotification->call($value);
-                    $entity->save();
                 } catch (Exception $groupeatException) {
+                    $entity->failed = true;
+                    $entity->save();
                     $this->logger->critical(
                         'Failed to send notification to '
                         . $device->customer->toShortString()
@@ -67,14 +71,19 @@ class SendNotificationToCustomers extends QueuedListener
         $groupOrder = $entity->groupOrder;
         $maximumDiscountRate = $groupOrder->restaurant->maximumDiscountRate;
         $timeToLiveInSeconds = $groupOrder->endingAt->diffInSeconds(Carbon::now(), true);
+        $additionalData = ['groupOrderId' => $groupOrder->id, 'notificationId' => $entity->id];
 
-        return new NotificationValue(
-            $entity->device,
-            $this->translateFor('title', $customer),
-            $this->translateFor('message', $customer, compact('maximumDiscountRate')),
-            $timeToLiveInSeconds,
-            ['groupOrderId' => $groupOrder->id]
-        );
+        if ($entity->silent) {
+            return new SilentNotification($entity->device, $timeToLiveInSeconds, $additionalData);
+        } else {
+            return new NotificationValue(
+                $entity->device,
+                $this->translateFor('title', $customer),
+                $this->translateFor('message', $customer, compact('maximumDiscountRate')),
+                $timeToLiveInSeconds,
+                $additionalData
+            );
+        }
     }
 
     protected function translateFor($messageKey, Customer $customer, array $params = [])

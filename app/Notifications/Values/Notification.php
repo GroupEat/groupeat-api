@@ -72,4 +72,9 @@ class Notification
     {
         return $this->additionalData;
     }
+
+    public function isSilent()
+    {
+        return empty($this->message) && empty($this->title);
+    }
 }

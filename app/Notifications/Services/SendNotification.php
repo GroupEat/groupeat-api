@@ -43,6 +43,8 @@ class SendNotification
                 default:
                     throw new RuntimeException("Cannot send notification to platform $platformLabel");
             }
+        } else {
+            $response = 'notSent';
         }
 
         $this->events->fire(new NotificationHasBeenSent($notification));
