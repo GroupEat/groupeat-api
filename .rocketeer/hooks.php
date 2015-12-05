@@ -35,7 +35,7 @@ return [
         'deploy'  => [
             function ($task) {
                 $task->runForCurrentRelease('php artisan migrate --force');
-                $task->runForCurrentRelease('sudo supervisorctl restart all');
+                $task->runForCurrentRelease('sudo supervisorctl restart api-queue');
             }
         ],
         'cleanup' => [],
