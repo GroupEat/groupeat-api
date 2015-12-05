@@ -83,6 +83,7 @@ class SelectDevicesToNotify
             }, 'customersThatCanBeNotifiedIds')
             ->next(function (Collection $customersThatCanBeNotifiedIds) use ($chain) {
                 $devices = Device::whereIn('customerId', $customersThatCanBeNotifiedIds->all())
+                    ->whereNotNull('notificationToken')
                     ->with('customer', 'platform')
                     ->get();
                 $chain->log('devicesToNotifyIds', $devices->lists('id'));

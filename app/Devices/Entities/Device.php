@@ -31,7 +31,6 @@ class Device extends Entity
         return [
             'customerId' => 'required',
             'UUID' => 'required',
-            'notificationToken' => 'required',
             'platformId' => 'required',
             'platformVersion' => 'required',
             'model' => 'required',
