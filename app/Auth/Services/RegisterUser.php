@@ -34,7 +34,7 @@ class RegisterUser
      * @param string   $password
      * @param string   $locale
      * @param User     $userType
-     * @param callable $additionalValidationCallback
+     * @param Closure $additionalValidationCallback
      *
      * @return User
      */

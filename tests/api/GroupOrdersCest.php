@@ -26,12 +26,12 @@ class GroupOrdersCest
         $orderDetails['groupOrderId'] = $groupOrderId;
         $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
         $I->seeResponseCodeIs(201);
-        $mail = $I->grabMailById('restaurants.groupOrderHasBeenClosed');
+        $I->grabMailById('restaurants.groupOrderHasBeenClosed');
 
         $confirmUrl = "groupOrders/$groupOrderId/confirm";
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId");
         $email = $I->grabDataFromResponse('email');
-        $password = $I->grabDataFromResponse('name'); // For test purpose, the password of a restaurant is its name.
+        $password = 'groupeat';
         $I->sendApiPost('auth/token', compact('email', 'password'));
         $restaurantToken = $I->grabDataFromResponse('token');
         $I->sendApiGetWithToken($restaurantToken, "groupOrders/$groupOrderId");

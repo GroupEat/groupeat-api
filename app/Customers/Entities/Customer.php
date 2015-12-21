@@ -3,7 +3,6 @@ namespace Groupeat\Customers\Entities;
 
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
-use Groupeat\Devices\Entities\Device;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasPhoneNumber;

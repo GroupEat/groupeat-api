@@ -107,7 +107,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
 
         // The user should be save in order to have its id
         $user->save();
-        $userCredentials->user = $user;
+        $userCredentials->user()->associate($user);
         $userCredentials->save();
 
         return $userCredentials;
@@ -190,11 +190,6 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
     public function getRememberTokenName()
     {
         // Not implemented
-    }
-
-    protected function setUserAttribute(User $user)
-    {
-        return $this->setPolymorphicAttribute('user', $user);
     }
 
     protected function setPasswordAttribute($password)

@@ -2,7 +2,6 @@
 namespace Groupeat\Support\Database\Abstracts;
 
 use Config;
-use DB;
 use Faker\Factory;
 use Illuminate\Database\Seeder as LaravelSeeder;
 

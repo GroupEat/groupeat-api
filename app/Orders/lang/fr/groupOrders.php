@@ -2,6 +2,6 @@
 
 return [
 
-    'summary' => 'Récapitulatif :',
+    'summary' => "Récapitulatif :",
 
 ];

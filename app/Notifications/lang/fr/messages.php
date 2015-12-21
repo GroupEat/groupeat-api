@@ -2,6 +2,7 @@
 
 return [
 
-    'joinGroupOrder' => "Une commande groupée a été lancée. Rejoins la !",
+    'title' => "Nouvelle commande GroupEat",
+    'message' => "réduction jusqu'à :maximumDiscountRate %"
 
 ];

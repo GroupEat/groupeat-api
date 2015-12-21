@@ -15,21 +15,23 @@ class RestaurantTransformer extends TransformerAbstract
             'name' => $restaurant->name,
             'email' => $restaurant->email,
             'rating' => $restaurant->rating,
+            'closingAt' => (string) $restaurant->closingAt,
             'phoneNumber' => $restaurant->phoneNumber,
             'minimumGroupOrderPrice' => $restaurant->minimumGroupOrderPrice->getAmount(),
             'deliveryCapacity' => $restaurant->deliveryCapacity,
             'pictureUrl' => $restaurant->pictureUrl,
             'discountPolicy' => $restaurant->discountPolicy,
+            'maximumDiscountRate' => $restaurant->maximumDiscountRate
         ];
     }
 
     public function includeAddress(Restaurant $restaurant)
     {
-        return $this->item($restaurant->address, new AddressTransformer());
+        return $this->item($restaurant->address, new AddressTransformer);
     }
 
     public function includeCategories(Restaurant $restaurant)
     {
-        return $this->collection($restaurant->categories, new CategoryTransformer());
+        return $this->collection($restaurant->categories, new CategoryTransformer);
     }
 }

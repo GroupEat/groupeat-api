@@ -8,8 +8,8 @@ class ApnsCertificate
 
     public function __construct(ApnsCertificatePath $path, ApnsCertificatePassphrase $passphrase)
     {
-        $this->path = $path;
-        $this->passphrase = $passphrase;
+        $this->path = $path->value();
+        $this->passphrase = $passphrase->value();
     }
 
     public function getPath()

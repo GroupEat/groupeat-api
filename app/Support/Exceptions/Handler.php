@@ -20,7 +20,7 @@ class Handler extends DingoExceptionHandler
      * @var array
      */
     private $dontReport = [
-        \Symfony\Component\HttpKernel\Exception\HttpException::class
+        HttpException::class
     ];
 
     public function __construct(LoggerInterface $logger)

@@ -1,17 +1,12 @@
 <?php
 namespace Groupeat\Admin\Listeners;
 
-use Groupeat\Admin\Events\GroupOrderHasNotBeenConfirmed;
 use Groupeat\Admin\Values\SlackBroadcastingEnabled;
-use Groupeat\Auth\Events\UserHasRegistered;
-use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
-use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Support\Events\Abstracts\Event;
 use Groupeat\Support\Listeners\Abstracts\QueuedListener;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class BroadcastOnSlack extends QueuedListener
 {
@@ -34,7 +29,7 @@ class BroadcastOnSlack extends QueuedListener
             $json = ['text' => (string) $event];
 
             try {
-                $response = $this->client->post(static::URL, compact('json'));
+                $this->client->post(static::URL, compact('json'));
             } catch (ClientException $e) {
                 $this->logger->error("Could not broadcast event [$event] on Slack.");
             }

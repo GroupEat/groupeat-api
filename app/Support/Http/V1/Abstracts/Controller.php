@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
 use League\Fractal\TransformerAbstract;
-use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller extends IlluminateController
 {

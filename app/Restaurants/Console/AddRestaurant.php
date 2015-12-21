@@ -14,7 +14,6 @@ use Groupeat\Support\Console\Abstracts\Command;
 use Groupeat\Support\Values\PhoneNumber;
 use Illuminate\Database\DatabaseManager;
 use Phaza\LaravelPostgis\Geometries\Point;
-use Symfony\Component\DomCrawler\Form;
 
 class AddRestaurant extends Command
 {
@@ -56,7 +55,7 @@ class AddRestaurant extends Command
 
             $credentialsData = $restaurantData->credentials;
             $credentials = new UserCredentials;
-            $credentials->user = $restaurant;
+            $credentials->user()->associate($restaurant);
             $credentials->email = $credentialsData->email;
             $credentials->locale = $credentialsData->locale;
             $credentials->password = '';

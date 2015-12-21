@@ -2,7 +2,6 @@
 namespace Groupeat\Settings\Jobs;
 
 use Groupeat\Settings\Entities\CustomerSettings;
-use Groupeat\Settings\Jobs\UpdateSettings;
 use Groupeat\Settings\Events\CustomerHasUpdatedItsSettings;
 use Groupeat\Support\Exceptions\BadRequest;
 use Illuminate\Contracts\Events\Dispatcher;

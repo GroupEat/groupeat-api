@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
+use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Http\V1\Traits\CanAddOrder;
 use Groupeat\Orders\Jobs\ConfirmGroupOrder;
 use Groupeat\Orders\Entities\GroupOrder;
@@ -15,6 +16,8 @@ class GroupOrdersController extends Controller
 
     public function index()
     {
+        $this->auth->assertSameType(new Customer);
+
         $query = GroupOrder::with('restaurant');
 
         if ((bool) $this->get('joinable')) {
@@ -37,6 +40,10 @@ class GroupOrdersController extends Controller
 
     public function show(GroupOrder $groupOrder)
     {
+        if (!$this->auth->isSameType(new Customer)) {
+            $this->auth->assertSame($groupOrder->restaurant);
+        }
+
         return $this->itemResponse($groupOrder);
     }
 

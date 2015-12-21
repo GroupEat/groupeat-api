@@ -7,7 +7,6 @@ use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Http\V1\ProductFormatTransformer;
 use Groupeat\Restaurants\Http\V1\ProductTransformer;
-use Groupeat\Restaurants\Http\V1\RestaurantTransformer;
 use League\Fractal\TransformerAbstract;
 
 class OrderTransformer extends TransformerAbstract

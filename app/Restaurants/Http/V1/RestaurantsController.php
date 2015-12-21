@@ -1,13 +1,11 @@
 <?php
 namespace Groupeat\Restaurants\Http\V1;
 
-use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\FoodType;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use League\Period\Period;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class RestaurantsController extends Controller
@@ -24,14 +22,16 @@ class RestaurantsController extends Controller
             $query->around(new Point($this->get('latitude'), $this->get('longitude')));
         }
 
-        return $this->collectionResponse($query->get(), new RestaurantTransformer());
+        $restaurants = $query->get()->load('openingWindows', 'closingWindows', 'credentials');
+
+        return $this->collectionResponse($restaurants, new RestaurantTransformer);
     }
 
     public function productsIndex(Restaurant $restaurant)
     {
         return $this->collectionResponse(
             $restaurant->products,
-            new ProductTransformer()
+            new ProductTransformer
         );
     }
 
@@ -39,12 +39,14 @@ class RestaurantsController extends Controller
     {
         return $this->collectionResponse(
             $product->formats,
-            new ProductFormatTransformer()
+            new ProductFormatTransformer
         );
     }
 
     public function show(Restaurant $restaurant)
     {
+        $restaurant->load('openingWindows', 'closingWindows');
+
         return $this->itemResponse($restaurant);
     }
 

@@ -18,7 +18,7 @@ class CreateDevicesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->string('UUID')->unique();
-            $table->string('notificationToken');
+            $table->string('notificationToken')->nullable();
             $table->unsignedInteger('platformId');
             $table->string('platformVersion');
             $table->string('model');

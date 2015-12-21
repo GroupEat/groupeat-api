@@ -32,7 +32,7 @@ class ApiHelper extends \Codeception\Module
 
     public function amAlloPizzaRestaurant()
     {
-        $this->sendApiPut('auth/token', ['email' => 'allo@pizza.fr', 'password' => 'AlloPizza']);
+        $this->sendApiPut('auth/token', ['email' => 'allo@pizza.fr', 'password' => 'groupeat']);
         $data = $this->grabDataFromResponse();
 
         return [$data['token'], $data['id']];
@@ -74,8 +74,11 @@ class ApiHelper extends \Codeception\Module
         } else {
             $groupOrderId = null;
             $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.716941&longitude=2.239171');
-            $restaurants = $this->grabDataFromResponse();
-            $restaurantId = $restaurants[0]['id'];
+            $restaurantId = collect($this->grabDataFromResponse())
+                ->sortBy(function ($restaurant) {
+                    return new Carbon($restaurant['closingAt']);
+                })
+                ->last()['id'];
             $url = 'orders';
         }
 

@@ -27,21 +27,9 @@ class Adminer extends Command
 
     public function handle()
     {
-        $this->line("Listing available versions");
-
-        $response = $this->client->get('https://api.github.com/repos/vrana/adminer/tags');
-
-        $latestVersion = collect(json_decode($response->getBody(), true))
-            ->map(function ($tag) {
-                return trim($tag['name'], 'v');
-            })
-            ->sortByDesc(null)
-            ->first();
-
-        $this->line("Latest version found: $latestVersion");
         $this->line("Downloading PHP file");
 
-        $this->client->get("http://downloads.sourceforge.net/adminer/adminer-$latestVersion-en.php", [
+        $this->client->get('https://www.adminer.org/latest-en.php', [
             'save_to' => storage_path('app/adminer.php'),
         ]);
 

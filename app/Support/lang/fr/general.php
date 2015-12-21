@@ -2,6 +2,6 @@
 
 return [
 
-    'referenceAbbreviation' => 'Réf. :reference',
+    'referenceAbbreviation' => "Réf. :reference",
 
 ];

@@ -6,7 +6,7 @@
 
     + id (required, string, `123`) ... The restaurant ID.
     + include (optional, string, `address`) ... [address, categories].
-    
+
 + Model
 
         {
@@ -17,6 +17,7 @@
             "phoneNumber": "0689731323",
             "minimumGroupOrderPrice": 1088,
             "deliveryCapacity": 7,
+            "closingAt": "2015-11-08 00:30:00", // The time of the next closing of the restaurant
             "pictureUrl": "https://snap-photos.s3.amazonaws.com/img-thumbs/960w/RE54D4GOX0.jpg",
             "discountPolicy": { // The key is the price and the value is the corresponding discount rate
                 "900": 0,
@@ -25,7 +26,8 @@
                 "2500": 30,
                 "3500": 40,
                 "6000": 50
-            }
+            },
+            "maximumDiscountRate": 50
         }
 
 ### Get restaurant [GET]
@@ -33,7 +35,7 @@
 + Response 200
 
     [Restaurant][]
-    
+
 + Response 404
 
 ## List restaurants [/restaurants/{?opened,around,latitude,longitude,include}]
@@ -70,7 +72,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
 + Parameters
 
     + id (required, string, `123`) ... The restaurant ID.
-    
+
 + Response 200
 
         {

@@ -19,7 +19,7 @@ An e-mail will be sent to the given address with an activation link that must be
 + Response 201
 
     [Token][]
-        
+
 + Response 400
 
         {
@@ -109,7 +109,7 @@ A customer must have a first name, a last name and a phone number thus, when hit
         }
 
 + Response 400
-            
+
         {
             "errorKey": "badPhoneNumberFormat",
             "message": "The phone number must match /^33(\\d)(\\d{2})(\\d{2})(\\d{2})(\\d{2})$/, \"+33605040302\" given.",
@@ -150,7 +150,7 @@ A customer must have a first name, a last name and a phone number thus, when hit
 + Response 200
 
     [Address][]
-    
+
 + Response 404
 
 ### Add/Update address [PUT]
@@ -169,7 +169,7 @@ For the MVP, all the addresses must be valid campus addresses. That's why the on
 + Response 200
 
     [Address][]
-    
+
 + Response 404
 
 + Response 422

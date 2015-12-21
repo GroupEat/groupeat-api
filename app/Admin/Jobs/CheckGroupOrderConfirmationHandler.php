@@ -7,7 +7,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 class CheckGroupOrderConfirmationHandler
 {
     private $events;
-    private $maxConfirmationDurationInMinutes;
 
     public function __construct(Dispatcher $events)
     {

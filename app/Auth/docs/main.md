@@ -68,7 +68,7 @@ Once hit, this route will make the old token obsolete: only the new one can be u
 + Response 200
 
     [Token][]
-    
+
 + Response 401
 
         {
@@ -93,7 +93,7 @@ Once hit, this route will make the old token obsolete: only the new one can be u
 
 ## Password [/auth/password]
 
-Changing or reseting a password will make the current authentication token obsolete. 
+Changing or reseting a password will make the current authentication token obsolete.
 
 ### Reset password [POST]
 
@@ -122,7 +122,7 @@ Changing or reseting a password will make the current authentication token obsol
             "errorKey": "noUserForPasswordResetToken",
             "message": "No user corresponding to this password reset token."
         }
-        
+
 + Response 422
 
         {
@@ -145,7 +145,7 @@ Changing or reseting a password will make the current authentication token obsol
     [Token][]
 
 + Response 400
-                
+
         {
             "errorKey": "passwordsMustBeDifferent",
             "message": "The new password cannot be the same as the old one."
@@ -161,7 +161,7 @@ Changing or reseting a password will make the current authentication token obsol
                 }
             }
         }
-        
+
 + Response 404
 
         {
@@ -172,16 +172,16 @@ Changing or reseting a password will make the current authentication token obsol
                 }
             }
         }
-        
+
 + Response 422
 
         {
             "errorKey": "badPassword",
             "message": "The password must be at least six characters."
         }
-        
+
 ## Send password reset link [/auth/passwordResets]
-    
+
 ### POST
 
 + Request

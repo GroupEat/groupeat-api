@@ -6,24 +6,26 @@ use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Mailing\Services\SendMail;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Listeners\Abstracts\QueuedListener;
-use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Contracts\Config\Repository;
 
 class SendActivationLink extends QueuedListener
 {
     private $mailer;
-    private $urlGenerator;
+    private $config;
 
-    public function __construct(SendMail $mailer, UrlGenerator $urlGenerator)
+    public function __construct(SendMail $mailer, Repository $config)
     {
         $this->mailer = $mailer;
-        $this->urlGenerator = $urlGenerator;
+        $this->config = $config;
     }
 
     public function handle(UserHasRegistered $event)
     {
         $userCredentials = $event->getUser();
         $token = $this->generateActivationToken($userCredentials);
-        $url = $this->urlGenerator->to("auth/activate?token=$token");
+        $apiUrl = $this->config->get('app.url');
+        $webAppBaseUrl = str_replace('://', '://app.', trim($apiUrl, '/api'));
+        $url = "$webAppBaseUrl/auth/activate?token=$token";
 
         $this->mailer->call(
             $userCredentials,

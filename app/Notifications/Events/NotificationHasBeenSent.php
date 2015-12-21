@@ -1,7 +1,7 @@
 <?php
 namespace Groupeat\Notifications\Events;
 
-use Groupeat\Notifications\Entities\Notification;
+use Groupeat\Notifications\Values\Notification;
 use Groupeat\Support\Events\Abstracts\Event;
 
 class NotificationHasBeenSent extends Event

@@ -1,55 +1,59 @@
 <?php
 namespace Groupeat\Notifications\Services;
 
-use Groupeat\Notifications\Entities\Notification;
-use Groupeat\Notifications\Services\Abstracts\NotificationSender;
 use Groupeat\Notifications\Values\GcmKey;
+use Groupeat\Notifications\Values\Notification;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Services\Locale;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Response;
 
-class SendGcmNotification extends NotificationSender
+class SendGcmNotification
 {
     const URL = 'https://android.googleapis.com/gcm/send';
+    const LED_COLOR_ARGB = [0, 255, 78, 80];
 
     private $client;
     private $key;
 
-    public function __construct(Locale $locale, GcmKey $key)
+    public function __construct(GcmKey $key)
     {
-        parent::__construct($locale);
-
         $this->client = new Client;
-        $this->key = $key;
+        $this->key = $key->value();
     }
 
     public function call(Notification $notification)
     {
-        $customer = $notification->customer;
-        $device = $notification->device;
-        $groupOrder = $notification->groupOrder;
+        $data = [];
 
-        $notificationToken = $device->notificationToken;
+        if (!$notification->isSilent()) {
+            $data['ledColor'] = LED_COLOR_ARGB;
+            $data['title'] = $notification->getTitle();
+            $data['message'] = $notification->getMessage();
+        }
 
-        $data = [
-            'message' => $this->translateFor('joinGroupOrder', $customer->credentials),
-            'groupOrderId' => $groupOrder->id,
+        foreach ($notification->getAdditionalData() as $key => $value) {
+            $data[$key] = $value;
+        }
+
+        $payload = [
+            'json' => [
+                'to' => $notification->getDevice()->notificationToken,
+                'data' => $data,
+            ],
+            'headers' => [
+                'Authorization' => "key={$this->key}",
+                'Content-type' => 'application/json',
+            ],
         ];
 
+        if ($notification->getTimeToLiveInSeconds()) {
+            $payload['json']['time_to_live'] = $notification->getTimeToLiveInSeconds();
+        }
+
         try {
-            $response = $this->client->post(static::URL, [
-                'json' => [
-                    'to' => $notificationToken,
-                    'data' => $data,
-                    'time_to_live' => $notification->getTimeToLiveInSeconds(),
-                ],
-                'headers' => [
-                    'Authorization' => "key={$this->key}",
-                    'Content-type' => 'application/json',
-                ],
-            ]);
+            $response = $this->client->post(static::URL, $payload);
         } catch (ClientException $e) {
             throw new UnprocessableEntity(
                 'gcmError',
@@ -63,5 +67,7 @@ class SendGcmNotification extends NotificationSender
                 (string) $response->getBody()
             );
         }
+
+        return (string) $response->getBody();
     }
 }

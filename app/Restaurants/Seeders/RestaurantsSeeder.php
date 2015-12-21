@@ -7,6 +7,7 @@ use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Database\Abstracts\Seeder;
 use Groupeat\Support\Database\Traits\GeneratePhoneNumber;
+use Illuminate\Support\Arr;
 
 class RestaurantsSeeder extends Seeder
 {
@@ -54,16 +55,17 @@ class RestaurantsSeeder extends Seeder
             'pictureUrl' => $this->getPictureUrl(),
         ]);
 
-        $userCredentials = UserCredentials::create([
-            'user' => $restaurant,
+        $credentials = new UserCredentials([
             'email' => $this->faker->email,
             'password' => $restaurant->name,
             'activatedAt' => $restaurant->freshTimestamp(),
             'locale' => 'fr',
         ]);
+        $credentials->user()->associate($restaurant);
+        $credentials->save();
 
         $this->setPizzeriaCategoryFor($restaurant);
-        $this->setAuthTokenFor($userCredentials);
+        $this->setAuthTokenFor($credentials);
     }
 
     protected function insertAdditionalEntries($id)
@@ -71,22 +73,27 @@ class RestaurantsSeeder extends Seeder
         $restaurantsData = [
             [
                 'name' => "Pizza Di Genova",
+                'email' => 'pizza@genova.fr',
                 'phoneNumber' => '0605040302',
             ],
             [
                 'name' => "Toujours ouvert",
+                'email' => 'toujours@ouvert.fr',
                 'phoneNumber' => '0605040301',
             ],
             [
                 'name' => "Toujours fermé",
+                'email' => 'toujours@ferme.fr',
                 'phoneNumber' => '0605040300',
             ],
             [
                 'name' => "Toujours ouvert à Paris",
+                'email' => 'ouvert@paris.fr',
                 'phoneNumber' => '0605040303',
             ],
             [
                 'name' => "AlloPizza",
+                'email' => 'allo@pizza.fr',
                 'phoneNumber' => '0605040304',
             ]
         ];
@@ -99,19 +106,19 @@ class RestaurantsSeeder extends Seeder
             $restaurantData['pictureUrl'] = $this->getPictureUrl();
             $restaurantData['phoneNumber'] = $this->generatePhoneNumber();
 
-            $restaurant = Restaurant::create($restaurantData);
-            $email = $restaurantData['name'] == 'AlloPizza' ? 'allo@pizza.fr' : $this->faker->email;
+            $restaurant = Restaurant::create(Arr::except($restaurantData, 'email'));
 
-            $userCredentials = UserCredentials::create([
-                'user' => $restaurant,
-                'email' => $email,
-                'password' => $restaurant->name,
+            $credentials = new UserCredentials([
+                'email' => $restaurantData['email'],
+                'password' => 'groupeat',
                 'activatedAt' => $restaurant->freshTimestamp(),
                 'locale' => 'fr',
             ]);
+            $credentials->user()->associate($restaurant);
+            $credentials->save();
 
             $this->setPizzeriaCategoryFor($restaurant);
-            $this->setAuthTokenFor($userCredentials);
+            $this->setAuthTokenFor($credentials);
         }
     }
 
@@ -120,9 +127,9 @@ class RestaurantsSeeder extends Seeder
         $restaurant->categories()->sync([$this->pizzeriaCategory->id]);
     }
 
-    private function setAuthTokenFor(UserCredentials $userCredentials)
+    private function setAuthTokenFor(UserCredentials $credentials)
     {
-        $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
+        $credentials->replaceAuthenticationToken($this->generateToken->call($credentials));
     }
 
     private function getPictureUrl()

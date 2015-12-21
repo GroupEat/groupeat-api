@@ -1,6 +1,5 @@
 <?php namespace Groupeat\Documentation;
 
-use Groupeat\Documentation\Services\GenerateApiDocumentation;
 use Groupeat\Documentation\Values\OrderedPackages;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 

@@ -21,8 +21,8 @@ return [
         'Restaurants',
         'Orders',
         'Devices',
-        'Notifications',
         'Settings',
+        'Support'
     ],
 
 ];

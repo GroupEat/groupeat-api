@@ -9,6 +9,7 @@
 
     <exclude-pattern>*/views/*</exclude-pattern>
     <exclude-pattern>*/lang/*</exclude-pattern>
+    <exclude-pattern>*/_output/*</exclude-pattern>
     <exclude-pattern>tests/*/*Tester.php</exclude-pattern>
 
     <rule ref="PSR2">

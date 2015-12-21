@@ -6,6 +6,7 @@ use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Restaurants\Services\ApplyAroundScope;
 use Groupeat\Restaurants\Services\ApplyOpenedScope;
+use Groupeat\Restaurants\Services\ComputeClosingAt;
 use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasPhoneNumber;
@@ -33,6 +34,7 @@ class Restaurant extends Entity implements User
             'name' => 'required',
             'phoneNumber' => 'required',
             'discountPolicy' => 'required',
+            'pictureUrl' => 'required|string',
             'minimumGroupOrderPrice' => 'required|integer',
             'deliveryCapacity' => 'required|integer',
             'rating' => 'required|integer|max:10',
@@ -79,7 +81,7 @@ class Restaurant extends Entity implements User
         return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
 
-    public function assertOpened(Period $period = null)
+    public function assertOpened(Period $period)
     {
         if (!$this->isOpened($period)) {
             $start = Carbon::instance($period->getStartDate());
@@ -144,5 +146,18 @@ class Restaurant extends Entity implements User
     protected function getDeliveryCapacityAttribute()
     {
         return (int) $this->attributes['deliveryCapacity'];
+    }
+
+    protected function getMaximumDiscountRateAttribute()
+    {
+        $discounts = array_values($this->discountPolicy);
+        sort($discounts);
+
+        return end($discounts);
+    }
+
+    protected function getClosingAtAttribute()
+    {
+        return app(ComputeClosingAt::class)->call($this);
     }
 }

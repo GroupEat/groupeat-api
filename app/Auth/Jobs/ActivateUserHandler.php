@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
-use Groupeat\Auth\Jobs\ActivateUser;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\NotFound;

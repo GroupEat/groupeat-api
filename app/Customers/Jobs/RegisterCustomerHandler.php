@@ -2,7 +2,6 @@
 namespace Groupeat\Customers\Jobs;
 
 use Groupeat\Auth\Services\RegisterUser;
-use Groupeat\Customers\Jobs\RegisterCustomer;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 

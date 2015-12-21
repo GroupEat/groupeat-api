@@ -9,9 +9,14 @@ use Groupeat\Support\Entities\Abstracts\ImmutableDatedEntity;
 
 class Notification extends ImmutableDatedEntity
 {
+    const RECEIVED_AT = 'receivedAt';
+
+    protected $dates = [self::RECEIVED_AT];
+
     public function getRules()
     {
         return [
+            'silent' => 'required|boolean',
             'customerId' => 'required',
             'deviceId' => 'required',
             'groupOrderId' => 'required'
@@ -31,12 +36,5 @@ class Notification extends ImmutableDatedEntity
     public function groupOrder()
     {
         return $this->belongsTo(GroupOrder::class);
-    }
-
-    public function getTimeToLiveInSeconds(Carbon $from = null)
-    {
-        $from = $from ?: Carbon::now();
-
-        return $this->groupOrder->endingAt->diffInSeconds($from, true);
     }
 }

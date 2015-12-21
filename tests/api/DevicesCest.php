@@ -69,20 +69,5 @@ class DevicesCest
         $I->sendApiGetWithToken($token2, "customers/$id2/devices");
         $I->seeResponseCodeIs(200);
         $I->seeResponseContains($model);
-
-        $I->sendApiGetWithToken($token1, "customers/$id1");
-        $email = $I->grabDataFromResponse('email');
-        $password = 'password';
-
-        $I->haveHttpHeader('X-Device-Id', $deviceId);
-        $I->sendApiPut('auth/token', compact('email', 'password'));
-
-        $I->sendApiGetWithToken($token1, "customers/$id1/devices");
-        $I->seeResponseCodeIs(200);
-        $I->seeResponseContains($model);
-
-        $I->sendApiGetWithToken($token2, "customers/$id2/devices");
-        $I->seeResponseCodeIs(200);
-        $I->dontSeeResponseContains($model);
     }
 }

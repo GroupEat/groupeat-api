@@ -1,12 +1,12 @@
 # Group Orders
-        
+
 ## Order [/orders/{id}/{?include}]
 
 + Parameters
 
     + id (required, string, `123`) ... The order ID
     + include (optional, string, `customer`) ... [customer, groupOrder, deliveryAddress, productFormats]
-    
+
 + Model
 
         {
@@ -24,14 +24,14 @@ Only the customer who created it or the corresponding restaurant can see the ord
 + Response 200
 
     [Order][]
-    
+
 + Response 403
 
         {
             "errorKey": "wrongAuthenticatedUser",
             "message": "Should be authenticated as customer 5 instead of 6."
         }
-    
+
 + Response 404
 
 ## Get order delivery address [/orders/{id}/deliveryAddress]
@@ -41,7 +41,7 @@ Only the customer who created it or the corresponding restaurant can see the ord
 + Parameters
 
     + id (required, string, `123`) ... The order ID
-    
+
 + Response 200
 
         {
@@ -74,7 +74,7 @@ The request must contain all the data required to attach a delivery address to t
 
 The attributes dedicated to the order itself are `foodRushDurationInMinutes` which must be between {{ orders.minimum_foodrush_in_minutes }} and {{ orders.maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired quantity of each product format. All the product formats must of course belong to the same restaurant.
 
-The restaurant must stay opened at least {{ restaurants.opening_duration_in_minutes }} minutes more to create a group order.
+To create a group order, the restaurant must stay opened long enough to let the minimum foodrush time ({{ orders.minimum_foodrush_in_minutes }} minutes) and the maximum preparation time ({{ restaurants.maximum_preparation_time_in_minutes }} minutes) flow.
 
 The distance between the given address and the restaurant must be less than {{ restaurants.around_distance_in_kilometers }} kilometers.
 
@@ -95,14 +95,14 @@ The distance between the given address and the restaurant must be less than {{ r
 + Response 201
 
     [Order][]
-    
+
 + Response 400
 
         {
             "errorKey": "missingProductFormats",
             "message": "The product formats object is required to place an order"
         }
-        
+
 + Response 400
 
         {
@@ -116,9 +116,9 @@ The distance between the given address and the restaurant must be less than {{ r
             "errorKey": "userShouldBeActivated",
             "message": "The customer #26 should be activated to place an order."
         }
-        
+
 + Response 403
- 
+
          {
              "errorKey": "missingCustomerInformation",
              "message": "The attributes [firstName, lastName, phoneNumber] are missing for customer customer #35"
@@ -151,7 +151,7 @@ The distance between the given address and the restaurant must be less than {{ r
             "errorKey": "productFormatsFromDifferentRestaurants",
             "message": "The product formats must belong to the same restaurant."
         }
-        
+
 + Response 422
 
         {
@@ -211,7 +211,7 @@ The distance between the given address and the restaurant must be less than {{ r
     + customerId (required, string, `123`) ... The customer ID
     + groupOrderId (required, string, `123`) ... The group order ID
     + include (optional, string, `restaurant`) ... [restaurant, deliveryAddress]
-    
+
 + Response 200
 
         [
@@ -231,7 +231,7 @@ The distance between the given address and the restaurant must be less than {{ r
 
     + id (required, string, `123`) ... The group order ID.
     + include (optional, string, `restaurant`) ... [restaurant].
-    
+
 + Model
 
         {
@@ -252,7 +252,7 @@ The distance between the given address and the restaurant must be less than {{ r
 + Response 200
 
     [Group order][]
-    
+
 + Response 404
 
 ## List group orders [/groupOrders/{?joinable,around,latitude,longitude,include}]
@@ -266,7 +266,7 @@ The distance between the given address and the restaurant must be less than {{ r
     + latitude (optional, float, `2.21928`) ... Client latitude.
     + longitude (optional, float, `48.711`) ... Client longitude.
     + include (optional, string, `restaurant`) ... [restaurant]
-    
+
 + Response 200
 
         [
@@ -297,7 +297,7 @@ To join a group order, the distance between the first delivery address and the g
 + Response 201
 
     [Order][]
-    
+
 + Response 422
 
         {
@@ -310,7 +310,7 @@ To join a group order, the distance between the first delivery address and the g
 + Parameters
 
     + id (required, string, `123`) ... The restaurant ID.
-    
+
 ### POST
 
 Only restaurants are allowed to push an external order.
@@ -342,7 +342,7 @@ The foodrush duration is automatically set to {{ orders.external_order_foodrush_
     [Order][]
 
 + Response 403
- 
+
         {
             "errorKey": "wrongAuthenticatedUser",
             "message":"Should be authenticated as restaurant 9 instead of 10."

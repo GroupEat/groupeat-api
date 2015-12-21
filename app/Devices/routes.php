@@ -9,8 +9,7 @@ $api->version('v1', function ($api) {
         $api->group(['prefix' => 'customers/{customer}/devices'], function ($api) {
             $api->post('/', DevicesController::class.'@attach');
             $api->get('/', DevicesController::class.'@index');
+            $api->put('{device}', DevicesController::class.'@update');
         });
     });
-
-    $api->put('devices/{device}', DevicesController::class.'@update');
 });

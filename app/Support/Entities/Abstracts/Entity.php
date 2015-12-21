@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Support\Entities\Abstracts;
 
-use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Presenters\Presenter;
@@ -86,7 +85,7 @@ abstract class Entity extends Model implements PresentableInterface
     {
         parent::__construct($attributes);
 
-        $this->validationErrors = new MessageBag();
+        $this->validationErrors = new MessageBag;
     }
 
     /**
@@ -232,31 +231,5 @@ abstract class Entity extends Model implements PresentableInterface
     protected function getIdAttribute()
     {
         return isset($this->attributes['id']) ? (string) $this->attributes['id'] : null;
-    }
-
-    /**
-     * @param string $name          Name of the relation
-     * @param Entity $relatedEntity
-     *
-     * @return $this
-     */
-    protected function setPolymorphicAttribute($name, Entity $relatedEntity)
-    {
-        $id = $relatedEntity->getKey();
-
-        if (empty($id)) {
-            $message = 'Cannot set polymorphic relation '
-                . $relatedEntity->toShortString().' on '
-                . $this->toShortString().'.';
-
-            throw new Exception(
-                'polymorphicRelationCannotBeSet',
-                $message
-            );
-        }
-
-        $this->$name()->associate($relatedEntity);
-
-        return $this;
     }
 }

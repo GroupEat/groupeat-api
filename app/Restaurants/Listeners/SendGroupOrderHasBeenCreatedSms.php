@@ -6,7 +6,6 @@ use Groupeat\Messaging\Values\Sms;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Support\Listeners\Abstracts\QueuedListener;
 use Groupeat\Support\Services\Locale;
-use Psr\Log\LoggerInterface;
 
 class SendGroupOrderHasBeenCreatedSms extends QueuedListener
 {

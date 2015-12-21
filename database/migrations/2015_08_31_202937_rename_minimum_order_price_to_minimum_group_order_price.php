@@ -10,19 +10,11 @@ class RenameMinimumOrderPriceToMinimumGroupOrderPrice extends Migration
 
     public function up()
     {
-        Schema::table($this->getTable(), function (Blueprint $table) {
-            DB::statement(
-                'ALTER TABLE '.$this->getTable().' RENAME COLUMN "minimumOrderPrice" TO "minimumGroupOrderPrice";'
-            );
-        });
+        DB::statement('ALTER TABLE '.$this->getTable().' RENAME COLUMN "minimumOrderPrice" TO "minimumGroupOrderPrice"');
     }
 
     public function down()
     {
-        Schema::table($this->getTable(), function (Blueprint $table) {
-            DB::statement(
-                'ALTER TABLE '.$this->getTable().' RENAME COLUMN "minimumGroupOrderPrice" TO "minimumOrderPrice";'
-            );
-        });
+        DB::statement('ALTER TABLE '.$this->getTable().' RENAME COLUMN "minimumGroupOrderPrice" TO "minimumOrderPrice"');
     }
 }
