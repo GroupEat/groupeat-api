@@ -8,6 +8,7 @@ use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Orders\Values\DeliveryAddressConstraints;
 use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
+use Groupeat\Orders\Values\MaximumOrderFlowInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Support\Jobs\DelayedJob;
@@ -16,11 +17,12 @@ use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 class PackageProvider extends WorkbenchPackageProvider
 {
     protected $configValues = [
-        MinimumFoodrushInMinutes::class => 'orders.minimum_foodrush_in_minutes',
+        ExternalOrderFoodrushInMinutes::class => 'orders.external_order_foodrush_in_minutes',
+        JoinableDistanceInKms::class => 'orders.joinable_distance_in_kilometers',
         MaximumFoodrushInMinutes::class => 'orders.maximum_foodrush_in_minutes',
         MaximumPreparationTimeInMinutes::class => 'orders.maximum_preparation_time_in_minutes',
-        JoinableDistanceInKms::class => 'orders.joinable_distance_in_kilometers',
-        ExternalOrderFoodrushInMinutes::class => 'orders.external_order_foodrush_in_minutes',
+        MaximumOrderFlowInMinutes::class => 'orders.maximum_order_flow_in_minutes',
+        MinimumFoodrushInMinutes::class => 'orders.minimum_foodrush_in_minutes',
     ];
 
     protected $routeEntities = [

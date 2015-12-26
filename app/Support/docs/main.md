@@ -9,9 +9,10 @@ Returns the current public configuration of the API.
 + Response 200
 
         {
-            "orders.minimumFoodrushInMinutes": 5,
-            "orders.maximumFoodrushInMinutes": 60,
-            "orders.maximumPreparationTimeInMinutes": 35
+            "orders.minimumFoodrushInMinutes": {{ orders.minimum_foodrush_in_minutes }},
+            "orders.maximumFoodrushInMinutes": {{ orders.maximum_foodrush_in_minutes }},
+            "orders.maximumPreparationTimeInMinutes": {{ orders.maximum_preparation_time_in_minutes }},
+            "orders.maximumOrderFlowInMinutes": {{ orders.maximum_order_flow_in_minutes }}
         }
 
 ## Ping the API  [/ping]

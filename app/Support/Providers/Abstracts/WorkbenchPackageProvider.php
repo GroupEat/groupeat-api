@@ -87,7 +87,10 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
      */
     protected function bindConfigValue($valueClass, $configKey)
     {
-        $this->bindValue($valueClass, $this->app['config']->get($configKey));
+        $this->app->instance(
+            $valueClass,
+            new $valueClass($this->app['config']->get($configKey), $configKey)
+        );
     }
 
     protected function bindListenersIfNeeded()

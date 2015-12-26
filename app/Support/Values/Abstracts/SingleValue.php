@@ -11,19 +11,28 @@ abstract class SingleValue implements JsonSerializable
     protected $value;
 
     /**
-     * @param mixed $value
+     * @var string
      */
-    public function __construct($value)
-    {
-        $this->value = $value;
-    }
+    protected $name;
 
     /**
-     * @return mixed
+     * @param mixed       $value
+     * @param string|null $name
      */
+    public function __construct($value, $name = null)
+    {
+        $this->value = $value;
+        $this->name = $name;
+    }
+
     public function value()
     {
         return $this->value;
+    }
+
+    public function name()
+    {
+        return $this->name;
     }
 
     /**
