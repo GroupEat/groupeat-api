@@ -46,8 +46,8 @@ Returns the list of restaurants sorted by name in alphabetical order.
 
 + Parameters
 
-    + opened (optional, boolean, `1`) ... Retrieve opened restaurants only.
-    + around (optional, boolean, `1`) ... Retrieve restaurants around only. Needs latitude and longitude parameters.
+    + opened (optional, boolean, `1`) ... Retrieve opened restaurants only. A restaurant is considered opened if it stays opened during the period [now + orders.minimumFoodrushInMinutes, now + orders.minimumFoodrushInMinutes + orders.maximumOrderFlowInMinutes].
+    + around (optional, boolean, `1`) ... Retrieve restaurants around only. Requires latitude and longitude parameters.
     + latitude (optional, float, `2.21928`) ... Client latitude.
     + longitude (optional, float, `48.711`) ... Client longitude.
     + include (optional, string, `address`) ... [address, categories].

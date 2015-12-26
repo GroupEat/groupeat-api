@@ -249,6 +249,11 @@ class ApiHelper extends \Codeception\Module
         $this->getModule('REST')->haveHttpHeader('Accept', 'application/vnd.groupeat.v1+json');
     }
 
+    public function getValue($valueClass)
+    {
+        return $this->getModule('Laravel5')->app[$valueClass]->value();
+    }
+
     protected function runQueues()
     {
         foreach (DB::table('jobs')->where('available_at', '<=', Carbon::now()->timestamp)->get() as $job) {

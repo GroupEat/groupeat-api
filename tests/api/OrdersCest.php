@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class OrdersCest
 {
     public function testThatACustomerShouldBeActivatedAndHaveNoMissingInformationToPlaceAnOrder(ApiTester $I)
@@ -72,13 +74,19 @@ class OrdersCest
     public function testThatTheAnOrderCannotBePlacedOnAClosedRestaurant(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
-        $products = $this->getProducts($I, $token, ['around' => true, 'opened' => false], function ($restaurants) {
-            foreach ($restaurants as $restaurant) {
-                if ($restaurant['name'] == 'Toujours fermé') {
-                    return $restaurant['id'];
+        $now = Carbon::now();
+        $products = $this->getProducts(
+            $I,
+            $token,
+            ['around' => true, 'opened' => false],
+            function ($restaurants) use ($now) {
+                foreach ($restaurants as $restaurant) {
+                    if (new Carbon($restaurant['closingAt']) == $now) {
+                        return $restaurant['id'];
+                    }
                 }
             }
-        });
+        );
         $productFormats = $this->getProductFormatsFrom($products);
         $orderDetails = $this->getOrderDetails($I, $token, compact('productFormats'));
 

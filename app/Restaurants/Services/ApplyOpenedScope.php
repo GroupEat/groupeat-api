@@ -2,36 +2,16 @@
 namespace Groupeat\Restaurants\Services;
 
 use Carbon\Carbon;
-use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
-use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\OpeningWindow;
 use Illuminate\Database\Eloquent\Builder;
 use League\Period\Period;
 
 class ApplyOpenedScope
 {
-    private $minimumFoodrushInMinutes;
-    private $maximumPreparationTimeInMinutes;
-
-    public function __construct(
-        MinimumFoodrushInMinutes $minimumFoodrushInMinutes,
-        MaximumPreparationTimeInMinutes $maximumPreparationTimeInMinutes
-    ) {
-        $this->minimumFoodrushInMinutes = $minimumFoodrushInMinutes->value();
-        $this->maximumPreparationTimeInMinutes = $maximumPreparationTimeInMinutes->value();
-    }
-
-    public function call(Builder $query, Period $period = null)
+    public function call(Builder $query, Period $period)
     {
-        if (is_null($period)) {
-            $start = Carbon::now()->addMinutes($this->minimumFoodrushInMinutes);
-            $end = Carbon::now()
-                ->addMinutes($this->minimumFoodrushInMinutes)
-                ->addMinutes($this->maximumPreparationTimeInMinutes);
-        } else {
-            $start = Carbon::instance($period->getStartDate());
-            $end = Carbon::instance($period->getEndDate());
-        }
+        $start = Carbon::instance($period->getStartDate());
+        $end = Carbon::instance($period->getEndDate());
 
         $this->assertSameOrPreviousDay($start, $end);
 

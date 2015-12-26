@@ -9,7 +9,6 @@ use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidationHandler;
 use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
-use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
@@ -21,21 +20,18 @@ class CreateGroupOrderHandler extends GroupOrderValidationHandler
 {
     private $minimumFoodRushInMinutes;
     private $maximumFoodRushInMinutes;
-    private $maximumPreparationTimeInMinutes;
 
     public function __construct(
         Dispatcher $events,
         AddressConstraints $deliveryAddressConstraints,
         MaximumDeliveryDistanceInKms $maximumDeliveryDistanceInKms,
         MinimumFoodrushInMinutes $minimumFoodRushInMinutes,
-        MaximumFoodrushInMinutes $maximumFoodRushInMinutes,
-        MaximumPreparationTimeInMinutes $maximumPreparationTimeInMinutes
+        MaximumFoodrushInMinutes $maximumFoodRushInMinutes
     ) {
         parent::__construct($events, $deliveryAddressConstraints, $maximumDeliveryDistanceInKms);
 
         $this->minimumFoodRushInMinutes = $minimumFoodRushInMinutes->value();
         $this->maximumFoodRushInMinutes = $maximumFoodRushInMinutes->value();
-        $this->maximumPreparationTimeInMinutes = $maximumPreparationTimeInMinutes->value();
     }
 
     public function handle(CreateGroupOrder $job)
@@ -83,7 +79,7 @@ class CreateGroupOrderHandler extends GroupOrderValidationHandler
     private function assertThatTheRestaurantWontCloseTooSoon(Restaurant $restaurant, $foodRushInMinutes)
     {
         $start = Carbon::now()->addMinutes($foodRushInMinutes);
-        $end = $start->copy()->addMinutes($this->maximumPreparationTimeInMinutes);
+        $end = $start->copy();
 
         $restaurant->assertOpened(new Period($start, $end));
     }

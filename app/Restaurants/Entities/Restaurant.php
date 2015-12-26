@@ -76,7 +76,7 @@ class Restaurant extends Entity implements User
         app(ApplyAroundScope::class)->call($query, $location, $distanceInKms);
     }
 
-    public function isOpened(Period $period = null)
+    public function isOpened(Period $period)
     {
         return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
@@ -94,7 +94,7 @@ class Restaurant extends Entity implements User
         }
     }
 
-    public function scopeOpened(Builder $query, Period $period = null)
+    public function scopeOpened(Builder $query, Period $period)
     {
         app(ApplyOpenedScope::class)->call($query, $period);
     }
