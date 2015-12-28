@@ -23,8 +23,18 @@ trait HasLocation
      */
     public function distanceInKmsWith(Entity $other)
     {
+        return $this->distanceInKmsWithPoint($other->location);
+    }
+
+    /**
+     * @param Point $location
+     *
+     * @return float
+     */
+    public function distanceInKmsWithPoint(Point $location)
+    {
         $thisLocation = $this->toGeography($this->location);
-        $otherLocation = $this->toGeography($other->location);
+        $otherLocation = $this->toGeography($location);
 
         $res = $this->getConnection()->select('SELECT ST_DISTANCE('.$thisLocation.', '.$otherLocation.')');
 

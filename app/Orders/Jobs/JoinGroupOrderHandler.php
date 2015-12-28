@@ -27,7 +27,7 @@ class JoinGroupOrderHandler extends GroupOrderValidationHandler
         $deliveryAddress = $this->getDeliveryAddress($job->getDeliveryAddressData());
 
         $this->assertJoinable($groupOrder);
-        $this->assertCloseEnough($deliveryAddress, $groupOrder->getInitiatingOrder()->deliveryAddress);
+        $this->assertCloseEnough($deliveryAddress, $groupOrder->getAddressToCompareToForJoining());
 
         $order = $groupOrder->addOrder(
             $job->getCustomer(),

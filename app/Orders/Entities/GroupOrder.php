@@ -265,6 +265,14 @@ class GroupOrder extends Entity
         }
     }
 
+    /**
+     * @return \Groupeat\Support\Entities\Abstracts\Address
+     */
+    public function getAddressToCompareToForJoining()
+    {
+        return $this->getInitiatingOrder()->deliveryAddress;
+    }
+
     protected function getDiscountRateAttribute()
     {
         return new DiscountRate((int) $this->attributes['discountRate']);

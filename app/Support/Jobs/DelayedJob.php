@@ -17,7 +17,7 @@ class DelayedJob extends Job implements SelfHandling, ShouldQueue
     public function __construct(Job $job, Carbon $handleAt)
     {
         $this->job = $job;
-        $this->delay = Carbon::now()->diffInSeconds($handleAt);
+        $this->delay = $handleAt->diffInSeconds();
     }
 
     public function getJob()
