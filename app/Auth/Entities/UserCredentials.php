@@ -45,12 +45,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         parent::boot();
     }
 
-    /**
-     * @param string $email
-     *
-     * @return UserCredentials
-     */
-    public static function findByEmailOrFail($email)
+    public static function findByEmailOrFail(string $email): UserCredentials
     {
         $userCredentials = static::findByEmail($email);
 
@@ -62,19 +57,14 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
     }
 
     /**
-     * @param string $email
-     *
-     * @return UserCredentials or null if not found
+     * @return UserCredentials|null if not found
      */
-    public static function findByEmail($email)
+    public static function findByEmail(string $email)
     {
         return static::where('email', $email)->first();
     }
 
-    /**
-     * @param string $email
-     */
-    public static function throwNotFoundByEmailException($email)
+    public static function throwNotFoundByEmailException(string $email)
     {
         throw new NotFound(
             ['email' => ['notFound' => []]],
@@ -90,15 +80,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         );
     }
 
-    /**
-     * @param string $email
-     * @param string $password
-     * @param string $locale
-     * @param User   $user
-     *
-     * @return static
-     */
-    public static function register($email, $password, $locale, User $user)
+    public static function register(string $email, string $password, string $locale, User $user): UserCredentials
     {
         $userCredentials = new static;
         $userCredentials->email = $email;
@@ -123,14 +105,11 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         return $this->morphTo();
     }
 
-    public function isActivated()
+    public function isActivated(): bool
     {
         return !empty($this->activatedAt);
     }
 
-    /**
-     * @param Carbon $now
-     */
     public function activate(Carbon $now = null)
     {
         $now = $now ?: $this->freshTimestamp();
@@ -140,29 +119,19 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         $this->save();
     }
 
-    /**
-     * @param string $token
-     */
-    public function replaceAuthenticationToken($token)
+    public function replaceAuthenticationToken(string $token)
     {
         $this->token = $token;
         $this->save();
     }
 
-    /**
-     * @param $password
-     * @param $token
-     */
-    public function resetPassword($password, $token)
+    public function resetPassword(string $password, string $token)
     {
         $this->hashAndSetPassword($password);
         $this->replaceAuthenticationToken($token);
     }
 
-    /**
-     * @param string $password
-     */
-    public function hashAndSetPassword($password)
+    public function hashAndSetPassword(string $password)
     {
         $this->attributes['password'] = Hash::make($password);
     }

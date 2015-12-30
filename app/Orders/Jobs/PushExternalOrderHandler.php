@@ -3,18 +3,16 @@ namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;
+use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
-use Groupeat\Orders\Jobs\Abstracts\GroupOrderValidationHandler;
 use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
-use Groupeat\Support\Values\NullValue;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class PushExternalOrderHandler extends GroupOrderValidationHandler
+class PushExternalOrderHandler
 {
-    /**
-     * @var int
-     */
+    private $events;
+    private $deliveryAddressConstraints;
     private $foodrushInMinutes;
 
     public function __construct(
@@ -22,8 +20,8 @@ class PushExternalOrderHandler extends GroupOrderValidationHandler
         AddressConstraints $addressConstraints,
         ExternalOrderFoodrushInMinutes $foodrushInMinutes
     ) {
-        parent::__construct($events, $addressConstraints, new NullValue);
-
+        $this->events = $events;
+        $this->deliveryAddressConstraints = $addressConstraints->value();
         $this->foodrushInMinutes = $foodrushInMinutes->value();
     }
 
@@ -35,7 +33,10 @@ class PushExternalOrderHandler extends GroupOrderValidationHandler
             $job->getCustomerPhoneNumber()
         );
 
-        $deliveryAddress = $this->getDeliveryAddress($job->getDeliveryAddressData());
+        $deliveryAddress = new DeliveryAddress(array_merge(
+            $job->getDeliveryAddressData(),
+            $this->deliveryAddressConstraints
+        ));
 
         $order = GroupOrder::createWith(
             $customer,

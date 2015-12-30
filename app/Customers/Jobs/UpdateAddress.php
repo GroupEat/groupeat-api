@@ -9,10 +9,6 @@ class UpdateAddress extends Job
     private $customer;
     private $addressData;
 
-    /**
-     * @param Customer $customer
-     * @param array    $addressData
-     */
     public function __construct(Customer $customer, array $addressData)
     {
         $this->customer = $customer;

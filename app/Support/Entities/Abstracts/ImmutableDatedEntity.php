@@ -7,9 +7,6 @@ abstract class ImmutableDatedEntity extends Entity
 
     protected $dates = [self::CREATED_AT];
 
-    /**
-     * @param array $attributes
-     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

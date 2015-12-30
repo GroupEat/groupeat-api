@@ -9,12 +9,7 @@ class ResetPassword extends Job
     private $email;
     private $newPassword;
 
-    /**
-     * @param string $token
-     * @param string $email
-     * @param string $newPassword
-     */
-    public function __construct($token, $email, $newPassword)
+    public function __construct(string $token, string $email, string $newPassword)
     {
         $this->token = $token;
         $this->email = $email;

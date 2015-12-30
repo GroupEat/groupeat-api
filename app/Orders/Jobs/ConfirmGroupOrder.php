@@ -8,24 +8,12 @@ use Groupeat\Support\Jobs\Abstracts\Job;
 class ConfirmGroupOrder extends Job
 {
     private $groupOrder;
-
-    /**
-     * @var Carbon
-     */
     private $preparedAt;
 
-    /**
-     * @param GroupOrder $groupOrder
-     * @param string     $preparedAt
-     */
-    public function __construct(GroupOrder $groupOrder, $preparedAt)
+    public function __construct(GroupOrder $groupOrder, Carbon $preparedAt)
     {
         $this->groupOrder = $groupOrder;
-
-        $this->preparedAt = Carbon::createFromFormat(
-            Carbon::DEFAULT_TO_STRING_FORMAT,
-            $preparedAt
-        )->second(0);
+        $this->preparedAt = $preparedAt;
     }
 
     public function getGroupOrder()

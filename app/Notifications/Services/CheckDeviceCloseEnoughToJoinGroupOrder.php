@@ -11,15 +11,7 @@ use Psr\Log\LoggerInterface;
 class CheckDeviceCloseEnoughToJoinGroupOrder
 {
     private $logger;
-
-    /**
-     * @var int
-     */
     private $deviceLocationFreshnessInMinutes;
-
-    /**
-     * @var float
-     */
     private $joinableDistanceInKms;
 
     public function __construct(
@@ -32,9 +24,9 @@ class CheckDeviceCloseEnoughToJoinGroupOrder
         $this->joinableDistanceInKms = $joinableDistanceInKms->value();
     }
 
-    public function call(Device $device, GroupOrder $groupOrder)
+    public function call(Device $device, GroupOrder $groupOrder): bool
     {
-        $lastDeviceLocation = $device->locations()->latest()->first();
+        $lastDeviceLocation = $device->locations()->latest(DeviceLocation::CREATED_AT)->first();
 
         if (!$lastDeviceLocation) {
             $this->logWhyNotCloseEnough($device, $groupOrder, "No available location for this device");

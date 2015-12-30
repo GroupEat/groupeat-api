@@ -9,12 +9,7 @@ class RegisterCustomer extends Job
     private $password;
     private $locale;
 
-    /**
-     * @param string $email
-     * @param string $password
-     * @param string $locale
-     */
-    public function __construct($email, $password, $locale)
+    public function __construct(string $email, string $password, string $locale)
     {
         $this->email = $email;
         $this->password = $password;

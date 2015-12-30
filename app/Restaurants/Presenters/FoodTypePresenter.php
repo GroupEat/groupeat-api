@@ -19,13 +19,13 @@ class FoodTypePresenter extends Presenter
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->presentLabel();
     }
 
-    public function presentLabel()
+    public function presentLabel(): string
     {
-        return (string) static::$translations[$this->object->label];
+        return static::$translations[$this->object->label];
     }
 }

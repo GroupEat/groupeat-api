@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
+use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Http\V1\Traits\CanAddOrder;
 use Groupeat\Orders\Jobs\ConfirmGroupOrder;
@@ -51,7 +52,11 @@ class GroupOrdersController extends Controller
     {
         $this->auth->assertSame($groupOrder->restaurant);
 
-        $this->dispatch(new ConfirmGroupOrder($groupOrder, $this->json('preparedAt')));
+        $preparedAt = Carbon::createFromFormat(
+            Carbon::DEFAULT_TO_STRING_FORMAT,
+            $this->json('preparedAt')
+        )->second(0);
+        $this->dispatch(new ConfirmGroupOrder($groupOrder, $preparedAt));
     }
 
     public function join(GroupOrder $groupOrder)

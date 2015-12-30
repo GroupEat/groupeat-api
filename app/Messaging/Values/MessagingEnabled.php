@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Messaging\Values;
 
-use Groupeat\Support\Values\Abstracts\SingleValue;
+use Groupeat\Support\Values\Abstracts\Flag;
 
-class MessagingEnabled extends SingleValue
+class MessagingEnabled extends Flag
 {
     //
 }

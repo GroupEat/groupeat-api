@@ -36,12 +36,7 @@ class CustomerSettings extends Entity
         ];
     }
 
-    /**
-     * @param Customer $customer
-     *
-     * @return static
-     */
-    public static function findByCustomerOrFail(Customer $customer)
+    public static function findByCustomerOrFail(Customer $customer): CustomerSettings
     {
         $setting = static::query()->where('customerId', $customer->id)->first();
 

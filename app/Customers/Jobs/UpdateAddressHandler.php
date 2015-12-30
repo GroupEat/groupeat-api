@@ -15,12 +15,7 @@ class UpdateAddressHandler
         $this->addressConstraints = $addressConstraints->value();
     }
 
-    /**
-     * @param UpdateAddress $job
-     *
-     * @return Address
-     */
-    public function handle(UpdateAddress $job)
+    public function handle(UpdateAddress $job): Address
     {
         $attributes = $job->getAddressData();
         $customer = $job->getCustomer();

@@ -5,8 +5,8 @@ use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Groupeat\Support\Values\Abstracts\SingleValue;
 use Illuminate\Contracts\Events\Dispatcher;
+use Groupeat\Support\Values\Abstracts\DistanceInKms;
 
 abstract class GroupOrderValidationHandler
 {
@@ -17,18 +17,13 @@ abstract class GroupOrderValidationHandler
     public function __construct(
         Dispatcher $events,
         AddressConstraints $addressConstraints,
-        SingleValue $maximumDistanceInKms
+        DistanceInKms $maximumDistanceInKms
     ) {
         $this->events = $events;
         $this->deliveryAddressConstraints = $addressConstraints->value();
         $this->maximumDistanceInKms = $maximumDistanceInKms->value();
     }
 
-    /**
-     * @param array $addressData
-     *
-     * @return DeliveryAddress
-     */
     protected function getDeliveryAddress(array $addressData)
     {
         return new DeliveryAddress(array_merge(
@@ -37,10 +32,6 @@ abstract class GroupOrderValidationHandler
         ));
     }
 
-    /**
-     * @param DeliveryAddress $deliveryAddress
-     * @param Address         $other
-     */
     protected function assertCloseEnough(DeliveryAddress $deliveryAddress, Address $other)
     {
         $distanceInKms = $deliveryAddress->distanceInKmsWith($other);

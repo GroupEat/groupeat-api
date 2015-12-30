@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Notifications\Values;
 
-use Groupeat\Support\Values\Abstracts\SingleValue;
+use Groupeat\Support\Values\Abstracts\DurationInMinutes;
 
-class DeviceLocationFreshnessInMinutes extends SingleValue
+class DeviceLocationFreshnessInMinutes extends DurationInMinutes
 {
     //
 }

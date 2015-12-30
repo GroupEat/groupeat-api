@@ -11,35 +11,23 @@ class PushExternalOrder extends AddOrder
     private $customerFirstName;
     private $customerLastName;
 
-    /**
-     * @var PhoneNumber|null
-     */
     private $customerPhoneNumber;
 
-    /**
-     * @param Restaurant $restaurant
-     * @param string $customerFirstName
-     * @param string $customerLastName
-     * @param string  $customerPhoneNumber
-     * @param array $productFormats
-     * @param array $deliveryAddressData
-     * @param null  $comment
-     */
     public function __construct(
         Restaurant $restaurant,
-        $customerFirstName,
-        $customerLastName,
-        $customerPhoneNumber,
+        string $customerFirstName,
+        string $customerLastName,
         array $productFormats,
         array $deliveryAddressData,
-        $comment = null
+        PhoneNumber $customerPhoneNumber,
+        string $comment
     ) {
         parent::__construct($productFormats, $deliveryAddressData, $comment);
 
         $this->restaurant = $restaurant;
         $this->customerFirstName = $customerFirstName;
         $this->customerLastName = $customerLastName;
-        $this->customerPhoneNumber = $customerPhoneNumber ? new PhoneNumber($customerPhoneNumber) : null;
+        $this->customerPhoneNumber = $customerPhoneNumber;
     }
 
     public function getRestaurant()

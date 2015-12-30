@@ -9,12 +9,7 @@ class ChangePassword extends Job
     private $oldPassword;
     private $newPassword;
 
-    /**
-     * @param string $email
-     * @param string $oldPassword
-     * @param string $newPassword
-     */
-    public function __construct($email, $oldPassword, $newPassword)
+    public function __construct(string $email, string $oldPassword, string $newPassword)
     {
         $this->email = $email;
         $this->oldPassword = $oldPassword;

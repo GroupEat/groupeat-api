@@ -9,19 +9,12 @@ class JoinGroupOrder extends AddCustomerOrder
 {
     private $groupOrder;
 
-    /**
-     * @param GroupOrder $groupOrder
-     * @param Customer   $customer
-     * @param array      $productFormats
-     * @param array      $deliveryAddressData
-     * @param string     $comment
-     */
     public function __construct(
         GroupOrder $groupOrder,
         Customer $customer,
         array $productFormats,
         array $deliveryAddressData,
-        $comment = null
+        string $comment
     ) {
         parent::__construct($customer, $productFormats, $deliveryAddressData, $comment);
 

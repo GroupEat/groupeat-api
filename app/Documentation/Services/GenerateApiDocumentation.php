@@ -23,12 +23,7 @@ class GenerateApiDocumentation
         $this->environment = $environment;
     }
 
-    /**
-     * @param OutputInterface $output
-     *
-     * @return string Error output
-     */
-    public function call(OutputInterface $output = null)
+    public function call(OutputInterface $output = null): string
     {
         if (empty($output)) {
             $output = new NullOutput;
@@ -58,20 +53,17 @@ class GenerateApiDocumentation
 
         $command = "aglio --theme-variables flatly --theme-full-width -i $inputPath -o $outputPath";
 
-        $status = process($command, $output)->getErrorOutput();
+        $errorOutput = (string) process($command, $output)->getErrorOutput();
 
         $html = file_get_contents($outputPath);
         $html = $this->parseConfig($html);
 
         file_put_contents($outputPath, $html);
 
-        return $status;
+        return $errorOutput;
     }
 
-    /**
-     * @return string
-     */
-    public function getHTML()
+    public function getHTML(): string
     {
         $path = $this->getOutputPath();
 

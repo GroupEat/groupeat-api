@@ -8,23 +8,16 @@ class CreateGroupOrder extends AddCustomerOrder
 {
     private $foodRushInMinutes;
 
-    /**
-     * @param int      $foodRushInMinutes
-     * @param Customer $customer
-     * @param array    $productFormats
-     * @param array    $deliveryAddressData
-     * @param string   $comment
-     */
     public function __construct(
-        $foodRushInMinutes,
+        int $foodRushInMinutes,
         Customer $customer,
         array $productFormats,
         array $deliveryAddressData,
-        $comment = null
+        string $comment
     ) {
         parent::__construct($customer, $productFormats, $deliveryAddressData, $comment);
 
-        $this->foodRushInMinutes = (int) $foodRushInMinutes;
+        $this->foodRushInMinutes = $foodRushInMinutes;
     }
 
     public function getFoodRushInMinutes()

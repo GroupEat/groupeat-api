@@ -5,6 +5,11 @@ use Groupeat\Support\Values\Abstracts\SingleValue;
 
 class Environment extends SingleValue
 {
+    public function value(): string
+    {
+        return $this->value;
+    }
+
     public function isLocal()
     {
         return $this->is('local');

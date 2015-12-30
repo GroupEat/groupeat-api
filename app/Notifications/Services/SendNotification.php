@@ -26,7 +26,7 @@ class SendNotification
         $this->apns = $apns;
     }
 
-    public function call(Notification $notification, $force = false)
+    public function call(Notification $notification, bool $force = false): string
     {
         if ($this->enabled || $force) {
             $platformLabel = $notification->getDevice()->platform->label;
@@ -37,7 +37,7 @@ class SendNotification
                     break;
 
                 case 'ios':
-                    $response = $this->apns->call($notification);
+                    $response = (string) $this->apns->call($notification);
                     break;
 
                 default:

@@ -29,17 +29,13 @@ class RegisterUser
         $this->localeService = $localeService;
     }
 
-    /**
-     * @param string   $email
-     * @param string   $password
-     * @param string   $locale
-     * @param User     $userType
-     * @param Closure $additionalValidationCallback
-     *
-     * @return User
-     */
-    public function call($email, $password, $locale, User $userType, Closure $additionalValidationCallback = null)
-    {
+    public function call(
+        string $email,
+        string $password,
+        string $locale,
+        User $userType,
+        Closure $additionalValidationCallback = null
+    ): User {
         $this->localeService->assertAvailable($locale);
         $this->assertValidCredentials($email, $password, $additionalValidationCallback);
 
@@ -51,7 +47,7 @@ class RegisterUser
         return $userCredentials->user;
     }
 
-    private function assertValidCredentials($email, $password, Closure $additionalCallback = null)
+    private function assertValidCredentials(string $email, string $password, Closure $additionalCallback = null)
     {
         $credentials = compact('email', 'password');
 

@@ -4,15 +4,11 @@ namespace Groupeat\Auth\Entities\Traits;
 use Groupeat\Auth\Entities\Interfaces\User;
 use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Forbidden;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait HasCredentials
 {
-    /**
-     * @param $email
-     *
-     * @return User
-     */
-    public static function findByEmailOrFail($email)
+    public static function findByEmailOrFail(string $email): User
     {
         $user = static::findByEmail($email);
 
@@ -24,11 +20,9 @@ trait HasCredentials
     }
 
     /**
-     * @param string $email
-     *
-     * @return User or null if not found
+     * @return User|null if not found
      */
-    public static function findByEmail($email)
+    public static function findByEmail(string $email)
     {
         $credentials = UserCredentials::findByEmail($email);
 
@@ -53,15 +47,12 @@ trait HasCredentials
         return $this->credentials->locale;
     }
 
-    public function isActivated()
+    public function isActivated(): bool
     {
         return $this->credentials->isActivated();
     }
 
-    /**
-     * @param string $exceptionMessage
-     */
-    public function assertActivated($exceptionMessage = null)
+    public function assertActivated(string $exceptionMessage = '')
     {
         if (!$this->isActivated()) {
             if (empty($exceptionMessage)) {
@@ -75,7 +66,7 @@ trait HasCredentials
         }
     }
 
-    public function credentials()
+    public function credentials(): MorphOne
     {
         return $this->morphOne(UserCredentials::class, 'user');
     }

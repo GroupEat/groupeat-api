@@ -5,8 +5,8 @@ use Groupeat\Devices\Entities\Device;
 
 class SilentNotification extends Notification
 {
-    public function __construct(Device $device, $timeToLiveInSeconds, $additionalData = [])
+    public function __construct(Device $device, int $timeToLiveInSeconds, array $additionalData = [])
     {
-        parent::__construct($device, null, null, $timeToLiveInSeconds, $additionalData);
+        parent::__construct($device, $timeToLiveInSeconds, $additionalData, '', '');
     }
 }

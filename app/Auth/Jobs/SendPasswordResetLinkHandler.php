@@ -44,12 +44,7 @@ class SendPasswordResetLinkHandler
         }
     }
 
-    /**
-     * @param $token
-     *
-     * @return string
-     */
-    public function getUrl($token)
+    public function getUrl(string $token): string
     {
         return $this->urlGenerator->to("auth/password/reset?token=$token");
     }

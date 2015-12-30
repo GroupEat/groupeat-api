@@ -14,11 +14,7 @@ class Handler extends DingoExceptionHandler
 {
     private $logger;
 
-    /**
-     * A list of the exception types that should not be reported.
-     *
-     * @var array
-     */
+    // List of the exception types that should not be reported
     private $dontReport = [
         HttpException::class
     ];
@@ -28,14 +24,7 @@ class Handler extends DingoExceptionHandler
         $this->logger = $logger;
     }
 
-    /**
-     * Report or log an exception.
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param BaseException $e
-     *
-     * @return void
-     */
+    // Report or log an exception. This is a great spot to send exceptions to Sentry, Bugsnag, etc.
     public function report(BaseException $e)
     {
         if ($this->shouldReport($e)) {

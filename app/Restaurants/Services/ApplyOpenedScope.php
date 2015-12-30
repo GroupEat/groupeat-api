@@ -111,7 +111,7 @@ class ApplyOpenedScope
         }
     }
 
-    private function isSpanningOnTwoDays(Carbon $start, Carbon $end)
+    private function isSpanningOnTwoDays(Carbon $start, Carbon $end): bool
     {
         if ($start->gt($end)) {
             throw new BadRequest(

@@ -23,22 +23,17 @@ class SendMail
         $this->logger = $logger;
     }
 
-    /**
-     * @return Locale
-     */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
 
-    /**
-     * @param UserCredentials $user
-     * @param string          $viewName
-     * @param string          $subjectLangKey
-     * @param array           $data
-     */
-    public function call(UserCredentials $user, $viewName, $subjectLangKey, array $data = [])
-    {
+    public function call(
+        UserCredentials $user,
+        string $viewName,
+        string $subjectLangKey,
+        array $data = []
+    ) {
         $this->locale->executeWithUserLocale(function () use ($user, $viewName, $subjectLangKey, $data) {
             $email = $user->email;
             $viewFactory = $this->mailer->getViewFactory();

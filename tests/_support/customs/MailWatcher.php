@@ -7,11 +7,6 @@ use Swift_Message;
 
 class MailWatcher extends \Codeception\Module
 {
-    /**
-     * @var Collection
-     */
-    private $mails;
-
     public function _before()
     {
         $this->flush();
@@ -27,10 +22,7 @@ class MailWatcher extends \Codeception\Module
         $this->mails = collect();
     }
 
-    /**
-     * @param string $needle
-     */
-    public function assertFirstMailContains($needle)
+    public function assertFirstMailContains(string $needle)
     {
         $this->assertMailContains($this->grabFirstMail(), $needle);
     }
@@ -40,12 +32,7 @@ class MailWatcher extends \Codeception\Module
         return $this->grabMailCrawlableBody($this->grabFirstMail());
     }
 
-    /**
-     * @param string $id
-     *
-     * @return string
-     */
-    public function grabHrefInLinkByIdInFirstMail($id)
+    public function grabHrefInLinkByIdInFirstMail(string $id)
     {
         return $this->grabHrefInLinkByIdInMail($this->grabFirstMail(), $id);
     }
@@ -65,11 +52,7 @@ class MailWatcher extends \Codeception\Module
         return $this->grabFirstMail()->getBody();
     }
 
-    /**
-     * @param Swift_Message $mail
-     * @param string        $needle
-     */
-    public function assertMailContains(Swift_Message $mail, $needle)
+    public function assertMailContains(Swift_Message $mail, string $needle)
     {
         $this->assertContains($needle, $mail->getBody());
     }
@@ -84,13 +67,7 @@ class MailWatcher extends \Codeception\Module
         return new Crawler($mail->getBody());
     }
 
-    /**
-     * @param Swift_Message $mail
-     * @param string        $id
-     *
-     * @return string
-     */
-    public function grabHrefInLinkByIdInMail(Swift_Message $mail, $id)
+    public function grabHrefInLinkByIdInMail(Swift_Message $mail, string $id): string
     {
         $href = trim($this->grabMailCrawlableBody($mail)->filter("#$id")->attr('href'));
 
@@ -104,12 +81,7 @@ class MailWatcher extends \Codeception\Module
         return array_keys($mail->getTo())[0];
     }
 
-    /**
-     * @param string $id
-     *
-     * @return Swift_Message
-     */
-    public function grabMailById($id)
+    public function grabMailById(string $id): Swift_Message
     {
         $mails = $this->grabMails()->filter(function (Swift_Message $mail) use ($id) {
             return $this->grabMailId($mail) == $id;
@@ -131,10 +103,7 @@ class MailWatcher extends \Codeception\Module
         return $this->mails;
     }
 
-    /**
-     * @return Swift_Message
-     */
-    public function grabFirstMail()
+    public function grabFirstMail(): Swift_Message
     {
         if (empty($this->mails->first())) {
             \PHPUnit_Framework_Assert::fail('No mail was sent.');
@@ -143,12 +112,7 @@ class MailWatcher extends \Codeception\Module
         return $this->mails->first();
     }
 
-    /**
-     * @param Swift_Message $mail
-     *
-     * @return string
-     */
-    private function getPlainText(Swift_Message $mail)
+    private function getPlainText(Swift_Message $mail): string
     {
         return explode('Content-Type: text/html;', (string) $mail)[0];
     }

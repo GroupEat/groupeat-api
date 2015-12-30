@@ -5,13 +5,8 @@ use File;
 
 class SeedersOrderer
 {
-    /**
-     * Returns the Seeders in the same order than the Migrations in order
-     * to avoid any foreign key problem.
-     *
-     * @return array
-     */
-    public function getList()
+    // Return the Seeders in the same order than the Migrations in order to avoid any foreign key problem
+    public function getList(): array
     {
         $seeders = [];
 

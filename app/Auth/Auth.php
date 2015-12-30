@@ -33,15 +33,8 @@ class Auth implements Provider
         $this->dingoAuth = $dingoAuth;
     }
 
-    /**
-     * Authenticate the request and return the authenticated user instance.
-     *
-     * @param Request $request
-     * @param Route   $route
-     *
-     * @return mixed
-     */
-    public function authenticate(Request $request, Route $route)
+    // Read the request authorization header and return the authenticated user instance if successful.
+    public function authenticate(Request $request, Route $route): UserCredentials
     {
         $authorizationHeader = $request->header('authorization');
 
@@ -59,12 +52,7 @@ class Auth implements Provider
         return $this->credentials();
     }
 
-    /**
-     * @param string $token
-     *
-     * @return UserCredentials
-     */
-    public function login($token)
+    public function login(string $token): UserCredentials
     {
         try {
             $userCredentials = $this->jwtAuth->authenticate($token);
@@ -91,11 +79,7 @@ class Auth implements Provider
         return $this->credentials();
     }
 
-    /**
-     * @param $email
-     * @param $password
-     */
-    public function byCredentials($email, $password)
+    public function byCredentials(string $email, string $password)
     {
         if ($this->illuminateAuth->once(compact('email', 'password'))) {
             $user = $this->illuminateAuth->getUser();
@@ -118,10 +102,7 @@ class Auth implements Provider
         $this->dingoAuth->setUser(null);
     }
 
-    /**
-     * @return bool
-     */
-    public function check()
+    public function check(): bool
     {
         return !empty($this->illuminateAuth->getUser());
     }
@@ -136,35 +117,23 @@ class Auth implements Provider
         }
     }
 
-    /**
-     * @return UserCredentials
-     */
-    public function credentials()
+    public function credentials(): UserCredentials
     {
         $this->checkOrFail();
 
         return $this->illuminateAuth->getUser();
     }
 
-    /**
-     * @return User
-     */
-    public function user()
+    public function user(): User
     {
         return $this->credentials()->user;
     }
 
-    /**
-     * @return string
-     */
-    public function userId()
+    public function userId(): string
     {
         return $this->user()->id;
     }
 
-    /**
-     * @param User $user
-     */
     public function assertSame(User $user)
     {
         $this->assertSameType($user);
@@ -181,12 +150,7 @@ class Auth implements Provider
         }
     }
 
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function isSame(User $user)
+    public function isSame(User $user): bool
     {
         if (!$this->check()) {
             return false;
@@ -195,9 +159,6 @@ class Auth implements Provider
         return $this->currentType() == $this->typeOf($user) && $this->userId() == $user->id;
     }
 
-    /**
-     * @param User $user
-     */
     public function assertSameType(User $user)
     {
         $currentType = $this->currentType();
@@ -212,12 +173,7 @@ class Auth implements Provider
         }
     }
 
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function isSameType(User $user)
+    public function isSameType(User $user): bool
     {
         if (!$this->check()) {
             return false;
@@ -226,12 +182,7 @@ class Auth implements Provider
         return $this->currentType() == $this->typeOf($user);
     }
 
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function addUserType(User $user)
+    public function addUserType(User $user): bool
     {
         $userType = $this->typeOf($user);
         $shortType = $this->toShortType($userType);
@@ -245,20 +196,12 @@ class Auth implements Provider
         return false;
     }
 
-    /**
-     * @return string
-     */
-    public function currentType()
+    public function currentType(): string
     {
         return $this->typeOf($this->user());
     }
 
-    /**
-     * @param User $user
-     *
-     * @return string
-     */
-    public function shortTypeOf(User $user)
+    public function shortTypeOf(User $user): string
     {
         $type = $this->typeOf($user);
         $shortType = array_search($type, $this->userTypes);
@@ -273,30 +216,16 @@ class Auth implements Provider
         return $shortType;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return string
-     */
-    public function typeOf(User $user)
+    public function typeOf(User $user): string
     {
         return get_class($user);
     }
 
-    /**
-     * @return array
-     */
-    public function getUserTypes()
+    public function getUserTypes(): array
     {
         return $this->userTypes;
     }
 
-    /**
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
     public function __call($method, $parameters)
     {
         foreach ($this->userTypes as $shortType => $userType) {
@@ -345,12 +274,7 @@ class Auth implements Provider
         $credentials->user()->associate($user);
     }
 
-    /**
-     * @param string $userType
-     *
-     * @return string
-     */
-    private function toShortType($userType)
+    private function toShortType(string $userType): string
     {
         return strtolower(class_basename($userType));
     }

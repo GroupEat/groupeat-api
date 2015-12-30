@@ -11,27 +11,14 @@ use Treffynnon\Navigator;
 
 trait HasLocation
 {
-    /**
-     * @var Point
-     */
     protected $locationPoint;
 
-    /**
-     * @param Entity $other
-     *
-     * @return float
-     */
-    public function distanceInKmsWith(Entity $other)
+    public function distanceInKmsWith(Entity $other): float
     {
         return $this->distanceInKmsWithPoint($other->location);
     }
 
-    /**
-     * @param Point $location
-     *
-     * @return float
-     */
-    public function distanceInKmsWithPoint(Point $location)
+    public function distanceInKmsWithPoint(Point $location): float
     {
         $thisLocation = $this->toGeography($this->location);
         $otherLocation = $this->toGeography($location);
@@ -41,7 +28,7 @@ trait HasLocation
         return $res[0]->st_distance / 1000;
     }
 
-    public function scopeWithinKilometers(EloquentBuilder $query, Point $location, $kilometers)
+    public function scopeWithinKilometers(EloquentBuilder $query, Point $location, float $kilometers)
     {
         if (!is_numeric($kilometers)) {
             throw new Exception(
@@ -77,10 +64,7 @@ trait HasLocation
         return new PostgisBuilder($query);
     }
 
-    /**
-     * @return Point
-     */
-    protected function getLocationAttribute()
+    protected function getLocationAttribute(): Point
     {
         return $this->locationPoint;
     }
@@ -91,7 +75,7 @@ trait HasLocation
         $this->attributes['location'] = $this->getConnection()->raw($this->toGeography($location));
     }
 
-    protected function toGeography(Point $location)
+    protected function toGeography(Point $location): string
     {
         return "ST_GeogFromText('".$location->toWKT()."')";
     }

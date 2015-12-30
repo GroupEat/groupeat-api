@@ -27,8 +27,10 @@ class UpdateDeviceHandler
 
         $this->maintainCorrectDeviceOwner->call($device, $job->getCustomer());
 
-        if ($job->getLocation()) {
-            DeviceLocation::createFromDeviceAndLocationArray($device, $job->getLocation());
+        $location = $job->getLocation();
+
+        if (!empty($location)) {
+            DeviceLocation::createFromDeviceAndLocationArray($device, $location);
         }
 
         if ($platformVersion || $notificationToken) {

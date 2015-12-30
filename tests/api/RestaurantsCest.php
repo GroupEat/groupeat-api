@@ -109,7 +109,7 @@ class RestaurantsCest
         $this->assertClosingAt($I, $token, $restaurantId, new Carbon('2015-11-08 00:30:00'));
     }
 
-    private function assertClosingAt(ApiTester $I, $token, $restaurantId, Carbon $expected)
+    private function assertClosingAt(ApiTester $I, string $token, string $restaurantId, Carbon $expected)
     {
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId");
         $closingAt = new Carbon($I->grabDataFromResponse('closingAt'));
@@ -118,7 +118,7 @@ class RestaurantsCest
         $I->assertTrue($period->contains($closingAt));
     }
 
-    private function createOpeningWindow($restaurantId, $start, $end, $tomorrow = false)
+    private function createOpeningWindow(string $restaurantId, string $start, string $end, bool $tomorrow = false)
     {
         $openingWindow = new OpeningWindow;
         $openingWindow->restaurantId = $restaurantId;
@@ -128,7 +128,7 @@ class RestaurantsCest
         $openingWindow->save();
     }
 
-    private function createClosingWindow($restaurantId, $start, $end)
+    private function createClosingWindow(string $restaurantId, string $start, string $end)
     {
         $closingWindow = new ClosingWindow;
         $closingWindow->restaurantId = $restaurantId;
@@ -137,7 +137,7 @@ class RestaurantsCest
         $closingWindow->save();
     }
 
-    private function createRestaurant()
+    private function createRestaurant(): string
     {
         $restaurant = new Restaurant;
         $restaurant->name = 'Test Pizza';
@@ -159,7 +159,7 @@ class RestaurantsCest
         return $restaurant->id;
     }
 
-    private function isRestaurantInResponse(ApiTester $I, $token, $restaurantId, $query = '')
+    private function isRestaurantInResponse(ApiTester $I, string $token, string $restaurantId, string $query = ''): bool
     {
         $I->sendApiGetWithToken($token, "restaurants?$query");
         $restaurants = $I->grabDataFromResponse();

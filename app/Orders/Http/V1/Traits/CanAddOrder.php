@@ -27,7 +27,7 @@ trait CanAddOrder
             );
         }
 
-        $comment = $this->json('comment');
+        $comment = $this->json('comment') ?? '';
 
         $command = $getCommandCallback($productFormats, $deliveryAddressData, $comment);
         $order = $this->dispatch($command);

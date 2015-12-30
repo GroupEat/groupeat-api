@@ -1,10 +1,9 @@
 <?php
 namespace Groupeat\Auth\Entities\Interfaces;
 
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+
 interface User
 {
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne Relationship giving access to the credentials
-     */
-    public function credentials();
+    public function credentials(): MorphOne;
 }

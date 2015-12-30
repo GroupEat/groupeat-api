@@ -11,9 +11,6 @@ class Locale
     private $translator;
     private $availableLocales;
 
-    /**
-     * @var string
-     */
     private $locale;
 
     public function __construct(Translator $translator, AvailableLocales $availableLocales)
@@ -22,20 +19,12 @@ class Locale
         $this->availableLocales = $availableLocales->value();
     }
 
-    /**
-     * @return string
-     */
-    public function get()
+    public function get(): string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function set($locale)
+    public function set(string $locale): Locale
     {
         $this->assertAvailable($locale);
 
@@ -44,21 +33,12 @@ class Locale
         return $this;
     }
 
-    /**
-     * @return Translator
-     */
     public function getTranslator()
     {
         return $this->translator;
     }
 
-    /**
-     * @param Closure $callback
-     * @param string   $locale
-     *
-     * @return mixed
-     */
-    public function executeWithUserLocale(Closure $callback, $locale)
+    public function executeWithUserLocale(Closure $callback, string $locale)
     {
         $this->assertNotNull($locale);
 
@@ -72,10 +52,7 @@ class Locale
         return $res;
     }
 
-    /**
-     * @param string $locale
-     */
-    public function assertAvailable($locale)
+    public function assertAvailable(string $locale)
     {
         $this->assertNotNull($locale);
 

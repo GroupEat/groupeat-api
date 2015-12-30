@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Notifications\Services;
 
+use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Orders\Entities\GroupOrder;
@@ -20,8 +21,12 @@ class SendJoinGroupOrderNotification
         $this->sendNotification = $sendNotification;
     }
 
-    public function call(GroupOrder $groupOrder, Device $device, $silent = false, $additionalData = [])
-    {
+    public function call(
+        GroupOrder $groupOrder,
+        Device $device,
+        bool $silent = false,
+        array $additionalData = []
+    ): Notification {
         $customer = $device->customer;
         $maximumDiscountRate = $groupOrder->restaurant->maximumDiscountRate;
 
@@ -59,7 +64,7 @@ class SendJoinGroupOrderNotification
         return $entity;
     }
 
-    private function translateFor($messageKey, Customer $customer, array $params = [])
+    private function translateFor(string $messageKey, Customer $customer, array $params = []): string
     {
         return $this->locale->executeWithUserLocale(function () use ($messageKey, $params) {
             return $this->locale->getTranslator()->get("notifications::messages.$messageKey", $params);

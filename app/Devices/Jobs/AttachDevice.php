@@ -15,23 +15,14 @@ class AttachDevice extends Job
     private $model;
     private $location;
 
-    /**
-     * @param Customer        $customer
-     * @param string          $UUID
-     * @param string          $notificationToken
-     * @param Platform        $platform
-     * @param string          $platformVersion
-     * @param string          $model
-     * @param array|null  $location
-     */
     public function __construct(
         Customer $customer,
-        $UUID,
-        $notificationToken,
+        string $UUID,
+        string $notificationToken,
         Platform $platform,
-        $platformVersion,
-        $model,
-        $location
+        string $platformVersion,
+        string $model,
+        array $location
     ) {
         $this->customer = $customer;
         $this->UUID = $UUID;

@@ -16,13 +16,7 @@ class GenerateToken
         $this->defaultDurationInMinutes = $defaultTokenDurationInMinutes->value();
     }
 
-    /**
-     * @param UserCredentials $userCredentials
-     * @param int             $durationInMinutes Null for default duration
-     *
-     * @return string The authentication token
-     */
-    public function call(UserCredentials $userCredentials, $durationInMinutes = null)
+    public function call(UserCredentials $userCredentials, int $durationInMinutes = null): string
     {
         if (!is_null($durationInMinutes)) {
             $this->JWTauth->manager()->getPayloadFactory()->setTTL($durationInMinutes);

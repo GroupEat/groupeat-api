@@ -3,7 +3,7 @@ namespace Groupeat\Notifications\Entities;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
-use Groupeat\Notifications\Values\Notification as NoisyNotification;
+use Groupeat\Notifications\Values\Notification as NotificationValue;
 use Groupeat\Notifications\Values\SilentNotification;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Entities\Abstracts\ImmutableDatedEntity;
@@ -39,28 +39,24 @@ class Notification extends ImmutableDatedEntity
         return $this->belongsTo(GroupOrder::class);
     }
 
-    /**
-     * @param int         $timeToLiveInSeconds
-     * @param array       $additionalData
-     * @param string|null $title
-     * @param string|null $message
-     *
-     * @return NoisyNotification|SilentNotification
-     */
-    public function toValue($timeToLiveInSeconds, $additionalData, $title, $message)
-    {
+    public function toValue(
+        int $timeToLiveInSeconds,
+        array $additionalData = [],
+        string $title = '',
+        string $message = ''
+    ) {
         $additionalData = (array) $additionalData;
         $additionalData['notificationId'] = $this->id;
 
         if ($this->silent) {
             return new SilentNotification($this->device, $timeToLiveInSeconds, $additionalData);
         } else {
-            return new NoisyNotification(
+            return new NotificationValue(
                 $this->device,
-                $title,
-                $message,
                 $timeToLiveInSeconds,
-                $additionalData
+                $additionalData,
+                $title,
+                $message
             );
         }
     }

@@ -30,7 +30,7 @@ class SendSms
         $this->client = new Client;
     }
 
-    public function call(Sms $sms, $force = false)
+    public function call(Sms $sms, bool $force = false)
     {
         if ($this->enabled || $force) {
             $text = static::FROM . "\n" . $sms->getText();

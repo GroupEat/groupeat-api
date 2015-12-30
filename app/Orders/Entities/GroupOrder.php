@@ -9,10 +9,12 @@ use Groupeat\Orders\Support\ProductFormats;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Support\DiscountRate;
+use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Phaza\LaravelPostgis\Geometries\Point;
+use SebastianBergmann\Money\Money;
 
 class GroupOrder extends Entity
 {
@@ -44,22 +46,13 @@ class GroupOrder extends Entity
         static::$joinableDistanceInKms = config('orders.joinable_distance_in_kilometers');
     }
 
-    /**
-     * @param Customer        $customer
-     * @param DeliveryAddress $address
-     * @param ProductFormats  $productFormats
-     * @param int             $foodRushDurationInMinutes
-     * @param string          $comment
-     *
-     * @return Order
-     */
     public static function createWith(
         Customer $customer,
         DeliveryAddress $address,
         ProductFormats $productFormats,
-        $foodRushDurationInMinutes,
-        $comment = null
-    ) {
+        int $foodRushDurationInMinutes,
+        string $comment = ''
+    ): Order {
         $restaurant = $productFormats->getRestaurant();
         static::assertNotExistingFor($restaurant);
         static::assertMinimumGroupOrderPriceReached($restaurant, $productFormats);
@@ -70,12 +63,7 @@ class GroupOrder extends Entity
         return $groupOrder->addOrder($customer, $productFormats, $address, $comment);
     }
 
-    /**
-     * @param Carbon $time
-     *
-     * @return bool
-     */
-    public function isJoinable(Carbon $time = null)
+    public function isJoinable(Carbon $time = null): bool
     {
         $time = $time ?: $this->freshTimestamp();
 
@@ -95,10 +83,7 @@ class GroupOrder extends Entity
         });
     }
 
-    /**
-     * @return Order
-     */
-    public function getInitiatingOrder()
+    public function getInitiatingOrder(): Order
     {
         return $this->orders->filter(function ($order) {
             return $order->initiator;
@@ -115,20 +100,12 @@ class GroupOrder extends Entity
         return $this->belongsTo(Restaurant::class);
     }
 
-    /**
-     * @param Customer        $customer
-     * @param ProductFormats  $productFormats
-     * @param DeliveryAddress $address
-     * @param string          $comment
-     *
-     * @return Order
-     */
     public function addOrder(
         Customer $customer,
         ProductFormats $productFormats,
         DeliveryAddress $address,
-        $comment = null
-    ) {
+        string $comment = ''
+    ): Order {
         $customer->assertActivated("The {$customer->toShortString()} should be activated to place an order.");
         $customer->assertNoMissingInformation();
         list($nbProductFormats, $totalRawPrice) = $this->getNbProductFormatsAndRawPriceWith($productFormats);
@@ -174,9 +151,6 @@ class GroupOrder extends Entity
         event(new GroupOrderHasBeenClosed($this));
     }
 
-    /**
-     * @param Carbon $preparedAt
-     */
     public function confirm(Carbon $preparedAt)
     {
         $this->confirmedAt = $this->freshTimestamp();
@@ -189,10 +163,8 @@ class GroupOrder extends Entity
         return !is_null($this->confirmedAt);
     }
 
-    /**
-     * @return int The number of product formats that can still be added to the group order
-     */
-    public function computeRemainingCapacity()
+    // Return the amount of product formats that can still be added to the group order
+    public function computeRemainingCapacity(): int
     {
         $nbProductFormats = DB::table((new Order)->productFormats()->getTable())
             ->whereIn('orderId', $this->orders()->lists('id'))
@@ -201,18 +173,12 @@ class GroupOrder extends Entity
         return $this->restaurant->deliveryCapacity - $nbProductFormats;
     }
 
-    /**
-     * @return \SebastianBergmann\Money\Money
-     */
-    public function getTotalRawPriceAttribute()
+    public function getTotalRawPriceAttribute(): Money
     {
         return sumPrices($this->orders->pluck('rawPrice'));
     }
 
-    /**
-     * @return \SebastianBergmann\Money\Money
-     */
-    public function getTotalDiscountedPriceAttribute()
+    public function getTotalDiscountedPriceAttribute(): Money
     {
         return sumPrices($this->orders->pluck('discountedPrice'));
     }
@@ -226,12 +192,7 @@ class GroupOrder extends Entity
             ->where($model->getTableField(self::ENDING_AT), '>', $time);
     }
 
-    /**
-     * @param Builder $query
-     * @param Point   $location
-     * @param float   $distanceInKms
-     */
-    public function scopeAround(Builder $query, Point $location, $distanceInKms = null)
+    public function scopeAround(Builder $query, Point $location, float $distanceInKms = 0)
     {
         $distanceInKms = $distanceInKms ?: static::$joinableDistanceInKms;
 
@@ -247,16 +208,12 @@ class GroupOrder extends Entity
         });
     }
 
-    /**
-     * @param Builder $query
-     * @param int     $sinceMinutes
-     */
-    public function scopeUnconfirmed(Builder $query, $sinceMinutes = null)
+    public function scopeUnconfirmed(Builder $query, int $sinceMinutes = 0)
     {
         $query->whereNotNull($this->getTableField(self::CLOSED_AT))
             ->whereNull($this->getTableField(self::CONFIRMED_AT));
 
-        if (is_int($sinceMinutes)) {
+        if ($sinceMinutes) {
             $query->where(
                 $this->getTableField(self::CLOSED_AT),
                 '<',
@@ -265,10 +222,7 @@ class GroupOrder extends Entity
         }
     }
 
-    /**
-     * @return \Groupeat\Support\Entities\Abstracts\Address
-     */
-    public function getAddressToCompareToForJoining()
+    public function getAddressToCompareToForJoining(): Address
     {
         return $this->getInitiatingOrder()->deliveryAddress;
     }

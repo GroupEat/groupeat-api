@@ -23,7 +23,7 @@ class SendGcmNotification
         $this->key = $key->value();
     }
 
-    public function call(Notification $notification)
+    public function call(Notification $notification): string
     {
         $data = [];
 

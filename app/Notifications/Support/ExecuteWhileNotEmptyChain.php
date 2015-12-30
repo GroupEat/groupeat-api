@@ -11,13 +11,9 @@ class ExecuteWhileNotEmptyChain
     private $logPrefix;
     private $logContext;
     private $isFirstCall = true;
-
-    /**
-     * @var Collection
-     */
     private $result;
 
-    public function __construct(LoggerInterface $logger, $logPrefix, array $logContext)
+    public function __construct(LoggerInterface $logger, string $logPrefix, array $logContext = [])
     {
         $this->logger = $logger;
         $this->logPrefix = $logPrefix;
@@ -30,7 +26,7 @@ class ExecuteWhileNotEmptyChain
         return $this->result;
     }
 
-    public function next(Closure $callback, $step = null)
+    public function next(Closure $callback, string $step = '')
     {
         if (!$this->isFirstCall && $this->result->isEmpty()) {
             return $this;
@@ -38,7 +34,7 @@ class ExecuteWhileNotEmptyChain
 
         $this->result = $this->isFirstCall ? $callback() : $callback($this->result);
 
-        if (!is_null($step)) {
+        if ($step) {
             $this->log($step, $this->result);
         }
 
@@ -49,7 +45,7 @@ class ExecuteWhileNotEmptyChain
         return $this;
     }
 
-    public function log($step, Collection $result)
+    public function log(string $step, Collection $result)
     {
         $this->logger->debug($this->logPrefix.'#'.$step.': '.$result->toJson(), $this->logContext);
     }

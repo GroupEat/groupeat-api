@@ -25,20 +25,12 @@ class DiscountRate
         $this->percentage = $percentage;
     }
 
-    /**
-     * @return int
-     */
-    public function toPercentage()
+    public function toPercentage(): int
     {
         return $this->percentage;
     }
 
-    /**
-     * @param Money $price
-     *
-     * @return Money
-     */
-    public function applyTo(Money $price)
+    public function applyTo(Money $price): Money
     {
         return $price->multiply(1 - $this->percentage / 100);
     }

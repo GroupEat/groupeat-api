@@ -39,12 +39,12 @@ class ApiHelper extends \Codeception\Module
     }
 
     public function sendRegistrationRequest(
-        $email = null,
-        $password = 'password',
-        $resource = 'customers',
-        $locale = 'fr'
-    ) {
-        if (is_null($email)) {
+        string $email = '',
+        string $password = 'password',
+        string $resource = 'customers',
+        string $locale = 'fr'
+    ): array {
+        if (empty($email)) {
             $email = uniqid().'@ensta.fr';
         }
 
@@ -110,57 +110,57 @@ class ApiHelper extends \Codeception\Module
         return [$token, $orderId, $restaurantCapacity, $orderDetails, $customerId, $restaurantId];
     }
 
-    public function sendApiGetWithToken($token, $path, $params = [])
+    public function sendApiGetWithToken(string $token, string $path, array $params = [])
     {
         $this->sendApiWithToken($token, 'GET', $path, $params);
     }
 
-    public function sendApiPutWithToken($token, $path, $params = [])
+    public function sendApiPutWithToken(string $token, string $path, array $params = [])
     {
         $this->sendApiWithToken($token, 'PUT', $path, $params);
     }
 
-    public function sendApiPatchWithToken($token, $path, $params = [])
+    public function sendApiPatchWithToken(string $token, string $path, array $params = [])
     {
         $this->sendApiWithToken($token, 'PATCH', $path, $params);
     }
 
-    public function sendApiPostWithToken($token, $path, $params = [])
+    public function sendApiPostWithToken(string $token, string $path, array $params = [])
     {
         $this->sendApiWithToken($token, 'POST', $path, $params);
     }
 
-    public function sendApiDeleteWithToken($token, $path, $params = [])
+    public function sendApiDeleteWithToken(string $token, string $path, array $params = [])
     {
         $this->sendApiWithToken($token, 'DELETE', $path, $params);
     }
 
-    public function sendApiGet($path, $params = [])
+    public function sendApiGet(string $path, array $params = [])
     {
         $this->sendApi('GET', $path, $params);
     }
 
-    public function sendApiPut($path, $params = [])
+    public function sendApiPut(string $path, array $params = [])
     {
         $this->sendApi('PUT', $path, $params);
     }
 
-    public function sendApiPatch($path, $params = [])
+    public function sendApiPatch(string $path, array $params = [])
     {
         $this->sendApi('PATCH', $path, $params);
     }
 
-    public function sendApiPost($path, $params = [])
+    public function sendApiPost(string $path, array $params = [])
     {
         $this->sendApi('POST', $path, $params);
     }
 
-    public function sendApiDelete($path, $params = [])
+    public function sendApiDelete(string $path, array $params = [])
     {
         $this->sendApi('DELETE', $path, $params);
     }
 
-    public function sendApiWithToken($token, $verb, $path, $params = [])
+    public function sendApiWithToken(string $token, string $verb, string $path, array $params = [])
     {
         $restModule = $this->getModule('REST');
         $restModule->amBearerAuthenticated($token);
@@ -168,7 +168,7 @@ class ApiHelper extends \Codeception\Module
         unset($restModule->headers['Authorization']);
     }
 
-    public function sendApi($verb, $path, $params = [])
+    public function sendApi(string $verb, string $path, array $params = [])
     {
         $verb = strtoupper($verb);
         $url = $this->getApiUrl($path);
@@ -209,17 +209,17 @@ class ApiHelper extends \Codeception\Module
         $this->runQueues();
     }
 
-    public function getApiUrl($path)
+    public function getApiUrl(string $path): string
     {
         return "/api/$path";
     }
 
-    public function seeResponseErrorKeyIs($errorKey)
+    public function seeResponseErrorKeyIs(string $errorKey)
     {
         $this->getModule('REST')->seeResponseContainsJson(['data' => ['errorKey' => $errorKey]]);
     }
 
-    public function seeErrorResponse($code, $errorKey)
+    public function seeErrorResponse(int $code, string $errorKey)
     {
         $this->getModule('REST')->seeResponseCodeIs($code);
         $this->seeResponseErrorKeyIs($errorKey);
@@ -235,7 +235,7 @@ class ApiHelper extends \Codeception\Module
         return $this->getModule('REST')->seeResponseContainsJson(compact('data'));
     }
 
-    public function grabDataFromResponse($path = '')
+    public function grabDataFromResponse(string $path = '')
     {
         if ($path) {
             $path = ".$path";
@@ -249,9 +249,9 @@ class ApiHelper extends \Codeception\Module
         $this->getModule('REST')->haveHttpHeader('Accept', 'application/vnd.groupeat.v1+json');
     }
 
-    public function getValue($valueClass)
+    public function getValue(string $valueClassWithNamespace)
     {
-        return $this->getModule('Laravel5')->app[$valueClass]->value();
+        return $this->getModule('Laravel5')->app[$valueClassWithNamespace]->value();
     }
 
     protected function runQueues()

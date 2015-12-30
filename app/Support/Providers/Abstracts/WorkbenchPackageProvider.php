@@ -81,11 +81,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         }
     }
 
-    /**
-     * @param string $valueClass
-     * @param string $configKey
-     */
-    protected function bindConfigValue($valueClass, $configKey)
+    protected function bindConfigValue(string $valueClass, string $configKey)
     {
         $this->app->instance(
             $valueClass,
@@ -106,11 +102,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         }
     }
 
-    /**
-     * @param string $valueClass
-     * @param mixed  $value
-     */
-    protected function bindValue($valueClass, $value)
+    protected function bindValue(string $valueClass, $value)
     {
         $this->app->instance(
             $valueClass,

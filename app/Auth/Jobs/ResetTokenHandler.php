@@ -16,12 +16,7 @@ class ResetTokenHandler
         $this->generateToken = $generateToken;
     }
 
-    /**
-     * @param ResetToken $job
-     *
-     * @return UserCredentials
-     */
-    public function handle(ResetToken $job)
+    public function handle(ResetToken $job): UserCredentials
     {
         $email = $job->getEmail();
         $password = $job->getPassword();

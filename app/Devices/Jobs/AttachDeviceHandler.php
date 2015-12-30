@@ -18,7 +18,7 @@ class AttachDeviceHandler
         $this->maintainCorrectDeviceOwner = $maintainCorrectDeviceOwner;
     }
 
-    public function handle(AttachDevice $job)
+    public function handle(AttachDevice $job): Device
     {
         $deviceUUID = $job->getUUID();
         $device = Device::where('UUID', $deviceUUID)->first();
@@ -38,8 +38,10 @@ class AttachDeviceHandler
             $this->events->fire(new DeviceHasBeenAttached($device));
         }
 
-        if ($job->getLocation()) {
-            DeviceLocation::createFromDeviceAndLocationArray($device, $job->getLocation());
+        $location = $job->getLocation();
+
+        if (!empty($location)) {
+            DeviceLocation::createFromDeviceAndLocationArray($device, $location);
         }
 
         return $device;

@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Groupeat\Restaurants\Entities\ProductFormat;
 
 class OrdersCest
 {
@@ -75,7 +76,7 @@ class OrdersCest
     {
         list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $now = Carbon::now();
-        $products = $this->getProducts(
+        list($products) = $this->getProducts(
             $I,
             $token,
             ['around' => true, 'opened' => false],
@@ -98,27 +99,16 @@ class OrdersCest
     {
         list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
 
-        $latitude = 0;
-        $longitude = 0;
-        $products = $this->getProducts(
-            $I,
-            $token,
-            ['around' => true, 'opened' => true],
-            function ($restaurants) use ($latitude, $longitude) {
-                $restaurant = $restaurants[0];
-                $latitude = $restaurant['address']['data']['latitude'];
-                $longitude = $restaurant['address']['data']['longitude'];
-
-                return $restaurant['id'];
-            }
-        );
+        list($products, $restaurantId) = $this->getProducts($I, $token);
+        $I->sendApiGetWithToken($token, "restaurants/$restaurantId?include=address");
+        $address = $I->grabDataFromResponse('address.data');
 
         $productFormats = $this->getProductFormatsFrom($products);
         $orderDetails = $this->getOrderDetails($I, $token, [
             'productFormats' => $productFormats,
             'deliveryAddress' => [
-                'latitude' => $latitude - 1,
-                'longitude' => $longitude + 1,
+                'latitude' => $address['latitude'] - 1,
+                'longitude' => $address['longitude'] + 1,
             ],
         ]);
 
@@ -138,7 +128,7 @@ class OrdersCest
             }
         }
 
-        $wrongProducts = $this->getProducts(
+        list($wrongProducts) = $this->getProducts(
             $I,
             $token,
             ['around' => true, 'opened' => true],
@@ -161,13 +151,10 @@ class OrdersCest
     {
         list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $options = ['around' => true, 'opened' => true];
-        $minimumPrice = 0;
 
-        $products = $this->getProducts($I, $token, $options, function ($restaurants) use (&$minimumPrice) {
-            $minimumPrice = $restaurants[0]['minimumGroupOrderPrice'];
-
-            return $restaurants[0]['id'];
-        });
+        list($products, $restaurantId) = $this->getProducts($I, $token, $options);
+        $I->sendApiGetWithToken($token, "restaurants/$restaurantId");
+        $minimumPrice = $I->grabDataFromResponse('minimumGroupOrderPrice');
 
         $price = 0;
         $productFormats = [];
@@ -192,11 +179,9 @@ class OrdersCest
         $options = ['around' => true, 'opened' => true];
         $deliveryCapacity = 0;
 
-        $products = $this->getProducts($I, $token, $options, function ($restaurants) use (&$deliveryCapacity) {
-            $deliveryCapacity = $restaurants[0]['deliveryCapacity'];
-
-            return $restaurants[0]['id'];
-        });
+        list($products, $restaurantId) = $this->getProducts($I, $token, $options);
+        $I->sendApiGetWithToken($token, "restaurants/$restaurantId");
+        $deliveryCapacity = $I->grabDataFromResponse('deliveryCapacity');
 
         $quantity = 0;
         $productFormats = [];
@@ -359,13 +344,18 @@ class OrdersCest
 
     private function getProducts(
         ApiTester $I,
-        $token,
+        string $token,
         array $options = ['around' => true, 'opened' => true],
         Closure $getRestaurantIdCallback = null
-    ) {
+    ): array {
         if (is_null($getRestaurantIdCallback)) {
             $getRestaurantIdCallback = function ($restaurants) {
-                return $restaurants[0]['id'];
+                return collect($restaurants)->sortByDesc(function ($restaurant) {
+                    return Carbon::createFromFormat(
+                        Carbon::DEFAULT_TO_STRING_FORMAT,
+                        $restaurant['closingAt']
+                    );
+                })->first()['id'];
             };
         }
 
@@ -374,15 +364,16 @@ class OrdersCest
         $restaurantId = $getRestaurantIdCallback($I->grabDataFromResponse());
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/products?include=formats");
 
-        return $I->grabDataFromResponse();
+        return [$I->grabDataFromResponse(), $restaurantId];
     }
 
-    private function getOrderDetails(ApiTester $I, $token, array $details = [])
+    private function getOrderDetails(ApiTester $I, string $token, array $details = []): array
     {
         $defaultProductFormats = '{}';
 
         if (empty($details['productFormats'])) {
-            $defaultProductFormats = $this->getProductFormatsFrom($this->getProducts($I, $token));
+            list($products) = $this->getProducts($I, $token);
+            $defaultProductFormats = $this->getProductFormatsFrom($products);
         }
 
         $details = array_merge([
@@ -399,7 +390,7 @@ class OrdersCest
         return $details;
     }
 
-    private function getQueryStringParamsFor(array $options = [])
+    private function getQueryStringParamsFor(array $options = []): array
     {
         $latitude = isset($options['latitude']) ? $options['latitude'] : $this->getDefaultLatitude();
         $longitude = isset($options['longitude']) ? $options['longitude'] : $this->getDefaultLongitude();
@@ -422,7 +413,7 @@ class OrdersCest
         return $queryStringParams;
     }
 
-    private function getProductFormatsFrom(array $products, array $selectedProducts = [[0, 0, 2], [1, 2, 1]])
+    private function getProductFormatsFrom(array $products, array $selectedProducts = [[0, 0, 2], [1, 2, 1]]): array
     {
         $productFormats = [];
 
@@ -434,23 +425,23 @@ class OrdersCest
         return $productFormats;
     }
 
-    private function getDefaultLatitude()
+    private function getDefaultLatitude(): float
     {
         return 48.716941;
     }
 
-    private function getDefaultLongitude()
+    private function getDefaultLongitude(): float
     {
         return 2.239171;
     }
 
-    private function getRestaurantEmailFromProductFormat($productFormatId)
+    private function getRestaurantEmailFromProductFormat(string $productFormatId): string
     {
-        return \Groupeat\Restaurants\Entities\ProductFormat::find($productFormatId)->product->restaurant->email;
+        return ProductFormat::find($productFormatId)->product->restaurant->email;
     }
 
-    private function computeDiscountRate($discountedPrice, $rawPrice)
+    private function computeDiscountRate($discountedPrice, $rawPrice): int
     {
-        return (int) round(100 * (1 - $discountedPrice / $rawPrice));
+        return round(100 * (1 - $discountedPrice / $rawPrice));
     }
 }

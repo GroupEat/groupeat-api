@@ -9,39 +9,16 @@ use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Collection;
+use SebastianBergmann\Money\Money;
 
 class ProductFormats
 {
-    /**
-     * @var array
-     */
     private $quantities;
-
-    /**
-     * @var Collection
-     */
     private $models;
-
-    /**
-     * @var Restaurant
-     */
     private $restaurant;
-
-    /**
-     * @var int
-     */
     private $totalNumberOfProductFormats;
-
-    /**
-     * @var \SebastianBergmann\Money\Money
-     */
     private $totalPrice;
 
-    /**
-     * @param array      $quantities
-     * @param Collection $models
-     * @param Restaurant $restaurant
-     */
     public function __construct(array $quantities, Collection $models = null, Restaurant $restaurant = null)
     {
         $quantities = array_filter($quantities, function ($quantity) {
@@ -96,35 +73,32 @@ class ProductFormats
         }));
     }
 
-    public function getQuantities()
+    public function getQuantities(): array
     {
         return $this->quantities;
     }
 
-    public function getIds()
+    public function getIds(): array
     {
         return array_keys($this->quantities);
     }
 
-    public function getModels()
+    public function getModels(): Collection
     {
         return $this->models;
     }
 
-    public function getRestaurant()
+    public function getRestaurant(): Restaurant
     {
         return $this->restaurant;
     }
 
-    public function count()
+    public function count(): int
     {
         return $this->totalNumberOfProductFormats;
     }
 
-    /**
-     * @return \SebastianBergmann\Money\Money
-     */
-    public function totalPrice()
+    public function totalPrice(): Money
     {
         return $this->totalPrice;
     }

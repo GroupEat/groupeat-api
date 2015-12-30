@@ -16,10 +16,6 @@ use Psr\Log\LoggerInterface;
 class SelectDevicesToNotify
 {
     private $logger;
-
-    /**
-     * @var float
-     */
     private $joinableDistanceInKms;
 
     public function __construct(LoggerInterface $logger, JoinableDistanceInKms $joinableDistanceInKms)
@@ -28,7 +24,7 @@ class SelectDevicesToNotify
         $this->joinableDistanceInKms = $joinableDistanceInKms->value();
     }
 
-    public function call(GroupOrder $groupOrder)
+    public function call(GroupOrder $groupOrder): Collection
     {
         $chain = new ExecuteWhileNotEmptyChain($this->logger, class_basename($this), ['groupOrderId' => $groupOrder->id]);
 

@@ -6,9 +6,11 @@ use Groupeat\Auth\Auth;
 use Groupeat\Support\Jobs\Abstracts\Job;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
 use League\Fractal\TransformerAbstract;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 abstract class Controller extends IlluminateController
 {
@@ -18,11 +20,6 @@ abstract class Controller extends IlluminateController
     protected $auth;
     private $dispatcher;
 
-    /**
-     * @param Request    $request
-     * @param Auth       $auth
-     * @param Dispatcher $dispatcher
-     */
     public function __construct(Request $request, Auth $auth, Dispatcher $dispatcher)
     {
         $this->request = $request;
@@ -30,44 +27,22 @@ abstract class Controller extends IlluminateController
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * @param string $key
-     * @param mixed  $default
-     * @param bool   $deep
-     *
-     * @return mixed
-     */
-    protected function get($key, $default = null, $deep = false)
+    protected function get(string $key, $default = null, bool $deep = false)
     {
         return $this->request->query->get($key, $default, $deep);
     }
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\ParameterBag
-     */
-    protected function query()
+    protected function query(): ParameterBag
     {
         return $this->request->query;
     }
 
-    /**
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    protected function json($key = null, $default = null)
+    protected function json(string $key = null, $default = null)
     {
         return $this->request->json($key, $default);
     }
 
-    /**
-     * @param                     $item
-     * @param TransformerAbstract $transformer
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function itemResponse($item, TransformerAbstract $transformer = null)
+    protected function itemResponse($item, TransformerAbstract $transformer = null): Response
     {
         if (empty($item)) {
             return $this->response()->noContent();
@@ -80,13 +55,7 @@ abstract class Controller extends IlluminateController
         return $this->response()->item($item, $transformer);
     }
 
-    /**
-     * @param Collection          $collection
-     * @param TransformerAbstract $transfomer
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function collectionResponse(Collection $collection, TransformerAbstract $transfomer = null)
+    protected function collectionResponse(Collection $collection, TransformerAbstract $transfomer = null): Response
     {
         if (is_null($transfomer)) {
             if ($collection->isEmpty()) {
@@ -99,34 +68,19 @@ abstract class Controller extends IlluminateController
         return $this->response()->collection($collection, $transfomer);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function arrayResponse(array $data)
+    protected function arrayResponse(array $data): Response
     {
         return $this->response()->array(compact('data'));
     }
 
-    /**
-     * @param $item
-     *
-     * @return TransformerAbstract
-     */
-    protected function getTransformerFor($item)
+    protected function getTransformerFor($item): TransformerAbstract
     {
         $className = $this->getTransformerClassNameFor($item);
 
         return new $className;
     }
 
-    /**
-     * @param $item
-     *
-     * @return string
-     */
-    protected function getTransformerClassNameFor($item)
+    protected function getTransformerClassNameFor($item): string
     {
         $controllerNamespace = getNamespaceOf($this);
         $itemClass = class_basename($item);
@@ -134,11 +88,6 @@ abstract class Controller extends IlluminateController
         return $controllerNamespace.'\\'.$itemClass.'Transformer';
     }
 
-    /**
-     * @param Job $job
-     *
-     * @return mixed
-     */
     protected function dispatch(Job $job)
     {
         return $this->dispatcher->dispatch($job);

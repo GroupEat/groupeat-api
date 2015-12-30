@@ -13,19 +13,8 @@ class RestaurantsSeeder extends Seeder
 {
     use GeneratePhoneNumber;
 
-    /**
-     * @var GenerateToken
-     */
     private $generateToken;
-
-    /**
-     * @var Category
-     */
     private $pizzeriaCategory;
-
-    /**
-     * @var array
-     */
     private $discountPolicy = [
         900 => 0,
         1000 => 10,

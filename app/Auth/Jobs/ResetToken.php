@@ -8,11 +8,7 @@ class ResetToken extends Job
     private $email;
     private $password;
 
-    /**
-     * @param string $email
-     * @param string $password
-     */
-    public function __construct($email, $password)
+    public function __construct(string $email, string $password)
     {
         $this->email = $email;
         $this->password = $password;

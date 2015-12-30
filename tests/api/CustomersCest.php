@@ -79,10 +79,10 @@ class CustomersCest
 
     protected function sendRegistrationRequest(
         ApiTester $I,
-        $email = 'user@ensta.fr',
-        $password = 'password',
-        $locale = 'fr'
-    ) {
+        string $email = 'user@ensta.fr',
+        string $password = 'password',
+        string $locale = 'fr'
+    ): array {
         return $I->sendRegistrationRequest($email, $password, 'customers', $locale);
     }
 }
