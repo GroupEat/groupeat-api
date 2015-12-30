@@ -16,6 +16,8 @@ checkout:
     - echo "PGSQL_PASSWORD=" >> .env
 
 dependencies:
+  override:
+    - composer install --no-interaction
   cache_directories:
     - "vendor"
 
