@@ -9,7 +9,7 @@ abstract class Command extends IlluminateCommand
     // Set $timeoutInSeconds to 0 for no timeout at all.
     protected function process(string $command, int $timeoutInSeconds = 0): Process
     {
-        return process($command, $this->output, null, $timeoutInSeconds);
+        return process($command, $this->output, '', $timeoutInSeconds);
     }
 
     protected function fail($code = 1)
