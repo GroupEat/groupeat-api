@@ -23,10 +23,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         // Associative array defined by inheritance
     ];
 
-    protected $routeEntities = [
-        // Associative array defined by inheritance
-    ];
-
     protected $listeners = [
         // Associative array defined by inheritance
     ];
@@ -34,7 +30,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
     public function register()
     {
         $this->bindConfigValuesIfNeeded();
-        $this->bindRouteEntitiesIfNeeded();
 
         $this->registerPackage();
     }
@@ -47,7 +42,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
 
         $this->includeRoutes();
         $this->registerConsoleCommands();
-        $this->registerJobsMapping();
         $this->bindListenersIfNeeded();
 
         $this->bootPackage();
@@ -68,15 +62,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         if (!empty($this->configValues)) {
             foreach ($this->configValues as $valueClass => $configKey) {
                 $this->bindConfigValue($valueClass, $configKey);
-            }
-        }
-    }
-
-    protected function bindRouteEntitiesIfNeeded()
-    {
-        if (!empty($this->routeEntities)) {
-            foreach ($this->routeEntities as $entityClass => $routeSegment) {
-                $this->app['router']->model($routeSegment, $entityClass);
             }
         }
     }
@@ -192,24 +177,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         }, $consoleCommandPaths);
 
         $this->commands($consoleCommandNamespaces);
-    }
-
-    protected function registerJobsMapping()
-    {
-        $maps = [];
-        $jobsPaths = File::files($this->getPackagePath('Jobs'));
-        $namespacePrefix = 'Groupeat\\'.$this->getPackageName();
-
-        foreach ($jobsPaths as $jobsPath) {
-            $method = 'handle';
-            $className = pathinfo($jobsPath, PATHINFO_FILENAME);
-            $jobsClass = $namespacePrefix.'\Jobs\\'.$className;
-            $handlerClass = $namespacePrefix.'\Jobs\\'.$className.'Handler';
-
-            $maps[$jobsClass] = "$handlerClass@$method";
-        }
-
-        $this->app[Dispatcher::class]->maps($maps);
     }
 
     protected function getPackagePath($file = '')

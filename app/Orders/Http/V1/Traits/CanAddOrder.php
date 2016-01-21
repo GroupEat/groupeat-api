@@ -14,7 +14,7 @@ trait CanAddOrder
         if (empty($productFormats)) {
             throw new BadRequest(
                 'missingProductFormats',
-                "The product formats object is required to place an order"
+                "There must be at least one product format."
             );
         }
 
@@ -27,7 +27,10 @@ trait CanAddOrder
             );
         }
 
-        $comment = $this->json('comment') ?? '';
+        $deliveryAddressData['location'] = getPointFromLocationArray($deliveryAddressData);
+        unset($deliveryAddressData['latitude'], $deliveryAddressData['longitude']);
+
+        $comment = $this->json('comment') ?: '';
 
         $command = $getCommandCallback($productFormats, $deliveryAddressData, $comment);
         $order = $this->dispatch($command);

@@ -24,8 +24,8 @@ class ExternalOrdersController extends Controller
                 $customerData['lastName'],
                 $productFormats,
                 $deliveryAddressData,
-                $customerData['phoneNumber'] ? new PhoneNumber($customerData['phoneNumber']) : null,
-                $comment
+                $comment,
+                $customerData['phoneNumber'] ? new PhoneNumber($customerData['phoneNumber']) : null
             );
         });
     }

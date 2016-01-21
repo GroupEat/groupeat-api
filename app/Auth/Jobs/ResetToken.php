@@ -1,7 +1,10 @@
 <?php
 namespace Groupeat\Auth\Jobs;
 
+use Groupeat\Auth\Entities\UserCredentials;
+use Groupeat\Auth\Services\GenerateToken;
 use Groupeat\Support\Jobs\Abstracts\Job;
+use Tymon\JWTAuth\JWTAuth;
 
 class ResetToken extends Job
 {
@@ -14,13 +17,20 @@ class ResetToken extends Job
         $this->password = $password;
     }
 
-    public function getEmail()
+    public function handle(JWTAuth $jwtAuth, GenerateToken $generateToken): UserCredentials
     {
-        return $this->email;
-    }
+        $email = $this->email;
+        $password = $this->password;
 
-    public function getPassword()
-    {
-        return $this->password;
+        $userCredentials = UserCredentials::findByEmailOrFail($email);
+        $token = $jwtAuth->attempt(compact('email', 'password'));
+
+        if ($token === false) {
+            UserCredentials::throwBadPasswordException();
+        }
+
+        $userCredentials->replaceAuthenticationToken($generateToken->call($userCredentials));
+
+        return $userCredentials;
     }
 }

@@ -6,6 +6,9 @@ use Config;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Exception as BaseException;
 use Groupeat\Support\Exceptions\Exception as GroupeatException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -16,7 +19,10 @@ class Handler extends DingoExceptionHandler
 
     // List of the exception types that should not be reported
     private $dontReport = [
-        HttpException::class
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
+        ValidationException::class,
     ];
 
     public function __construct(LoggerInterface $logger)

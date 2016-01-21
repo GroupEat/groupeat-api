@@ -2,7 +2,6 @@
 namespace Groupeat\Auth;
 
 use Dingo\Api\Auth\Auth as DingoAuth;
-use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Auth\Events\UserHasRegistered;
 use Groupeat\Auth\Listeners\SendActivationLink;
 use Groupeat\Auth\Values\TokenDurationInMinutes;
@@ -14,10 +13,6 @@ class PackageProvider extends WorkbenchPackageProvider
 {
     protected $configValues = [
         TokenDurationInMinutes::class => 'jwt.ttl',
-    ];
-
-    protected $routeEntities = [
-        UserCredentials::class => 'user',
     ];
 
     protected $listeners = [
@@ -42,7 +37,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
     private function addUserInLogContext()
     {
-        $this->app[LoggerInterface::class]->pushProcessor(function ($record) {
+        $this->app[LoggerInterface::class]->getMonolog()->pushProcessor(function ($record) {
             $auth = $this->app[Auth::class];
 
             if ($auth->check()) {

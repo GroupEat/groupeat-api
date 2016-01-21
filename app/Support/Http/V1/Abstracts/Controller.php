@@ -5,7 +5,6 @@ use Dingo\Api\Routing\Helpers;
 use Groupeat\Auth\Auth;
 use Groupeat\Support\Jobs\Abstracts\Job;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
@@ -20,26 +19,25 @@ abstract class Controller extends IlluminateController
     protected $auth;
     private $dispatcher;
 
-    public function __construct(Request $request, Auth $auth, Dispatcher $dispatcher)
+    public function __construct(Auth $auth, Dispatcher $dispatcher)
     {
-        $this->request = $request;
         $this->auth = $auth;
         $this->dispatcher = $dispatcher;
     }
 
     protected function get(string $key, $default = null, bool $deep = false)
     {
-        return $this->request->query->get($key, $default, $deep);
+        return $this->request()->query->get($key, $default, $deep);
     }
 
     protected function query(): ParameterBag
     {
-        return $this->request->query;
+        return $this->request()->query;
     }
 
     protected function json(string $key = null, $default = null)
     {
-        return $this->request->json($key, $default);
+        return $this->request()->json($key, $default);
     }
 
     protected function itemResponse($item, TransformerAbstract $transformer = null): Response
@@ -91,5 +89,10 @@ abstract class Controller extends IlluminateController
     protected function dispatch(Job $job)
     {
         return $this->dispatcher->dispatch($job);
+    }
+
+    protected function request()
+    {
+        return app('request');
     }
 }

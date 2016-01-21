@@ -31,14 +31,9 @@ $api->version('v1', function ($api) {
         });
     });
 
-    $api->group(['prefix' => 'groupOrders/{groupOrder}'], function ($api) {
-        $api->group(['middleware' => ['api.auth']], function ($api) {
-            $api->get('/', GroupOrdersController::class.'@show');
-            $api->post('confirm', GroupOrdersController::class.'@confirm');
-        });
-
-        $api->group(['middleware' => ['api.auth']], function ($api) {
-            $api->post('orders', GroupOrdersController::class.'@join');
-        });
+    $api->group(['prefix' => 'groupOrders/{groupOrder}', 'middleware' => 'api.auth'], function ($api) {
+        $api->post('orders', GroupOrdersController::class.'@join');
+        $api->post('confirm', GroupOrdersController::class.'@confirm');
+        $api->get('/', GroupOrdersController::class.'@show');
     });
 });

@@ -1,7 +1,5 @@
 <?php namespace Groupeat\Orders;
 
-use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\CloseGroupOrderAfterFoodrush;
 use Groupeat\Orders\Values\JoinableDistanceInKms;
@@ -23,11 +21,6 @@ class PackageProvider extends WorkbenchPackageProvider
         MaximumPreparationTimeInMinutes::class => 'orders.maximum_preparation_time_in_minutes',
         MaximumOrderFlowInMinutes::class => 'orders.maximum_order_flow_in_minutes',
         MinimumFoodrushInMinutes::class => 'orders.minimum_foodrush_in_minutes',
-    ];
-
-    protected $routeEntities = [
-        Order::class => 'order',
-        GroupOrder::class => 'groupOrder',
     ];
 
     protected function bootPackage()

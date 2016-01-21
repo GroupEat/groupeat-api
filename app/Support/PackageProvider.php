@@ -23,6 +23,9 @@ class PackageProvider extends WorkbenchPackageProvider
 
     protected function registerPackage()
     {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+
         $this->bindValue(
             Environment::class,
             $this->app->environment()

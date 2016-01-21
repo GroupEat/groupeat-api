@@ -1,13 +1,16 @@
 <?php
 namespace Groupeat\Customers\Jobs;
 
+use Groupeat\Auth\Services\RegisterUser;
+use Groupeat\Customers\Entities\Customer;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Jobs\Abstracts\Job;
 
 class RegisterCustomer extends Job
 {
-    private $email;
-    private $password;
-    private $locale;
+    public $email;
+    public $password;
+    public $locale;
 
     public function __construct(string $email, string $password, string $locale)
     {
@@ -16,18 +19,28 @@ class RegisterCustomer extends Job
         $this->locale = $locale;
     }
 
-    public function getEmail()
+    public function handle(RegisterUser $registerUser)
     {
-        return $this->email;
+        return $registerUser->call(
+            $this->email,
+            $this->password,
+            $this->locale,
+            new Customer,
+            function ($credentials) {
+                $this->assertEmailFromCampus($credentials['email']);
+            }
+        );
     }
 
-    public function getPassword()
+    private function assertEmailFromCampus($email)
     {
-        return $this->password;
-    }
+        $domains = 'ensta-paristech\.fr|ensta\.fr|polytechnique\.edu|institutoptique\.fr';
 
-    public function getLocale()
-    {
-        return $this->locale;
+        if (!preg_match("/@($domains)$/", $email)) {
+            throw new UnprocessableEntity(
+                ['email' => ['notFromCampus' => []]],
+                "E-mail should correspond to a Saclay campus account."
+            );
+        }
     }
 }

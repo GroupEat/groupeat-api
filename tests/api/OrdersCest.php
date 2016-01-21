@@ -60,7 +60,7 @@ class OrdersCest
 
         $orderDetails = $this->getOrderDetails($I, $token, ['productFormats' => [1 => 0]]);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'noProductFormats');
+        $I->seeErrorResponse(400, 'missingProductFormats');
     }
 
     public function testThatTheProductFormatsMustExist(ApiTester $I)
@@ -144,7 +144,7 @@ class OrdersCest
         $orderDetails['productFormats'] = $wrongProductFormats + $orderDetails['productFormats'];
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'productFormatsFromDifferentRestaurants');
+        $I->seeErrorResponse(400, 'productFormatsFromDifferentRestaurants');
     }
 
     public function testThatTheGroupOrderMustExceedTheMinimumPrice(ApiTester $I)

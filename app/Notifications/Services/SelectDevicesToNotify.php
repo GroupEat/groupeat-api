@@ -71,7 +71,7 @@ class SelectDevicesToNotify
 
                         return $lastOrderDate->diffInDays() < $daysWithoutNotifying;
                     })
-                    ->lists('customerId');
+                    ->pluck('customerId');
                 $chain->log('customersThatOrderedTooRecentlyIds', $customersThatOrderedTooRecentlyIds);
 
                 return $customersThatCanBeNotifiedAtThisTimeIds->diff($customersThatOrderedTooRecentlyIds);
@@ -81,7 +81,7 @@ class SelectDevicesToNotify
                     ->whereNotNull('notificationToken')
                     ->with('customer', 'platform', 'locations')
                     ->get();
-                $chain->log('devicesToNotifyIds', $devices->lists('id'));
+                $chain->log('devicesToNotifyIds', $devices->pluck('id'));
 
                 return $devices;
             })

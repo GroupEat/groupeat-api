@@ -10,7 +10,7 @@ use Groupeat\Auth\Entities\UserCredentials;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\Forbidden;
 use Groupeat\Support\Exceptions\Unauthorized;
-use Illuminate\Auth\Guard;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\JWTAuth;
@@ -98,13 +98,12 @@ class Auth implements Provider
 
     public function logout()
     {
-        $this->illuminateAuth->logout();
         $this->dingoAuth->setUser(null);
     }
 
     public function check(): bool
     {
-        return !empty($this->illuminateAuth->getUser());
+        return !empty($this->illuminateAuth->user());
     }
 
     public function checkOrFail()

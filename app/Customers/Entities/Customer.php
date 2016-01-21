@@ -27,8 +27,11 @@ class Customer extends Entity implements User
         ];
     }
 
-    public static function addExternalCustomer(string $firstName, string $lastName, PhoneNumber $phoneNumber): Customer
-    {
+    public static function addExternalCustomer(
+        string $firstName,
+        string $lastName,
+        PhoneNumber $phoneNumber = null
+    ): Customer {
         $customer = new static;
         $customer->isExternal = true;
         $customer->firstName = $firstName;

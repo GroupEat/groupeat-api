@@ -136,6 +136,11 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         $this->attributes['password'] = Hash::make($password);
     }
 
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
+
     public function getAuthIdentifier()
     {
         return $this->getKey();

@@ -9,7 +9,7 @@ class DeviceLocation extends ImmutableDatedEntity
 {
     use HasLocation;
 
-    public static function createFromDeviceAndLocationArray(Device $device, $location)
+    public static function createFromDeviceAndLocation(Device $device, Point $location)
     {
         $deviceLocation = new static;
         $deviceLocation->device()->associate($device);

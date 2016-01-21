@@ -5,9 +5,9 @@ use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
+use Groupeat\Support\Exceptions\BadRequest;
 use Groupeat\Support\Exceptions\Exception;
 use Groupeat\Support\Exceptions\NotFound;
-use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Collection;
 use SebastianBergmann\Money\Money;
 
@@ -26,8 +26,8 @@ class ProductFormats
         });
 
         if (empty($quantities) || (array_sum($quantities) == 0)) {
-            throw new UnprocessableEntity(
-                'noProductFormats',
+            throw new BadRequest(
+                'missingProductFormats',
                 "There must be at least one product format."
             );
         }
@@ -150,7 +150,7 @@ class ProductFormats
 
     private function throwNotSameRestaurantException()
     {
-        throw new UnprocessableEntity(
+        throw new BadRequest(
             'productFormatsFromDifferentRestaurants',
             "The product formats must belong to the same restaurant."
         );

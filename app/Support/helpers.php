@@ -101,6 +101,13 @@ if (!function_exists('sumPrices')) {
     }
 }
 
+if (!function_exists('getPointFromLocationArray')) {
+    function getPointFromLocationArray(array $location): \Phaza\LaravelPostgis\Geometries\Point
+    {
+        return new \Phaza\LaravelPostgis\Geometries\Point($location['latitude'], $location['longitude']);
+    }
+}
+
 if (!function_exists('process')) {
     // Run a shell command with the Symfony Process class.
     // Give a valid output parameter if you want realtime feedback.

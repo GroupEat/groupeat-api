@@ -1,9 +1,17 @@
 <?php
 namespace Groupeat\Orders\Jobs;
 
+use Groupeat\Customers\Entities\Customer;
+use Groupeat\Customers\Values\AddressConstraints;
+use Groupeat\Orders\Entities\DeliveryAddress;
+use Groupeat\Orders\Entities\GroupOrder;
+use Groupeat\Orders\Entities\Order;
+use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\Abstracts\AddOrder;
+use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Values\PhoneNumber;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class PushExternalOrder extends AddOrder
 {
@@ -19,8 +27,8 @@ class PushExternalOrder extends AddOrder
         string $customerLastName,
         array $productFormats,
         array $deliveryAddressData,
-        PhoneNumber $customerPhoneNumber,
-        string $comment
+        string $comment,
+        PhoneNumber $customerPhoneNumber = null
     ) {
         parent::__construct($productFormats, $deliveryAddressData, $comment);
 
@@ -30,23 +38,29 @@ class PushExternalOrder extends AddOrder
         $this->customerPhoneNumber = $customerPhoneNumber;
     }
 
-    public function getRestaurant()
-    {
-        return $this->restaurant;
-    }
+    public function handle(
+        Dispatcher $events,
+        AddressConstraints $addressConstraints,
+        ExternalOrderFoodrushInMinutes $foodrushInMinutes
+    ): Order {
+        $customer = Customer::addExternalCustomer(
+            $this->customerFirstName,
+            $this->customerLastName,
+            $this->customerPhoneNumber
+        );
 
-    public function getCustomerFirstName()
-    {
-        return $this->customerFirstName;
-    }
+        $deliveryAddress = $this->getDeliveryAddress($this->deliveryAddressData, $addressConstraints->value());
 
-    public function getCustomerLastName()
-    {
-        return $this->customerLastName;
-    }
+        $order = GroupOrder::createWith(
+            $customer,
+            $deliveryAddress,
+            $this->productFormats,
+            $foodrushInMinutes->value(),
+            $this->comment
+        );
 
-    public function getCustomerPhoneNumber()
-    {
-        return $this->customerPhoneNumber;
+        $events->fire(new GroupOrderHasBeenCreated($order));
+
+        return $order;
     }
 }

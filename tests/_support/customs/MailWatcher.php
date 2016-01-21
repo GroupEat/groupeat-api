@@ -1,6 +1,7 @@
 <?php
 namespace Codeception\Module;
 
+use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Collection;
 use Symfony\Component\DomCrawler\Crawler;
 use Swift_Message;
@@ -11,7 +12,8 @@ class MailWatcher extends \Codeception\Module
     {
         $this->flush();
 
-        $this->getModule('Laravel5')->app['events']->listen('mailer.sending', function ($mail) {
+        $this->getModule('Laravel5')->app['events']->listen(MessageSending::class, function (MessageSending $event) {
+            $mail = $event->message;
             $this->mails->push($mail);
             $this->debugSection('Mail', $this->getPlainText($mail));
         });
@@ -94,7 +96,7 @@ class MailWatcher extends \Codeception\Module
         return $mails->first();
     }
 
-    public function grabMails()
+    public function grabMails(): Collection
     {
         if ($this->mails->isEmpty()) {
             \PHPUnit_Framework_Assert::fail('No mail was sent.');

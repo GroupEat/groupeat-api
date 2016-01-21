@@ -174,6 +174,7 @@ class ApiHelper extends \Codeception\Module
         $url = $this->getApiUrl($path);
 
         $this->getModule('MailWatcher')->flush();
+        $this->getModule('SmsWatcher')->flush();
         $this->getModule('Laravel5')->app[Auth::class]->logout();
 
         $this->haveAcceptHeader();
@@ -189,7 +190,7 @@ class ApiHelper extends \Codeception\Module
                 $client->setServerParameter("HTTP_HOST", $val);
             }
 
-            if ($RESTmodule->isFunctional and $header == 'CONTENT_TYPE') {
+            if ($RESTmodule->isFunctional && $header == 'CONTENT_TYPE') {
                 $client->setServerParameter($header, $val);
             }
         }
@@ -199,10 +200,6 @@ class ApiHelper extends \Codeception\Module
         $client->request($verb, $url, [], [], [], $body);
         $RESTmodule->response = (string) $client->getInternalResponse()->getContent();
         $this->debugSection("Response", $RESTmodule->response);
-
-        if (count($client->getInternalRequest()->getCookies())) {
-            $this->debugSection('Cookies', $client->getInternalRequest()->getCookies());
-        }
 
         $this->debugSection("Headers", $client->getInternalResponse()->getHeaders());
         $this->debugSection("Status", $client->getInternalResponse()->getStatus());

@@ -6,7 +6,6 @@ use Groupeat\Orders\Values\MaximumOrderFlowInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Application;
 use Psr\Log\LoggerInterface;
 

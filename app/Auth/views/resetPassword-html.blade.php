@@ -1,3 +1,5 @@
+@inject('getResetPasswordUrl', 'Groupeat\Auth\Services\GetResetPasswordUrl')
+
 @extends('layout.main')
 
 @section('mailId'){{ 'auth.resetPassword' }}@stop
@@ -12,7 +14,7 @@
 @section('buttonId'){{ 'password-reset-link' }}@stop
 
 @section('buttonUrl')
-    {!! app(\Groupeat\Auth\Jobs\SendPasswordResetLinkHandler::class)->getUrl($token) !!}
+    {!! $getResetPasswordUrl->call($token) !!}
 @stop
 
 @section('button')

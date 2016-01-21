@@ -79,7 +79,7 @@ Returns the list of restaurants sorted by name in alphabetical order.
             "street": "86 Rue Maurice Berteaux",
             "details": null,
             "city": "Palaiseau",
-            "postcode": 91120,
+            "postcode": "91120",
             "state": "Essonne",
             "country": "France",
             "latitude": 48.7171,
