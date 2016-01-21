@@ -68,7 +68,7 @@ class PackageProvider extends WorkbenchPackageProvider
             $syslog = new SyslogHandler('laravel');
             $syslog->setFormatter(new LineFormatter('%level_name%: %message% %extra%'));
 
-            $this->app[LoggerInterface::class]->pushHandler($syslog);
+            $this->app[LoggerInterface::class]->getMonolog()->pushHandler($syslog);
         }
     }
 
