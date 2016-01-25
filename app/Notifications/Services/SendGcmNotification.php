@@ -28,7 +28,7 @@ class SendGcmNotification
         $data = [];
 
         if (!$notification->isSilent()) {
-            $data['ledColor'] = LED_COLOR_ARGB;
+            $data['ledColor'] = self::LED_COLOR_ARGB;
             $data['title'] = $notification->getTitle();
             $data['message'] = $notification->getMessage();
         }
