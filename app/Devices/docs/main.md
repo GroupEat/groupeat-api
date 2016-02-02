@@ -72,7 +72,7 @@
 
         {
             "UUID": "1sfqsf557845sfsf", // A unique ID representing the device
-            "notificationToken": "353SQKFJ323fdsf", // The token to use with GCM, APNS or equivalent services
+            "notificationToken": "353SQKFJ323fdsf", // The token to use with GCM, APNS or equivalent services, optional
             "platform": "android", // Should be one of the labels returned by the route above.
             "platformVersion": "1.0",
             "model": "Black 16 Go Nexus 5"

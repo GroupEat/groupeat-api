@@ -24,19 +24,22 @@ class AttachDevice extends Job
     public function __construct(
         Customer $customer,
         string $UUID,
-        string $notificationToken,
         Platform $platform,
         string $platformVersion,
         string $model,
+        string $notificationToken,
         Point $location = null
     ) {
         $this->customer = $customer;
         $this->UUID = $UUID;
-        $this->notificationToken = $notificationToken;
         $this->platform = $platform;
         $this->platformVersion = $platformVersion;
         $this->model = $model;
         $this->location = $location;
+
+        if ($notificationToken) {
+            $this->notificationToken = $notificationToken;
+        }
     }
 
     public function handle(Dispatcher $events, MaintainCorrectDeviceOwner $maintainCorrectDeviceOwner): Device
