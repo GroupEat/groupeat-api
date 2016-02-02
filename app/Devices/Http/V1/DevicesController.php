@@ -30,11 +30,11 @@ class DevicesController extends Controller
         $device = $this->dispatch(new AttachDevice(
             $customer,
             $this->json('UUID'),
-            $this->json('notificationToken'),
             Platform::findByLabelOrFail($this->json('platform')),
             $this->json('platformVersion'),
             $this->json('model'),
-            $this->json('location') ? getPointFromLocationArray($this->json('location')) : null
+            $this->optionalJson('notificationToken', ''),
+            $this->optionalJson('location') ? getPointFromLocationArray($this->json('location')) : null
         ));
 
         return $this->itemResponse($device)->setStatusCode(Response::HTTP_CREATED);
@@ -47,10 +47,10 @@ class DevicesController extends Controller
         $device = $this->dispatch(new UpdateDevice(
             $device,
             $customer,
-            $this->json('platformVersion') ?: '',
-            $this->json('notificationToken') ?: '',
-            $this->json('notificationId') ?: '',
-            $this->json('location') ? getPointFromLocationArray($this->json('location')) : null
+            $this->optionalJson('platformVersion', ''),
+            $this->optionalJson('notificationToken', ''),
+            $this->optionalJson('notificationId', ''),
+            $this->optionalJson('location') ? getPointFromLocationArray($this->json('location')) : null
         ));
 
         return $this->itemResponse($device);

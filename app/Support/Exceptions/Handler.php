@@ -91,6 +91,19 @@ class Handler extends DingoExceptionHandler
                 return response()->json($json, 503);
             }
         } else {
+            if ($this->isRequestFormatError($e)) {
+                $json = [
+                    'errorKey' => 'invalidRequestFormat',
+                    'message' => "The request format may be invalid because a class instanciation failed inside a controller with the following error: {$e->getMessage()}",
+                ];
+
+                if ($isDebug) {
+                    $json['debug'] = $debugInfo;
+                }
+
+                return response()->json($json, 400);
+            }
+
             $statusCode = 500;
             $data['errorKey'] = 'internalServerError';
             $data['message'] = $isDebug ? $e->getMessage() : "The server encountered an internal error";
@@ -134,5 +147,12 @@ class Handler extends DingoExceptionHandler
         }
 
         return true;
+    }
+
+    private function isRequestFormatError(BaseException $e)
+    {
+        $trace = $e->getTrace();
+
+        return $trace[0]['function'] == '__construct' && ends_with($trace[1]['class'], 'Controller');
     }
 }

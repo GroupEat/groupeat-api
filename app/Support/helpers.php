@@ -104,6 +104,13 @@ if (!function_exists('sumPrices')) {
 if (!function_exists('getPointFromLocationArray')) {
     function getPointFromLocationArray(array $location): \Phaza\LaravelPostgis\Geometries\Point
     {
+        if (!($location['latitude'] && $location['longitude'])) {
+            throw new \Groupeat\Support\Exceptions\BadRequest(
+                'missingCoordinates',
+                "The latitude or longitude attribute is missing"
+            );
+        }
+
         return new \Phaza\LaravelPostgis\Geometries\Point($location['latitude'], $location['longitude']);
     }
 }

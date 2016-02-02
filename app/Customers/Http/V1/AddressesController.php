@@ -27,7 +27,7 @@ class AddressesController extends Controller
     {
         $this->auth->assertSame($customer);
 
-        $attributes = $this->json()->all();
+        $attributes = $this->allJson();
         // TODO: make route consistent: wrap latitude and longitude into location when Ionic Deploy is integrated
         $attributes['location'] = getPointFromLocationArray([
             'latitude' => $attributes['latitude'],

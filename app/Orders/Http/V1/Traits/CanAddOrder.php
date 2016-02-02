@@ -30,7 +30,7 @@ trait CanAddOrder
         $deliveryAddressData['location'] = getPointFromLocationArray($deliveryAddressData);
         unset($deliveryAddressData['latitude'], $deliveryAddressData['longitude']);
 
-        $comment = $this->json('comment') ?: '';
+        $comment = $this->optionalJson('comment', '');
 
         $command = $getCommandCallback($productFormats, $deliveryAddressData, $comment);
         $order = $this->dispatch($command);

@@ -28,8 +28,6 @@ class AdminController extends Controller
         if ($title || $message) {
             $notification = new Notification(
                 $device,
-                $title,
-                $message,
                 $this->json('timeToLiveInSeconds'),
                 $this->json('additionalData')
             );

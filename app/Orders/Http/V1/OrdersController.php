@@ -48,7 +48,7 @@ class OrdersController extends Controller
     {
         return $this->addOrder(function ($productFormats, $deliveryAddressData, $comment) {
             return new CreateGroupOrder(
-                $this->json()->getInt('foodRushDurationInMinutes'),
+                (int) $this->json('foodRushDurationInMinutes'),
                 $this->auth->customer(),
                 $productFormats,
                 $deliveryAddressData,

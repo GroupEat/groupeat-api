@@ -13,7 +13,7 @@ class SupportController extends Controller
 {
     public function ping(Application $app)
     {
-        $json = $this->json()->all();
+        $json = $this->allJson();
 
         app(LoggerInterface::class)->debug(json_encode(['ping' => $json]));
 
