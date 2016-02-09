@@ -52,14 +52,15 @@ class AttachDevice extends Job
             $device = new Device;
             $device->customer()->associate($this->customer);
             $device->UUID = $this->UUID;
-            $device->notificationToken = $this->notificationToken;
             $device->platform()->associate($this->platform);
-            $device->platformVersion = $this->platformVersion;
             $device->model = $this->model;
-
-            $device->save();
-            $events->fire(new DeviceHasBeenAttached($device));
         }
+
+        $device->notificationToken = $this->notificationToken;
+        $device->platformVersion = $this->platformVersion;
+
+        $device->save();
+        $events->fire(new DeviceHasBeenAttached($device));
 
         if ($this->location) {
             DeviceLocation::createFromDeviceAndLocation($device, $this->location);
