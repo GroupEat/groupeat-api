@@ -13,7 +13,7 @@ class DeviceLocation extends ImmutableDatedEntity
     {
         $deviceLocation = new static;
         $deviceLocation->device()->associate($device);
-        $deviceLocation->location = new Point($location['latitude'], $location['longitude']);
+        $deviceLocation->location = $location;
         $deviceLocation->save();
 
         return $deviceLocation;
