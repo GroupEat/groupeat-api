@@ -31,7 +31,7 @@ class SendNoisyJoinGroupOrderNotificationAfterSilentOne extends QueuedListener
     {
         $notification = $event->getNotification();
 
-        if ($this->needToSendNoisyNotification($event)) {
+        if ($this->needToSendNoisyNotification($notification)) {
             $this->sendJoinGroupOrderNotification->call($notification->groupOrder, $notification->device);
         }
     }
