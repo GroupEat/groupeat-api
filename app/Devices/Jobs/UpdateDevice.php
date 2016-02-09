@@ -9,6 +9,7 @@ use Groupeat\Notifications\Entities\Notification;
 use Groupeat\Notifications\Events\NotificationHasBeenReceived;
 use Groupeat\Support\Jobs\Abstracts\Job;
 use Illuminate\Contracts\Events\Dispatcher;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class UpdateDevice extends Job
 {
