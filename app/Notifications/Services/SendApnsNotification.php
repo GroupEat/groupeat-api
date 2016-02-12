@@ -8,7 +8,7 @@ use Groupeat\Support\Services\Locale;
 
 class SendApnsNotification
 {
-    const URL = 'ssl://gateway.sandbox.push.apple.com:2195';
+    const URL = 'ssl://gateway.push.apple.com:2195';
     const TIMEOUT_IN_SECONDS = 60.0;
 
     private $certificate;
