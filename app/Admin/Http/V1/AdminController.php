@@ -29,7 +29,9 @@ class AdminController extends Controller
             $notification = new Notification(
                 $device,
                 $this->json('timeToLiveInSeconds'),
-                $this->json('additionalData')
+                $this->json('additionalData'),
+                $title,
+                $message
             );
         } else {
             $notification = new SilentNotification(
