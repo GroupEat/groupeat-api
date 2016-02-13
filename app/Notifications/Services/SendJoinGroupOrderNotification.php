@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Notifications\Services;
 
+use Exception;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Notifications\Entities\Notification;
@@ -48,7 +49,7 @@ class SendJoinGroupOrderNotification
 
         try {
             $this->sendNotification->call($value);
-        } catch (Exception $groupeatException) {
+        } catch (Exception $exception) {
             $entity->failed = true;
             $entity->save();
             $this->logger->critical(
@@ -56,8 +57,8 @@ class SendJoinGroupOrderNotification
                 . $device->customer->toShortString()
                 . ' on ' . $device->toShortString()
                 . ' for ' . $groupOrder->toShortString()
-                . ' with message ' . $groupeatException->getMessage()
-                . ' with trace ' . $groupeatException->getTraceAsString()
+                . ' with message ' . $exception->getMessage()
+                . ' with trace ' . $exception->getTraceAsString()
             );
         }
 
