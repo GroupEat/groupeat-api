@@ -22,8 +22,8 @@ class AdminController extends Controller
     {
         $this->auth->assertSameType(new Admin);
 
-        $title = $this->json('title');
-        $message = $this->json('message');
+        $title = $this->optionalJson('title');
+        $message = $this->optionalJson('message');
 
         if ($title || $message) {
             $notification = new Notification(
