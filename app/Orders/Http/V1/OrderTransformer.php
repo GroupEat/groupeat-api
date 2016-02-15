@@ -7,11 +7,18 @@ use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Http\V1\ProductFormatTransformer;
 use Groupeat\Restaurants\Http\V1\ProductTransformer;
+use Groupeat\Restaurants\Http\V1\PromotionTransformer;
 use League\Fractal\TransformerAbstract;
 
 class OrderTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['customer', 'groupOrder', 'deliveryAddress', 'productFormats'];
+    protected $availableIncludes = [
+        'customer',
+        'groupOrder',
+        'deliveryAddress',
+        'productFormats',
+        'restaurantPromotions',
+    ];
 
     public function transform(Order $order)
     {
@@ -63,5 +70,10 @@ class OrderTransformer extends TransformerAbstract
 
             return $productData;
         });
+    }
+
+    public function includeRestaurantPromotions(Order $order)
+    {
+        return $this->collection($order->restaurantPromotions, new PromotionTransformer);
     }
 }

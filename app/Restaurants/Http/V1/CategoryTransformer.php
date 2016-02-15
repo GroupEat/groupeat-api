@@ -6,11 +6,11 @@ use League\Fractal\TransformerAbstract;
 
 class CategoryTransformer extends TransformerAbstract
 {
-    public function transform(Category $foodType)
+    public function transform(Category $category)
     {
         return [
-            'id' => $foodType->id,
-            'label' => $foodType->label,
+            'id' => $category->id,
+            'label' => $category->label,
         ];
     }
 }

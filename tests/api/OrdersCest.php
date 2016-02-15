@@ -29,7 +29,7 @@ class OrdersCest
 
     public function testThatTheRestaurantReceiveAnEmailAndASmsWhenAnOrderIsPlaced(ApiTester $I)
     {
-        list($token, $orderId, $restaurantCapacity, $orderDetails, $customerId) = $I->createGroupOrder();
+        list($token, $orderId, $restaurantCapacity, $orderDetails, $customerId) = $I->placeOrder();
         $productFormatId = array_keys($orderDetails['productFormats'])[0];
         $restaurantEmail = $this->getRestaurantEmailFromProductFormat($productFormatId);
         $I->assertSame('restaurants.orderHasBeenPlaced', $I->grabFirstMailId());
@@ -304,8 +304,8 @@ class OrdersCest
 
     public function testThatACustomerCanListItsOrders(ApiTester $I)
     {
-        list($token1, $orderId1,,, $customerId1) = $I->createGroupOrder();
-        list($token2, $orderId2,,, $customerId2) = $I->createGroupOrder();
+        list($token1, $orderId1,,, $customerId1) = $I->placeOrder();
+        list($token2, $orderId2,,, $customerId2) = $I->placeOrder();
 
         $I->sendApiGetWithToken($token1, "customers/$customerId1/orders");
         $orders1 = $I->grabDataFromResponse('');
@@ -324,7 +324,7 @@ class OrdersCest
 
     public function testThatACustomerCanListItsOrdersInASpecificGroupOrder(ApiTester $I)
     {
-        list($token, $orderId,,, $customerId) = $I->createGroupOrder();
+        list($token, $orderId,,, $customerId) = $I->placeOrder();
 
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');

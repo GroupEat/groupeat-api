@@ -1,7 +1,9 @@
 <?php namespace Groupeat\Orders;
 
+use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\CloseGroupOrderAfterFoodrush;
+use Groupeat\Orders\Listeners\GrantPromotions;
 use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Orders\Values\DeliveryAddressConstraints;
 use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
@@ -21,6 +23,10 @@ class PackageProvider extends WorkbenchPackageProvider
         MaximumPreparationTimeInMinutes::class => 'orders.maximum_preparation_time_in_minutes',
         MaximumOrderFlowInMinutes::class => 'orders.maximum_order_flow_in_minutes',
         MinimumFoodrushInMinutes::class => 'orders.minimum_foodrush_in_minutes',
+    ];
+
+    protected $listeners = [
+        GrantPromotions::class => GroupOrderHasBeenClosed::class,
     ];
 
     protected function bootPackage()

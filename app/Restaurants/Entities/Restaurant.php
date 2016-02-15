@@ -72,6 +72,11 @@ class Restaurant extends Entity implements User
         return $this->hasMany(ClosingWindow::class);
     }
 
+    public function promotions()
+    {
+        return $this->hasMany(Promotion::class);
+    }
+
     public function scopeAround(Builder $query, Point $location, $distanceInKms = null)
     {
         app(ApplyAroundScope::class)->call($query, $location, $distanceInKms);

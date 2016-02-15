@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SendGcmNotification
 {
     const URL = 'https://android.googleapis.com/gcm/send';
+    const IMAGE = 'icon';
     const LED_COLOR_ARGB = [0, 255, 78, 80];
 
     private $client;
@@ -28,6 +29,7 @@ class SendGcmNotification
         $data = [];
 
         if (!$notification->isSilent()) {
+            $data['image'] = self::IMAGE;
             $data['ledColor'] = self::LED_COLOR_ARGB;
             $data['title'] = $notification->getTitle();
             $data['message'] = $notification->getMessage();
