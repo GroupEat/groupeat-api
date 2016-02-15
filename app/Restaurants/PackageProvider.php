@@ -5,7 +5,6 @@ use Groupeat\Orders\Events\GroupOrderHasBeenConfirmed;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
-use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenClosedMail;
 use Groupeat\Restaurants\Listeners\SendGroupOrderHasBeenCreatedSms;
@@ -18,11 +17,6 @@ class PackageProvider extends WorkbenchPackageProvider
 {
     protected $configValues = [
         MaximumDeliveryDistanceInKms::class => 'restaurants.around_distance_in_kilometers',
-    ];
-
-    protected $routeEntities = [
-        Restaurant::class => 'restaurant',
-        Product::class => 'product',
     ];
 
     protected $listeners = [

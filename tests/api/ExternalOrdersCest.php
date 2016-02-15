@@ -47,7 +47,7 @@ class ExternalOrdersCest
         $I->assertFirstMailContains($firstName);
         $I->assertFirstMailContains($lastName);
 
-        $I->checkNoSmsWasSent();
+        $I->assertNoSmsWasSent();
 
         $I->assertEquals($data['rawPrice'], $data['discountedPrice']);
         $I->sendApiGetWithToken($token, 'orders/' . $data['id'] . '?include=groupOrder');

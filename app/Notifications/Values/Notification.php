@@ -6,34 +6,21 @@ use Groupeat\Support\Exceptions\BadRequest;
 
 class Notification
 {
-    /**
-     * @var Device
-     */
     private $device;
-
-    /**
-     * @var string
-     */
+    private $timeToLiveInSeconds;
+    private $additionalData;
     private $title;
-
-    /**
-     * @var string
-     */
     private $message;
 
-    /**
-     * @var int
-     */
-    private $timeToLiveInSeconds;
-
-    /**
-     * @var array Associative array that will be merged with the notification payload.
-     *            It should not contain any key used by GCM or APNS.
-     */
-    private $additionalData;
-
-    public function __construct(Device $device, $title, $message, $timeToLiveInSeconds, $additionalData = [])
-    {
+    // The $additionalData associative array will be merged with the notification payload.
+    // It should not contain any key used by GCM or APNS.
+    public function __construct(
+        Device $device,
+        int $timeToLiveInSeconds,
+        array $additionalData = [],
+        string $title = '',
+        string $message = ''
+    ) {
         if (empty($device->notificationToken)) {
             throw new BadRequest(
                 'missingNotificationToken',

@@ -8,7 +8,7 @@ use Groupeat\Support\Services\Locale;
 
 class SendApnsNotification
 {
-    const URL = 'ssl://gateway.sandbox.push.apple.com:2195';
+    const URL = 'ssl://gateway.push.apple.com:2195';
     const TIMEOUT_IN_SECONDS = 60.0;
 
     private $certificate;
@@ -18,7 +18,7 @@ class SendApnsNotification
         $this->certificate = $certificate;
     }
 
-    public function call(Notification $notification)
+    public function call(Notification $notification): int
     {
         $streamContext = stream_context_create();
         stream_context_set_option($streamContext, 'ssl', 'local_cert', $this->certificate->getPath());
@@ -74,7 +74,7 @@ class SendApnsNotification
         return $status;
     }
 
-    private function getBinaryMessage($notificationToken, $data)
+    private function getBinaryMessage(string $notificationToken, array $data): string
     {
         $payload = json_encode($data);
 

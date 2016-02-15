@@ -21,7 +21,7 @@ class CustomersController extends Controller
     {
         $this->auth->assertSame($customer);
 
-        $data = $this->json()->all();
+        $data = $this->allJson();
 
         if (!empty($data['phoneNumber'])) {
             $data['phoneNumber'] = new PhoneNumber($data['phoneNumber']);

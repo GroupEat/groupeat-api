@@ -11,6 +11,7 @@
     <exclude-pattern>*/lang/*</exclude-pattern>
     <exclude-pattern>*/_output/*</exclude-pattern>
     <exclude-pattern>tests/*/*Tester.php</exclude-pattern>
+    <exclude-pattern>bootstrap/cache/*</exclude-pattern>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength.TooLong"/>

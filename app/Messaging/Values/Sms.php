@@ -6,17 +6,10 @@ use JsonSerializable;
 
 class Sms implements JsonSerializable
 {
-    /**
-     * @var PhoneNumber
-     */
     private $phoneNumber;
-
-    /**
-     * @var string
-     */
     private $text;
 
-    public function __construct(PhoneNumber $phoneNumber, $text)
+    public function __construct(PhoneNumber $phoneNumber, string $text)
     {
         $this->phoneNumber = $phoneNumber;
         $this->text = $text;
@@ -40,7 +33,7 @@ class Sms implements JsonSerializable
         ];
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'To: ' . $this->phoneNumber . ', text: "' . $this->text . '"';
     }

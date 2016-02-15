@@ -27,15 +27,11 @@ class Customer extends Entity implements User
         ];
     }
 
-    /**
-     * @param string      $firstName
-     * @param string      $lastName
-     * @param PhoneNumber $phoneNumber
-     *
-     * @return static
-     */
-    public static function addExternalCustomer($firstName, $lastName, PhoneNumber $phoneNumber)
-    {
+    public static function addExternalCustomer(
+        string $firstName,
+        string $lastName,
+        PhoneNumber $phoneNumber = null
+    ): Customer {
         $customer = new static;
         $customer->isExternal = true;
         $customer->firstName = $firstName;
@@ -51,12 +47,12 @@ class Customer extends Entity implements User
         return $this->hasOne(Address::class);
     }
 
-    public function isActivated()
+    public function isActivated(): bool
     {
         return $this->isExternal ? true : $this->isActivatedThroughCredentials();
     }
 
-    public function getMissingAttributes()
+    public function getMissingAttributes(): array
     {
         return collect(['firstName', 'lastName', 'phoneNumber'])->filter(function ($attribute) {
             return empty($this->$attribute);

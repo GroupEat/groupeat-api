@@ -2,14 +2,11 @@
 namespace Groupeat\Support\Exceptions;
 
 use Exception as BaseException;
-use Illuminate\Support\MessageBag as Bag;
+use Illuminate\Support\MessageBag;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Exception extends HttpException
 {
-    /**
-     * @var string
-     */
     protected $errorKey;
 
     public function __construct(
@@ -29,36 +26,25 @@ class Exception extends HttpException
         $this->errorKey = $errorKey;
 
         if (is_null($errors)) {
-            $this->errors = new Bag();
+            $this->errors = new MessageBag;
         } else {
-            $this->errors = is_array($errors) ? new Bag($errors) : $errors;
+            $this->errors = is_array($errors) ? new MessageBag($errors) : $errors;
         }
 
         HttpException::__construct($statusCode, $message, $previous, $headers, $code);
     }
 
-    /**
-     * @return string
-     */
     public function getErrorKey()
     {
         return $this->errorKey;
     }
 
-    /**
-     * @return Bag
-     */
-    public function getErrors()
+    public function getErrors(): MessageBag
     {
         return $this->errors;
     }
 
-    /**
-     * @param array $errors
-     *
-     * @return array
-     */
-    protected function formatErrors(array $errors)
+    protected function formatErrors(array $errors): array
     {
         $formattedErrors = [];
 

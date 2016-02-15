@@ -14,10 +14,6 @@ class PackageProvider extends WorkbenchPackageProvider
         AddressConstraints::class => 'customers.address_constraints',
     ];
 
-    protected $routeEntities = [
-        Customer::class => 'customer',
-    ];
-
     protected $listeners = [
         SendGroupOrderHasBeenConfirmedMails::class => GroupOrderHasBeenConfirmed::class,
     ];

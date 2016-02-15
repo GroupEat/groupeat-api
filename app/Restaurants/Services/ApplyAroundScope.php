@@ -15,12 +15,7 @@ class ApplyAroundScope
         $this->maximumDeliveryDistanceInKms = $maximumDeliveryDistanceInKms->value();
     }
 
-    /**
-     * @param Builder $query
-     * @param Point   $location
-     * @param float   $distanceInKms Null to use the maximum delivery distance
-     */
-    public function call(Builder $query, Point $location, $distanceInKms = null)
+    public function call(Builder $query, Point $location, float $distanceInKms = null)
     {
         if (is_null($distanceInKms)) {
             $distanceInKms = $this->maximumDeliveryDistanceInKms;

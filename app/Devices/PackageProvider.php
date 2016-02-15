@@ -18,7 +18,7 @@ class PackageProvider extends WorkbenchPackageProvider
 
     private function addDeviceInLogContext()
     {
-        $this->app[LoggerInterface::class]->pushProcessor(function ($record) {
+        $this->app[LoggerInterface::class]->getMonolog()->pushProcessor(function ($record) {
             $request = $this->app['request'];
             $deviceUUID = $request->header('X-Device-Id');
 

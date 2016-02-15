@@ -26,9 +26,4 @@ abstract class Address extends Entity
     {
         return new AddressPresenter($this);
     }
-
-    protected function getPostcodeAttribute()
-    {
-        return (int) $this->attributes['postcode']; // TODO: use casting instead
-    }
 }

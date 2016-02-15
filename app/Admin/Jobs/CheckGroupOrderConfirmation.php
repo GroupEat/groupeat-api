@@ -1,8 +1,10 @@
 <?php
 namespace Groupeat\Admin\Jobs;
 
+use Groupeat\Admin\Events\GroupOrderHasNotBeenConfirmed;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Jobs\Abstracts\Job;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class CheckGroupOrderConfirmation extends Job
 {
@@ -13,8 +15,10 @@ class CheckGroupOrderConfirmation extends Job
         $this->groupOrder = $groupOrder;
     }
 
-    public function getGroupOrder()
+    public function handle(Dispatcher $events)
     {
-        return $this->groupOrder;
+        if (!$this->groupOrder->isConfirmed()) {
+            $events->fire(new GroupOrderHasNotBeenConfirmed($this->groupOrder));
+        }
     }
 }

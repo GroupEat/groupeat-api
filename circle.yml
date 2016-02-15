@@ -2,7 +2,7 @@ machine:
   timezone:
     Europe/Paris
   php:
-    version: 5.6.5
+    version: 7.0.0RC7
 
 database:
   post:
@@ -16,6 +16,8 @@ checkout:
     - echo "PGSQL_PASSWORD=" >> .env
 
 dependencies:
+  override:
+    - composer install --no-interaction
   cache_directories:
     - "vendor"
 

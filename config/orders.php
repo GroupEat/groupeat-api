@@ -39,6 +39,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Maximum Order Flow Duration in Minutes
+    |--------------------------------------------------------------------------
+    |
+    | The expected maximum time in minutes that a customer cant take to
+    | make an order (from restaurant choice, to chart submition).
+    |
+    */
+
+    'maximum_order_flow_in_minutes' => 5,
+
+    /*
+    |--------------------------------------------------------------------------
     | Maximum Preparation Time in Minutes
     |--------------------------------------------------------------------------
     |

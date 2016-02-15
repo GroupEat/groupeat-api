@@ -48,7 +48,7 @@ Only the customer who created it or the corresponding restaurant can see the ord
             "street": "Allée des techniques avancées",
             "details": "Bâtiment A, chambre 200",
             "city": "Palaiseau",
-            "postcode": 91120,
+            "postcode": "91120",
             "state": "Essone",
             "country": "France",
             "latitude": 48.711,
@@ -99,15 +99,22 @@ The distance between the given address and the restaurant must be less than {{ r
 + Response 400
 
         {
-            "errorKey": "missingProductFormats",
-            "message": "The product formats object is required to place an order"
+            "errorKey": "missingDeliveryAddress",
+            "message": "The delivery address object is required to place an order"
         }
 
 + Response 400
 
         {
-            "errorKey": "missingDeliveryAddress",
-            "message": "The delivery address object is required to place an order"
+            "errorKey": "missingProductFormats",
+            "message": "There must be at least one product format."
+        }
+
++ Response 400
+
+        {
+            "errorKey": "productFormatsFromDifferentRestaurants",
+            "message": "The product formats must belong to the same restaurant."
         }
 
 + Response 403
@@ -136,20 +143,6 @@ The distance between the given address and the restaurant must be less than {{ r
         {
             "errorKey": "invalidFoodRushDuration",
             "message": "The FoodRush duration must be between 5 and 60 minutes, 70 given."
-        }
-
-+ Response 422
-
-        {
-            "errorKey": "noProductFormats",
-            "message": "There must be at least one product format."
-        }
-
-+ Response 422
-
-        {
-            "errorKey": "productFormatsFromDifferentRestaurants",
-            "message": "The product formats must belong to the same restaurant."
         }
 
 + Response 422

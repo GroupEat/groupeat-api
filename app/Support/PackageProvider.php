@@ -23,6 +23,9 @@ class PackageProvider extends WorkbenchPackageProvider
 
     protected function registerPackage()
     {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+
         $this->bindValue(
             Environment::class,
             $this->app->environment()
@@ -65,7 +68,7 @@ class PackageProvider extends WorkbenchPackageProvider
             $syslog = new SyslogHandler('laravel');
             $syslog->setFormatter(new LineFormatter('%level_name%: %message% %extra%'));
 
-            $this->app[LoggerInterface::class]->pushHandler($syslog);
+            $this->app[LoggerInterface::class]->getMonolog()->pushHandler($syslog);
         }
     }
 

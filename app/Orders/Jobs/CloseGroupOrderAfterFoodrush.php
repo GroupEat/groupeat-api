@@ -3,6 +3,7 @@ namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Jobs\Abstracts\Job;
+use Psr\Log\LoggerInterface;
 
 class CloseGroupOrderAfterFoodrush extends Job
 {
@@ -13,8 +14,15 @@ class CloseGroupOrderAfterFoodrush extends Job
         $this->groupOrder = $groupOrder;
     }
 
-    public function getGroupOrder()
+    public function handle(LoggerInterface $logger)
     {
-        return $this->groupOrder;
+        if (!$this->groupOrder->closedAt) {
+            $logger->info($this->groupOrder->toShortString() . ' foodrush has ended');
+            $this->groupOrder->close();
+        } else {
+            $logger->info(
+                $this->groupOrder->toShortString() . ' has already been closed at ' . $this->groupOrder->closedAt
+            );
+        }
     }
 }

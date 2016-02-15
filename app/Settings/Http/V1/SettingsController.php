@@ -21,7 +21,7 @@ class SettingsController extends Controller
 
         $settings = $this->dispatch(new UpdateSettings(
             $customer,
-            $this->json()->all()
+            $this->allJson()
         ));
 
         return $this->itemResponse($settings);

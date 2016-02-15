@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Support\Entities\Abstracts;
 
+use Groupeat\Support\Database\Abstracts\Migration;
 use Groupeat\Support\Exceptions\NotFound;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Presenters\Presenter;
@@ -78,9 +79,6 @@ abstract class Entity extends Model implements PresentableInterface
         );
     }
 
-    /**
-     * @param array $attributes
-     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -88,10 +86,7 @@ abstract class Entity extends Model implements PresentableInterface
         $this->validationErrors = new MessageBag;
     }
 
-    /**
-     * @return bool
-     */
-    public function validate()
+    public function validate(): bool
     {
         $validator = Validator::make($this->attributes, $this->getRules());
         $isValid = $validator->passes();
@@ -101,20 +96,12 @@ abstract class Entity extends Model implements PresentableInterface
         return $isValid;
     }
 
-    /**
-     * @return array
-     */
-    public function getFailedRules()
+    public function getFailedRules(): array
     {
         return $this->failedRules;
     }
 
-    /**
-     * @param array $options
-     *
-     * @return bool
-     */
-    public function forceSave(array $options = [])
+    public function forceSave(array $options = []): bool
     {
         static::$skipValidation = true;
 
@@ -125,10 +112,7 @@ abstract class Entity extends Model implements PresentableInterface
         return $status;
     }
 
-    /**
-     * @return MessageBag
-     */
-    public function errors()
+    public function errors(): MessageBag
     {
         return $this->validationErrors;
     }
@@ -138,30 +122,17 @@ abstract class Entity extends Model implements PresentableInterface
      */
     abstract public function getRules();
 
-    /**
-     * @param string $fieldName
-     *
-     * @return string Field name preceded by the the table name
-     */
-    public function getTableField($fieldName)
+    public function getTableField(string $fieldName): string
     {
         return $this->getTable().'.'.$fieldName;
     }
 
-    /**
-     * @param string $fieldName
-     *
-     * @return string Field name preceded by the the table name both surrounded by double quotes
-     */
-    public function getRawTableField($fieldName)
+    public function getRawTableField(string $fieldName): string
     {
         return '"'.$this->getTable().'"."'.$fieldName.'"';
     }
 
-    /**
-     * @return string
-     */
-    public function toShortString()
+    public function toShortString(): string
     {
         $str = lcfirst(class_basename($this));
 
@@ -174,10 +145,7 @@ abstract class Entity extends Model implements PresentableInterface
         return $str;
     }
 
-    /**
-     * @return Presenter
-     */
-    public function getPresenter()
+    public function getPresenter(): Presenter
     {
         $class = str_replace('Entities', 'Presenters', static::class) . 'Presenter';
 
@@ -217,10 +185,7 @@ abstract class Entity extends Model implements PresentableInterface
         return [$type, $id];
     }
 
-    /**
-     * @return \Groupeat\Support\Database\Abstracts\Migration
-     */
-    protected function getRelatedMigration()
+    protected function getRelatedMigration(): Migration
     {
         $temp = str_replace('\\Entities\\', '\\Migrations\\', static::class);
         $migrationClass = str_plural($temp).'Migration';

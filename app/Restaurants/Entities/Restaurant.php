@@ -11,6 +11,7 @@ use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasPhoneNumber;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
+use Groupeat\Support\Values\Abstracts\DistanceInKms;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\Period\Period;
@@ -76,7 +77,7 @@ class Restaurant extends Entity implements User
         app(ApplyAroundScope::class)->call($query, $location, $distanceInKms);
     }
 
-    public function isOpened(Period $period = null)
+    public function isOpened(Period $period)
     {
         return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
@@ -94,14 +95,12 @@ class Restaurant extends Entity implements User
         }
     }
 
-    public function scopeOpened(Builder $query, Period $period = null)
+    public function scopeOpened(Builder $query, Period $period)
     {
         app(ApplyOpenedScope::class)->call($query, $period);
     }
 
     /**
-     * @param Money $rawPrice
-     *
      * The discount policy of a restaurant is saved in the database as a
      * JSON object. The keys represent the price to reach to unlock the specific discount rate
      * stored in the value.
@@ -110,10 +109,8 @@ class Restaurant extends Entity implements User
      * it means that for 10e there will be a 10% discount, for 20e 20%, for 25e 30%,
      * for 35e 40% and for 60e 50%. From 0e to 9e there won't be any discount.
      * Between the given points, the discount rate increase linearly.
-     *
-     * @return DiscountRate
      */
-    public function getDiscountRateFor(Money $rawPrice)
+    public function getDiscountRateFor(Money $rawPrice): DiscountRate
     {
         $policy = $this->discountPolicy;
         ksort($policy);

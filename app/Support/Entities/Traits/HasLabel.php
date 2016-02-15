@@ -8,21 +8,17 @@ trait HasLabel
     private $labelRules = 'required|string';
 
     /**
-     * @param string $label
-     *
-     * @return static or null if not found
+     * @return static|null if not found
      */
-    public static function findByLabel($label)
+    public static function findByLabel(string $label)
     {
         return static::where('label', $label)->first();
     }
 
     /**
-     * @param string $label
-     *
      * @return static
      */
-    public static function findByLabelOrFail($label)
+    public static function findByLabelOrFail(string $label)
     {
         $entity = static::findByLabel($label);
 

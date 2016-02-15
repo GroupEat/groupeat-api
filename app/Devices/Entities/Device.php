@@ -46,4 +46,9 @@ class Device extends Entity
     {
         return $this->belongsTo(Platform::class);
     }
+
+    public function locations()
+    {
+        return $this->hasMany(DeviceLocation::class);
+    }
 }

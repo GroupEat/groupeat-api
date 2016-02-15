@@ -5,6 +5,7 @@ use Groupeat\Orders\Http\V1\Traits\CanAddOrder;
 use Groupeat\Orders\Jobs\PushExternalOrder;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use Groupeat\Support\Values\PhoneNumber;
 
 class ExternalOrdersController extends Controller
 {
@@ -21,10 +22,10 @@ class ExternalOrdersController extends Controller
                 $this->auth->restaurant(),
                 $customerData['firstName'],
                 $customerData['lastName'],
-                $customerData['phoneNumber'],
                 $productFormats,
                 $deliveryAddressData,
-                $comment
+                $comment,
+                $customerData['phoneNumber'] ? new PhoneNumber($customerData['phoneNumber']) : null
             );
         });
     }

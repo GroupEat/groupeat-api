@@ -23,10 +23,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         // Associative array defined by inheritance
     ];
 
-    protected $routeEntities = [
-        // Associative array defined by inheritance
-    ];
-
     protected $listeners = [
         // Associative array defined by inheritance
     ];
@@ -34,7 +30,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
     public function register()
     {
         $this->bindConfigValuesIfNeeded();
-        $this->bindRouteEntitiesIfNeeded();
 
         $this->registerPackage();
     }
@@ -47,7 +42,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
 
         $this->includeRoutes();
         $this->registerConsoleCommands();
-        $this->registerJobsMapping();
         $this->bindListenersIfNeeded();
 
         $this->bootPackage();
@@ -72,22 +66,12 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         }
     }
 
-    protected function bindRouteEntitiesIfNeeded()
+    protected function bindConfigValue(string $valueClass, string $configKey)
     {
-        if (!empty($this->routeEntities)) {
-            foreach ($this->routeEntities as $entityClass => $routeSegment) {
-                $this->app['router']->model($routeSegment, $entityClass);
-            }
-        }
-    }
-
-    /**
-     * @param string $valueClass
-     * @param string $configKey
-     */
-    protected function bindConfigValue($valueClass, $configKey)
-    {
-        $this->bindValue($valueClass, $this->app['config']->get($configKey));
+        $this->app->instance(
+            $valueClass,
+            new $valueClass($this->app['config']->get($configKey), $configKey)
+        );
     }
 
     protected function bindListenersIfNeeded()
@@ -103,11 +87,7 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         }
     }
 
-    /**
-     * @param string $valueClass
-     * @param mixed  $value
-     */
-    protected function bindValue($valueClass, $value)
+    protected function bindValue(string $valueClass, $value)
     {
         $this->app->instance(
             $valueClass,
@@ -197,24 +177,6 @@ abstract class WorkbenchPackageProvider extends ServiceProvider
         }, $consoleCommandPaths);
 
         $this->commands($consoleCommandNamespaces);
-    }
-
-    protected function registerJobsMapping()
-    {
-        $maps = [];
-        $jobsPaths = File::files($this->getPackagePath('Jobs'));
-        $namespacePrefix = 'Groupeat\\'.$this->getPackageName();
-
-        foreach ($jobsPaths as $jobsPath) {
-            $method = 'handle';
-            $className = pathinfo($jobsPath, PATHINFO_FILENAME);
-            $jobsClass = $namespacePrefix.'\Jobs\\'.$className;
-            $handlerClass = $namespacePrefix.'\Jobs\\'.$className.'Handler';
-
-            $maps[$jobsClass] = "$handlerClass@$method";
-        }
-
-        $this->app[Dispatcher::class]->maps($maps);
     }
 
     protected function getPackagePath($file = '')

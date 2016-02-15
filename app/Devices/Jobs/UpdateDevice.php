@@ -3,7 +3,13 @@ namespace Groupeat\Devices\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Devices\Entities\Device;
+use Groupeat\Devices\Entities\DeviceLocation;
+use Groupeat\Devices\Services\MaintainCorrectDeviceOwner;
+use Groupeat\Notifications\Entities\Notification;
+use Groupeat\Notifications\Events\NotificationHasBeenReceived;
 use Groupeat\Support\Jobs\Abstracts\Job;
+use Illuminate\Contracts\Events\Dispatcher;
+use Phaza\LaravelPostgis\Geometries\Point;
 
 class UpdateDevice extends Job
 {
@@ -14,21 +20,13 @@ class UpdateDevice extends Job
     private $notificationId;
     private $location;
 
-    /**
-     * @param Device      $device
-     * @param Customer    $customer
-     * @param string|null $platformVersion
-     * @param string|null $notificationToken
-     * @param string|null $notificationId
-     * @param array|null  $location
-     */
     public function __construct(
         Device $device,
         Customer $customer,
-        $platformVersion,
-        $notificationToken,
-        $notificationId,
-        $location
+        string $platformVersion,
+        string $notificationToken,
+        string $notificationId,
+        Point $location = null
     ) {
         $this->device = $device;
         $this->customer = $customer;
@@ -38,51 +36,28 @@ class UpdateDevice extends Job
         $this->location = $location;
     }
 
-    /**
-     * @return Device
-     */
-    public function getDevice()
+    public function handle(Dispatcher $events, MaintainCorrectDeviceOwner $maintainCorrectDeviceOwner)
     {
+        $maintainCorrectDeviceOwner->call($this->device, $this->customer);
+
+        if ($this->location) {
+            DeviceLocation::createFromDeviceAndLocation($this->device, $this->location);
+        }
+
+        if ($this->platformVersion || $this->notificationToken) {
+            if ($this->platformVersion) {
+                $this->device->platformVersion = $this->platformVersion;
+            }
+            if ($this->notificationToken) {
+                $this->device->notificationToken = $this->notificationToken;
+            }
+            $this->device->save();
+        }
+
+        if ($this->notificationId) {
+            $events->fire(new NotificationHasBeenReceived(Notification::findOrFail($this->notificationId)));
+        }
+
         return $this->device;
-    }
-
-    /**
-     * @return Customer
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPlatformVersion()
-    {
-        return $this->platformVersion;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getNotificationToken()
-    {
-        return $this->notificationToken;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getNotificationId()
-    {
-        return $this->notificationId;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getLocation()
-    {
-        return $this->location;
     }
 }

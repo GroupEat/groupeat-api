@@ -9,7 +9,7 @@ use League\Period\Period;
 
 class ComputeClosingAt
 {
-    public function call(Restaurant $restaurant)
+    public function call(Restaurant $restaurant): Carbon
     {
         $now = Carbon::now();
         $openings = collect($restaurant->openingWindows);

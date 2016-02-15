@@ -221,14 +221,14 @@ class AuthCest
 
     protected function sendRegistrationRequest(
         ApiTester $I,
-        $email = 'user@ensta.fr',
-        $password = 'password',
-        $locale = 'fr'
-    ) {
+        string $email = 'user@ensta.fr',
+        string $password = 'password',
+        string $locale = 'fr'
+    ): array {
         return $I->sendRegistrationRequest($email, $password, $this->getUserResource(), $locale);
     }
 
-    private function getUserResource()
+    private function getUserResource(): string
     {
         return 'customers'; // Could have been admin or any other user type.
     }

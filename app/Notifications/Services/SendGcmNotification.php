@@ -23,12 +23,12 @@ class SendGcmNotification
         $this->key = $key->value();
     }
 
-    public function call(Notification $notification)
+    public function call(Notification $notification): string
     {
         $data = [];
 
         if (!$notification->isSilent()) {
-            $data['ledColor'] = LED_COLOR_ARGB;
+            $data['ledColor'] = self::LED_COLOR_ARGB;
             $data['title'] = $notification->getTitle();
             $data['message'] = $notification->getMessage();
         }

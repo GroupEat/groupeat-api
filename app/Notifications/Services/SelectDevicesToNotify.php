@@ -16,10 +16,6 @@ use Psr\Log\LoggerInterface;
 class SelectDevicesToNotify
 {
     private $logger;
-
-    /**
-     * @var float
-     */
     private $joinableDistanceInKms;
 
     public function __construct(LoggerInterface $logger, JoinableDistanceInKms $joinableDistanceInKms)
@@ -28,22 +24,21 @@ class SelectDevicesToNotify
         $this->joinableDistanceInKms = $joinableDistanceInKms->value();
     }
 
-    public function call(GroupOrder $groupOrder)
+    public function call(GroupOrder $groupOrder): Collection
     {
         $chain = new ExecuteWhileNotEmptyChain($this->logger, class_basename($this), ['groupOrderId' => $groupOrder->id]);
 
         return collect($chain
             ->next(function () use ($groupOrder) {
-                // TODO: use geolocation to return customers really around
                 return Customer::lists('id');
-            }, 'customersAroundIds')
+            }, 'allCustomersIds')
             ->next(function (Collection $customersAroundIds) use ($groupOrder) {
                 $customersAlreadyInIds = $groupOrder->orders->map(function (Order $order) {
                     return $order->customerId;
                 });
 
                 return $customersAroundIds->diff($customersAlreadyInIds)->values();
-            }, 'customersAroundNotAlreadyInIds')
+            }, 'customersNotAlreadyInIds')
             ->next(function (Collection $customersAroundNotAlreadyInIds) {
                 return CustomerSettings::whereIn('customerId', $customersAroundNotAlreadyInIds->all())
                     ->where(CustomerSettings::NOTIFICATIONS_ENABLED, true)
@@ -74,9 +69,9 @@ class SelectDevicesToNotify
                         $lastOrderDate = new Carbon($record->createdAt);
                         $daysWithoutNotifying = $customerIdToDaysWithoutNotifying[$record->customerId];
 
-                        return $lastOrderDate->diffInDays(Carbon::now(), true) < $daysWithoutNotifying;
+                        return $lastOrderDate->diffInDays() < $daysWithoutNotifying;
                     })
-                    ->lists('customerId');
+                    ->pluck('customerId');
                 $chain->log('customersThatOrderedTooRecentlyIds', $customersThatOrderedTooRecentlyIds);
 
                 return $customersThatCanBeNotifiedAtThisTimeIds->diff($customersThatOrderedTooRecentlyIds);
@@ -84,9 +79,9 @@ class SelectDevicesToNotify
             ->next(function (Collection $customersThatCanBeNotifiedIds) use ($chain) {
                 $devices = Device::whereIn('customerId', $customersThatCanBeNotifiedIds->all())
                     ->whereNotNull('notificationToken')
-                    ->with('customer', 'platform')
+                    ->with('customer', 'platform', 'locations')
                     ->get();
-                $chain->log('devicesToNotifyIds', $devices->lists('id'));
+                $chain->log('devicesToNotifyIds', $devices->pluck('id'));
 
                 return $devices;
             })

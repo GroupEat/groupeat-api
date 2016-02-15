@@ -3,6 +3,7 @@ namespace Groupeat\Support\Database\Abstracts;
 
 use Groupeat\Support\Exceptions\Exception;
 use Illuminate\Database\Migrations\Migration as LaravelMigration;
+use Groupeat\Support\Entities\Abstracts\Entity;
 use Illuminate\Support\Facades\Schema;
 
 abstract class Migration extends LaravelMigration
@@ -23,10 +24,7 @@ abstract class Migration extends LaravelMigration
         Schema::dropIfExists($this->getTable());
     }
 
-    /**
-     * @return string The table name
-     */
-    public function getTable()
+    public function getTable(): string
     {
         if (!empty($this->table)) {
             return $this->table;
@@ -35,20 +33,12 @@ abstract class Migration extends LaravelMigration
         return $this->getEntity()->getTable();
     }
 
-    /**
-     * @param string $migration The other migration full class path
-     *
-     * @return string The corresponding table name
-     */
-    protected function getTableFor($migration)
+    protected function getTableFor(string $migrationClassWithNamespace): string
     {
-        return (new $migration)->getTable();
+        return (new $migrationClassWithNamespace)->getTable();
     }
 
-    /**
-     * @return \Groupeat\Support\Entities\Abstracts\Entity The related entity
-     */
-    protected function getEntity()
+    protected function getEntity(): Entity
     {
         if (!empty($this->entity)) {
             $className = $this->entity;

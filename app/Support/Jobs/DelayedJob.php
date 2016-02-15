@@ -5,10 +5,9 @@ use Carbon\Carbon;
 use Groupeat\Support\Jobs\Abstracts\Job;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DelayedJob extends Job implements SelfHandling, ShouldQueue
+class DelayedJob extends Job implements ShouldQueue
 {
     use Queueable;
 
@@ -17,7 +16,7 @@ class DelayedJob extends Job implements SelfHandling, ShouldQueue
     public function __construct(Job $job, Carbon $handleAt)
     {
         $this->job = $job;
-        $this->delay = Carbon::now()->diffInSeconds($handleAt);
+        $this->delay = $handleAt->diffInSeconds();
     }
 
     public function getJob()

@@ -6,6 +6,9 @@ use Config;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Exception as BaseException;
 use Groupeat\Support\Exceptions\Exception as GroupeatException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -14,13 +17,12 @@ class Handler extends DingoExceptionHandler
 {
     private $logger;
 
-    /**
-     * A list of the exception types that should not be reported.
-     *
-     * @var array
-     */
+    // List of the exception types that should not be reported
     private $dontReport = [
-        HttpException::class
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
+        ValidationException::class,
     ];
 
     public function __construct(LoggerInterface $logger)
@@ -28,14 +30,7 @@ class Handler extends DingoExceptionHandler
         $this->logger = $logger;
     }
 
-    /**
-     * Report or log an exception.
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param BaseException $e
-     *
-     * @return void
-     */
+    // Report or log an exception. This is a great spot to send exceptions to Sentry, Bugsnag, etc.
     public function report(BaseException $e)
     {
         if ($this->shouldReport($e)) {
@@ -96,6 +91,19 @@ class Handler extends DingoExceptionHandler
                 return response()->json($json, 503);
             }
         } else {
+            if ($this->isRequestFormatError($e)) {
+                $json = [
+                    'errorKey' => 'invalidRequestFormat',
+                    'message' => "The request format may be invalid because a class instanciation failed inside a controller with the following error: {$e->getMessage()}",
+                ];
+
+                if ($isDebug) {
+                    $json['debug'] = $debugInfo;
+                }
+
+                return response()->json($json, 400);
+            }
+
             $statusCode = 500;
             $data['errorKey'] = 'internalServerError';
             $data['message'] = $isDebug ? $e->getMessage() : "The server encountered an internal error";
@@ -139,5 +147,12 @@ class Handler extends DingoExceptionHandler
         }
 
         return true;
+    }
+
+    private function isRequestFormatError(BaseException $e)
+    {
+        $trace = $e->getTrace();
+
+        return $trace[0]['function'] == '__construct' && ends_with($trace[1]['class'], 'Controller');
     }
 }

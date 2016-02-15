@@ -5,7 +5,7 @@ use Groupeat\Customers\Entities\Customer;
 
 abstract class AddCustomerOrder extends AddOrder
 {
-    private $customer;
+    protected $customer;
 
     public function __construct(
         Customer $customer,
@@ -16,10 +16,5 @@ abstract class AddCustomerOrder extends AddOrder
         parent::__construct($productFormats, $deliveryAddressData, $comment);
 
         $this->customer = $customer;
-    }
-
-    public function getCustomer()
-    {
-        return $this->customer;
     }
 }

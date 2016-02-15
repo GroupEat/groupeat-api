@@ -26,7 +26,7 @@ class SendOrderHasBeenPlacedMail extends QueuedListener
         $this->call($event->getOrder(), 'joined');
     }
 
-    private function call(Order $order, $action)
+    private function call(Order $order, string $action)
     {
         $order->productFormats->load('product.type');
 

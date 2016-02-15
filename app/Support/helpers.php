@@ -1,32 +1,18 @@
 <?php
 
 if (!function_exists('artisan')) {
-    /**
-     * Call an Artisan command and return its output.
-     *
-     * @param string $command    Command name (like groupeat:push)
-     * @param array  $parameters Command options
-     * @param int    $verbosity
-     *
-     * @return string Command output
-     */
-    function artisan($command, array $parameters = [], $verbosity = null)
+    // Call an Artisan command inside a DB transaction and return its output.
+    function artisan(string $command, array $parameters = []): string
     {
-        Artisan::call($command, $parameters);
-
-        return trim(Artisan::output());
+        return DB::transaction(function () use ($command, $parameters) {
+            Artisan::call($command, $parameters);
+            return trim(Artisan::output());
+        });
     }
 }
 
 if (!function_exists('formatTime')) {
-    /**
-     * @param \Carbon\Carbon $time
-     * @param string         $hoursSuffix
-     * @param bool           $withSeconds
-     *
-     * @return string
-     */
-    function formatTime(\Carbon\Carbon $time, $hoursSuffix = '\h', $withSeconds = false)
+    function formatTime(\Carbon\Carbon $time, string $hoursSuffix = '\h', bool $withSeconds = false): string
     {
         $format = 'H'.$hoursSuffix.'i';
 
@@ -39,14 +25,7 @@ if (!function_exists('formatTime')) {
 }
 
 if (!function_exists('getNamespaceOf')) {
-    /**
-     * Get the namespace of the given class.
-     *
-     * @param $class
-     *
-     * @return string
-     */
-    function getNamespaceOf($class)
+    function getNamespaceOf($class): string
     {
         $className = get_class($class);
 
@@ -55,15 +34,8 @@ if (!function_exists('getNamespaceOf')) {
 }
 
 if (!function_exists('translateIfNeeded')) {
-    /**
-     * If the text contains corresponds to a lang key its translation will be returned
-     * Else the untounched text is returned.
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    function translateIfNeeded($text)
+    // If the text corresponds to a lang key its translation will be returned, else the untounched text is returned.
+    function translateIfNeeded(string $text): string
     {
         if (preg_match('/^\w+((\.|::)\w+)+\w+$/', $text)) {
             return trans($text);
@@ -74,16 +46,8 @@ if (!function_exists('translateIfNeeded')) {
 }
 
 if (!function_exists('mb_ucfirst')) {
-    /**
-     * Return the given string with the first letter uppercased.
-     *
-     * @param string  $str      The string to use
-     * @param boolean $lowerEnd Indicates if the rest of the string should be lowercased
-     * @param string  $encoding Encoding type
-     *
-     * @return string
-     */
-    function mb_ucfirst($str, $lowerEnd = false, $encoding = 'UTF-8')
+    // Return the given string with the first letter uppercased.
+    function mb_ucfirst(string $str, bool $lowerEnd = false, string $encoding = 'UTF-8'): string
     {
         $firstLetter = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding);
 
@@ -96,16 +60,8 @@ if (!function_exists('mb_ucfirst')) {
 }
 
 if (!function_exists('mb_lcfirst')) {
-    /**
-     * Return the given string with the first letter lowercased.
-     *
-     * @param string  $str      The string to use
-     * @param boolean $upperEnd Indicates if the rest of the string should be uppercased
-     * @param string  $encoding Encoding type
-     *
-     * @return string
-     */
-    function mb_lcfirst($str, $upperEnd = false, $encoding = 'UTF-8')
+    // Return the given string with the first letter lowercased.
+    function mb_lcfirst(string $str, bool $upperEnd = false, string $encoding = 'UTF-8'): string
     {
         $firstLetter = mb_strtolower(mb_substr($str, 0, 1, $encoding), $encoding);
 
@@ -118,7 +74,7 @@ if (!function_exists('mb_lcfirst')) {
 }
 
 if (!function_exists('formatPrice')) {
-    function formatPrice(\SebastianBergmann\Money\Money $price)
+    function formatPrice(\SebastianBergmann\Money\Money $price): string
     {
         $auth = app(\Groupeat\Auth\Auth::class);
         $userLocale = $auth->check() ? $auth->credentials()->locale : 'fr';
@@ -129,12 +85,7 @@ if (!function_exists('formatPrice')) {
 }
 
 if (!function_exists('sumPrices')) {
-    /**
-     * @param \Illuminate\Support\Collection $prices
-     *
-     * @return \SebastianBergmann\Money\Money
-     */
-    function sumPrices(\Illuminate\Support\Collection $prices)
+    function sumPrices(\Illuminate\Support\Collection $prices): \SebastianBergmann\Money\Money
     {
         if ($prices->isEmpty()) {
             return new \SebastianBergmann\Money\EUR(0);
@@ -150,25 +101,32 @@ if (!function_exists('sumPrices')) {
     }
 }
 
+if (!function_exists('getPointFromLocationArray')) {
+    function getPointFromLocationArray(array $location): \Phaza\LaravelPostgis\Geometries\Point
+    {
+        if (!($location['latitude'] && $location['longitude'])) {
+            throw new \Groupeat\Support\Exceptions\BadRequest(
+                'missingCoordinates',
+                "The latitude or longitude attribute is missing"
+            );
+        }
+
+        return new \Phaza\LaravelPostgis\Geometries\Point($location['latitude'], $location['longitude']);
+    }
+}
+
 if (!function_exists('process')) {
-    /**
-     * Run a shell command with the Symfony Process class.
-     * Give a valid output parameter if you want realtime feedback.
-     *
-     * @param string                                            $command
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param string                                            $workingDirectory Null for project root
-     * @param int                                               $timeoutInSeconds Null for no timeout
-     *
-     * @return \Symfony\Component\Process\Process
-     */
+    // Run a shell command with the Symfony Process class.
+    // Give a valid output parameter if you want realtime feedback.
+    // An empty $workingDirectory will execute the command in the current directory.
+    // A $timeoutInSeconds of 0 corresponds to no timeout at all.
     function process(
-        $command,
+        string $command,
         \Symfony\Component\Console\Output\OutputInterface $output = null,
-        $workingDirectory = null,
+        string $workingDirectory = '',
         $timeoutInSeconds = 60
-    ) {
-        if (is_null($workingDirectory)) {
+    ): \Symfony\Component\Process\Process {
+        if (!$workingDirectory) {
             $workingDirectory = base_path();
         }
 
@@ -177,7 +135,7 @@ if (!function_exists('process')) {
             $workingDirectory,
             null,
             null,
-            $timeoutInSeconds
+            $timeoutInSeconds > 0 ? $timeoutInSeconds : null
         );
 
         if (empty($output)) {
@@ -197,12 +155,8 @@ if (!function_exists('process')) {
 }
 
 if (!function_exists('getGroupeatPackagesCollection')) {
-    /**
-     * Get the collection of the GroupEat packages with the same case than the corresponding folders.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    function getGroupeatPackagesCollection()
+    // Get the collection of the GroupEat packages with the same case than the corresponding folders.
+    function getGroupeatPackagesCollection(): \Illuminate\Support\Collection
     {
         return collect(glob(app_path('*'), GLOB_ONLYDIR))->map(function ($directory) {
             $segments = explode('/', $directory);

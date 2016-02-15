@@ -15,7 +15,6 @@ class GroupOrdersCest
         $I->assertSame($remainingCapacity, $I->grabDataFromResponse('groupOrder.data.remainingCapacity'));
 
         for ($i = $remainingCapacity; $i > 1; $i--) {
-            $orderDetails['groupOrderId'] = $groupOrderId;
             $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
             $I->seeResponseCodeIs(201);
             $I->sendApiGetWithToken($token, "groupOrders/$groupOrderId");
@@ -23,7 +22,6 @@ class GroupOrdersCest
             $I->assertTrue($I->grabDataFromResponse('joinable'));
         }
 
-        $orderDetails['groupOrderId'] = $groupOrderId;
         $I->sendApiPostWithToken($token, "groupOrders/$groupOrderId/orders", $orderDetails);
         $I->seeResponseCodeIs(201);
         $I->grabMailById('restaurants.groupOrderHasBeenClosed');
@@ -44,7 +42,7 @@ class GroupOrdersCest
         $I->seeErrorResponse(422, 'cannotBePreparedBeforeBeingClosed');
 
         $I->sendApiPostWithToken($restaurantToken, $confirmUrl, [
-            'preparedAt' => (string) \Carbon\Carbon::now()->addHours(2),
+            'preparedAt' => (string) Carbon::now()->addHours(2),
         ]);
         $I->seeErrorResponse(422, 'preparationTimeTooLong');
 

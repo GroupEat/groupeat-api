@@ -15,10 +15,12 @@ class PhoneNumber extends SingleValue
         parent::__construct($number);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function value(): string
+    {
+        return $this->value;
+    }
+
+    public function __toString(): string
     {
         preg_match(static::REGEX, $this->value, $matches);
         array_shift($matches);

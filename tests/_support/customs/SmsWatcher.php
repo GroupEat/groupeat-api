@@ -2,12 +2,10 @@
 namespace Codeception\Module;
 
 use Groupeat\Messaging\Events\SmsHasBeenSent;
+use Groupeat\Messaging\Values\Sms;
 
 class SmsWatcher extends \Codeception\Module
 {
-    /**
-     * @var Collection
-     */
     private $sms;
 
     public function _before()
@@ -29,7 +27,7 @@ class SmsWatcher extends \Codeception\Module
         $this->sms = collect();
     }
 
-    public function grabFirstSms()
+    public function grabFirstSms(): Sms
     {
         $firstSms = $this->sms->first();
 
@@ -40,7 +38,7 @@ class SmsWatcher extends \Codeception\Module
         return $firstSms;
     }
 
-    public function checkNoSmsWasSent()
+    public function assertNoSmsWasSent()
     {
         $firstSms = $this->sms->first();
 

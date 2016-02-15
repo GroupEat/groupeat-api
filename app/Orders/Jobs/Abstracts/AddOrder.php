@@ -1,15 +1,17 @@
 <?php
 namespace Groupeat\Orders\Jobs\Abstracts;
 
+use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Support\ProductFormats;
+use Groupeat\Support\Entities\Abstracts\Address;
+use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Groupeat\Support\Jobs\Abstracts\Job;
-use Phaza\LaravelPostgis\Geometries\Point;
 
 abstract class AddOrder extends Job
 {
-    private $productFormats;
-    private $deliveryAddressData;
-    private $comment;
+    protected $productFormats;
+    protected $deliveryAddressData;
+    protected $comment;
 
     public function __construct(
         array $productFormats,
@@ -17,23 +19,28 @@ abstract class AddOrder extends Job
         $comment = null
     ) {
         $this->productFormats = new ProductFormats($productFormats);
-        $deliveryAddressData['location'] = new Point($deliveryAddressData['latitude'], $deliveryAddressData['longitude']);
         $this->deliveryAddressData = $deliveryAddressData;
         $this->comment = $comment;
     }
 
-    public function getProductFormats()
+    protected function getDeliveryAddress(array $addressData, array $deliveryAddressConstraints)
     {
-        return $this->productFormats;
+        return new DeliveryAddress(array_merge(
+            $addressData,
+            $deliveryAddressConstraints
+        ));
     }
 
-    public function getDeliveryAddressData()
+    protected function assertCloseEnough(DeliveryAddress $deliveryAddress, Address $other, float $maximumDistanceInKms)
     {
-        return $this->deliveryAddressData;
-    }
+        $distanceInKms = $deliveryAddress->distanceInKmsWith($other);
 
-    public function getComment()
-    {
-        return $this->comment;
+        if ($distanceInKms > $maximumDistanceInKms) {
+            throw new UnprocessableEntity(
+                'deliveryDistanceTooLong',
+                'The delivery distance should be less than '
+                .$maximumDistanceInKms." kms, $distanceInKms given."
+            );
+        }
     }
 }

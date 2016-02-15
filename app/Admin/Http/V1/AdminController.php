@@ -22,16 +22,16 @@ class AdminController extends Controller
     {
         $this->auth->assertSameType(new Admin);
 
-        $title = $this->json('title');
-        $message = $this->json('message');
+        $title = $this->optionalJson('title');
+        $message = $this->optionalJson('message');
 
         if ($title || $message) {
             $notification = new Notification(
                 $device,
-                $title,
-                $message,
                 $this->json('timeToLiveInSeconds'),
-                $this->json('additionalData')
+                $this->json('additionalData'),
+                $title,
+                $message
             );
         } else {
             $notification = new SilentNotification(

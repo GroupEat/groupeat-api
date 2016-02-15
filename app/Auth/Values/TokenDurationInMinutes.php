@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Auth\Values;
 
-use Groupeat\Support\Values\Abstracts\SingleValue;
+use Groupeat\Support\Values\Abstracts\DurationInMinutes;
 
-class TokenDurationInMinutes extends SingleValue
+class TokenDurationInMinutes extends DurationInMinutes
 {
     //
 }

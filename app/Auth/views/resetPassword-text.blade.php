@@ -1,3 +1,5 @@
+@inject('getResetPasswordUrl', 'Groupeat\Auth\Services\GetResetPasswordUrl')
+
 @lang('auth::resetPassword.text')
 
-{!! app(\Groupeat\Auth\Jobs\SendPasswordResetLinkHandler::class)->getUrl($token) !!}
+{!! $getResetPasswordUrl->call($token) !!}

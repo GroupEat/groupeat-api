@@ -1,9 +1,9 @@
 <?php
 namespace Groupeat\Restaurants\Values;
 
-use Groupeat\Support\Values\Abstracts\SingleValue;
+use Groupeat\Support\Values\Abstracts\DurationInMinutes;
 
-class DefaultOpeningDurationInMinutes extends SingleValue
+class DefaultOpeningDurationInMinutes extends DurationInMinutes
 {
     //
 }
