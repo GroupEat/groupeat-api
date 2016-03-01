@@ -1,8 +1,10 @@
 <?php
 namespace Groupeat\Orders\Entities;
 
+use CreateOrderRestaurantPromotionTable;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Restaurants\Entities\ProductFormat;
+use Groupeat\Restaurants\Entities\Promotion;
 use Groupeat\Support\Entities\Abstracts\ImmutableDatedEntity;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\Money;
@@ -36,6 +38,16 @@ class Order extends ImmutableDatedEntity
     public function deliveryAddress()
     {
         return $this->hasOne(DeliveryAddress::class);
+    }
+
+    public function restaurantPromotions()
+    {
+        return $this->belongsToMany(
+            Promotion::class,
+            (new CreateOrderRestaurantPromotionTable())->getTable(),
+            'orderId',
+            'restaurantPromotionId'
+        );
     }
 
     public function getDiscountedPriceAttribute()

@@ -6,7 +6,7 @@ class GroupOrdersCest
 {
     public function testThatACustomerReceiveAMailWhenAGroupOrderIsConfirmed(ApiTester $I)
     {
-        list($token, $orderId, $restaurantCapacity, $orderDetails, $customerId, $restaurantId) = $I->createGroupOrder();
+        list($token, $orderId, $restaurantCapacity, $orderDetails, $customerId, $restaurantId) = $I->placeOrder();
 
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $groupOrderId = $I->grabDataFromResponse('groupOrder.data.id');
@@ -61,7 +61,7 @@ class GroupOrdersCest
 
     public function testThatAGroupOrderClosesAutomaticallyWhenFoodrushIsOver(ApiTester $I)
     {
-        list($token, $orderId, $restaurantCapacity, $orderDetails) = $I->createGroupOrder();
+        list($token, $orderId, $restaurantCapacity, $orderDetails) = $I->placeOrder();
         $foodRushDuration = $orderDetails['foodRushDurationInMinutes'];
 
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");

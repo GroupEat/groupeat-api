@@ -56,7 +56,7 @@ class ApiHelper extends \Codeception\Module
         return [$token, $id, $type];
     }
 
-    public function createGroupOrder()
+    public function placeOrder()
     {
         list($token, $customerId) = $this->amAnActivatedCustomerWithNoMissingInformation();
 
@@ -73,12 +73,7 @@ class ApiHelper extends \Codeception\Module
             $url = "groupOrders/$groupOrderId/orders";
         } else {
             $groupOrderId = null;
-            $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.716941&longitude=2.239171');
-            $restaurantId = collect($this->grabDataFromResponse())
-                ->sortBy(function ($restaurant) {
-                    return new Carbon($restaurant['closingAt']);
-                })
-                ->last()['id'];
+            $restaurantId = $this->getIdOfRestaurantThatCanHandleAGroupOrder();
             $url = 'orders';
         }
 
@@ -108,6 +103,18 @@ class ApiHelper extends \Codeception\Module
         $orderId = $this->grabDataFromResponse('id');
 
         return [$token, $orderId, $restaurantCapacity, $orderDetails, $customerId, $restaurantId];
+    }
+
+    public function getIdOfRestaurantThatCanHandleAGroupOrder()
+    {
+        list($token) = $this->amAnActivatedCustomer();
+        $this->sendApiGetWithToken($token, 'restaurants?opened=1&around=1&latitude=48.716941&longitude=2.239171');
+
+        return collect($this->grabDataFromResponse())
+            ->sortBy(function ($restaurant) {
+                return new Carbon($restaurant['closingAt']);
+            })
+            ->last()['id'];
     }
 
     public function sendApiGetWithToken(string $token, string $path, array $params = [])
@@ -267,7 +274,7 @@ class ApiHelper extends \Codeception\Module
             Carbon::setTestNow($date);
 
             $this->runQueues();
-            $callback();
+            return $callback();
         } finally {
             $this->debugSection('Back to present', '');
             Carbon::setTestNow();

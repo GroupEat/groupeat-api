@@ -8,7 +8,6 @@ use Groupeat\Devices\Entities\Device;
 use Groupeat\Notifications\Support\ExecuteWhileNotEmptyChain;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
-use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Settings\Entities\CustomerSettings;
 use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
@@ -16,12 +15,10 @@ use Psr\Log\LoggerInterface;
 class SelectDevicesToNotify
 {
     private $logger;
-    private $joinableDistanceInKms;
 
-    public function __construct(LoggerInterface $logger, JoinableDistanceInKms $joinableDistanceInKms)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
-        $this->joinableDistanceInKms = $joinableDistanceInKms->value();
     }
 
     public function call(GroupOrder $groupOrder): Collection
