@@ -17,11 +17,9 @@ var app;
 
 try {
   const fs = require('fs');
-  const apiBaseUrl = process.env.BASE_URL;
-  const host = apiBaseUrl.split('/api')[0].split('://')[1];
   const sslOptions = {
-    key: fs.readFileSync(`/etc/letsencrypt/live/${host}/privkey.pem`),
-    cert: fs.readFileSync(`/etc/letsencrypt/live/${host}/fullchain.pem`)
+    key: fs.readFileSync(`/etc/letsencrypt/live/current/privkey.pem`),
+    cert: fs.readFileSync(`/etc/letsencrypt/live/current/fullchain.pem`)
   };
 
   app = require('https').createServer(sslOptions, handler);
