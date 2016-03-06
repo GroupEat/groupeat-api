@@ -65,12 +65,17 @@ class Restaurant extends Entity implements User
 
     public function openingWindows()
     {
-        return $this->hasMany(OpeningWindow::class);
+        return $this->hasMany(OpeningWindow::class)->orderBy('dayOfWeek')->orderBy('start');
+    }
+
+    public function getOpenedWindows(Period $period)
+    {
+        return app(ComputeOpenedWindows::class)->call($this, $period);
     }
 
     public function closingWindows()
     {
-        return $this->hasMany(ClosingWindow::class);
+        return $this->hasMany(ClosingWindow::class)->orderBy('start');
     }
 
     public function promotions()
@@ -162,10 +167,5 @@ class Restaurant extends Entity implements User
     protected function getClosingAtAttribute()
     {
         return app(ComputeClosingAt::class)->call($this);
-    }
-
-    protected function getOpenedWindowsAttribute()
-    {
-        return app(ComputeOpenedWindows::class)->call($this, Carbon::now(), Carbon::now()->addWeek(2));
     }
 }

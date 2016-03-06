@@ -5,38 +5,38 @@ use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\Restaurant;
 use League\Period\Period;
 use Groupeat\Restaurants\Entities\ClosingWindow;
+use Illuminate\Database\Eloquent\Collection;
 
 class ComputeOpenedWindows
 {
-    public function call(Restaurant $restaurant, Carbon $start, Carbon $end)
+    public function call(Restaurant $restaurant, Period $period): Collection
     {
-        $openings = collect($restaurant->openingWindows);
-        $closings = collect($restaurant->closingWindows);
-        $now = Carbon::now();
-
         // Adding a closing for today until now to prevent getting opened windows in the past
         $beforeNowClosing = new ClosingWindow;
-        $beforeNowClosing->start = $now->copy()->startOfDay()->toDateTimeString();
-        $beforeNowClosing->end = $now->toDateTimeString();
-        $closings->push($beforeNowClosing);
+        $beforeNowClosing->start = Carbon::instance($period->getStartDate())->startOfDay();
+        $beforeNowClosing->end = $period->getStartDate();
+        $restaurant->closingWindows[] = $beforeNowClosing;
 
-        $openedPeriods = [];
-        foreach ($this->getOpeningPeriods($openings, $start, $end) as $openingPeriod) {
-            $openedPeriods = array_merge($openedPeriods, $this->getOpenedPeriods($openingPeriod, $closings));
+        $openedPeriods = new Collection;
+        foreach ($this->makeOpeningPeriodsFromOpeningWindows($restaurant->openingWindows, $period) as $openingPeriod) {
+            $newOpenedPeriods = $this->applyClosingWindowsOnOpeningPeriods($openingPeriod, $restaurant->closingWindows);
+            foreach($newOpenedPeriods as $newOpenedPeriod) {
+                $openedPeriods[] = $newOpenedPeriod;
+            }
         }
         return $openedPeriods;
     }
 
-    public function getOpeningPeriods($openings, Carbon $start, Carbon $end)
+    public function makeOpeningPeriodsFromOpeningWindows(Collection $openings, Period $period): Collection
     {
-        $openingPeriods = [];
-        $currentDay = $start->copy();
-        while ($currentDay->lte($end)) {
+        $openingPeriods = new Collection;
+        $currentDay = Carbon::instance($period->getStartDate());
+        while ($currentDay <= Carbon::instance($period->getEndDate())) {
             foreach ($openings as $opening) {
                 if ($opening->dayOfWeek == $currentDay->dayOfWeek) {
                     $openingPeriodStart = $currentDay->copy()->setTime($opening->start->hour, $opening->start->minute, $opening->start->second);
                     $openingPeriodEnd = $currentDay->copy()->setTime($opening->end->hour, $opening->end->minute, $opening->end->second);
-                    array_push($openingPeriods, new Period($openingPeriodStart, $openingPeriodEnd));
+                    $openingPeriods[] = new Period($openingPeriodStart, $openingPeriodEnd);
                 }
             }
             $currentDay = $currentDay->addDay();
@@ -45,12 +45,12 @@ class ComputeOpenedWindows
         return $openingPeriods;
     }
 
-    public function getOpenedPeriods(Period $openingPeriod, $closings)
+    public function applyClosingWindowsOnOpeningPeriods(Period $openingPeriod, Collection $closings): Collection
     {
-        $openedPeriods = [$openingPeriod];
+        $openedPeriods = Collection::make([$openingPeriod]);
         foreach ($closings as $closing) {
             $openedPeriodsCopy = $openedPeriods;
-            $openedPeriods = [];
+            $openedPeriods = new Collection;
             foreach ($openedPeriodsCopy as $openedPeriod) {
                 $closingPeriod = new Period($closing->start, $closing->end);
                 // Keeping the whole $openedPeriod if it does not overlap with the closing period
@@ -58,11 +58,11 @@ class ComputeOpenedWindows
                 if ($openedPeriod->overlaps($closingPeriod)) {
                     foreach ($openedPeriod->diff($closingPeriod) as $diff) {
                         if ($diff->overlaps($openedPeriod)) {
-                            array_push($openedPeriods, $diff->intersect($openedPeriod));
+                            $openedPeriods[] = $diff->intersect($openedPeriod);
                         }
                     }
                 } else {
-                    array_push($openedPeriods, $openedPeriod);
+                    $openedPeriods[] = $openedPeriod;
                 }
             }
         }

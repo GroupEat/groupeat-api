@@ -3,6 +3,8 @@ namespace Groupeat\Restaurants\Http\V1;
 
 use Groupeat\Restaurants\Entities\Restaurant;
 use League\Fractal\TransformerAbstract;
+use Carbon\Carbon;
+use League\Period\Period;
 
 class RestaurantTransformer extends TransformerAbstract
 {
@@ -37,6 +39,8 @@ class RestaurantTransformer extends TransformerAbstract
 
     public function includeOpenedWindows(Restaurant $restaurant)
     {
-        return $this->collection($restaurant->openedWindows, new PeriodTransformer);
+        $now = Carbon::now();
+        $openedWindows = $restaurant->getOpenedWindows(new Period($now, $now->copy()->addWeek(2)));
+        return $this->collection($openedWindows, new PeriodTransformer);
     }
 }
