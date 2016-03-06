@@ -4,6 +4,7 @@ namespace Groupeat\Restaurants\Services;
 use Carbon\Carbon;
 use Groupeat\Restaurants\Entities\Restaurant;
 use League\Period\Period;
+use Groupeat\Restaurants\Entities\ClosingWindow;
 
 class ComputeOpenedWindows
 {
@@ -11,11 +12,17 @@ class ComputeOpenedWindows
     {
         $openings = collect($restaurant->openingWindows);
         $closings = collect($restaurant->closingWindows);
+        $now = Carbon::now();
+
+        // Adding a closing for today until now to prevent getting opened windows in the past
+        $beforeNowClosing = new ClosingWindow;
+        $beforeNowClosing->start = $now->copy()->startOfDay()->toDateTimeString();
+        $beforeNowClosing->end = $now->toDateTimeString();
+        $closings->push($beforeNowClosing);
+
         $openedPeriods = [];
         foreach ($this->getOpeningPeriods($openings, $start, $end) as $openingPeriod) {
-            foreach ($this->getOpenedPeriods($openingPeriod, $closings) as $openedPeriod) {
-                array_push($openedPeriods, $openedPeriod);
-            }
+            $openedPeriods = array_merge($openedPeriods, $this->getOpenedPeriods($openingPeriod, $closings));
         }
         return $openedPeriods;
     }
