@@ -30,6 +30,8 @@ class Restaurant extends Entity implements User
         'discountPolicy' => 'json',
     ];
 
+    private static $minimumFoodrushInMinutes, $maximumOrderFlowInMinutes;
+
     public function getRules()
     {
         return [
@@ -46,6 +48,9 @@ class Restaurant extends Entity implements User
     protected static function boot()
     {
         parent::boot();
+
+        static::$minimumFoodrushInMinutes = config('orders.minimum_foodrush_in_minutes');
+        static::$maximumOrderFlowInMinutes = config('orders.maximum_order_flow_in_minutes');
     }
 
     public function categories()

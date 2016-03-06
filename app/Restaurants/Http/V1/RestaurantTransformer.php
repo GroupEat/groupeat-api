@@ -17,6 +17,7 @@ class RestaurantTransformer extends TransformerAbstract
             'name' => $restaurant->name,
             'email' => $restaurant->email,
             'rating' => $restaurant->rating,
+            'isOpened' => $restaurant->isOpened(),
             'closingAt' => (string) $restaurant->closingAt,
             'phoneNumber' => $restaurant->phoneNumber,
             'minimumGroupOrderPrice' => $restaurant->minimumGroupOrderPrice->getAmount(),
