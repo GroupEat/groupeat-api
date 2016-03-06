@@ -40,7 +40,7 @@ class RestaurantTransformer extends TransformerAbstract
     public function includeOpenedWindows(Restaurant $restaurant)
     {
         $now = Carbon::now();
-        $openedWindows = $restaurant->getOpenedWindows(new Period($now, $now->copy()->addWeek(2)));
+        $openedWindows = $restaurant->getOpenedWindows(new Period($now, $now->copy()->addWeek(1)));
         return $this->collection($openedWindows, new PeriodTransformer);
     }
 }

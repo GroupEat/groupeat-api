@@ -20,7 +20,7 @@ class ComputeOpenedWindows
         $openedPeriods = new Collection;
         foreach ($this->makeOpeningPeriodsFromOpeningWindows($restaurant->openingWindows, $period) as $openingPeriod) {
             $newOpenedPeriods = $this->applyClosingWindowsOnOpeningPeriods($openingPeriod, $restaurant->closingWindows);
-            foreach($newOpenedPeriods as $newOpenedPeriod) {
+            foreach ($newOpenedPeriods as $newOpenedPeriod) {
                 $openedPeriods[] = $newOpenedPeriod;
             }
         }
@@ -47,7 +47,7 @@ class ComputeOpenedWindows
 
     public function applyClosingWindowsOnOpeningPeriods(Period $openingPeriod, Collection $closings): Collection
     {
-        $openedPeriods = Collection::make([$openingPeriod]);
+        $openedPeriods = collect([$openingPeriod]);
         foreach ($closings as $closing) {
             $openedPeriodsCopy = $openedPeriods;
             $openedPeriods = new Collection;

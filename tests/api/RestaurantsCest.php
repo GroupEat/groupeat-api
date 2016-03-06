@@ -110,7 +110,7 @@ class RestaurantsCest
         $this->assertClosingAt($I, $token, $restaurantId, new Carbon('2015-11-08 00:30:00'));
     }
 
-    public function testThatOpenedWindowsShouldSpanForTwoWeeks(ApiTester $I)
+    public function testThatOpenedWindowsShouldSpanForAWeek(ApiTester $I)
     {
         Carbon::setTestNow(new Carbon('2015-11-07 20:30:00'));
         list($token) = $I->amAnActivatedCustomer();
@@ -120,8 +120,8 @@ class RestaurantsCest
         $this->createOpeningWindow($restaurantId, '20:30:00', '23:59:59', true);
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/?include=openedWindows");
         $openedWindows = $I->grabDataFromResponse('openedWindows.data');
-        // Three for today's opening window and two for tomorrow's
-        $I->assertEquals(count($openedWindows), 5);
+        // Two for today's opening window and one for tomorrow's
+        $I->assertEquals(count($openedWindows), 3);
         $this->assertPeriodEquals($I, $openedWindows[0], new Period(new Carbon('2015-11-07 20:30:00'), new Carbon('2015-11-07 23:59:59')));
     }
 
@@ -136,7 +136,7 @@ class RestaurantsCest
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/?include=openedWindows");
         $openedWindows = Collection::make($I->grabDataFromResponse('openedWindows.data'));
         // Today's opened window should be splat in two
-        $I->assertEquals(count($openedWindows), 4);
+        $I->assertEquals(count($openedWindows), 3);
         $this->assertPeriodEquals($I, $openedWindows[0], new Period(new Carbon('2015-11-07 20:30:00'), new Carbon('2015-11-07 21:30:00')));
         $this->assertPeriodEquals($I, $openedWindows[1], new Period(new Carbon('2015-11-07 21:45:00'), new Carbon('2015-11-07 23:59:59')));
     }
@@ -152,7 +152,7 @@ class RestaurantsCest
         $I->sendApiGetWithToken($token, "restaurants/$restaurantId/?include=openedWindows");
         $openedWindows = Collection::make($I->grabDataFromResponse('openedWindows.data'));
         // Today's opened window should be splat in two
-        $I->assertEquals(count($openedWindows), 4);
+        $I->assertEquals(count($openedWindows), 3);
         $this->assertPeriodEquals($I, $openedWindows[0], new Period(new Carbon('2015-11-07 21:00:00'), new Carbon('2015-11-07 21:30:00')));
         $this->assertPeriodEquals($I, $openedWindows[1], new Period(new Carbon('2015-11-07 21:45:00'), new Carbon('2015-11-07 23:59:59')));
     }
