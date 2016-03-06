@@ -6,7 +6,7 @@ use League\Fractal\TransformerAbstract;
 
 class RestaurantTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['address', 'categories'];
+    protected $availableIncludes = ['address', 'categories', 'openedWindows'];
 
     public function transform(Restaurant $restaurant)
     {
@@ -33,5 +33,10 @@ class RestaurantTransformer extends TransformerAbstract
     public function includeCategories(Restaurant $restaurant)
     {
         return $this->collection($restaurant->categories, new CategoryTransformer);
+    }
+
+    public function includeOpenedWindows(Restaurant $restaurant)
+    {
+        return $this->collection($restaurant->openedWindows, new PeriodTransformer);
     }
 }

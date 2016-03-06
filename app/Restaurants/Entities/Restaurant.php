@@ -7,6 +7,7 @@ use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Restaurants\Services\ApplyAroundScope;
 use Groupeat\Restaurants\Services\ApplyOpenedScope;
 use Groupeat\Restaurants\Services\ComputeClosingAt;
+use Groupeat\Restaurants\Services\ComputeOpenedWindows;
 use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasPhoneNumber;
@@ -161,5 +162,10 @@ class Restaurant extends Entity implements User
     protected function getClosingAtAttribute()
     {
         return app(ComputeClosingAt::class)->call($this);
+    }
+
+    protected function getOpenedWindowsAttribute()
+    {
+        return app(ComputeOpenedWindows::class)->call($this, Carbon::now(), Carbon::now()->addWeek(2));
     }
 }
