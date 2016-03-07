@@ -24,30 +24,55 @@ class ComputeOpenedWindows
                 $openedPeriods[] = $newOpenedPeriod;
             }
         }
+
         return $openedPeriods;
     }
 
-    public function makeOpeningPeriodsFromOpeningWindows(Collection $openings, Period $period): Collection
+    private function makeOpeningPeriodsFromOpeningWindows(Collection $openings, Period $period): Collection
     {
         $openingPeriods = new Collection;
         $currentDay = Carbon::instance($period->getStartDate());
+
         while ($currentDay <= Carbon::instance($period->getEndDate())) {
             foreach ($openings as $opening) {
                 if ($opening->dayOfWeek == $currentDay->dayOfWeek) {
-                    $openingPeriodStart = $currentDay->copy()->setTime($opening->start->hour, $opening->start->minute, $opening->start->second);
-                    $openingPeriodEnd = $currentDay->copy()->setTime($opening->end->hour, $opening->end->minute, $opening->end->second);
+                    $openingPeriodStart = $this->makeCarbonWithDateAndTime($currentDay, $opening->start);
+                    $openingPeriodEnd = $this->makeCarbonWithDateAndTime($currentDay, $opening->end);
                     $openingPeriods[] = new Period($openingPeriodStart, $openingPeriodEnd);
                 }
             }
             $currentDay = $currentDay->addDay();
         }
 
-        return $openingPeriods;
+        return $this->mergeOpeningWindowsAroundMidnight($openingPeriods);
     }
 
-    public function applyClosingWindowsOnOpeningPeriods(Period $openingPeriod, Collection $closings): Collection
+    private function mergeOpeningWindowsAroundMidnight(Collection $openingPeriods): Collection
+    {
+        $mergedPeriods = new Collection;
+
+        for ($i = 0; $i < $openingPeriods->count(); $i++) {
+            if (Carbon::instance($openingPeriods[$i]->getEndDate())->toTimeString() == '23:59:59'
+                && $i !== $openingPeriods->count() - 1
+                && Carbon::instance($openingPeriods[$i + 1]->getStartDate())->toTimeString() == '00:00:00'
+            ) {
+                $mergedPeriods[] = new Period(
+                    $openingPeriods[$i]->getStartDate(),
+                    $openingPeriods[$i + 1]->getEndDate()
+                );
+                $i++;
+            } else {
+                $mergedPeriods[] = $openingPeriods[$i];
+            }
+        }
+
+        return $mergedPeriods;
+    }
+
+    private function applyClosingWindowsOnOpeningPeriods(Period $openingPeriod, Collection $closings): Collection
     {
         $openedPeriods = collect([$openingPeriod]);
+
         foreach ($closings as $closing) {
             $openedPeriodsCopy = $openedPeriods;
             $openedPeriods = new Collection;
@@ -68,5 +93,10 @@ class ComputeOpenedWindows
         }
 
         return $openedPeriods;
+    }
+
+    private function makeCarbonWithDateAndTime(Carbon $date, Carbon $time): Carbon
+    {
+        return $date->copy()->setTime($time->hour, $time->minute, $time->second);
     }
 }

@@ -12,7 +12,6 @@ use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasPhoneNumber;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Groupeat\Support\Values\Abstracts\DistanceInKms;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\Period\Period;
@@ -30,8 +29,6 @@ class Restaurant extends Entity implements User
         'discountPolicy' => 'json',
     ];
 
-    private static $minimumFoodrushInMinutes, $maximumOrderFlowInMinutes;
-
     public function getRules()
     {
         return [
@@ -43,14 +40,6 @@ class Restaurant extends Entity implements User
             'deliveryCapacity' => 'required|integer',
             'rating' => 'required|integer|max:10',
         ];
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::$minimumFoodrushInMinutes = config('orders.minimum_foodrush_in_minutes');
-        static::$maximumOrderFlowInMinutes = config('orders.maximum_order_flow_in_minutes');
     }
 
     public function categories()
@@ -93,12 +82,12 @@ class Restaurant extends Entity implements User
         app(ApplyAroundScope::class)->call($query, $location, $distanceInKms);
     }
 
-    public function isOpened(Period $period)
+    public function isOpened(Period $period = null)
     {
         return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
 
-    public function assertOpened(Period $period)
+    public function assertOpened(Period $period = null)
     {
         if (!$this->isOpened($period)) {
             $start = Carbon::instance($period->getStartDate());
@@ -111,7 +100,7 @@ class Restaurant extends Entity implements User
         }
     }
 
-    public function scopeOpened(Builder $query, Period $period)
+    public function scopeOpened(Builder $query, Period $period = null)
     {
         app(ApplyOpenedScope::class)->call($query, $period);
     }

@@ -9,8 +9,8 @@ class PeriodTransformer extends TransformerAbstract
     public function transform(Period $period)
     {
         return [
-            'start' => $period->getStartDate(),
-            'end' => $period->getEndDate(),
+            'start' => (string) $period->getStartDate(),
+            'end' => (string) $period->getEndDate(),
         ];
     }
 }

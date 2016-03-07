@@ -75,7 +75,7 @@ class CreateGroupOrder extends AddCustomerOrder
     private function assertThatTheRestaurantWontCloseTooSoon(Restaurant $restaurant)
     {
         $start = Carbon::now()->addMinutes($this->foodRushInMinutes);
-        $end = $start->copy();
+        $end = $start->copy()->addSecond();
 
         $restaurant->assertOpened(new Period($start, $end));
     }

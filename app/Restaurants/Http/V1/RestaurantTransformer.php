@@ -8,7 +8,7 @@ use League\Period\Period;
 
 class RestaurantTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['address', 'categories', 'openedWindows'];
+    protected $availableIncludes = ['address', 'categories', 'openingWindows'];
 
     public function transform(Restaurant $restaurant)
     {
@@ -38,7 +38,7 @@ class RestaurantTransformer extends TransformerAbstract
         return $this->collection($restaurant->categories, new CategoryTransformer);
     }
 
-    public function includeOpenedWindows(Restaurant $restaurant)
+    public function includeOpeningWindows(Restaurant $restaurant)
     {
         $now = Carbon::now();
         $openedWindows = $restaurant->getOpenedWindows(new Period($now, $now->copy()->addWeek(1)));

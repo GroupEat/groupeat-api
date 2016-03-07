@@ -1,29 +1,21 @@
 <?php
 namespace Groupeat\Restaurants\Http\V1;
 
-use Carbon\Carbon;
-use Groupeat\Orders\Values\MaximumOrderFlowInMinutes;
-use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\Category;
 use Groupeat\Restaurants\Entities\FoodType;
 use Groupeat\Restaurants\Entities\Product;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
-use League\Period\Period;
 use Phaza\LaravelPostgis\Geometries\Point;
 
 class RestaurantsController extends Controller
 {
-    public function index(
-        MaximumOrderFlowInMinutes $maximumOrderFlowInMinutes,
-        MinimumFoodrushInMinutes $minimumFoodrushInMinutes
-    ) {
+    public function index()
+    {
         $query = Restaurant::orderBy('name', 'asc');
 
         if ((bool) $this->get('opened')) {
-            $start = Carbon::now()->addMinutes($minimumFoodrushInMinutes->value());
-            $end = $start->copy()->addMinutes($maximumOrderFlowInMinutes->value());
-            $query->opened(new Period($start, $end));
+            $query->opened();
         }
 
         if ((bool) $this->get('around')) {
