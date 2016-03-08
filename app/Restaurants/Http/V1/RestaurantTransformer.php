@@ -3,10 +3,12 @@ namespace Groupeat\Restaurants\Http\V1;
 
 use Groupeat\Restaurants\Entities\Restaurant;
 use League\Fractal\TransformerAbstract;
+use Carbon\Carbon;
+use League\Period\Period;
 
 class RestaurantTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = ['address', 'categories'];
+    protected $availableIncludes = ['address', 'categories', 'openingWindows'];
 
     public function transform(Restaurant $restaurant)
     {
@@ -15,6 +17,7 @@ class RestaurantTransformer extends TransformerAbstract
             'name' => $restaurant->name,
             'email' => $restaurant->email,
             'rating' => $restaurant->rating,
+            'isOpened' => $restaurant->isOpened(),
             'closingAt' => (string) $restaurant->closingAt,
             'phoneNumber' => $restaurant->phoneNumber,
             'minimumGroupOrderPrice' => $restaurant->minimumGroupOrderPrice->getAmount(),
@@ -33,5 +36,12 @@ class RestaurantTransformer extends TransformerAbstract
     public function includeCategories(Restaurant $restaurant)
     {
         return $this->collection($restaurant->categories, new CategoryTransformer);
+    }
+
+    public function includeOpeningWindows(Restaurant $restaurant)
+    {
+        $now = Carbon::now();
+        $openedWindows = $restaurant->getOpenedWindows(new Period($now, $now->copy()->addWeek(1)));
+        return $this->collection($openedWindows, new PeriodTransformer);
     }
 }

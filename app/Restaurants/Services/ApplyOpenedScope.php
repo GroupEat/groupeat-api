@@ -2,14 +2,31 @@
 namespace Groupeat\Restaurants\Services;
 
 use Carbon\Carbon;
+use Groupeat\Orders\Values\MaximumOrderFlowInMinutes;
+use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\OpeningWindow;
 use Illuminate\Database\Eloquent\Builder;
 use League\Period\Period;
 
 class ApplyOpenedScope
 {
-    public function call(Builder $query, Period $period)
+    private $maximumOrderFlowInMinutes;
+    private $minimumFoodrushInMinutes;
+
+    public function __construct(
+        MaximumOrderFlowInMinutes $maximumOrderFlowInMinutes,
+        MinimumFoodrushInMinutes $minimumFoodrushInMinutes
+    ) {
+        $this->maximumOrderFlowInMinutes = $maximumOrderFlowInMinutes->value();
+        $this->minimumFoodrushInMinutes = $minimumFoodrushInMinutes->value();
+    }
+
+    public function call(Builder $query, Period $period = null)
     {
+        if (!$period) {
+            $period = $this->getDefaultOpeningPeriod();
+        }
+
         $start = Carbon::instance($period->getStartDate());
         $end = Carbon::instance($period->getEndDate());
 
@@ -20,6 +37,14 @@ class ApplyOpenedScope
         } else {
             $this->applySameDayScope($query, $start, $end);
         }
+    }
+
+    private function getDefaultOpeningPeriod()
+    {
+        $start = Carbon::now()->addMinutes($this->minimumFoodrushInMinutes);
+        $end = $start->copy()->addMinutes($this->maximumOrderFlowInMinutes);
+
+        return new Period($start, $end);
     }
 
     private function applySameDayScope(Builder $query, Carbon $start, Carbon $end)

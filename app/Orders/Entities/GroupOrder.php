@@ -6,6 +6,7 @@ use DB;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Events\GroupOrderHasBeenClosed;
 use Groupeat\Orders\Support\ProductFormats;
+use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Support\DiscountRate;
@@ -43,7 +44,7 @@ class GroupOrder extends Entity
     {
         parent::boot();
 
-        static::$joinableDistanceInKms = config('orders.joinable_distance_in_kilometers');
+        static::$joinableDistanceInKms = app(JoinableDistanceInKms::class)->value();
     }
 
     public static function createWith(
