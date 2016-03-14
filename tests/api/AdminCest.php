@@ -4,7 +4,7 @@ class AdminCest
 {
     public function testThatOnlyAdminsCanSeeTheDocs(ApiTester $I)
     {
-        $docsUrl = 'admin/docs';
+        $docsUrl = 'docs';
         list($token) = $I->amAnActivatedCustomer();
 
         $I->sendApiGetWithToken($token, $docsUrl);
