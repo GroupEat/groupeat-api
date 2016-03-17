@@ -43,3 +43,38 @@ Send a push notification to the device with the given UUID. To send a *silent pu
         }
 
 + Response 200
+
+## Make-up group order  [/restaurants/{id}/madeUpGroupOrders]
+
++ Parameters
+
+    + id (required, string, `123`) ... The restaurant ID
+
+### POST
+
+Make-up a group order which starts with an initial discount rate greater than zero.
+
++ Request
+
+        {
+            "initialDiscountRate": 30, // percentage
+            "foodRushDurationInMinutes": 35
+        }
+
++ Response 201
+
+    [Group order][]
+
++ Response 400
+
+        {
+            "errorKey": "initialDiscountRateTooBig",
+            "message": "The initial discount rate cannot exceed the maximum discount rate of the restaurant"
+        }
+
++ Response 422
+
+        {
+            "errorKey": "groupOrderAlreadyExisting",
+            "message": "A group order already exists for the restaurant#1."
+        }

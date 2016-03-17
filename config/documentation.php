@@ -16,13 +16,13 @@ return [
     'order' => [
         'Documentation',
         'Auth',
-        'Admin',
         'Customers',
         'Restaurants',
         'Orders',
         'Devices',
         'Settings',
-        'Support'
+        'Admin',
+        'Support',
     ],
 
 ];
