@@ -10,6 +10,7 @@ use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Groupeat\Restaurants\Entities\ProductFormat;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Support\DiscountRate;
+use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
 use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
@@ -24,10 +25,8 @@ class GroupOrder extends Entity
     const CONFIRMED_AT = 'confirmedAt';
     const PREPARED_AT = 'preparedAt';
 
-    /**
-     * @var float
-     */
     private static $joinableDistanceInKms;
+    private static $maximumDeliveryDistanceInKms;
 
     protected $dates = [self::CLOSED_AT, self::ENDING_AT, self::CONFIRMED_AT, self::PREPARED_AT];
 
@@ -45,6 +44,7 @@ class GroupOrder extends Entity
         parent::boot();
 
         static::$joinableDistanceInKms = app(JoinableDistanceInKms::class)->value();
+        static::$maximumDeliveryDistanceInKms = app(MaximumDeliveryDistanceInKms::class)->value();
     }
 
     public static function createWith(
@@ -64,6 +64,25 @@ class GroupOrder extends Entity
         return $groupOrder->addOrder($customer, $productFormats, $address, $comment);
     }
 
+    public static function assertNotExistingFor(Restaurant $restaurant)
+    {
+        $model = new static;
+        $now = $model->freshTimestamp();
+
+        $alreadyExisting = $model->whereNull($model->getTableField('closedAt'))
+            ->where($model->getTableField(self::CREATED_AT), '<=', $now)
+            ->where($model->getTableField(self::ENDING_AT), '>=', $now)
+            ->where($model->getTableField('restaurantId'), $restaurant->id)
+            ->count();
+
+        if ($alreadyExisting) {
+            throw new UnprocessableEntity(
+                'groupOrderAlreadyExisting',
+                "A group order already exists for the {$restaurant->toShortString()}."
+            );
+        }
+    }
+
     public function isJoinable(Carbon $time = null): bool
     {
         $time = $time ?: $this->freshTimestamp();
@@ -73,7 +92,7 @@ class GroupOrder extends Entity
 
     public function productFormatsQuery()
     {
-        $model = new ProductFormat();
+        $model = new ProductFormat;
 
         return $model->whereHas('orders', function ($query) {
             $query->whereHas('groupOrder', function ($subQuery) {
@@ -101,6 +120,11 @@ class GroupOrder extends Entity
         return $this->belongsTo(Restaurant::class);
     }
 
+    public function isMadeUpWithoutAnyOrder()
+    {
+        return $this->isMadeUp && $this->orders->count() == 0;
+    }
+
     public function addOrder(
         Customer $customer,
         ProductFormats $productFormats,
@@ -120,7 +144,8 @@ class GroupOrder extends Entity
         $order->customer()->associate($customer);
         $order->setCreatedAt($order->freshTimestamp());
 
-        if (!$this->exists) {
+        // An existing group order can have zero orders if it is a made-up one.
+        if (!$this->exists || $this->isMadeUpWithoutAnyOrder()) {
             $order->initiator = true;
         }
 
@@ -193,19 +218,28 @@ class GroupOrder extends Entity
             ->where($model->getTableField(self::ENDING_AT), '>', $time);
     }
 
-    public function scopeAround(Builder $query, Point $location, float $distanceInKms = 0)
+    public function scopeAround(Builder $query, Point $location)
     {
-        $distanceInKms = $distanceInKms ?: static::$joinableDistanceInKms;
+        $query->where(function (Builder $subQuery) use ($location) {
+            $subQuery->orWhere(function (Builder $microQuery) use ($location) {
+                 $microQuery
+                     ->where('isMadeUp', true)
+                     ->whereHas('restaurant', function (Builder $microQuery) use ($location) {
+                         $microQuery->whereHas('address', function (Builder $picoQuery) use ($location) {
+                             $picoQuery->withinKilometers($location, static::$maximumDeliveryDistanceInKms);
+                         });
+                     });
+            });
+            $subQuery->orWhereHas('orders', function (Builder $miniQuery) use ($location) {
+                $miniQuery->where($miniQuery->getModel()->getTableField('initiator'), true);
 
-        $query->whereHas('orders', function (Builder $subQuery) use ($location, $distanceInKms) {
-            $subQuery->where($subQuery->getModel()->getTableField('initiator'), true);
-
-            $subQuery->whereHas(
-                'deliveryAddress',
-                function (Builder $miniQuery) use ($location, $distanceInKms) {
-                    $miniQuery->withinKilometers($location, $distanceInKms);
-                }
-            );
+                $miniQuery->whereHas(
+                    'deliveryAddress',
+                    function (Builder $microQuery) use ($location) {
+                        $microQuery->withinKilometers($location, static::$joinableDistanceInKms);
+                    }
+                );
+            });
         });
     }
 
@@ -223,9 +257,22 @@ class GroupOrder extends Entity
         }
     }
 
-    public function getAddressToCompareToForJoining(): Address
+    public function isCloseEnoughToJoin(Point $point): bool
     {
-        return $this->getInitiatingOrder()->deliveryAddress;
+        if ($this->isMadeUpWithoutAnyOrder()) {
+            return $this->restaurant->address->distanceInKmsWithPoint($point) < static::$maximumDeliveryDistanceInKms;
+        }
+
+        return $this->getInitiatingOrder()->deliveryAddress->distanceInKmsWithPoint($point) < static::$joinableDistanceInKms;
+    }
+
+    public function setFoodRushDurationInMinutes(int $minutes)
+    {
+        if (!$this->exists) {
+            $this->createdAt = $this->freshTimestamp();
+        }
+
+        $this->endingAt = $this->createdAt->copy()->addMinutes($minutes);
     }
 
     protected function getDiscountRateAttribute()
@@ -235,26 +282,12 @@ class GroupOrder extends Entity
 
     protected function setDiscountRateAttribute(DiscountRate $discountRate)
     {
-        $this->attributes['discountRate'] = $discountRate->toPercentage();
-    }
-
-    private static function assertNotExistingFor(Restaurant $restaurant)
-    {
-        $model = new static;
-        $now = $model->freshTimestamp();
-
-        $alreadyExisting = $model->whereNull($model->getTableField('closedAt'))
-            ->where($model->getTableField(self::CREATED_AT), '<=', $now)
-            ->where($model->getTableField(self::ENDING_AT), '>=', $now)
-            ->where($model->getTableField('restaurantId'), $restaurant->id)
-            ->count();
-
-        if ($alreadyExisting) {
-            throw new UnprocessableEntity(
-                'groupOrderAlreadyExisting',
-                "A group order already exists for the {$restaurant->toShortString()}."
-            );
-        }
+        // The discount rate should only increase.
+        // It can also be create different than 0 in the case of a made-up group order
+        $this->attributes['discountRate'] = max(
+            empty($this->attributes['discountRate']) ? 0 : $this->attributes['discountRate'],
+            $discountRate->toPercentage()
+        );
     }
 
     private static function assertMinimumGroupOrderPriceReached(Restaurant $restaurant, ProductFormats $productFormats)
@@ -266,15 +299,6 @@ class GroupOrder extends Entity
                 . "but must be greater than {$restaurant->minimumGroupOrderPrice->getAmount()}."
             );
         }
-    }
-
-    private function setFoodRushDurationInMinutes($minutes)
-    {
-        if (!$this->exists) {
-            $this->createdAt = $this->freshTimestamp();
-        }
-
-        $this->endingAt = $this->createdAt->copy()->addMinutes($minutes);
     }
 
     private function getNbProductFormatsAndRawPriceWith(ProductFormats $productFormats)

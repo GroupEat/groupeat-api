@@ -5,23 +5,19 @@ use Groupeat\Devices\Entities\Device;
 use Groupeat\Devices\Entities\DeviceLocation;
 use Groupeat\Notifications\Values\DeviceLocationFreshnessInMinutes;
 use Groupeat\Orders\Entities\GroupOrder;
-use Groupeat\Orders\Values\JoinableDistanceInKms;
 use Psr\Log\LoggerInterface;
 
 class CheckDeviceCloseEnoughToJoinGroupOrder
 {
     private $logger;
     private $deviceLocationFreshnessInMinutes;
-    private $joinableDistanceInKms;
 
     public function __construct(
         LoggerInterface $logger,
-        DeviceLocationFreshnessInMinutes $deviceLocationFreshnessInMinutes,
-        JoinableDistanceInKms $joinableDistanceInKms
+        DeviceLocationFreshnessInMinutes $deviceLocationFreshnessInMinutes
     ) {
         $this->logger = $logger;
         $this->deviceLocationFreshnessInMinutes = $deviceLocationFreshnessInMinutes->value();
-        $this->joinableDistanceInKms = $joinableDistanceInKms->value();
     }
 
     public function call(Device $device, GroupOrder $groupOrder): bool
@@ -42,14 +38,11 @@ class CheckDeviceCloseEnoughToJoinGroupOrder
             return false;
         }
 
-        $groupOrderAddress = $groupOrder->getAddressToCompareToForJoining();
-        $distanceWithGroupOrder = $groupOrderAddress->distanceInKmsWithPoint($lastDeviceLocation->location);
-
-        if ($distanceWithGroupOrder > $this->joinableDistanceInKms) {
+        if (!$groupOrder->isCloseEnoughToJoin($lastDeviceLocation->location)) {
             $this->logWhyNotCloseEnough(
                 $device,
                 $groupOrder,
-                "$distanceWithGroupOrder kms is more than $this->joinableDistanceInKms kms"
+                "The device is too far from the group order"
             );
             return false;
         }
