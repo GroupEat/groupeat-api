@@ -75,7 +75,7 @@ class AdminCest
             $totalRawPrice = $I->grabDataFromResponse('totalRawPrice');
         }
 
-        $I->assertGreaterThan($initialDiscountRate, $I->grabDataFromResponse('discountRate'));
+        $I->assertGreaterThanOrEqual($initialDiscountRate, $I->grabDataFromResponse('discountRate'));
     }
 
     private function getMadeUpGroupOrderDetails(ApiTester $I)
