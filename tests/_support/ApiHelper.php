@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Closure;
 use DB;
 use Groupeat\Auth\Auth;
+use League\Period\Period;
 
 class ApiHelper extends \Codeception\Module
 {
@@ -279,5 +280,12 @@ class ApiHelper extends \Codeception\Module
             $this->debugSection('Back to present', '');
             Carbon::setTestNow();
         }
+    }
+
+    // Used to assert that two dates are equal with a slight margin due to computation time
+    public function assertRoughlyEqual(Carbon $actual, Carbon $expected, int $marginInSeconds = 2)
+    {
+        $period = new Period($expected, $expected->copy()->addMinutes($marginInSeconds));
+        $this->assertTrue($period->contains($actual));
     }
 }

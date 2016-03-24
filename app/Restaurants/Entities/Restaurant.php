@@ -7,11 +7,11 @@ use Groupeat\Auth\Entities\Traits\HasCredentials;
 use Groupeat\Restaurants\Services\ApplyAroundScope;
 use Groupeat\Restaurants\Services\ApplyOpenedScope;
 use Groupeat\Restaurants\Services\ComputeClosingAt;
+use Groupeat\Restaurants\Services\ComputeOpenedWindows;
 use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Entities\Traits\HasPhoneNumber;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
-use Groupeat\Support\Values\Abstracts\DistanceInKms;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\Period\Period;
@@ -42,11 +42,6 @@ class Restaurant extends Entity implements User
         ];
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-    }
-
     public function categories()
     {
         return $this->belongsToMany(Category::class);
@@ -64,12 +59,17 @@ class Restaurant extends Entity implements User
 
     public function openingWindows()
     {
-        return $this->hasMany(OpeningWindow::class);
+        return $this->hasMany(OpeningWindow::class)->orderBy('dayOfWeek')->orderBy('start');
+    }
+
+    public function getOpenedWindows(Period $period)
+    {
+        return app(ComputeOpenedWindows::class)->call($this, $period);
     }
 
     public function closingWindows()
     {
-        return $this->hasMany(ClosingWindow::class);
+        return $this->hasMany(ClosingWindow::class)->orderBy('start');
     }
 
     public function promotions()
@@ -82,12 +82,12 @@ class Restaurant extends Entity implements User
         app(ApplyAroundScope::class)->call($query, $location, $distanceInKms);
     }
 
-    public function isOpened(Period $period)
+    public function isOpened(Period $period = null)
     {
         return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
 
-    public function assertOpened(Period $period)
+    public function assertOpened(Period $period = null)
     {
         if (!$this->isOpened($period)) {
             $start = Carbon::instance($period->getStartDate());
@@ -100,7 +100,7 @@ class Restaurant extends Entity implements User
         }
     }
 
-    public function scopeOpened(Builder $query, Period $period)
+    public function scopeOpened(Builder $query, Period $period = null)
     {
         app(ApplyOpenedScope::class)->call($query, $period);
     }

@@ -2,12 +2,17 @@
 namespace Groupeat\Admin\Http\V1;
 
 use Groupeat\Admin\Entities\Admin;
+use Groupeat\Admin\Jobs\MakeUpGroupOrder;
 use Groupeat\Devices\Entities\Device;
 use Groupeat\Documentation\Services\GenerateApiDocumentation;
 use Groupeat\Notifications\Services\SendNotification;
 use Groupeat\Notifications\Values\Notification;
 use Groupeat\Notifications\Values\SilentNotification;
+use Groupeat\Orders\Http\V1\GroupOrderTransformer;
+use Groupeat\Restaurants\Entities\Restaurant;
+use Groupeat\Restaurants\Support\DiscountRate;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
@@ -42,5 +47,18 @@ class AdminController extends Controller
         }
 
         return $sendNotification->call($notification, true);
+    }
+
+    public function makeUpGroupOrder(Restaurant $restaurant)
+    {
+        $this->auth->assertSameType(new Admin);
+        $groupOrder = $this->dispatch(new MakeUpGroupOrder(
+            $restaurant,
+            new DiscountRate($this->json('initialDiscountRate')),
+            $this->json('foodRushDurationInMinutes')
+        ));
+
+        return $this->itemResponse($groupOrder, new GroupOrderTransformer)
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 }

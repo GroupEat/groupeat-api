@@ -5,7 +5,7 @@
 + Parameters
 
     + id (required, string, `123`) ... The restaurant ID.
-    + include (optional, string, `address`) ... [address, categories].
+    + include (optional, string, `address`) ... [address, categories, openingWindows].
 
 + Model
 
@@ -15,6 +15,7 @@
             "email": "pizza@genova.com",
             "rating": 7, // Integer values from 0 to 10
             "phoneNumber": "0689731323",
+            "isOpened": true, // If true then it should remain enough time to place an order
             "minimumGroupOrderPrice": 1088,
             "deliveryCapacity": 7,
             "closingAt": "2015-11-08 00:30:00", // The time of the next closing of the restaurant

@@ -4,6 +4,7 @@ namespace Groupeat\Orders\Jobs;
 use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;
+use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
@@ -12,6 +13,7 @@ use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
 use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Restaurants\Values\MaximumDeliveryDistanceInKms;
+use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Contracts\Events\Dispatcher;
 use League\Period\Period;
@@ -75,8 +77,20 @@ class CreateGroupOrder extends AddCustomerOrder
     private function assertThatTheRestaurantWontCloseTooSoon(Restaurant $restaurant)
     {
         $start = Carbon::now()->addMinutes($this->foodRushInMinutes);
-        $end = $start->copy();
+        $end = $start->copy()->addSecond();
 
         $restaurant->assertOpened(new Period($start, $end));
+    }
+
+    private function assertCloseEnough(DeliveryAddress $deliveryAddress, Address $other, float $maximumDistanceInKms)
+    {
+        $distanceInKms = $deliveryAddress->distanceInKmsWith($other);
+
+        if ($distanceInKms > $maximumDistanceInKms) {
+            throw new UnprocessableEntity(
+                'deliveryDistanceTooLong',
+                "The delivery address is too far from the group order"
+            );
+        }
     }
 }
