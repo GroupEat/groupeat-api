@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
+use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Http\V1\Traits\CanAddOrder;
@@ -47,8 +48,11 @@ class OrdersController extends Controller
     public function place()
     {
         return $this->addOrder(function ($productFormats, $deliveryAddressData, $comment) {
+            $endingAt = $this->optionalJson('endingAt') ? new Carbon($this->optionalJson('endingAt')) : null;
+
             return new CreateGroupOrder(
-                (int) $this->json('foodRushDurationInMinutes'),
+                (int) $this->optionalJson('foodRushDurationInMinutes'),
+                $endingAt,
                 $this->auth->customer(),
                 $productFormats,
                 $deliveryAddressData,

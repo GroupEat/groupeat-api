@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Orders\Jobs;
 
+use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\DeliveryAddress;
@@ -12,6 +13,7 @@ use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Values\PhoneNumber;
 use Illuminate\Contracts\Events\Dispatcher;
+use League\Period\Period;
 
 class PushExternalOrder extends AddOrder
 {
@@ -51,11 +53,13 @@ class PushExternalOrder extends AddOrder
 
         $deliveryAddress = $this->getDeliveryAddress($this->deliveryAddressData, $addressConstraints->value());
 
+        $start = Carbon::now();
+        $end = $start->copy()->addMinutes($foodrushInMinutes->value());
         $order = GroupOrder::createWith(
             $customer,
             $deliveryAddress,
             $this->productFormats,
-            $foodrushInMinutes->value(),
+            new Period($start, $end),
             $this->comment
         );
 

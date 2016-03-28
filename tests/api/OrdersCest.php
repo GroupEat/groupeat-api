@@ -50,6 +50,20 @@ class OrdersCest
         $I->seeErrorResponse(422, 'invalidFoodRushDuration');
     }
 
+    public function testThatAEndingAtTimeCanBeSpecified(ApiTester $I)
+    {
+        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
+        $endingAt = Carbon::now()->addHours(2);
+        $orderDetails = $this->getOrderDetails($I, $token, ['endingAt' => $endingAt->toDateTimeString()]);
+
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeResponseCodeIs(201);
+
+        $orderId = $I->grabDataFromResponse('id');
+        $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
+        $I->assertRoughlyEqual(new Carbon($I->grabDataFromResponse('groupOrder.data.endingAt')), $endingAt);
+    }
+
     public function testThatTheOrderCannotBeEmpty(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();

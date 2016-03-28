@@ -39,7 +39,8 @@ class MakeUpGroupOrder extends Job
         $groupOrder->isMadeUp = true;
         $groupOrder->restaurant()->associate($this->restaurant);
         $groupOrder->discountRate = $this->initialDiscountRate;
-        $groupOrder->setFoodRushDurationInMinutes($this->foodRushDurationInMinutes);
+        $groupOrder->createdAt = $groupOrder->freshTimestamp();
+        $groupOrder->endingAt = $groupOrder->createdAt->copy()->addMinutes($this->foodRushDurationInMinutes);
 
         $groupOrder->save();
 

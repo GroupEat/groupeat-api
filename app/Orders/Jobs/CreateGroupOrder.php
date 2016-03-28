@@ -20,10 +20,12 @@ use League\Period\Period;
 
 class CreateGroupOrder extends AddCustomerOrder
 {
+    private $endingAt;
     private $foodRushInMinutes;
 
     public function __construct(
         int $foodRushInMinutes,
+        $endingAt,
         Customer $customer,
         array $productFormats,
         array $deliveryAddressData,
@@ -32,6 +34,7 @@ class CreateGroupOrder extends AddCustomerOrder
         parent::__construct($customer, $productFormats, $deliveryAddressData, $comment);
 
         $this->foodRushInMinutes = $foodRushInMinutes;
+        $this->endingAt = $endingAt;
     }
 
     public function handle(
@@ -48,11 +51,13 @@ class CreateGroupOrder extends AddCustomerOrder
         $deliveryAddress = $this->getDeliveryAddress($this->deliveryAddressData, $deliveryAddressConstraints->value());
         $this->assertCloseEnough($deliveryAddress, $restaurant->address, $maximumDeliveryDistanceInKms->value());
 
+        $start = Carbon::now();
+        $end = $this->endingAt ? $this->endingAt : $start->copy()->addMinutes($this->foodRushInMinutes);
         $order = GroupOrder::createWith(
             $this->customer,
             $deliveryAddress,
             $this->productFormats,
-            $this->foodRushInMinutes,
+            new Period($start, $end),
             $this->comment
         );
 
@@ -63,7 +68,7 @@ class CreateGroupOrder extends AddCustomerOrder
 
     private function guardAgainstInvalidFoodRushDuration(int $minimumFoodRushInMinutes, int $maximumFoodRushInMinutes)
     {
-        if ($this->foodRushInMinutes < $minimumFoodRushInMinutes || $this->foodRushInMinutes > $maximumFoodRushInMinutes) {
+        if ($this->foodRushInMinutes && ($this->foodRushInMinutes < $minimumFoodRushInMinutes || $this->foodRushInMinutes > $maximumFoodRushInMinutes)) {
             throw new UnprocessableEntity(
                 "invalidFoodRushDuration",
                 "The FoodRush duration must be between "
@@ -76,7 +81,7 @@ class CreateGroupOrder extends AddCustomerOrder
 
     private function assertThatTheRestaurantWontCloseTooSoon(Restaurant $restaurant)
     {
-        $start = Carbon::now()->addMinutes($this->foodRushInMinutes);
+        $start = $this->endingAt ? $this->endingAt : Carbon::now()->addMinutes($this->foodRushInMinutes);
         $end = $start->copy()->addSecond();
 
         $restaurant->assertOpened(new Period($start, $end));
