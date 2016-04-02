@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Admin\Http\V1;
 
+use Carbon\Carbon;
 use Groupeat\Admin\Entities\Admin;
 use Groupeat\Admin\Jobs\MakeUpGroupOrder;
 use Groupeat\Devices\Entities\Device;
@@ -55,7 +56,7 @@ class AdminController extends Controller
         $groupOrder = $this->dispatch(new MakeUpGroupOrder(
             $restaurant,
             new DiscountRate($this->json('initialDiscountRate')),
-            $this->json('foodRushDurationInMinutes')
+            new Carbon($this->json('endingAt'))
         ));
 
         return $this->itemResponse($groupOrder, new GroupOrderTransformer)

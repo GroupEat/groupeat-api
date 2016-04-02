@@ -3,7 +3,7 @@ namespace Groupeat\Orders\Values;
 
 use Groupeat\Support\Values\Abstracts\DurationInMinutes;
 
-class MaximumFoodrushInMinutes extends DurationInMinutes
+class ExternalGroupOrderDurationInMinutes extends DurationInMinutes
 {
     //
 }

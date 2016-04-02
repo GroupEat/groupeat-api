@@ -1,6 +1,7 @@
 <?php
 namespace Groupeat\Orders\Http\V1;
 
+use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Http\V1\Traits\CanAddOrder;
@@ -47,8 +48,17 @@ class OrdersController extends Controller
     public function place()
     {
         return $this->addOrder(function ($productFormats, $deliveryAddressData, $comment) {
+            $foodrushDurationInMinutes = (int) $this->optionalJson('foodRushDurationInMinutes');
+
+            if ($foodrushDurationInMinutes > 0) {
+                // Support for deprecated foodrush field
+                $endingAt = Carbon::now()->addMinutes($foodrushDurationInMinutes);
+            } else {
+                $endingAt = new Carbon($this->json('endingAt'));
+            }
+
             return new CreateGroupOrder(
-                (int) $this->json('foodRushDurationInMinutes'),
+                $endingAt,
                 $this->auth->customer(),
                 $productFormats,
                 $deliveryAddressData,

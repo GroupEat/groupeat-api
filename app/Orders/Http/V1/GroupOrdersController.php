@@ -52,10 +52,7 @@ class GroupOrdersController extends Controller
     {
         $this->auth->assertSame($groupOrder->restaurant);
 
-        $preparedAt = Carbon::createFromFormat(
-            Carbon::DEFAULT_TO_STRING_FORMAT,
-            $this->json('preparedAt')
-        )->second(0);
+        $preparedAt = (new Carbon($this->json('preparedAt')))->second(0);
         $this->dispatch(new ConfirmGroupOrder($groupOrder, $preparedAt));
     }
 

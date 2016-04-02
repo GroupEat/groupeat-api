@@ -58,7 +58,7 @@ Make-up a group order which starts with an initial discount rate greater than ze
 
         {
             "initialDiscountRate": 30, // percentage
-            "foodRushDurationInMinutes": 35
+            "endingAt": "2016-04-02 21:17:00"
         }
 
 + Response 201

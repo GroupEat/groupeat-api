@@ -1,10 +1,8 @@
 <?php
 namespace Groupeat\Support\Http\V1;
 
-use Groupeat\Orders\Values\MaximumFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumOrderFlowInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
-use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Support\Http\V1\Abstracts\Controller;
 use Illuminate\Foundation\Application;
 use Psr\Log\LoggerInterface;
@@ -24,8 +22,6 @@ class SupportController extends Controller
     {
         $values = [];
         $parameterClasses = [
-            MinimumFoodrushInMinutes::class,
-            MaximumFoodrushInMinutes::class,
             MaximumPreparationTimeInMinutes::class,
             MaximumOrderFlowInMinutes::class,
         ];
