@@ -29,7 +29,6 @@ class SendJoinGroupOrderNotification
         array $additionalData = []
     ): Notification {
         $customer = $device->customer;
-        $maximumDiscountRate = $groupOrder->restaurant->maximumDiscountRate;
 
         $entity = new Notification;
         $entity->silent = $silent;
@@ -43,8 +42,13 @@ class SendJoinGroupOrderNotification
         $value = $entity->toValue(
             $groupOrder->endingAt->diffInSeconds(),
             $additionalData,
-            $this->translateFor('title', $customer),
-            $this->translateFor('message', $customer, compact('maximumDiscountRate'))
+            $this->translateFor('title', $customer, [
+                'restaurantNameWithLocation' => $groupOrder->restaurant->getPresenter()->nameWithLocation,
+                'endingTime' => $groupOrder->getPresenter()->endingTime,
+            ]),
+            $this->translateFor('message', $customer, [
+                'maximumDiscountRate' => $groupOrder->restaurant->maximumDiscountRate
+            ])
         );
 
         try {

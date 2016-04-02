@@ -2,7 +2,7 @@
 
 return [
 
-    'title' => "Nouvelle commande GroupEat",
-    'message' => "réduction jusqu'à :maximumDiscountRate %"
+    'title' => "Commande en cours chez :restaurantNameWithLocation jusqu'à :endingTime",
+    'message' => "réduction jusqu'à :maximumDiscountRate"
 
 ];

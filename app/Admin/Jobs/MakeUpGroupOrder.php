@@ -27,7 +27,7 @@ class MakeUpGroupOrder extends Job
 
     public function handle(Dispatcher $events)
     {
-        if ($this->initialDiscountRate->percentage > $this->restaurant->maximumDiscountRate) {
+        if ($this->initialDiscountRate->toPercentage() > $this->restaurant->maximumDiscountRate->toPercentage()) {
             throw new BadRequest(
                 'initialDiscountRateTooBig',
                 "The initial discount rate cannot exceed the maximum discount rate of the restaurant"

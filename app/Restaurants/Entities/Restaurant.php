@@ -155,7 +155,7 @@ class Restaurant extends Entity implements User
         $discounts = array_values($this->discountPolicy);
         sort($discounts);
 
-        return end($discounts);
+        return new DiscountRate((int) end($discounts));
     }
 
     protected function getClosingAtAttribute()
