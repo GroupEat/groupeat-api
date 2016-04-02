@@ -6,6 +6,8 @@ use SebastianBergmann\Money\Money;
 
 class DiscountRate
 {
+    private $percentage;
+
     public function __construct($percentage)
     {
         if (!is_int($percentage)) {
@@ -23,6 +25,11 @@ class DiscountRate
         }
 
         $this->percentage = $percentage;
+    }
+
+    public function __toString()
+    {
+        return $this->percentage.'%';
     }
 
     public function toPercentage(): int
