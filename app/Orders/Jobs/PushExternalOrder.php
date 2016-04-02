@@ -9,7 +9,7 @@ use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\Abstracts\AddOrder;
-use Groupeat\Orders\Values\ExternalOrderFoodrushInMinutes;
+use Groupeat\Orders\Values\ExternalGroupOrderDurationInMinutes;
 use Groupeat\Restaurants\Entities\Restaurant;
 use Groupeat\Support\Values\PhoneNumber;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -43,7 +43,7 @@ class PushExternalOrder extends AddOrder
     public function handle(
         Dispatcher $events,
         AddressConstraints $addressConstraints,
-        ExternalOrderFoodrushInMinutes $foodrushInMinutes
+        ExternalGroupOrderDurationInMinutes $durationInMinutes
     ): Order {
         $customer = Customer::addExternalCustomer(
             $this->customerFirstName,
@@ -52,14 +52,11 @@ class PushExternalOrder extends AddOrder
         );
 
         $deliveryAddress = $this->getDeliveryAddress($this->deliveryAddressData, $addressConstraints->value());
-
-        $start = Carbon::now();
-        $end = $start->copy()->addMinutes($foodrushInMinutes->value());
         $order = GroupOrder::createWith(
             $customer,
             $deliveryAddress,
             $this->productFormats,
-            new Period($start, $end),
+            Carbon::now()->addMinutes($durationInMinutes->value()),
             $this->comment
         );
 

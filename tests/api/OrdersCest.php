@@ -37,24 +37,12 @@ class OrdersCest
         $I->grabFirstSms();
     }
 
-    public function testThatTheFoodRushDurationMustBeValid(ApiTester $I)
-    {
-        list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
-        $orderDetails = $this->getOrderDetails($I, $token, ['foodRushDurationInMinutes' => 70]);
-
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'invalidFoodRushDuration');
-
-        $orderDetails['foodRushDurationInMinutes'] = 1;
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'invalidFoodRushDuration');
-    }
-
     public function testThatAEndingAtTimeCanBeSpecified(ApiTester $I)
     {
         list($token) = $I->amAnActivatedCustomerWithNoMissingInformation();
         $endingAt = Carbon::now()->addHours(2);
         $orderDetails = $this->getOrderDetails($I, $token, ['endingAt' => $endingAt->toDateTimeString()]);
+        unset($orderDetails['foodRushDurationInMinutes']);
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeResponseCodeIs(201);
@@ -62,6 +50,11 @@ class OrdersCest
         $orderId = $I->grabDataFromResponse('id');
         $I->sendApiGetWithToken($token, "orders/$orderId?include=groupOrder");
         $I->assertRoughlyEqual(new Carbon($I->grabDataFromResponse('groupOrder.data.endingAt')), $endingAt);
+
+        $endingAtInAnAnotherOpenedWindow = Carbon::now()->addDays(2)->toDateTimeString();
+        $orderDetails['endingAt'] = $endingAtInAnAnotherOpenedWindow;
+        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
+        $I->seeErrorResponse(400, 'invalidEndingAt');
     }
 
     public function testThatTheOrderCannotBeEmpty(ApiTester $I)

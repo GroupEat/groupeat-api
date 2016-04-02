@@ -5,7 +5,7 @@ use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Support\Jobs\Abstracts\Job;
 use Psr\Log\LoggerInterface;
 
-class CloseGroupOrderAfterFoodrush extends Job
+class CloseGroupOrderIfNeeded extends Job
 {
     private $groupOrder;
 
@@ -17,7 +17,7 @@ class CloseGroupOrderAfterFoodrush extends Job
     public function handle(LoggerInterface $logger)
     {
         if (!$this->groupOrder->closedAt) {
-            $logger->info($this->groupOrder->toShortString() . ' foodrush has ended');
+            $logger->info('closing '.$this->groupOrder->toShortString());
             $this->groupOrder->close();
         } else {
             $logger->info(

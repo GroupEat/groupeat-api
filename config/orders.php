@@ -17,28 +17,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Miminum FoodRush Duration in Minutes
-    |--------------------------------------------------------------------------
-    |
-    | The duration in minutes that a FoodRush must exceed.
-    |
-    */
-
-    'minimum_foodrush_in_minutes' => 5,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Maximum FoodRush Duration in Minutes
-    |--------------------------------------------------------------------------
-    |
-    | The duration in minutes that a FoodRush should not exceed.
-    |
-    */
-
-    'maximum_foodrush_in_minutes' => 60,
-
-    /*
-    |--------------------------------------------------------------------------
     | Maximum Order Flow Duration in Minutes
     |--------------------------------------------------------------------------
     |
@@ -62,14 +40,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Foodrush Duration in Minutes when External Order is Pushed by Restaurant
+    | Duration in Minutes of an External Group Order Pushed by a Restaurant
     |--------------------------------------------------------------------------
     |
-    | The duration in minutes of the foodrush created when a restaurant push
-    | an external order into the application.
+    | The duration in minutes during which the group order created by
+    | a restaurant can be joined.
     |
     */
 
-    'external_order_foodrush_in_minutes' => 10,
+    'external_group_order_duration_in_minutes' => 10,
 
 ];
