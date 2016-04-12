@@ -86,7 +86,7 @@ class AdminCest
             $restaurantId,
             "restaurants/$restaurantId/madeUpGroupOrders",
             [
-                'foodRushDurationInMinutes' => 20,
+                'endingAt' => Carbon::now()->addMinutes(20)->toDateTimeString(),
                 'initialDiscountRate' => 33
             ]
         ];

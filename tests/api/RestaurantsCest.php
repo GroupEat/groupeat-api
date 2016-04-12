@@ -2,7 +2,6 @@
 
 use Carbon\Carbon;
 use Groupeat\Auth\Entities\UserCredentials;
-use Groupeat\Orders\Values\MinimumFoodrushInMinutes;
 use Groupeat\Orders\Values\MaximumOrderFlowInMinutes;
 use Groupeat\Restaurants\Entities\ClosingWindow;
 use Groupeat\Restaurants\Entities\OpeningWindow;
@@ -46,7 +45,6 @@ class RestaurantsCest
 
     public function testThatTheOpenedQueryParameterWorks(ApiTester $I)
     {
-        $minimumFoodrushInMinutes = $I->getValue(MinimumFoodrushInMinutes::class);
         $maximumOrderFlowInMinutes = $I->getValue(MaximumOrderFlowInMinutes::class);
 
         $now = new Carbon('2015-11-07 21:00:00');
@@ -61,13 +59,11 @@ class RestaurantsCest
         $this->createOpeningWindow($restaurantId, $now->toTimeString(), $now->toTimeString());
         $I->assertFalse($this->isRestaurantInResponse($I, $token, $restaurantId, 'opened=1'));
 
-        $this->createOpeningWindow($restaurantId, $now->toTimeString(), $now->copy()->addMinutes(
-            $minimumFoodrushInMinutes
-        )->toTimeString());
+        $this->createOpeningWindow($restaurantId, $now->toTimeString(), $now->toTimeString());
         $I->assertFalse($this->isRestaurantInResponse($I, $token, $restaurantId, 'opened=1'));
 
         $this->createOpeningWindow($restaurantId, $now->toTimeString(), $now->copy()->addMinutes(
-            $minimumFoodrushInMinutes + $maximumOrderFlowInMinutes
+            $maximumOrderFlowInMinutes
         )->toTimeString());
         $I->assertTrue($this->isRestaurantInResponse($I, $token, $restaurantId, 'opened=1'));
     }

@@ -72,16 +72,16 @@ Only activated customers are allowed to create a group order.
 
 The request must contain all the data required to attach a delivery address to the order.
 
-The attributes dedicated to the order itself are `foodRushDurationInMinutes` which must be between {{ orders.minimum_foodrush_in_minutes }} and {{ orders.maximum_foodrush_in_minutes }} minutes and the `productFormats` object that indicate the desired quantity of each product format. All the product formats must of course belong to the same restaurant.
+The attributes dedicated to the order itself are `endingAt` and the `productFormats` object that indicate the desired quantity of each product format. All the product formats must of course belong to the same restaurant.
 
-To create a group order, the restaurant must stay opened long enough to let the minimum foodrush time ({{ orders.minimum_foodrush_in_minutes }} minutes) and the maximum preparation time ({{ restaurants.maximum_preparation_time_in_minutes }} minutes) flow.
+The first restaurant opening window must contain the `endingAt` date.
 
 The distance between the given address and the restaurant must be less than {{ restaurants.around_distance_in_kilometers }} kilometers.
 
 + Request
 
         {
-            "foodRushDurationInMinutes": 30,
+            "endingAt": "2016-04-02 21:17:00",
             "productFormats": {"1": 2, "2": 3},
             "deliveryAddress": {
                 "street": "Allée des techniques avancées",
@@ -117,6 +117,13 @@ The distance between the given address and the restaurant must be less than {{ r
             "message": "The product formats must belong to the same restaurant."
         }
 
++ Response 400
+
+        {
+            "errorKey": "invalidEndingAt",
+            "message": "2016-04-02 20:18:00 must be included in the first restaurant opened window"
+        }
+
 + Response 403
 
         {
@@ -141,15 +148,8 @@ The distance between the given address and the restaurant must be less than {{ r
 + Response 422
 
         {
-            "errorKey": "invalidFoodRushDuration",
-            "message": "The FoodRush duration must be between 5 and 60 minutes, 70 given."
-        }
-
-+ Response 422
-
-        {
-            "errorKey": "deliveryDistanceTooLong",
-            "message": "The delivery distance should be less than 7 kms, 10 given."
+            "errorKey": "restaurantClosed",
+            "message": "The restaurant #6 is closed at 2016-04-01 08:08:08."
         }
 
 + Response 422
@@ -283,7 +283,7 @@ The distance between the given address and the restaurant must be less than {{ r
 
 Only activated customers are allowed to join a group order.
 
-Same request than the *Create group order* route except that the `foodRushDurationInMinutes` field is not needed. The possible error responses are also the same except that the `invalidFoodRushDuration` and `groupOrderAlreadyExisting` errors cannot occur.
+Same request than the *Create group order* route except that the `endingAt` field is not needed. The possible error responses are also the same except that the `restaurantClosed`, `invalidEndingAt` and `groupOrderAlreadyExisting` errors cannot occur.
 
 To join a group order, the distance between the first delivery address and the given one must be less than {{ orders.joinable_distance_in_kilometers }} kilometers.
 
@@ -308,9 +308,9 @@ To join a group order, the distance between the first delivery address and the g
 
 Only restaurants are allowed to push an external order.
 
-The possible error responses are the same than the *Create group order* route except that the `userShouldBeActivated`, `invalidFoodRushDuration` and `deliveryDistanceTooLong` errors cannot occur.
+The possible error responses are the same than the *Create group order* route except that the `userShouldBeActivated`, `restaurantClosed`, `invalidEndingAt` and `deliveryDistanceTooLong` errors cannot occur.
 
-The foodrush duration is automatically set to {{ orders.external_order_foodrush_in_minutes }} minutes.
+The group order duration is automatically set to {{ orders.external_group_order_duration_in_minutes }} minutes.
 
 + Request
 

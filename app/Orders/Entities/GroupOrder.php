@@ -15,6 +15,7 @@ use Groupeat\Support\Entities\Abstracts\Address;
 use Groupeat\Support\Entities\Abstracts\Entity;
 use Groupeat\Support\Exceptions\UnprocessableEntity;
 use Illuminate\Database\Eloquent\Builder;
+use League\Period\Period;
 use Phaza\LaravelPostgis\Geometries\Point;
 use SebastianBergmann\Money\Money;
 
@@ -51,7 +52,7 @@ class GroupOrder extends Entity
         Customer $customer,
         DeliveryAddress $address,
         ProductFormats $productFormats,
-        int $foodRushDurationInMinutes,
+        Carbon $endingAt,
         string $comment = ''
     ): Order {
         $restaurant = $productFormats->getRestaurant();
@@ -59,7 +60,7 @@ class GroupOrder extends Entity
         static::assertMinimumGroupOrderPriceReached($restaurant, $productFormats);
         $groupOrder = new static;
         $groupOrder->restaurant()->associate($restaurant);
-        $groupOrder->setFoodRushDurationInMinutes($foodRushDurationInMinutes);
+        $groupOrder->endingAt = $endingAt;
 
         return $groupOrder->addOrder($customer, $productFormats, $address, $comment);
     }
@@ -142,7 +143,6 @@ class GroupOrder extends Entity
         $order->comment = $comment;
         $order->rawPrice = $productFormats->totalPrice();
         $order->customer()->associate($customer);
-        $order->setCreatedAt($order->freshTimestamp());
 
         // An existing group order can have zero orders if it is a made-up one.
         if (!$this->exists || $this->isMadeUpWithoutAnyOrder()) {
@@ -264,15 +264,6 @@ class GroupOrder extends Entity
         }
 
         return $this->getInitiatingOrder()->deliveryAddress->distanceInKmsWithPoint($point) < static::$joinableDistanceInKms;
-    }
-
-    public function setFoodRushDurationInMinutes(int $minutes)
-    {
-        if (!$this->exists) {
-            $this->createdAt = $this->freshTimestamp();
-        }
-
-        $this->endingAt = $this->createdAt->copy()->addMinutes($minutes);
     }
 
     protected function getDiscountRateAttribute()

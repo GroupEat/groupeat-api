@@ -87,17 +87,12 @@ class Restaurant extends Entity implements User
         return $this->opened($period)->where($this->getTableField('id'), $this->id)->exists();
     }
 
-    public function assertOpened(Period $period = null)
+    public function throwClosedAt(Carbon $date)
     {
-        if (!$this->isOpened($period)) {
-            $start = Carbon::instance($period->getStartDate());
-            $end = Carbon::instance($period->getEndDate());
-
-            throw new UnprocessableEntity(
-                'restaurantClosed',
-                "The {$this->toShortString()} do not stay opened from $start to $end."
-            );
-        }
+        throw new UnprocessableEntity(
+            'restaurantClosed',
+            "The {$this->toShortString()} restaurant is closed at $date."
+        );
     }
 
     public function scopeOpened(Builder $query, Period $period = null)
@@ -155,7 +150,7 @@ class Restaurant extends Entity implements User
         $discounts = array_values($this->discountPolicy);
         sort($discounts);
 
-        return end($discounts);
+        return new DiscountRate((int) end($discounts));
     }
 
     protected function getClosingAtAttribute()

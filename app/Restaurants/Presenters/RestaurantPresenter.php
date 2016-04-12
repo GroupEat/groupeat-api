@@ -7,4 +7,9 @@ use Groupeat\Support\Presenters\Presenter;
 class RestaurantPresenter extends Presenter
 {
     use HasCredentials;
+
+    public function presentNameWithLocation()
+    {
+        return $this->object->name.' ('.$this->object->address->city.')';
+    }
 }
