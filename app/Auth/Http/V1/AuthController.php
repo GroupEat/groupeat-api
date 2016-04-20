@@ -1,7 +1,6 @@
 <?php
 namespace Groupeat\Auth\Http\V1;
 
-use Groupeat\Auth\Jobs\ActivateUser;
 use Groupeat\Auth\Jobs\ChangePassword;
 use Groupeat\Auth\Jobs\ResetPassword;
 use Groupeat\Auth\Jobs\ResetToken;
@@ -13,11 +12,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class AuthController extends Controller
 {
-    public function activate()
-    {
-        $this->dispatch(new ActivateUser($this->json('token')));
-    }
-
     public function getToken(Dispatcher $events)
     {
         $this->auth->byCredentials($this->json('email'), $this->json('password'));

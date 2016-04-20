@@ -21,7 +21,7 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
     public $timestamps = false;
 
     protected $dates = [self::ACTIVATED_AT];
-    protected $hidden = ['password', 'token', 'activationToken'];
+    protected $hidden = ['password', 'token'];
 
     public function getRules()
     {
@@ -114,7 +114,6 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
     {
         $date = $date ?: $this->freshTimestamp();
 
-        $this->activationToken = null;
         $this->activatedAt = $date;
         $this->save();
     }

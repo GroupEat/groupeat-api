@@ -6,8 +6,6 @@
 
 The user locale should be sent in addition to the classical email and password fields. In fact, even if the API will always use the English language, we need to know the language of the user in order to send him e-mails he can understand.
 
-An e-mail will be sent to the given address with an activation link that must be clicked in order to fully activate the created account.
-
 + Request
 
         {
