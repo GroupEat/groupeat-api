@@ -2,19 +2,6 @@
 
 class CustomersCest
 {
-    public function testThatACustomerNeedsACampusEmailToRegister(ApiTester $I)
-    {
-        foreach (['ensta.fr', 'ensta-paristech.fr', 'institutoptique.fr', 'polytechnique.edu'] as $domain) {
-            $this->sendRegistrationRequest($I, "user@$domain");
-        }
-
-        foreach (['gmail.com', 'supelec.fr', 'ensta.com', 'ensta.org'] as $domain) {
-            $I->sendApiPost('customers', ['email' => "user@$domain", 'password' => 'password', 'locale' => 'fr']);
-            $I->seeResponseCodeIs(422);
-            $I->seeErrorsContain(['email' => ['notFromCampus' => []]]);
-        }
-    }
-
     public function testThatACustomerCanUnregister(ApiTester $I)
     {
         list($token, $id) = $this->sendRegistrationRequest($I);

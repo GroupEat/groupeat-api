@@ -29,15 +29,10 @@ class RegisterUser
         $this->localeService = $localeService;
     }
 
-    public function call(
-        string $email,
-        string $password,
-        string $locale,
-        User $userType,
-        Closure $additionalValidationCallback = null
-    ): User {
+    public function call(string $email, string $password, string $locale, User $userType): User
+    {
         $this->localeService->assertAvailable($locale);
-        $this->assertValidCredentials($email, $password, $additionalValidationCallback);
+        $this->assertValidCredentials($email, $password);
 
         $userCredentials = UserCredentials::register($email, $password, $locale, $userType->newInstance());
         $userCredentials->replaceAuthenticationToken($this->generateToken->call($userCredentials));
@@ -47,7 +42,7 @@ class RegisterUser
         return $userCredentials->user;
     }
 
-    private function assertValidCredentials(string $email, string $password, Closure $additionalCallback = null)
+    private function assertValidCredentials(string $email, string $password)
     {
         $credentials = compact('email', 'password');
 
@@ -63,10 +58,6 @@ class RegisterUser
                 $validator->failed(),
                 "Cannot register user with invalid credentials."
             );
-        }
-
-        if (!is_null($additionalCallback)) {
-            $additionalCallback($credentials);
         }
     }
 }

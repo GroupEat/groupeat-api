@@ -21,31 +21,11 @@ class RegisterCustomer extends Job
 
     public function handle(RegisterUser $registerUser)
     {
-        $customer = $registerUser->call(
-            $this->email,
-            $this->password,
-            $this->locale,
-            new Customer,
-            function ($credentials) {
-                $this->assertEmailFromCampus($credentials['email']);
-            }
-        );
+        $customer = $registerUser->call($this->email, $this->password, $this->locale, new Customer);
 
         // There is no more activation email, the customers are activated by default for now.
         $customer->credentials->activate();
 
         return $customer;
-    }
-
-    private function assertEmailFromCampus($email)
-    {
-        $domains = 'ensta-paristech\.fr|ensta\.fr|polytechnique\.edu|institutoptique\.fr';
-
-        if (!preg_match("/@($domains)$/", $email)) {
-            throw new UnprocessableEntity(
-                ['email' => ['notFromCampus' => []]],
-                "E-mail should correspond to a Saclay campus account."
-            );
-        }
     }
 }
