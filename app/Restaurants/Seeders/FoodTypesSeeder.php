@@ -8,7 +8,7 @@ class FoodTypesSeeder extends Seeder
 {
     protected function insertAdditionalEntries($id)
     {
-        foreach (['pizza', 'kebab', 'salad'] as $label) {
+        foreach (['pizza', 'maki', 'sushi', 'sashimi', 'fugou', 'chirachi'] as $label) {
             FoodType::create(compact('label'));
         }
     }
