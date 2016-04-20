@@ -16,23 +16,6 @@ class AuthCest
         $I->seeResponseContainsJson(['type' => str_singular($this->getUserResource())]);
     }
 
-    public function testThatAUserCanBeActivatedAfterSuccessfulRegistration(ApiTester $I)
-    {
-        list($token, $id) = $this->sendRegistrationRequest($I);
-        $activationLink = $I->grabHrefInLinkByIdInFirstMail('activation-link');
-        $I->assertNotEmpty($activationLink);
-        list(, $activationToken) = explode("token=", $activationLink);
-
-        $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
-        $I->assertFalse($I->grabDataFromResponse('activated'));
-
-        $I->sendApiPost('auth/activationTokens', ['token' => $activationToken]);
-        $I->seeResponseCodeIs(200);
-
-        $I->sendApiGetWithToken($token, $this->getUserResource().'/'.$id);
-        $I->assertTrue($I->grabDataFromResponse('activated'));
-    }
-
     public function testThatAUserCanAuthenticateAfterSuccessfulRegistration(ApiTester $I)
     {
         list($token, $id) = $this->sendRegistrationRequest($I);

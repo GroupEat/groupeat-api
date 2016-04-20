@@ -11,12 +11,8 @@ class ApiHelper extends \Codeception\Module
 {
     public function amAnActivatedCustomer()
     {
-        list($token, $id) = $this->sendRegistrationRequest();
-        $activationLink = $this->getModule('MailWatcher')->grabHrefInLinkByIdInFirstMail('activation-link');
-        list(, $activationToken) = explode("token=", $activationLink);
-        $this->sendApiPost('auth/activationTokens', ['token' => $activationToken]);
-
-        return [$token, $id];
+        // Since there is no more activation email, nothing more thant registration is needed.
+        return $this->sendRegistrationRequest();
     }
 
     public function amAnActivatedCustomerWithNoMissingInformation()

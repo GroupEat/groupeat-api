@@ -3,7 +3,7 @@ namespace Groupeat\Auth;
 
 use Dingo\Api\Auth\Auth as DingoAuth;
 use Groupeat\Auth\Events\UserHasRegistered;
-use Groupeat\Auth\Listeners\SendActivationLink;
+use Groupeat\Auth\Listeners\SendWelcomeMail;
 use Groupeat\Auth\Values\TokenDurationInMinutes;
 use Groupeat\Support\Providers\Abstracts\WorkbenchPackageProvider;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class PackageProvider extends WorkbenchPackageProvider
     ];
 
     protected $listeners = [
-        SendActivationLink::class => UserHasRegistered::class,
+        SendWelcomeMail::class => UserHasRegistered::class,
     ];
 
     protected function registerPackage()

@@ -110,12 +110,12 @@ class UserCredentials extends Entity implements Authenticatable, CanResetPasswor
         return !empty($this->activatedAt);
     }
 
-    public function activate(Carbon $now = null)
+    public function activate(Carbon $date = null)
     {
-        $now = $now ?: $this->freshTimestamp();
+        $date = $date ?: $this->freshTimestamp();
 
         $this->activationToken = null;
-        $this->activatedAt = $now;
+        $this->activatedAt = $date;
         $this->save();
     }
 

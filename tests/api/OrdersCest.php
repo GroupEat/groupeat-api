@@ -5,15 +5,10 @@ use Groupeat\Restaurants\Entities\ProductFormat;
 
 class OrdersCest
 {
-    public function testThatACustomerShouldBeActivatedAndHaveNoMissingInformationToPlaceAnOrder(ApiTester $I)
+    public function testThatACustomerShouldHaveNoMissingInformationToPlaceAnOrder(ApiTester $I)
     {
-        list($token) = $I->sendRegistrationRequest();
-        $orderDetails = $this->getOrderDetails($I, $token);
-
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(403, 'userShouldBeActivated');
-
         list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeErrorResponse(403, 'missingCustomerInformation');
 

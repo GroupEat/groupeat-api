@@ -21,7 +21,7 @@ class RegisterCustomer extends Job
 
     public function handle(RegisterUser $registerUser)
     {
-        return $registerUser->call(
+        $customer = $registerUser->call(
             $this->email,
             $this->password,
             $this->locale,
@@ -30,6 +30,11 @@ class RegisterCustomer extends Job
                 $this->assertEmailFromCampus($credentials['email']);
             }
         );
+
+        // There is no more activation email, the customers are activated by default for now.
+        $customer->credentials->activate();
+
+        return $customer;
     }
 
     private function assertEmailFromCampus($email)
