@@ -99,7 +99,7 @@ class OrdersCest
         $orderDetails = $this->getOrderDetails($I, $token, compact('productFormats'));
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'restaurantClosed');
+        $I->dontSeeResponseCodeIs(201);
     }
 
     public function testThatTheRestaurantMustBeCloseEnough(ApiTester $I)
