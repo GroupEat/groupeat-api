@@ -19,7 +19,7 @@ class CustomersSeeder extends Seeder
 
         $credentials = new UserCredentials([
             'email' => $this->faker->email,
-            'password' => $customer->lastName,
+            'password' => 'groupeat',
             'locale' => 'fr',
         ]);
         $credentials->user()->associate($customer);
