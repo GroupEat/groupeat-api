@@ -61,7 +61,10 @@ class CreateGroupOrder extends AddCustomerOrder
             $restaurant->throwClosedAt($date);
         }
 
-        if (!$openedWindows[0]->contains($date)) {
+        $firstOpenedWindow = $openedWindows[0];
+
+        // Check if the order date is included (boundaries included) in the first opened window.
+        if ($date < $firstOpenedWindow->getStartDate() || $date > $firstOpenedWindow->getEndDate()) {
             throw new BadRequest(
                 'invalidEndingAt',
                 "$date must be included in the first restaurant opened window: $openedWindows[0]"
