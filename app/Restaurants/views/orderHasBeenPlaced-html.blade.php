@@ -5,7 +5,7 @@
 @section('beforeButton')
     <p>
         @lang("restaurants::groupOrders.$action.whoAndWhen", [
-            'customerFullName' => $customer->fullName,
+            'customerPhoneNumber' => $customer->phoneNumber,
             'groupOrderRef' => $groupOrder->reference,
             'creationTime' => $groupOrder->creationTime,
             'endingTime' => $groupOrder->endingTime,

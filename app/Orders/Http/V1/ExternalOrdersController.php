@@ -20,8 +20,6 @@ class ExternalOrdersController extends Controller
 
             return new PushExternalOrder(
                 $this->auth->restaurant(),
-                $customerData['firstName'],
-                $customerData['lastName'],
                 $productFormats,
                 $deliveryAddressData,
                 $comment,

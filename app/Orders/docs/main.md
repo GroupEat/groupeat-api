@@ -135,7 +135,7 @@ The distance between the given address and the restaurant must be less than {{ r
 
          {
              "errorKey": "missingCustomerInformation",
-             "message": "The attributes [firstName, lastName, phoneNumber] are missing for customer customer #35"
+             "message": "The attributes [phoneNumber] are missing for customer customer #35"
          }
 
 + Response 404

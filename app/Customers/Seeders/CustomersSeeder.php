@@ -14,8 +14,6 @@ class CustomersSeeder extends Seeder
     protected function makeEntry($id, $max)
     {
         $customer = Customer::create([
-            'firstName' => $this->faker->firstName,
-            'lastName' => $this->faker->lastName,
             'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 
@@ -31,8 +29,6 @@ class CustomersSeeder extends Seeder
     protected function insertAdditionalEntries($id)
     {
         $customer = Customer::create([
-            'firstName' => 'Groupeat',
-            'lastName' => 'User',
             'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 

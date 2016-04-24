@@ -19,8 +19,6 @@ class ApiHelper extends \Codeception\Module
     {
         list($token, $id) = $this->amAnActivatedCustomer();
         $this->sendApiPutWithToken($token, "customers/$id", [
-            'firstName' => 'Jean',
-            'lastName' => 'Jacques',
             'phoneNumber' => '33605040302',
         ]);
 

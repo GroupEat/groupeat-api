@@ -14,7 +14,7 @@ return [
 
         'subject' => "Nouvelle commande GroupEat",
 
-        'whoAndWhen' => ":customerFullName a créé une commande groupée :groupOrderRef à :creationTime terminant au plus tard à :endingTime.",
+        'whoAndWhen' => "Un client a créé une commande groupée :groupOrderRef à :creationTime terminant au plus tard à :endingTime.",
 
         'smsText' => "Une nouvelle commande groupée vient d'être créée à :creationTime.",
 
@@ -22,9 +22,9 @@ return [
 
     'joined' => [
 
-        'subject' => "Un utilisateur a rejoint une commande GroupEat",
+        'subject' => "Un client a rejoint une commande GroupEat",
 
-        'whoAndWhen' => ":customerFullName a rejoint à :creationTime la commande groupée :groupOrderRef terminant au plus tard à :endingTime.",
+        'whoAndWhen' => "Un client a rejoint à :creationTime la commande groupée :groupOrderRef terminant au plus tard à :endingTime.",
 
     ],
 

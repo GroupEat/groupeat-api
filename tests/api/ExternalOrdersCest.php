@@ -14,9 +14,6 @@ class ExternalOrdersCest
         $products = $I->grabDataFromResponse();
         $productFormatId = $products[0]['formats']['data'][0]['id'];
 
-        $firstName = 'Jean';
-        $lastName = 'Michel';
-
         $orderData = [
             'productFormats' => [$productFormatId => 3],
             'deliveryAddress' => [
@@ -30,8 +27,6 @@ class ExternalOrdersCest
                 'longitude' => 2.219278
             ],
             'customer' => [
-                'firstName' => $firstName,
-                'lastName' => $lastName,
                 'phoneNumber' => '33605040306'
             ],
             'comment' => "J'aurais dû passer via l'app GroupEat...",
@@ -48,8 +43,7 @@ class ExternalOrdersCest
         $mails = $I->grabMails();
         $I->assertEquals(1, $mails->count());
         $I->assertEquals('restaurants.orderHasBeenPlaced', $I->grabMailId($mails->first()));
-        $I->assertFirstMailContains($firstName);
-        $I->assertFirstMailContains($lastName);
+        $I->assertFirstMailContains('06 05 04 03 06'); // The phone number should be correctly formatted.
 
         $I->assertNoSmsWasSent();
 
