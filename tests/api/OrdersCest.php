@@ -384,6 +384,10 @@ class OrdersCest
             'deliveryAddress' => [
                 'street' => "Allée des techniques avancées",
                 'details' => "Bâtiment A, chambre 200",
+                'city' => "Palaiseau",
+                'postcode' => "91120",
+                'state' => "Essonne",
+                'country' => "France",
                 'latitude' => $this->getDefaultLatitude(),
                 'longitude' => $this->getDefaultLongitude(),
             ],

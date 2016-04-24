@@ -87,6 +87,10 @@ class ApiHelper extends \Codeception\Module
             'deliveryAddress' => [
                 'street' => "Allée des techniques avancées",
                 'details' => "Bâtiment A, chambre 200",
+                'city' => "Palaiseau",
+                'postcode' => "91120",
+                'state' => "Essonne",
+                'country' => "France",
                 'latitude' => 48.716941,
                 'longitude' => 2.239171,
             ],

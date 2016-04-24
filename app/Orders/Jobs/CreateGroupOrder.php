@@ -3,7 +3,6 @@ namespace Groupeat\Orders\Jobs;
 
 use Carbon\Carbon;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\DeliveryAddress;
 use Groupeat\Orders\Entities\GroupOrder;
 use Groupeat\Orders\Entities\Order;
@@ -33,20 +32,16 @@ class CreateGroupOrder extends AddCustomerOrder
         $this->endingAt = $endingAt;
     }
 
-    public function handle(
-        Dispatcher $events,
-        AddressConstraints $deliveryAddressConstraints,
-        MaximumDeliveryDistanceInKms $maximumDeliveryDistanceInKms
-    ): Order {
+    public function handle(Dispatcher $events, MaximumDeliveryDistanceInKms $maximumDeliveryDistanceInKms): Order
+    {
         $restaurant = $this->productFormats->getRestaurant();
         $this->assertEndingAtInFirstOpenedWindow($restaurant, $this->endingAt);
 
-        $deliveryAddress = $this->getDeliveryAddress($this->deliveryAddressData, $deliveryAddressConstraints->value());
-        $this->assertCloseEnough($deliveryAddress, $restaurant->address, $maximumDeliveryDistanceInKms->value());
+        $this->assertCloseEnough($this->deliveryAddress, $restaurant->address, $maximumDeliveryDistanceInKms->value());
 
         $order = GroupOrder::createWith(
             $this->customer,
-            $deliveryAddress,
+            $this->deliveryAddress,
             $this->productFormats,
             $this->endingAt,
             $this->comment

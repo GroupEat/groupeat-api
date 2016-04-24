@@ -20,8 +20,12 @@ class ExternalOrdersCest
         $orderData = [
             'productFormats' => [$productFormatId => 3],
             'deliveryAddress' => [
-                'street' => 'rue de la pizza',
-                'details' => 'dernier étage',
+                'street' => "ue de la pizza",
+                'details' => "dernier étage",
+                'city' => "PizzaCity",
+                'postcode' => "75001",
+                'state' => "PizzaState",
+                'country' => "PizzaLand",
                 'latitude' => 48.711042,
                 'longitude' => 2.219278
             ],

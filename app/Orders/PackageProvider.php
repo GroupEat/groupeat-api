@@ -5,7 +5,6 @@ use Groupeat\Orders\Events\GroupOrderHasBeenCreated;
 use Groupeat\Orders\Jobs\CloseGroupOrderIfNeeded;
 use Groupeat\Orders\Listeners\GrantPromotions;
 use Groupeat\Orders\Values\JoinableDistanceInKms;
-use Groupeat\Orders\Values\DeliveryAddressConstraints;
 use Groupeat\Orders\Values\ExternalGroupOrderDurationInMinutes;
 use Groupeat\Orders\Values\MaximumOrderFlowInMinutes;
 use Groupeat\Orders\Values\MaximumPreparationTimeInMinutes;
