@@ -14,14 +14,12 @@ class CustomersSeeder extends Seeder
     protected function makeEntry($id, $max)
     {
         $customer = Customer::create([
-            'firstName' => $this->faker->firstName,
-            'lastName' => $this->faker->lastName,
             'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 
         $credentials = new UserCredentials([
             'email' => $this->faker->email,
-            'password' => $customer->lastName,
+            'password' => 'groupeat',
             'locale' => 'fr',
         ]);
         $credentials->user()->associate($customer);
@@ -31,8 +29,6 @@ class CustomersSeeder extends Seeder
     protected function insertAdditionalEntries($id)
     {
         $customer = Customer::create([
-            'firstName' => 'Groupeat',
-            'lastName' => 'User',
             'phoneNumber' => $this->generatePhoneNumber(),
         ]);
 

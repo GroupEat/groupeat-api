@@ -14,7 +14,7 @@ Authorization: bearer {token}
             "id": "1",
             "type": "customer",
             "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZGV2XC9hcGlcL2F1dGhcL3Rva2VuIiwic3ViIjoxLCJpYXQiOjE0MjA0OTU0ODYsImV4cCI6MjA1MTIxNTQ4Nn0.1vZ4fyrLfyNP5LLjRI64x8ne8C7TAtGf6DO_i6qS7Do",
-            "activated": false
+            "activated": true
         }
 
 ### Retrieve token [PUT]
@@ -201,32 +201,4 @@ Changing or reseting a password will make the current authentication token obsol
                     "notFound": []
                 }
             }
-        }
-
-## Activate user [/auth/activationTokens]
-
-### POST
-
-Activate the user corresponding to the given token.
-
-+ Request
-
-        {
-            "token": "12a345qsd6..."
-        }
-
-+ Response 200
-
-+ Response 400
-
-        {
-            "errorKey": "missingActivationToken",
-            "message": "A valid activation token should be given."
-        }
-
-+ Response 404
-
-        {
-            "errorKey": "noUserForActivationToken",
-            "message": "Cannot retrieve user from activation token."
         }

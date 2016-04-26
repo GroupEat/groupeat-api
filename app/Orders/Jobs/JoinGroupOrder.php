@@ -2,7 +2,6 @@
 namespace Groupeat\Orders\Jobs;
 
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Customers\Values\AddressConstraints;
 use Groupeat\Orders\Entities\Order;
 use Groupeat\Orders\Events\GroupOrderHasBeenJoined;
 use Groupeat\Orders\Jobs\Abstracts\AddCustomerOrder;
@@ -26,15 +25,11 @@ class JoinGroupOrder extends AddCustomerOrder
         $this->groupOrder = $groupOrder;
     }
 
-    public function handle(
-        Dispatcher $events,
-        AddressConstraints $deliveryAddressConstraints
-    ): Order {
-        $deliveryAddress = $this->getDeliveryAddress($this->deliveryAddressData, $deliveryAddressConstraints->value());
-
+    public function handle(Dispatcher $events): Order
+    {
         $this->assertJoinable();
 
-        if (!$this->groupOrder->isCloseEnoughToJoin($deliveryAddress->location)) {
+        if (!$this->groupOrder->isCloseEnoughToJoin($this->deliveryAddress->location)) {
             throw new UnprocessableEntity(
                 'deliveryDistanceTooLong',
                 "The delivery address is too far from the group order"
@@ -44,7 +39,7 @@ class JoinGroupOrder extends AddCustomerOrder
         $order = $this->groupOrder->addOrder(
             $this->customer,
             $this->productFormats,
-            $deliveryAddress,
+            $this->deliveryAddress,
             $this->comment
         );
 

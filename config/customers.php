@@ -4,15 +4,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Constraint Address data
+    | Default Address Attributes
     |--------------------------------------------------------------------------
-    |
-    | For the MVP, the customers must live on the Campus.
-    | We therefore have to force some fields of their address.
-    |
     */
 
-    'address_constraints' => [
+    'default_address_attributes' => [
         'city' => 'Palaiseau',
         'postcode' => 91120,
         'state' => 'Essone',

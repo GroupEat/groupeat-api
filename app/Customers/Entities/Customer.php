@@ -21,25 +21,22 @@ class Customer extends Entity implements User
 
     public function getRules()
     {
-        return [
-            'firstName' => 'min:1',
-            'lastName' => 'min:1',
-        ];
+        return [];
     }
 
-    public static function addExternalCustomer(
-        string $firstName,
-        string $lastName,
-        PhoneNumber $phoneNumber = null
-    ): Customer {
+    public static function addExternalCustomer(PhoneNumber $phoneNumber = null): Customer
+    {
         $customer = new static;
         $customer->isExternal = true;
-        $customer->firstName = $firstName;
-        $customer->lastName = $lastName;
         $customer->phoneNumber = $phoneNumber;
         $customer->save();
 
         return $customer;
+    }
+
+    public function __toString()
+    {
+        return $this->isExternal ? "external #$this->id" : "$this->email ($this->phoneNumber)";
     }
 
     public function address()
@@ -54,7 +51,7 @@ class Customer extends Entity implements User
 
     public function getMissingAttributes(): array
     {
-        return collect(['firstName', 'lastName', 'phoneNumber'])->filter(function ($attribute) {
+        return collect(['phoneNumber'])->filter(function ($attribute) {
             return empty($this->$attribute);
         })->all();
     }

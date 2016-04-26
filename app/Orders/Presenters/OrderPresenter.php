@@ -65,7 +65,7 @@ class OrderPresenter extends Presenter
         $str = $this->presentReference();
 
         if ($withCustomer) {
-            $str .= ', '.mb_ucfirst($attributes['customer']).': '.$this->customer->fullNameWithPhoneNumber;
+            $str .= ', '.mb_ucfirst($attributes['customer']).': '.$this->customer->phoneNumber;
         }
 
         $str .= ', '.mb_ucfirst($attributes['deliveryAddress']).': '.$this->deliveryAddress
@@ -143,7 +143,7 @@ class OrderPresenter extends Presenter
         $row[] = $this->id;
 
         if ($withCustomer) {
-            $row[] = $this->customer->fullNameWithPhoneNumber;
+            $row[] = $this->customer->phoneNumber;
         }
 
         $row[] = (string) $this->deliveryAddress;

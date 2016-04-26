@@ -11,20 +11,14 @@ class ApiHelper extends \Codeception\Module
 {
     public function amAnActivatedCustomer()
     {
-        list($token, $id) = $this->sendRegistrationRequest();
-        $activationLink = $this->getModule('MailWatcher')->grabHrefInLinkByIdInFirstMail('activation-link');
-        list(, $activationToken) = explode("token=", $activationLink);
-        $this->sendApiPost('auth/activationTokens', ['token' => $activationToken]);
-
-        return [$token, $id];
+        // Since there is no more activation email, nothing more thant registration is needed.
+        return $this->sendRegistrationRequest();
     }
 
     public function amAnActivatedCustomerWithNoMissingInformation()
     {
         list($token, $id) = $this->amAnActivatedCustomer();
         $this->sendApiPutWithToken($token, "customers/$id", [
-            'firstName' => 'Jean',
-            'lastName' => 'Jacques',
             'phoneNumber' => '33605040302',
         ]);
 
@@ -91,6 +85,10 @@ class ApiHelper extends \Codeception\Module
             'deliveryAddress' => [
                 'street' => "Allée des techniques avancées",
                 'details' => "Bâtiment A, chambre 200",
+                'city' => "Palaiseau",
+                'postcode' => "91120",
+                'state' => "Essonne",
+                'country' => "France",
                 'latitude' => 48.716941,
                 'longitude' => 2.239171,
             ],

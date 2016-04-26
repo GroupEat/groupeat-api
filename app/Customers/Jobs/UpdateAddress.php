@@ -3,7 +3,7 @@ namespace Groupeat\Customers\Jobs;
 
 use Groupeat\Customers\Entities\Address;
 use Groupeat\Customers\Entities\Customer;
-use Groupeat\Customers\Values\AddressConstraints;
+use Groupeat\Customers\Values\DefaultAddressAttributes;
 use Groupeat\Support\Jobs\Abstracts\Job;
 
 class UpdateAddress extends Job
@@ -17,17 +17,18 @@ class UpdateAddress extends Job
         $this->addressData = $addressData;
     }
 
-    public function handle(AddressConstraints $addressConstraints): Address
+    public function handle(DefaultAddressAttributes $defaultAddressAttributes): Address
     {
+        $addressAttributes = array_merge($defaultAddressAttributes->value(), $this->addressData);
+
         if ($this->customer->address) {
             $address = $this->customer->address;
-            $address->fill($this->addressData);
+            $address->fill($addressAttributes);
         } else {
-            $address = new Address($this->addressData);
-            $address->customerId = $this->customer->id;
+            $address = new Address($addressAttributes);
+            $address->customer()->associate($this->customer);
         }
 
-        $address->fill($addressConstraints->value());
         $address->save();
 
         return $address;

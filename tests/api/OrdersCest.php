@@ -5,15 +5,10 @@ use Groupeat\Restaurants\Entities\ProductFormat;
 
 class OrdersCest
 {
-    public function testThatACustomerShouldBeActivatedAndHaveNoMissingInformationToPlaceAnOrder(ApiTester $I)
+    public function testThatACustomerShouldHaveNoMissingInformationToPlaceAnOrder(ApiTester $I)
     {
-        list($token) = $I->sendRegistrationRequest();
-        $orderDetails = $this->getOrderDetails($I, $token);
-
-        $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(403, 'userShouldBeActivated');
-
         list($token) = $I->amAnActivatedCustomer();
+        $orderDetails = $this->getOrderDetails($I, $token);
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
         $I->seeErrorResponse(403, 'missingCustomerInformation');
 
@@ -99,7 +94,7 @@ class OrdersCest
         $orderDetails = $this->getOrderDetails($I, $token, compact('productFormats'));
 
         $I->sendApiPostWithToken($token, 'orders', $orderDetails);
-        $I->seeErrorResponse(422, 'restaurantClosed');
+        $I->dontSeeResponseCodeIs(201);
     }
 
     public function testThatTheRestaurantMustBeCloseEnough(ApiTester $I)
@@ -389,6 +384,10 @@ class OrdersCest
             'deliveryAddress' => [
                 'street' => "Allée des techniques avancées",
                 'details' => "Bâtiment A, chambre 200",
+                'city' => "Palaiseau",
+                'postcode' => "91120",
+                'state' => "Essonne",
+                'country' => "France",
                 'latitude' => $this->getDefaultLatitude(),
                 'longitude' => $this->getDefaultLongitude(),
             ],
